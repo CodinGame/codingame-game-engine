@@ -2,6 +2,7 @@ package com.codingame.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -26,14 +27,7 @@ public final class GameManager<T extends AbstractPlayer> {
     }
 
     public List<T> getActivePlayers() {
-        List<T> actives = new ArrayList<T>();
-        for (T player : players) {
-            if (player.isActive()) {
-                actives.add(player);
-            }
-        }
-
-        return actives;
+        return players.stream().filter(AbstractPlayer::isActive).collect(Collectors.toList());
     }
 
     public void sendInputsToPlayers() {
