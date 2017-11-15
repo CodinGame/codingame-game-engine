@@ -1,0 +1,3 @@
+# SDK to build CodinGame games
+
+Work in progress...
