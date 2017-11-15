@@ -3,14 +3,20 @@ package com.codingame.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Provider;
 import javax.inject.Singleton;
+
+import com.google.inject.Inject;
 
 @Singleton
 public final class GameManager<T extends AbstractPlayer> {
     private List<T> players;
     private int turnMaxTime = 50;
     private int maxTurn = 200;
-
+    
+    @Inject Provider<T> playerProvider;
+    @Inject Provider<Referee> refereeProvider;
+    
     public List<T> getPlayers() {
         return players;
     }
@@ -55,6 +61,11 @@ public final class GameManager<T extends AbstractPlayer> {
 
     int getTurnMaxTime() {
         return turnMaxTime;
+    }
+
+    public void start() {
+        System.out.println(playerProvider.get().getClass().getName());
+        System.out.println(refereeProvider.get().getClass().getName());
     }
 
 }

@@ -4,13 +4,13 @@ public class PlayerTimeoutException extends Exception {
 
     private static final long serialVersionUID = -8569665968534367562L;
 
-    private AbstractPlayer player;
+    private AbstractPlayer abstractPlayer;
 
-    PlayerTimeoutException(AbstractPlayer player) {
-        this.player = player;
+    PlayerTimeoutException(AbstractPlayer abstractPlayer) {
+        this.abstractPlayer = abstractPlayer;
     }
 
     public AbstractPlayer getPlayer() {
-        return player;
+        return abstractPlayer;
     }
 }
