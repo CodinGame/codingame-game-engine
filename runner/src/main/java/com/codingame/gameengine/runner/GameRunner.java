@@ -341,7 +341,7 @@ public class GameRunner {
         addPlayer(new JavaPlayerAgent(playerClass.getName()));
     }
 
-    public void addExternalPlayer(String commandLine) {
+    public void addCommandLinePlayer(String commandLine) {
         addPlayer(new CommandLinePlayerAgent(commandLine));
     }
 
