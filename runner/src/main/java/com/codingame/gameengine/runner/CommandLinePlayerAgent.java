@@ -40,7 +40,7 @@ public class CommandLinePlayerAgent extends Agent {
     public void initialize(Properties conf) {
 
         try {
-            this.process = Runtime.getRuntime().exec("stdbuf -i 0 -o 0 " + commandLine);
+            this.process = Runtime.getRuntime().exec(commandLine);
         } catch (IOException e) {
             throw new RuntimeException("Failed to launch " + commandLine, e);
         }
