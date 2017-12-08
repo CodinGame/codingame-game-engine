@@ -76,14 +76,10 @@ public abstract class Agent {
      *            an input to write
      */
     public void sendInput(String input) {
-//        System.out.println("\t=== Sent to Agent:" + this.agentId);
-//        System.out.print(input);
-//        System.out.println("\t=== End sent");
-
         if (processStdin != null) {
             try {
-                if (log.isDebugEnabled()) {
-                    log.debug("Send input to agent " + this.agentId + " : " + input);
+                if (log.isTraceEnabled()) {
+                    log.trace("Send input to agent " + this.agentId + " : " + input);
                 }
                 processStdin.write(input.getBytes(UTF8));
                 processStdin.flush();

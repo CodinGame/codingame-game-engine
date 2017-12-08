@@ -241,7 +241,6 @@ public final class GameManager<T extends AbstractPlayer> {
         } else {
             data.add(createNewView(false).toString());
         }
-        System.err.println(data);
         out.println(data);
     }
 

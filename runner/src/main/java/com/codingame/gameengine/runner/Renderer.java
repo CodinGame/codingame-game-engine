@@ -38,7 +38,6 @@ public class Renderer {
     }
 
     private Path generateView(int playerCount, String jsonResult) {
-        System.err.println(jsonResult);
         Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
         deleteFolder(tmpdir.toFile());
         tmpdir.toFile().mkdirs();
