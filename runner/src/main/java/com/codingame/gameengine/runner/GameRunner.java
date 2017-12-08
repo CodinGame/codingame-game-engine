@@ -24,8 +24,8 @@ import com.google.gson.Gson;
 
 public class GameRunner {
 
-    public static final Charset UTF8 = Charset.forName("UTF-8");
     public static final String INTERRUPT_THREAD = "05&08#1981";
+    private static final Charset UTF8 = Charset.forName("UTF-8");
     private static final Pattern COMMAND_HEADER_PATTERN = Pattern
             .compile("\\[\\[(?<cmd>.+)\\] ?(?<lineCount>[0-9]+)\\]");
 
@@ -45,15 +45,14 @@ public class GameRunner {
     public GameRunner() {
         this(null);
     }
-    
+
     public GameRunner(String initFile) {
         try {
             referee = new RefereeAgent();
             players = new ArrayList<Agent>();
 
-            File paramsFile = new File(initFile);
-            if (paramsFile != null && paramsFile.exists()) {
-                gameResult.refereeInput = FileUtils.readFileToString(paramsFile, UTF8);
+            if (initFile != null) {
+                gameResult.refereeInput = FileUtils.readFileToString(new File(initFile), UTF8);
             }
         } catch (IOException e) {
             throw new RuntimeException("Cannot initialize game", e);
