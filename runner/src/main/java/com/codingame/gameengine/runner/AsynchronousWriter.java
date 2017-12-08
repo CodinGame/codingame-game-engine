@@ -21,7 +21,7 @@ public class AsynchronousWriter extends Thread {
         while (!interrupt) {
             try {
                 String toWrite = queue.take();
-                if (this.stream == null || toWrite == null || GameSimulator.INTERRUPT_THREAD.equals(toWrite)) {
+                if (this.stream == null || toWrite == null || GameRunner.INTERRUPT_THREAD.equals(toWrite)) {
                     interrupt = true;
                 } else {
                     stream.write(toWrite.getBytes(Agent.UTF8));
