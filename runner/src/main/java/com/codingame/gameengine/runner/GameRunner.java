@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -18,6 +16,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.codingame.gameengine.runner.Command.InputCommand;
+import com.codingame.gameengine.runner.Command.OutputCommand;
 import com.codingame.gameengine.runner.dto.GameResult;
 import com.codingame.gameengine.runner.dto.Tooltip;
 import com.google.gson.Gson;
@@ -113,34 +113,32 @@ public class GameRunner {
 
         readInitFrameErrors();
 
-        // Sends init (1 line by default, multiple lines if init data available)
-        int nbLine = 1;
-        StringBuilder initBuilder = new StringBuilder();
+        Command initCommand = new Command(OutputCommand.INIT);
+        initCommand.addLine(players.size());
+
+        // If the referee has input data (i.e. value for seed)
         if (gameResult.refereeInput != null) {
             try (Scanner scanner = new Scanner(gameResult.refereeInput)) {
                 while (scanner.hasNextLine()) {
-                    initBuilder.append(scanner.nextLine());
-                    initBuilder.append("\n");
-                    nbLine++;
+                    initCommand.addLine((scanner.nextLine()));
                 }
             }
         }
-        String initLine = String.format("[[INIT] %d]\n%d\n", nbLine, players.size());
-        initBuilder.insert(0, initLine);
 
-        referee.sendInput(initBuilder.toString());
+        referee.sendInput(initCommand.toString());
         int round = 0;
         while (true) {
-            Map<String, String> commands = readGameInfo();
+            GameTurnInfo turnInfo = readGameInfo();
+            boolean validTurn = turnInfo.isComplete();
 
-            if (commands != null) {
-                gameResult.outputs.get("referee").add(commands.get("INFOS"));
-                gameResult.summaries.add(commands.get("SUMMARY"));
+            if (validTurn) {
+                gameResult.outputs.get("referee").add(turnInfo.get(InputCommand.INFOS).orElse(null));
+                gameResult.summaries.add(turnInfo.get(InputCommand.SUMMARY).orElse(null));
             }
 
-            if ((commands != null) && (!commands.containsKey("SCORES"))) {
-                NextPlayerInfo nextPlayerInfo = new NextPlayerInfo(commands.get("NEXT_PLAYER_INFO"));
-                String nextPlayerOutput = getNextPlayerOutput(nextPlayerInfo, commands.get("NEXT_PLAYER_INPUT"));
+            if ((validTurn) && (!turnInfo.get(InputCommand.SCORES).isPresent())) {
+                NextPlayerInfo nextPlayerInfo = new NextPlayerInfo(turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null));
+                String nextPlayerOutput = getNextPlayerOutput(nextPlayerInfo, turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null));
                 if (nextPlayerOutput != null) {
                     sendPlayerOutput(nextPlayerOutput, nextPlayerInfo.nbLinesNextOutput);
                 } else {
@@ -149,31 +147,30 @@ public class GameRunner {
             }
 
             readError(referee);
-            if (commands == null) {
+            if (!validTurn) {
                 gameResult.views.add(null);
             } else {
-                gameResult.views.add(commands.get("VIEW"));
-            }
+                gameResult.views.add(turnInfo.get(InputCommand.VIEW).orElse(null));
 
-            if ((commands != null) && commands.containsKey("UINPUT")) {
-                gameResult.uinput.add(commands.get("UINPUT"));
-            }
+                turnInfo.get(InputCommand.UINPUT).ifPresent(line -> {
+                    gameResult.uinput.add(line);
+                });
 
-            if ((commands != null) && commands.containsKey("METADATA")) {
-                gameResult.metadata = commands.get("METADATA");
-            }
+                turnInfo.get(InputCommand.METADATA).ifPresent(line -> {
+                    gameResult.metadata = line;
+                });
 
-            if ((commands != null) && commands.containsKey("TOOLTIP")) {
-                String[] tooltipData = commands.get("TOOLTIP").split("\n");
+                final int currentRound = round;
+                turnInfo.get(InputCommand.TOOLTIP).ifPresent(line -> {
+                    String[] tooltipData = line.split("\n");
                 for (int i = 0; i < tooltipData.length / 2; ++i) {
                     String text = tooltipData[i * 2];
                     int eventId = Integer.valueOf(tooltipData[i * 2 + 1]);
-                    gameResult.tooltips.add(new Tooltip(text, eventId, round));
+                        gameResult.tooltips.add(new Tooltip(text, eventId, currentRound));
                 }
-            }
+                });
 
-            if ((commands != null) && commands.containsKey("SCORES")) {
-                String scores = commands.get("SCORES");
+                turnInfo.get(InputCommand.SCORES).ifPresent(scores -> {
                 for (String line : scores.split("\n")) {
                     String[] parts = line.split(" ");
                     if (parts.length > 1) {
@@ -182,9 +179,10 @@ public class GameRunner {
                         gameResult.scores.put(player, score);
                     }
                 }
+                });
             }
             round++;
-            if ((commands == null) || commands.containsKey("SCORES")) {
+            if (!validTurn || turnInfo.isEndTurn()) {
                 break;
             }
         }
@@ -231,16 +229,13 @@ public class GameRunner {
     }
 
     private void sendPlayerOutput(String output, int nbLines) {
-        StringBuilder toSend = new StringBuilder();
-        toSend.append("[[SET_PLAYER_OUTPUT] ");
-        toSend.append(nbLines);
-        toSend.append("]\n");
-        toSend.append(output);
-        referee.sendInput(toSend.toString());
+        Command command = new Command(OutputCommand.SET_PLAYER_OUTPUT, output.split("(\\n|\\r\\n)"));
+        referee.sendInput(command.toString());
     }
 
     private void sendTimeOut() {
-        referee.sendInput("[[SET_PLAYER_TIMEOUT] 0]\n");
+        Command command = new Command(OutputCommand.SET_PLAYER_TIMEOUT);
+        referee.sendInput(command.toString());
     }
 
     private String getNextPlayerOutput(NextPlayerInfo nextPlayerInfo, String nextPlayerInput) {
@@ -268,22 +263,21 @@ public class GameRunner {
         return playerOutput;
     }
 
-    private Map<String, String> readGameInfo() {
-        Map<String, String> commands = new HashMap<String, String>();
-        referee.sendInput("[[GET_GAME_INFO] 0]\n");
-        while ((!commands.containsKey("NEXT_PLAYER_INPUT") || !commands.containsKey("VIEW")
-                || !commands.containsKey("NEXT_PLAYER_INFO") || !commands.containsKey("INFOS"))
-                && (!commands.containsKey("VIEW") || !commands.containsKey("SCORES")
-                        || !commands.containsKey("INFOS"))) {
-            String[] command = readCommand(referee);
+    private GameTurnInfo readGameInfo() {
+        GameTurnInfo turnInfo = new GameTurnInfo();
+
+        referee.sendInput(new Command(OutputCommand.GET_GAME_INFO).toString());
+
+        while (!turnInfo.isComplete()) {
+            Command command = readCommand(referee);
             if (command == null)
-                return null;
-            commands.put(command[0], command[1]);
+                return turnInfo;
+            turnInfo.put(command);
         }
-        return commands;
+        return turnInfo;
     }
 
-    private String[] readCommand(Agent agent) {
+    private Command readCommand(Agent agent) {
         String output = "";
         output = agent.getOutput(1, 1500);
         if (output != null)
@@ -303,7 +297,7 @@ public class GameRunner {
             }
             if (checkOutput(output, nbLinesToRead) != OutputResult.OK)
                 return null;
-            return new String[] { command, output };
+            return new Command(InputCommand.valueOf(command), output);
         } else {
             throw new RuntimeException("Invalid referee command: " + output);
         }
