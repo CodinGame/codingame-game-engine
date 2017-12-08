@@ -39,10 +39,6 @@ public abstract class Agent {
      *
      * @param conf
      *            Global configuration
-     * @param id
-     *            The agent id
-     * @throws IOException
-     *             if an error occurs while writing files
      */
     public void initialize(Properties conf) {
     }

@@ -48,7 +48,7 @@ public class GameRunner {
 	}
 
 	public void addExternalPlayer(String commandLine) {
-		throw new UnsupportedOperationException("Not implemented");
+	    players.add(new CommandLinePlayerAgent(commandLine));
 	}
 
 	public void start() {
