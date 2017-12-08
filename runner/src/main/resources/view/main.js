@@ -1,90 +1,62 @@
-import { Drawer } from './js/viewer.js';
+import * as config from './js/config.js';
+import { Drawer } from './js/Drawer.js';
+import { createGameManagerFromGameInfo } from './gameManager.js'
+
+// TODO: add tooltips
 
 var progress;
 
 window.DEFAULT_WIDTH = 960;
 window.DEFAULT_HEIGHT = 540;
-
-
-
-
+window.overSampling = 2;
 
 function go() {
-  document.getElementById("canvasWidth").value = DEFAULT_WIDTH;
-  document.getElementById("canvasHeight").value = DEFAULT_HEIGHT;
-  document.getElementById("positionRange").max = frames.length - 1;
+  document.getElementById("positionRange").max = frames.length;
   document.getElementById("framelabel").max = frames.length - 1;
-
 
   canvas = document.getElementsByTagName('canvas')[0];
 
   Drawer.PIXI = PIXI;
   d = new Drawer(canvas, DEFAULT_WIDTH, DEFAULT_HEIGHT);
   window.d = d;
-  resize();
+
+  window.gameManager = createGameManagerFromGameInfo(d, {agents: window.agents, frames: window.frames})
+  window.gameManager.subscribe(updateToFrame);
 
   var stats = new Stats();
   stats.setMode(2);
   stats.domElement.style.position = 'absolute';
   stats.domElement.style.right = '0px';
   stats.domElement.style.top = '0px';
-  document.getElementById("container").appendChild(stats.domElement);
+  $("body").append(stats.domElement);
   d.onBeforeRender = stats.begin;
   d.onAfterRender = function () {
     stats.end();
   };
-  frame = 0;
-  progress = 1;
 
-  updateButtons();
   resize(1920, 1080);
 
-}
-
-function updateButtons() {
-  var viewerButtons = $('#viewerButtons');
-  var options = d.getOptions();
-  for (var i = 0; i < options.length; ++i) {
-    var option = options[i];
-    var div = $('<div></div>');
-    div.append($('<span>' + option.title + ' :</span>'));
-    var name = 'viewerOption' + i;
-    for (var value in option.values) {
-
-      var radio = $('<input type="radio" name="' + name + '" value="' + value + '" id="' + (name + value) + '"><label for="' + (name + value) + '">' + value + '</label>');
-      if (option.values[value] == option.get()) {
-        radio.attr('checked', true);
-      }
-      radio.data("option", option);
-      radio.data("name", option);
-      div.append(radio);
-      radio.on("change", function (test) {
-        var option = $(test.currentTarget).data("option");
-        var value = option.values[$('input[name=' + test.currentTarget.name + ']:checked').val()];
-        option.set(value);
-      });
-
+  let container = $('#container');
+  setInterval(function() {
+    if (canvas.width !== container.width() * overSampling) {
+      resize(container.width() * overSampling, container.width() * 0.5625 * overSampling);
     }
-    viewerButtons.append(div);
-  }
+  }, 200);
 }
-
 
 var d;
 var canvas;
 
-var speed = 1;
-var frame = -1;
-var animationId;
-var animationId = -1;
-var lastRender = -1;
-var init = 0;
-var data = window.data;
-var frames = data.views;
-var agents = [{
+window.speed = 1;
+window.animationId = -1;
+window.lastRender = -1;
+window.init = 0;
+window.data = window.data;
+window.frames = data.views.map(v => JSON.parse(v));
+window.agents = [{
   index: 0,
-  name: 'Antoine[Amadeus]',
-  avatar: 'https://static.codingame.com/servlet/fileservlet?id='+1715936252943+'&format=viewer_avatar',
+  name: '[CG]Nonofr',
+  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1715936252943 + '&format=viewer_avatar',
   // avatar: '/servlet/A.png',
   type: 'CODINGAMER',
   color: '#ffae16',
@@ -95,7 +67,7 @@ var agents = [{
 }, {
   index: 1,
   name: 'Index_1',
-  avatar: 'https://static.codingame.com/servlet/fileservlet?id='+1717001354716+'&format=viewer_avatar',
+  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1717001354716 + '&format=viewer_avatar',
   // avatar: '/servlet/B.png',
   type: 'CODINGAMER',
   color: '#ff1d5c',
@@ -165,6 +137,16 @@ var agents = [{
   }
 }];
 
+let idx = 0;
+for (const player of config.players) {
+  agents[idx].name = player.name;
+  agents[idx].avatar = player.avatar;
+  if (++idx >= agents.length) {
+    break;
+  }
+
+};
+
 console.log(data.tooltips ? JSON.stringify(data.tooltips) : 'no tooltips');
 var uinput = {};
 if (data.uinput) {
@@ -189,134 +171,92 @@ function updateText(id) {
   document.getElementById("errors").value = '';
   for (var i in data.ids) {
     var text = data.errors[i][id];
-    if (text != null)
+    if (text != null) {
       document.getElementById("errors").value += text;
-  }
-
-  if (data.errors.referee[id] != null) {
-    document.getElementById("refereeerrors").value = data.errors.referee[id];
-  } else {
-    document.getElementById("refereeerrors").value = "";
+    }
   }
 }
 
-function updateToFrame(_frame, _progress, _speed) {
+function updateToFrame(_frame, _progress, _playing, isSubFrame, isTurnBased, atEnd) {
   initFrames();
-  frame = Math.max(0, Math.min(_frame, frames.length - 1));
-  progress = Math.max(0, Math.min(_progress, 1));
+  let frame = Math.max(0, Math.min(_frame, frames.length - 1));
+  let progress = Math.max(0, Math.min(_progress, 1));
   document.getElementById("positionRange").value = frame + _progress;
   document.getElementById("framelabel").value = frame;
   updateText(frame);
-  d.update(frame, progress, _speed);
-}
-
-function enabledAsyncRendering(enabled) {
-  d.enableAsyncRendering(enabled);
-}
-
-function destroyViewer() {
-  d.destroy();
+  d.update(frame, progress, 1);
 }
 
 function initFrames() {
   if (init == 0) {
-    var _frames = []
-    for (var i = 0; i < frames.length; ++i) {
-      _frames.push(frames[i].split("\n"));
-    }
-    d.initFrames(_frames, agents.slice(0, window.playerCount));
+    d.initFrames(frames, agents.slice(0, window.playerCount));
     init = 1;
   }
 }
 
 function startAnimation() {
-  animationId = requestAnimationFrame(function (time) {
-    lastRender = time;
-    _animate(time);
-  });
-}
-
-
-function _animate(time) {
-  if (progress == 1) {
-    progress = 0.00000000000000001;
-    do {
-      frame++;
-    } while (frame < frames.length - 1 && (frames[frame].indexOf("KEY_FRAME") != 0 && frames[frame].indexOf("\"key\":true") === -1));
-  }
-  if (frame >= frames.length) {
-    animationId = -1;
-    updateToFrame(frames.length - 1, 1, 0);
-    return;
-  }
-  var step = Math.min(32, (time - lastRender)) / 1000 * 2 * speed;
-  
-  progress += step * (d.getFrameSpeed ? d.getFrameSpeed(frame, speed) : 1);
-  if (progress > 1)
-    progress = 1;
-  updateToFrame(frame, progress, speed);
-  lastRender = time;
-  animationId = requestAnimationFrame(_animate);
+  gameManager.play();
 }
 
 function stop() {
-  if (animationId >= 0) {
-    cancelAnimationFrame(animationId);
-    animationId = -1;
-    updateToFrame(frame, progress, 0);
-  }
-
+  gameManager.pause();  
 }
 
-function frame0() {
-  stop();
-  updateToFrame(0, progress = 1, 0);
-
+function togglePlay() {
+  gameManager.togglePlay();
 }
 
 function nextFrame() {
-  stop();
-  updateToFrame(progress >= 1 ? frame + 1 : frame, 1, 0);
+  gameManager.pause();
+  gameManager.next();
 }
 
 function previousFrame() {
-  stop();
-  updateToFrame(frame - 1, 1, 0);
+  gameManager.pause();
+  gameManager.prior();
 }
 
 function resize(width, height) {
-  if (!width || !height) {
-    width = document.getElementById("canvasWidth").value;
-    height = document.getElementById("canvasHeight").value;
-  }
-  document.getElementById("canvasWidth").value = width;
-  document.getElementById("canvasHeight").value = height;
-  var ratio = Math.min(DEFAULT_WIDTH / width, DEFAULT_HEIGHT / height);
+  console.log(width, height)
   canvas.width = width;
   canvas.height = height;
-  canvas.style.width = width + "px";
-  canvas.style.height = height + "px";
-  d.init(canvas, width, height, agents.map(function (agent) {
+  d.init(canvas, canvas.width, canvas.height, agents.map(function (agent) {
     return agent.color;
-  }), 1 / ratio);
-  canvas.style.width = (ratio * width) + "px";
-  canvas.style.height = (ratio * height) + "px";
+  }), overSampling);
+}
 
-  if (frame >= 0 && animationId >= 0) {
-    updateToFrame(frame, 1, 0);
+function setSpeed(speed) {
+  gameManager.setSpeed(speed);
+  document.getElementById('speedlabel').value = speed;
+}
+
+function goTo(frame, progress) {
+  let f = frame, p = progress;
+  if (frame === -1) {
+    f = frames.length - 1;
+  }
+  if (progress === 0) {
+    f = frame - 1;
+    p = 1;
+  }
+  gameManager.pause();
+  gameManager.setFrame(f, p * 100);
+}
+
+function fullScreen() {  
+  let fs = canvas.webkitRequestFullScreen || canvas.mozRequestFullScreen || canvas.requestFullscreen;
+  if (fs) {
+    fs.apply(canvas);
   }
 }
 
+window.setSpeed = setSpeed;
 window.resize = resize;
 window.nextFrame = nextFrame;
-window.frame0 = frame0;
-window.stop = stop;
 window.previousFrame = previousFrame;
-window.startAnimation = startAnimation;
-window.updateToFrame = updateToFrame;
-window.enabledAsyncRendering = enabledAsyncRendering;
-window.destroyViewer = destroyViewer;
+window.togglePlay = togglePlay;
 window.initFrames = initFrames;
-
+window.goTo = goTo;
+window.fullScreen = fullScreen;
 
 go();

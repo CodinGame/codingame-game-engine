@@ -1,4 +1,4 @@
-import {Entity} from "./Entity.js";
+import { Entity } from "./Entity.js";
 
 export class Shape extends Entity {
   static defaultLineWidth() {
@@ -18,11 +18,13 @@ export class Shape extends Entity {
   }
   constructor() {
     super();
-    this.defaultState.fillColor = Shape.defaultFillColor();
-    this.defaultState.lineWidth = Shape.defaultLineWidth();
-    this.defaultState.lineColor = Shape.defaultLineColor();
-    this.defaultState.fillAlpha = Shape.defaultFillAlpha();
-    this.defaultState.lineAlpha = Shape.defaultLineAlpha();
+    Object.assign(this.defaultState, {
+      fillColor: Shape.defaultFillColor(),
+      lineWidth: Shape.defaultLineWidth(),
+      lineColor: Shape.defaultLineColor(),
+      fillAlpha: Shape.defaultFillAlpha(),
+      lineAlpha: Shape.defaultLineAlpha()
+    });
   }
 
   initDisplay() {
@@ -34,7 +36,7 @@ export class Shape extends Entity {
     }
   }
 
-  updateDisplay(start, end, t) {
-    super.updateDisplay(start, end, t);
+  updateDisplay(state, changed, globalData) {
+    super.updateDisplay(state, changed, globalData);
   }
 }

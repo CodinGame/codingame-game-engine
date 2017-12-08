@@ -6,7 +6,6 @@
 
 	<script type='text/javascript' src="lib/jquery.js"></script>
 	<script type='text/javascript' src="lib/pixi.js"></script>
-	<!-- <script type='text/javascript' src="https://cdn.rawgit.com/pixijs/pixi.js/master/bin/pixi.min.js"></script> -->
 	<script type='text/javascript' src="lib/stats.min.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
 	<link href="http://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" type="text/css">
@@ -18,91 +17,128 @@
 		window.playerCount = [PLAYERCOUNT];
 	</script>
 	
-	<script src="./main.js" type="module">
-	</script>
+	<script src="./main.js" type="module"></script>
 	
+	<style>
+		body {
+			background-color: #20252a;
+			color: white;
+			font-family: 'Open Sans',Lato,sans-serif!important;
+		}
+
+		.player {
+			width: 960px;
+			overflow: auto;
+			resize: horizontal;
+			padding: 10px;
+			border: 1px solid #41454a;
+			min-width: 470px
+		}
+
+		.controls {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 50px;
+		}
+
+		.position {
+			display: flex;
+			flex: 1;
+		}
+		
+		#container {
+			position: relative;
+			height: 0;
+			padding-bottom: 56.25%;
+		}
+		
+		#positionRange {
+			flex: 1;
+			margin: 0 10px;
+		}
+		
+		#player-canvas {
+			position: absolute;
+			margin: 0;
+			padding: 0;
+			left:0;
+			top:0;
+			width: 100%;
+			height: 100% 
+		}
+		
+		fieldset {
+			border: 1px solid #41454a;
+			margin-top: 20px;
+		}
+		
+		textarea {
+			background-color: #252e38;
+			color: white;
+			width: 300px;
+			height: 80px;
+		}
+		
+		.full-screen {
+			margin-left: 10px;
+		}
+	</style>
 </head>
 
-<body style="left: 0px; top: 0px; margin: 0; padding: 0;" onload="frame0(); startAnimation()">
-	<div style="left: 0px; top: 0px; margin: 0; padding: 0; width: 960px; height: 540px; display:table">
-		<div id="container" style="display:table-cell; vertical-align: middle; text-align: center">
-			<canvas style="margin: 0; padding: 0; width: 960px; height: 540px; left: 0px; top: 0px; border: 1px solid black; line-height: 1px;"
-			 width="960" height="540"></canvas>
+<body>
+	<div class="player">
+		<div id="container">
+			<canvas id="player-canvas" width="960" height="540"></canvas>
+		</div>
+		
+		<div class="controls">
+
+			<div>
+				<button onclick="goTo(0, 1)">&lt;&lt;</button>
+				<button onclick="previousFrame()">&lt;</button>
+				<button onclick="togglePlay()">Play / Pause</button>
+				<button onclick="nextFrame()">&gt;</button>
+				<button onclick="goTo(-1, 1)">&gt;&gt;</button>
+			</div>
+		
+			<div class="position">
+				<input id="positionRange" type="range" value="1" max="0" min="1" step=".001" oninput="goTo(this.value | 0, this.value - (this.value | 0))" />
+				<input type="number" step="1" min="0" max="0" id="framelabel" value="0" onchange="goTo(this.value | 0, 1);" />
+			</div>
+		
+			<div>
+				<button class="full-screen" onclick="fullScreen();">Full Screen</button>
+			</div>
+
 		</div>
 	</div>
 
-	<fieldset style="display: inline">
-		<legend>Standard output</legend>
-		<textarea id="stdout" style="width: 120px; height: 80px;" readonly></textarea>
-	</fieldset>
-	<fieldset style="display: inline">
-		<legend>Standard error</legend>
-		<textarea id="errors" style="width: 300px; height: 80px;" readonly></textarea>
-	</fieldset>
-	<fieldset style="display: inline">
-		<legend>Referee output</legend>
-		<textarea id="console" style="width: 300px; height: 80px;" readonly></textarea>
-	</fieldset>
-	<fieldset style="display: inline">
-		<legend>Referee errors</legend>
-		<textarea id="refereeerrors" style="width: 120px; height: 80px;" readonly></textarea>
-	</fieldset>
-
-	<br />
-
-	<fieldset style="display: inline">
-		<legend>Animations</legend>
-		<button onclick="startAnimation()">play</button>
-		<button onclick="stop()">stop</button> | speed : <input type="number" id="speedlabel" min="0.01" max="100" value="1" step="0.01"
-		 style="width:40px" onchange="speed=this.value;" />
-		<br /><button onclick="speed=document.getElementById('speedlabel').value=0.1;">x0.1</button>
-		<button onclick="speed=document.getElementById('speedlabel').value=0.2;">x0.2</button>
-		<button onclick="speed=document.getElementById('speedlabel').value=0.5;">x0.5</button>
-		<button onclick="speed=document.getElementById('speedlabel').value=1;">x1</button>
-		<button onclick="speed=document.getElementById('speedlabel').value=2;">x2</button>
-		<button onclick="speed=document.getElementById('speedlabel').value=5;">x5</button>
-		<button onclick="speed=document.getElementById('speedlabel').value=10;">x10</button>
-	</fieldset>
-	<fieldset style="display: inline">
-		<legend>Position</legend>
-		<button onclick="frame0()">RESET</button>
-		<button onclick="previousFrame()">&lt;</button>
-		<input id="positionRange" type="range" value="0" max="0" min="0" step=".001" oninput="stop(); document.getElementById('framelabel').value=this.value|0; updateToFrame(this.value|0, this.value - (this.value | 0), 0);">
-		<input type="number" step="1" min="0" max="0" id="framelabel" value="0" style="width:50px" onchange="document.getElementById('positionRange').value=this.value|0; updateToFrame(document.getElementById('positionRange').value |0,1,0);"
-		/>
-		<button onclick="nextFrame()">&gt;</button>
-		<br />
-		<div style="display: none">
-			<input type="checkbox" checked="checked" name="rendering" onChange="enabledAsyncRendering(this.checked);" /> Rendering
-			<button onclick="destroyViewer()">Destroy</button>
-		</div>
-	</fieldset>
-	<fieldset style="display: inline">
-		<legend>Size</legend>
-		Width : <input type="number" id="canvasWidth" min="480" max="4000" value="1920" step="1" style="width:50px" onChange="resize();"
-		/><button onclick="resize(1920,1080);">FullHD</button>
-		<br />Height: <input type="number" id="canvasHeight" min="240" max="2000" value="1080" step="1" style="width:50px" onChange="resize();"
-		/><button onclick="resize(DEFAULT_WIDTH,DEFAULT_HEIGHT);">Reset</button>
-	</fieldset>
-	<fieldset style="display: none">
-		<legend>Recording</legend>
-		fps : <input type="number" id="recordFps" min="5" max="200" value="60" step="1" style="width:50px" /> Quality : <input
-		 type="number" id="recordQuality" min="0" max="1" value="1" step="0.01" style="width:50px" /><br /> i/f : <input type="number"
-		 id="imagePerFrame" min="5" max="1000" value="30" step="1" style="width:50px" />
-		<input type="checkbox" name="record" onChange="record(this.checked);" /> Record<br />
-	</fieldset>
 
 
-
-	<fieldset style="display: none">
-		<legend>Custom</legend>
-		<input id="customAction" type="range" value=".5" max="1" min="0" step=".001" oninput="if (d.customAction) { d.customAction(this.value); $('#customValue').val(this.value) }">
-		<input disabled type="number" step="0.001" min="0" max="1" id="customValue" value="0.5" />
+	<fieldset style="display: inline">
+		<legend>Player Standard Output</legend>
+		<textarea id="stdout"readonly></textarea>
+	</fieldset>
+	<fieldset style="display: inline">
+		<legend>Player Error Output</legend>
+		<textarea id="errors" readonly></textarea>
+	</fieldset>
+	<fieldset style="display: inline">
+		<legend>Referee Output</legend>
+		<textarea id="console" readonly></textarea>
 	</fieldset>
 
-	<fieldset style="display: none">
-		<form id="viewerButtons">
-		</form>
+	<fieldset style="display: inline">
+		<legend>Speed</legend>
+		<button onclick="setSpeed(0.1);">x0.1</button>
+		<button onclick="setSpeed(0.2);">x0.2</button>
+		<button onclick="setSpeed(0.5);">x0.5</button>
+		<button onclick="setSpeed(1);">x1</button>
+		<button onclick="setSpeed(2);">x2</button>
+		<button onclick="setSpeed(5);">x5</button>
+		<button onclick="setSpeed(10);">x10</button> | 
+		Custom speed: <input type="number" id="speedlabel" min="0.01" max="100" value="1" step="0.1" style="width:40px" onchange="setSpeed(this.value);" />
 	</fieldset>
 
 </body>

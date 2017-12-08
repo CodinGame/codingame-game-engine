@@ -8,7 +8,7 @@ import com.google.inject.Provider;
 
 public abstract class AbstractPlayer {
     @Inject Provider<GameManager<AbstractPlayer>> gameManagerProvider;
-    
+
     @SuppressWarnings("serial")
     public static class TimeoutException extends Exception {
 
@@ -20,61 +20,148 @@ public abstract class AbstractPlayer {
     private boolean active = true;
     private boolean timeout;
     private int score;
-    private String reason;
-    private boolean toBeExecuted ;
+    private boolean hasBeenExecuted;
 
-    // Used by referee
+    /**
+     * Gets the player nickname token.
+     * 
+     * @return a string that will be converted into the real nickname by the viewer.
+     */
+    public final String getNickname() {
+        return "$" + this.index;
+    }
 
+    /**
+     * Gets the player color token.
+     * 
+     * @return an integer that will be converted into the real color by the viewer.
+     */
+    public final int getColor() {
+        return -(this.index + 1);
+    }
+    
+    /**
+     * Gets the player avatar token.
+     * 
+     * @return an integer that will be converted into the real avatr by the viewer, if it exists.
+     */
+    public final String getAvatar() {
+        return "$" + this.index;
+    }
+
+    /**
+     * Returns true is the player is still active in the game (can be executed).
+     * 
+     * @return true is the player is active.
+     */
     public final boolean isActive() {
         return this.active;
     }
 
+    /**
+     * Get player index from 0 (included) to number of players (excluded).
+     * 
+     * @return the player index.
+     */
     public final int getIndex() {
         return this.index;
     }
 
+    /**
+     * Get current score.
+     * 
+     * @return current player score
+     */
     public final int getScore() {
         return this.score;
     }
 
+    /**
+     * Set current score. This is used to rank the players at the end of the game.
+     * 
+     * @param score
+     */
     public final void setScore(int score) {
         this.score = score;
     }
 
-    public final void deactivate(String reason) {
-        this.active = false;
-        this.reason = reason;
+    /**
+     * Deactivate a player. The player can't play after this and is no longer in the list of active players.
+     */
+    public final void deactivate() {
+        this.deactivate(null);
     }
 
+    /**
+     * Deactivate a player and adds a tooltip with the reason. The player can't play after this and is no longer in the list of active players.
+     * 
+     * @param reason
+     *            Message to display in the tooltip.
+     */
+    public final void deactivate(String reason) {
+        this.active = false;
+        if (reason != null) {
+            gameManagerProvider.get().addTooltip(new Tooltip(index, reason));
+        }
+    }
+
+    /**
+     * Adds a new line to the input to send to the player on execute.
+     * 
+     * @param line
+     *            The input to send.
+     */
     public final void sendInputLine(String line) {
-        if (toBeExecuted) {
+        if (hasBeenExecuted) {
             throw new RuntimeException("Impossible to send new inputs after calling execute");
+        }
+        if (this.gameManagerProvider.get().getOuputsRead()) {
+            throw new RuntimeException("Sending input data to a player after reading any output is forbidden.");
         }
         this.inputs.add(line);
     }
 
+    /**
+     * Executes the player for a maximum of turnMaxTime milliseconds and store the output.
+     */
     public final void execute() {
         gameManagerProvider.get().execute(this);
-        this.toBeExecuted = true;
+        this.hasBeenExecuted = true;
     }
 
+    /**
+     * Gets the output obtained after an execution.
+     * 
+     * @return a list of output lines
+     * @throws TimeoutException
+     */
     public final List<String> getOutputs() throws TimeoutException {
+        this.gameManagerProvider.get().setOuputsRead(true);
+        if (!this.hasBeenExecuted) {
+            throw new RuntimeException("Can't get outputs without executing it!");
+        }
         if (this.timeout) {
             throw new TimeoutException();
         }
         return this.outputs;
     }
 
+    /**
+     * Returns the number of lines that the player must return.
+     * 
+     * If the player do not write that amount of lines before the timeout delay, no outputs at all will be available for this player. The game engine
+     * will not read more than the expected output lines. Extra lines will be available for next turn.
+     * 
+     * @return the expected amount of lines the player must output
+     */
     public abstract int getExpectedOutputLines();
 
-    // Used by GameManager
+    //
+    // The following methods are only used by the GameManager:
+    //
 
     final void setIndex(int index) {
         this.index = index;
-    }
-
-    final String getReason() {
-        return reason;
     }
 
     final List<String> getInputs() {
@@ -88,7 +175,7 @@ public abstract class AbstractPlayer {
     final void resetOutputs() {
         this.outputs = null;
     }
-    
+
     final void setOutputs(List<String> outputs) {
         this.outputs = outputs;
     }
@@ -97,11 +184,11 @@ public abstract class AbstractPlayer {
         this.timeout = timeout;
     }
 
-    final boolean isToBeExecuted() {
-        return toBeExecuted;
+    final boolean hasBeenExecuted() {
+        return hasBeenExecuted;
     }
-    
-    final void setToBeExecuted(boolean toBeExecuted) {
-        this.toBeExecuted = toBeExecuted;
+
+    final void setHasBeenExecuted(boolean hasBeenExecuted) {
+        this.hasBeenExecuted = hasBeenExecuted;
     }
 }

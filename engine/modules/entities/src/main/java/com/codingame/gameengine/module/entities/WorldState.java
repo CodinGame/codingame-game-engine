@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WorldState {
+class WorldState {
     private Map<Entity<?>, EntityState> entityStateMap;
     private final double t;
 
@@ -16,24 +16,16 @@ public class WorldState {
     Double getFrameTime() {
         return t;
     }
-    
+
     Map<Entity<?>, EntityState> getEntityStateMap() {
         return entityStateMap;
     }
 
-    public void flushEntityState(Entity<?> entity) {
-        
-        final EntityState state = entityStateMap.get(entity);
-        if (state == null) {
-            entityStateMap.put(entity, entity.state);
-        } else {
-            //TODO log warning
-            entity.state.forEach((key, value) -> state.put(key, value));
-        }
-        entity.state = new EntityState();
-    }
-
-    public void flushMissingEntities(List<Entity<?>> entities) {
+    /**
+     * Performs a flush of all the entity states that are not already present in the state map.
+     * This allows the default behaviour of commiting all entities at t = 1, which can be overriden.
+     */
+    void flushMissingEntities(List<Entity<?>> entities) {
         entities.stream().forEach(entity -> {
             if (!entityStateMap.containsKey(entity)) {
                 entityStateMap.put(entity, entity.state);
@@ -41,5 +33,26 @@ public class WorldState {
             }
         });
 
+    }
+
+    private void updateStateMap(EntityState oldState, EntityState currentState, Entity<?> entity) {
+        if (oldState == null) {
+            entityStateMap.put(entity, currentState);
+        } else {
+            currentState.forEach((key, value) -> oldState.put(key, value));
+        }
+    }
+
+    void flushEntityState(Entity<?> entity) {
+        final EntityState state = entityStateMap.get(entity);
+        updateStateMap(state, entity.state, entity);
+        entity.state = new EntityState();
+    }
+
+    void updateAllEntities(WorldState next) {
+        next.entityStateMap.forEach((entity, nextState) -> {
+            EntityState oldState = entityStateMap.get(entity);
+            updateStateMap(oldState, nextState, entity);
+        });
     };
 }

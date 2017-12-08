@@ -1,7 +1,9 @@
-import {Circle} from "./Circle.js";
+import { Circle } from "./Circle.js";
 import Line from "./Line.js";
-import {Rectangle} from "./Rectangle.js";
-import {Sprite} from "./Sprite.js";
+import { Rectangle } from "./Rectangle.js";
+import { Sprite } from "./Sprite.js";
+import { Text } from "./Text.js";
+import { Group } from "./Group.js";
 
 export class EntityFactory {
   static create(type) {
@@ -18,6 +20,12 @@ export class EntityFactory {
         break;
       case 'SPRITE':
         entity = new Sprite();
+        break;
+      case 'TEXT':
+        entity = new Text();
+        break;
+      case 'GROUP':
+        entity = new Group();
         break;
       default:
         throw "Exception: entity type not found: " + type;

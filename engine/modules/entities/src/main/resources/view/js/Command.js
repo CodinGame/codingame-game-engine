@@ -7,7 +7,7 @@ export class CreateCommand {
     this.type = args[1];
   }
 
-  apply(stage, entities, frameNumber) {
+  apply(entities, frameNumber) {
     let entity = EntityFactory.create(this.type);
     entity.id = this.id;
     entities.set(this.id, entity);
@@ -15,7 +15,21 @@ export class CreateCommand {
 }
 
 export class PropertiesCommand {
-  constructor(args) {
+  constructor(args, globalData) {
+    let idx = 0;
+    this.id = +args[idx++];
+    this.t = +args[idx++];
+    this.params = JSON.parse(args.slice(2).join(' '));
+    for (const key in this.params) {
+      const value = this.params[key];
+      let opts = (PROPERTIES[key] || PROPERTIES.default);
+      if (typeof opts.convert === 'function') {
+        this.params[key] = opts.convert(value, globalData);
+      }
+    }
+  }
+  
+  deprecatedConstructor(args, globalData) {
     let idx = 0;
     this.id = +args[idx++];
     this.t = +args[idx++];
@@ -23,8 +37,11 @@ export class PropertiesCommand {
 
     while (idx + 1 < args.length) {
       let key = args[idx];
-      let type = (PROPERTIES[key] || PROPERTIES.default).type;
-      let value = type(args[idx + 1]);
+      let opts = (PROPERTIES[key] || PROPERTIES.default);
+      let value = opts.type(args[idx + 1]);
+      if (typeof opts.convert === 'function') {
+        value = opts.convert(value, globalData);
+      }
       this.params[key] = value;
       idx += 2;
     }
@@ -32,14 +49,14 @@ export class PropertiesCommand {
 }
 
 export class UpdateCommand extends PropertiesCommand {
-  apply(stage, entities, frameNumber) {
+  apply(entities, frameNumber) {
     let entity = entities.get(this.id);
     entity.update(this.t, this.params, frameNumber);
   }
 }
 
 export class SetCommand extends PropertiesCommand {
-  apply(stage, entities, frameNumber) {
+  apply(entities, frameNumber) {
     let entity = entities.get(this.id);
     entity.set(this.t, this.params, frameNumber);
   }

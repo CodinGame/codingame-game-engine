@@ -4,11 +4,19 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.JarURLConnection;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -37,6 +45,41 @@ public class Renderer {
         folder.delete();
     }
 
+    private void exportViewToWorkingDir(String sourceFolder, Path targetFolder) throws IOException {
+        Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources(sourceFolder);
+        while (resources.hasMoreElements()) {
+            URL url = resources.nextElement();
+
+            if ((url != null) && url.getProtocol().equals("jar")) {
+                JarURLConnection jarConnection = (JarURLConnection) url.openConnection();
+                ZipFile jar = jarConnection.getJarFile();
+                Enumeration<? extends ZipEntry> entries = jar.entries(); // gives ALL entries in jar
+
+                while (entries.hasMoreElements()) {
+                    ZipEntry entry = entries.nextElement();
+                    String name = entry.getName();
+                    if (!name.startsWith(sourceFolder)) {
+                        continue;
+                    }
+                    String entryTail = name.substring(sourceFolder.length());
+
+                    File f = new File(targetFolder + File.separator + entryTail);
+                    if (entry.isDirectory()) {
+                        f.mkdir();
+                    } else {
+                        Files.copy(jar.getInputStream(entry), f.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    }
+                }
+            } else if ((url != null) && url.getProtocol().equals("file")) {
+                try {
+                    FileUtils.copyDirectory(new File(url.toURI()), targetFolder.toFile());
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException("Cannot copy files", e);
+                }
+            }
+        }
+    }
+
     private Path generateView(int playerCount, String jsonResult) {
         Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
         deleteFolder(tmpdir.toFile());
@@ -45,7 +88,7 @@ public class Renderer {
         File temp = tmpdir.resolve("test.html").toFile();
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(temp))) {
-            FileUtils.copyDirectory(new File(GameRunner.class.getResource("/view").getFile()), tmpdir.toFile());
+            exportViewToWorkingDir("view", tmpdir);
 
             File[] listFiles = tmpdir.resolve("js").toFile().listFiles();
             Arrays.sort(listFiles);

@@ -8,9 +8,9 @@ export class CommandParser {
       SET: commands.SetCommand
     };
   }
-  parse(line) {
+  parse(line, globalData) {
     let args = line.split(" ");
     let keyword = args[0];
-    return new this.parsers[keyword](args.slice(1));
+    return new this.parsers[keyword](args.slice(1), globalData);
   }
 }

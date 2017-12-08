@@ -6,7 +6,7 @@
 		<groupId>com.codingame.gameengine</groupId>
 		<artifactId>parent</artifactId>
 		<version>1.0-SNAPSHOT</version>
-		<relativePath>parent</relativePath>
+		<relativePath>engine/parent</relativePath>
 	</parent>
 
 	<groupId>com.codingame</groupId>

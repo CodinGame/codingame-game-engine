@@ -1,0 +1,33 @@
+import { Shape } from './Shape.js';
+import { lerp, unlerp, lerpColor } from './utils.js';
+
+export default class Line extends Shape {
+
+  static defaultPosition() {
+    return 100;
+  }
+
+  constructor() {
+    super();
+    this.defaultState.x2 = Line.defaultPosition();
+    this.defaultState.y2 = Line.defaultPosition();
+  }
+
+  initDisplay() {
+    super.initDisplay();
+  }
+
+  updateDisplay(state, changed, globalData) {
+    super.updateDisplay(state, changed, globalData);
+
+    if (changed.lineWidth ||
+      changed.lineColor ||
+      changed.x2 ||
+      changed.y2) {
+      this.graphics.clear();
+      this.graphics.lineStyle(state.lineWidth, state.lineColor);
+      this.graphics.moveTo(0, 0);
+      this.graphics.lineTo(-this.container.x + state.x2 * globalData.coeff, -this.container.y + state.y2 * globalData.coeff);
+    }
+  }
+}
