@@ -148,7 +148,6 @@ export class Drawer {
     scope.renderables = [];
     scope.time = 0;
 
-
     if (this.demo) {
 
       if (this.demo.logo) {
@@ -160,7 +159,7 @@ export class Drawer {
       }
 
       var darkness = new PIXI.Graphics();
-      darkness.beginFill(0, 0.6);
+      darkness.beginFill(0, this.demo.overlayAlpha || 0);
       darkness.drawRect(0, 0, 1940, 1100);
       darkness.endFill()
       darkness.x -= 10;
@@ -209,12 +208,13 @@ export class Drawer {
       return agentData;
     });
 
-    this._frames = frames;
+    this._frames = frames.filter(x => x.key || x.frame);
     this.parseGlobalData(this._frames[0].global);
     this.playerCount = playerCount;
     this.reasons = [];
     this.frames = [];
     this.currentFrame = 0;
+    this.progress = 0;
     const firstFrame = this._frames[0].frame;
     this.frames.push(this.parseFrame(firstFrame, this.frames));
     for (var i = 1; i < this._frames.length; ++i) {
