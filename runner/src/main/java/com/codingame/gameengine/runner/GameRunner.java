@@ -1,8 +1,7 @@
 package com.codingame.gameengine.runner;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -12,7 +11,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -25,7 +23,6 @@ import com.google.gson.Gson;
 public class GameRunner {
 
     public static final String INTERRUPT_THREAD = "05&08#1981";
-    private static final Charset UTF8 = Charset.forName("UTF-8");
     private static final Pattern COMMAND_HEADER_PATTERN = Pattern
             .compile("\\[\\[(?<cmd>.+)\\] ?(?<lineCount>[0-9]+)\\]");
 
@@ -46,13 +43,14 @@ public class GameRunner {
         this(null);
     }
 
-    public GameRunner(String initFile) {
+    public GameRunner(Properties properties) {
         try {
             referee = new RefereeAgent();
             players = new ArrayList<Agent>();
-
-            if (initFile != null) {
-                gameResult.refereeInput = FileUtils.readFileToString(new File(initFile), UTF8);
+            if (properties != null) {
+                StringWriter sw = new StringWriter();
+                properties.store(sw, null);
+                gameResult.refereeInput = sw.toString();
             }
         } catch (IOException e) {
             throw new RuntimeException("Cannot initialize game", e);
@@ -137,8 +135,10 @@ public class GameRunner {
             }
 
             if ((validTurn) && (!turnInfo.get(InputCommand.SCORES).isPresent())) {
-                NextPlayerInfo nextPlayerInfo = new NextPlayerInfo(turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null));
-                String nextPlayerOutput = getNextPlayerOutput(nextPlayerInfo, turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null));
+                NextPlayerInfo nextPlayerInfo = new NextPlayerInfo(
+                        turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null));
+                String nextPlayerOutput = getNextPlayerOutput(nextPlayerInfo,
+                        turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null));
                 if (nextPlayerOutput != null) {
                     sendPlayerOutput(nextPlayerOutput, nextPlayerInfo.nbLinesNextOutput);
                 } else {
@@ -163,22 +163,22 @@ public class GameRunner {
                 final int currentRound = round;
                 turnInfo.get(InputCommand.TOOLTIP).ifPresent(line -> {
                     String[] tooltipData = line.split("\n");
-                for (int i = 0; i < tooltipData.length / 2; ++i) {
-                    String text = tooltipData[i * 2];
-                    int eventId = Integer.valueOf(tooltipData[i * 2 + 1]);
+                    for (int i = 0; i < tooltipData.length / 2; ++i) {
+                        String text = tooltipData[i * 2];
+                        int eventId = Integer.valueOf(tooltipData[i * 2 + 1]);
                         gameResult.tooltips.add(new Tooltip(text, eventId, currentRound));
-                }
+                    }
                 });
 
                 turnInfo.get(InputCommand.SCORES).ifPresent(scores -> {
-                for (String line : scores.split("\n")) {
-                    String[] parts = line.split(" ");
-                    if (parts.length > 1) {
-                        int player = Integer.decode(parts[0]);
-                        int score = Integer.decode(parts[1]);
-                        gameResult.scores.put(player, score);
+                    for (String line : scores.split("\n")) {
+                        String[] parts = line.split(" ");
+                        if (parts.length > 1) {
+                            int player = Integer.decode(parts[0]);
+                            int score = Integer.decode(parts[1]);
+                            gameResult.scores.put(player, score);
+                        }
                     }
-                }
                 });
             }
             round++;
@@ -279,7 +279,7 @@ public class GameRunner {
 
     private Command readCommand(Agent agent) {
         String output = "";
-        output = agent.getOutput(1, 1500);
+        output = agent.getOutput(1, 150000);
         if (output != null)
             output = output.replace('\r', '\n');
         if (checkOutput(output, 1) != OutputResult.OK)

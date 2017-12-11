@@ -183,7 +183,7 @@ function updateToFrame(_frame, _progress, _playing, isSubFrame, isTurnBased, atE
   initFrames();
   let frame = Math.max(0, Math.min(_frame, frames.length - 1));
   let progress = Math.max(0, Math.min(_progress, 1));
-  document.getElementById("positionRange").value = frame + _progress;
+  document.getElementById("positionRange").value = frame;
   document.getElementById("framelabel").value = frame;
   updateText(frame);
   d.update(frame, progress, 1);
