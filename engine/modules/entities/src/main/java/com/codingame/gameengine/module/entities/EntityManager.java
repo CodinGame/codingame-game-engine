@@ -26,7 +26,6 @@ public class EntityManager implements Module {
     //TODO: Allow user to select lerping function somehow (noLerp, bellLerp, easeLerp, etc)
 
     //JS
-    //TODO: in config.js : "players" should be automatic, not configurable
     //TODO: Should PIXI be in window or in Drawer ?
     //TODO: sort out the "getGameName()" problem
     //TODO: sort out the "canSwapPlayers()" pbm
