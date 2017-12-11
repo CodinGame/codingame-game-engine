@@ -195,8 +195,6 @@ public final class GameManager<T extends AbstractPlayer> {
     private JsonObject createNewView(boolean keyFrame) {
         JsonObject viewData = new JsonObject();
         viewData.addProperty("key", keyFrame);
-        viewData.addProperty("frameNumber", frame);
-        frame++;
         return viewData;
     }
 
@@ -220,6 +218,7 @@ public final class GameManager<T extends AbstractPlayer> {
     private void dumpView() {
         OutputData data = new OutputData(OutputCommand.VIEW);
         if (newTurn) {
+            prevViewData.addProperty("frameNumber", frame);
             if (turn == 0) {
                 JsonObject initFrame = new JsonObject();
                 initFrame.add("global", globalViewData);
@@ -229,7 +228,10 @@ public final class GameManager<T extends AbstractPlayer> {
                 data.add(prevViewData.toString());
             }
         } else {
-            data.add(createNewView(false).toString());
+            JsonObject viewData = createNewView(false);
+            viewData.addProperty("frameNumber", frame);
+
+            data.add(viewData.toString());
         }
         String viewData = data.toString();
 
@@ -240,7 +242,10 @@ public final class GameManager<T extends AbstractPlayer> {
             System.err.println("Warning: the amount of data sent to the viewer is too big. Please try to optimize your code to send less data.");
         }
 
+        System.err.println(viewData);
         out.println(viewData);
+        
+        frame++;
     }
 
     private void dumpInfos() {
