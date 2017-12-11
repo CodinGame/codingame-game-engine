@@ -57,98 +57,57 @@ window.data = window.data;
 window.frames = data.views.map(v => JSON.parse(v));
 window.agents = [{
   index: 0,
-  name: '[CG]Nonofr',
+  name: 'Player 1',
   avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1715936252943 + '&format=viewer_avatar',
-  // avatar: '/servlet/A.png',
-  type: 'CODINGAMER',
-  color: '#ffae16',
-  typeData: {
-    me: true,
-    nickname: '[CG]Nonofr'
-  }
+  color: '#ffae16'
 }, {
   index: 1,
-  name: 'Index_1',
+  name: 'Player 2',
   avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1717001354716 + '&format=viewer_avatar',
-  // avatar: '/servlet/B.png',
-  type: 'CODINGAMER',
-  color: '#ff1d5c',
-  typeData: {
-    me: true,
-    nickname: '[CG]Maxime'
-  }
+  color: '#ff1d5c'
 }, {
   index: 2,
   name: 'Player 3',
-  avatar: '/servlet/fileservlet?id=' + 1719001703601 + '&format=viewer_avatar',
-  type: 'CODINGAMER',
-  color: '#22a1e4',
-  typeData: {
-    me: false,
-    nickname: null
-  }
+  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719001703601 + '&format=viewer_avatar',
+  color: '#22a1e4'
 }, {
   index: 3,
   name: 'Player 4',
-  avatar: '/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
+  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
   type: 'CODINGAMER',
-  color: '#de6ddf',
-  typeData: {
-    me: false,
-    nickname: null
-  }
+  color: '#de6ddf'
 }, {
   index: 4,
   name: 'Player 5',
-  avatar: '/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
-  type: 'CODINGAMER',
-  color: '#9975e2',
-  typeData: {
-    me: false,
-    nickname: null
-  }
+  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
+  color: '#9975e2'
 }, {
   index: 5,
   name: 'Player 6',
-  avatar: '/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
-  type: 'CODINGAMER',
-  color: '#ff0000',
-  typeData: {
-    me: false,
-    nickname: null
-  }
+  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
+  color: '#ff0000'
 }, {
   index: 6,
   name: 'Player 7',
-  avatar: '/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
-  type: 'CODINGAMER',
-  color: '#6ac371',
-  typeData: {
-    me: false,
-    nickname: null
-  }
+  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
+  color: '#6ac371'
 }, {
   index: 7,
   name: 'Player 8',
-  avatar: '/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
-  type: 'CODINGAMER',
-  color: '#3ac5ca',
-  typeData: {
-    me: false,
-    nickname: null
-  }
+  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
+  color: '#3ac5ca'
 }];
 
-let idx = 0;
-for (const player of config.players) {
-  agents[idx].name = player.name;
-  agents[idx].avatar = player.avatar;
-  if (++idx >= agents.length) {
-    break;
+if (config.players) {
+  let idx = 0;
+  for (const player of config.players) {
+    agents[idx].name = player.name;
+    agents[idx].avatar = player.avatar;
+    if (++idx >= agents.length) {
+      break;
+    }
   }
-
-};
-
+}
 console.log(data.tooltips ? JSON.stringify(data.tooltips) : 'no tooltips');
 var uinput = {};
 if (data.uinput) {
