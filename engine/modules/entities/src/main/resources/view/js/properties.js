@@ -36,6 +36,7 @@ export const PROPERTIES = {
   fillColor: colorOpts,
   lineColor: colorOpts,
   strokeColor: colorOpts,
+  tint: colorOpts,
 
   image: stringOpts,
   text: {

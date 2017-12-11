@@ -22,10 +22,12 @@ export default class Line extends Shape {
 
     if (changed.lineWidth ||
       changed.lineColor ||
+      changed.lineAlpha ||
       changed.x2 ||
       changed.y2) {
+
       this.graphics.clear();
-      this.graphics.lineStyle(state.lineWidth, state.lineColor);
+      this.graphics.lineStyle(state.lineWidth * globalData.toPixel, state.lineColor, state.lineAlpha);
       this.graphics.moveTo(0, 0);
       this.graphics.lineTo(-this.container.x + state.x2 * globalData.coeff, -this.container.y + state.y2 * globalData.coeff);
     }

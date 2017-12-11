@@ -25,13 +25,16 @@ export class Rectangle extends Shape {
       changed.lineColor ||
       changed.width ||
       changed.height ||
+      changed.lineAlpha ||
+      changed.fillColor || 
       changed.fillColor) {
       this.graphics.clear();
       if (state.fillColor !== null) {
         this.graphics.beginFill(state.fillColor, state.fillAlpha);
       }
-      this.graphics.lineStyle(state.lineWidth, state.lineColor);
-      this.graphics.drawRect(0, 0, state.width, state.height);
+
+      this.graphics.lineStyle(state.lineWidth * globalData.toPixel, state.lineColor, state.lineAlpha);
+      this.graphics.drawRect(0, 0, state.width * globalData.coeff, state.height * globalData.coeff);
       if (state.fillColor !== null) {
         this.graphics.endFill();
       }

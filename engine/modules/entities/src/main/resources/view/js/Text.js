@@ -30,7 +30,7 @@ export class Text extends Entity {
     super.updateDisplay(state, changed, globalData);
     this.graphics.text = state.text;
     this.graphics.style.stroke = state.strokeColor;
-    this.graphics.style.strokeThickness = state.strokeThickness;
+    this.graphics.style.strokeThickness = state.strokeThickness * globalData.toPixel;
     this.graphics.style.fill = state.fillColor;
     this.graphics.style.fontSize = state.fontSize;
     this.graphics.style.fontFamily = state.fontFamily;

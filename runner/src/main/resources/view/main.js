@@ -42,6 +42,8 @@ function go() {
       resize(container.width() * overSampling, container.width() * 0.5625 * overSampling);
     }
   }, 200);
+  
+  goTo(0,1);
 }
 
 var d;

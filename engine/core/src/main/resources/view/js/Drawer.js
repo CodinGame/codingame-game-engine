@@ -1,5 +1,6 @@
 import * as config from './config.js';
 import { unlerp } from './utils.js';
+import { WIDTH, HEIGHT } from './constants.js';
 
 export class Drawer {
   constructor() {
@@ -16,16 +17,16 @@ export class Drawer {
     return 3;
   }
   static get WIDTH() {
-    return 1920;
+    return WIDTH;
   }
   static get HEIGHT() {
-    return 1080;
+    return HEIGHT;
   }
   static getGameRatio() {
     return Drawer.WIDTH / Drawer.HEIGHT;
   }
 
-  instantiateModules() {        
+  instantiateModules() {
     this.modules = {};
     for (const module of config.modules) {
       this.modules[module.name] = new module.class(module.name, config.assets);
@@ -164,9 +165,9 @@ export class Drawer {
       darkness.endFill()
       darkness.x -= 10;
       darkness.y -= 10;
-    
+
       var demoContainer = new PIXI.Container();
-    
+
       this.initDefaultFrames(this.demo.playerCount, this.demo.frames, this.demo.agents);
       /** **************************************************************************************************************************************** */
       this.preconstructScene(this.scope, demoContainer, this.initWidth, this.initHeight);
@@ -176,7 +177,7 @@ export class Drawer {
 
       scope.demo = demoContainer;
       scope.demotime = 0;
-    
+
       this.currentFrame = -1;
       container.addChild(demoContainer);
       container.addChild(darkness);
@@ -191,7 +192,7 @@ export class Drawer {
   initDefaultFrames(playerCount, frames, agents) {
     var drawer = this;
     var loader = new PIXI.loaders.Loader(window.location.origin);
-  
+
     this.instantiateModules();
 
     this.playerInfo = agents.map(function (agent, index) {
@@ -220,19 +221,19 @@ export class Drawer {
       this.frames.push(this.parseFrame(this._frames[i], this.frames));
     }
 
-    this.asyncRenderingTime = Drawer.RenderTimeout;  
+    this.asyncRenderingTime = Drawer.RenderTimeout;
   };
 
   /** Mandatory */
   renderDefaultScene(scope, step) {
     step = Math.min(80, step);
-  
+
     if (this.demo === undefined) {
       return false;
     }
 
     this.currentFrame = this.currentFrameTemp || 0;
-  
+
     scope.frameTime += step;
     scope.updateTime += step;
     scope.demotime += step / 1000;
@@ -245,7 +246,7 @@ export class Drawer {
 
     if (scope.demotime > 1.5 && scope.demotime <= 2.2) {
       var amplitude = Math.max(0, 1 - (scope.demotime - 1.5) / 0.7) * 15;
-  
+
       scope.demo.x = (Math.random() * 2 - 1) * amplitude;
       scope.demo.y = (Math.random() * 2 - 1) * amplitude;
     } else {
@@ -253,19 +254,19 @@ export class Drawer {
     }
     var updateInterval = 30;
     var frameInterval = this.frames[this.currentFrame].frameDuration || 500;
-  
+
     if (scope.updateTime >= updateInterval) {
       scope.updateTime -= updateInterval;
       this.progress = unlerp(0, frameInterval, scope.frameTime);
       this.updateScene(this.scope, this.question, this.frames, this.currentFrame, this.progress, 1, this.reasons[this.currentFrame], true);
     }
-  
+
     if (scope.frameTime >= frameInterval) {
       scope.frameTime -= frameInterval;
       this.currentFrame = (this.currentFrame + 1) % this.frames.length;
     }
     this.renderScene(this.scope, this.question, this.frames, this.currentFrame, this.progress, 1, this.reasons[this.currentFrame], step, true);
-  
+
     this.currentFrameTemp = this.currentFrame;
     this.currentFrame = -1;
     return true;
@@ -335,12 +336,14 @@ export class Drawer {
     container.scale.y = canvasHeight / Drawer.HEIGHT;
   }
 
-  /** Mandatory */
   initScene(scope, container, frames) {
     for (let moduleName in this.modules) {
       const module = this.modules[moduleName];
       var stage = new PIXI.Container();
-      module.reinitScene(stage);
+      module.reinitScene(stage, {
+        width: scope.canvasWidth,
+        height: scope.canvasHeight
+      });
       container.addChild(stage);
     }
   }

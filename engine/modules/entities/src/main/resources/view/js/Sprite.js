@@ -11,7 +11,8 @@ export class Sprite extends Entity {
       anchorX: Sprite.defaultAnchor(),
       anchorY: Sprite.defaultAnchor(),
       image: null,
-      blendMode: PIXI.BLEND_MODES.NORMAL
+      blendMode: PIXI.BLEND_MODES.NORMAL,
+      tint: 0xFFFFFF
     });
   }
 
@@ -33,9 +34,7 @@ export class Sprite extends Entity {
         this.graphics.texture = PIXI.Texture.fromFrame(state.image);
     }
     this.graphics.anchor.set(state.anchorX, state.anchorY);
-    if (state.blendMode !== 0) {
-      debugger
-    }
     this.graphics.blendMode = state.blendMode;
+    this.graphics.tint = state.tint;
   }
 }

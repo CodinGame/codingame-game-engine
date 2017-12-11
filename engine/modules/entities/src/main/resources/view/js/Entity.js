@@ -48,7 +48,6 @@ export class Entity {
   }
 
   render(progress, data, globalData) {
-    // progress = progress || 0.00001;
     const number = data.number;
     let subframes = this.states[data.number];
     this.container.visible = false;

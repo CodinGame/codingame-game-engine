@@ -23,10 +23,10 @@ public class Sprite extends Shape<Sprite> {
     private String image;
     private BlendMode blendMode;
     private double anchorX = 0.5, anchorY = 0.5;
+    private int tint = 0xFFFFFF;
 
     Sprite() {
         super();
-        setAnchor(0.5);
     }
 
     @Override
@@ -154,6 +154,32 @@ public class Sprite extends Shape<Sprite> {
         this.anchorY = anchorY;
         set("anchorY", anchorY);
         return this;
+    }
+
+    /**
+     * Sets the tint of this <code>Sprite</code> as an RGB integer.
+     *      
+     * @param color
+     *            the tint of this <code>Sprite</code>.
+     * @return this <code>Sprite</code>.
+     * @exception IllegalArgumentException if color is not a valid RGB integer.
+     */
+    public Sprite setTint(int color) {
+       requireValidColor(color);
+        this.tint = color;
+       set("tint", color);
+        return this;
+    }
+
+    /**
+     * Returns the tint of this <code>Sprite</code> as an RGB integer.
+     * <p>
+     * Default is 0xFFFFFF (white) 
+     * 
+     * @return the tint of this <code>Sprite</code>.
+     */
+    public int getTint() {
+        return tint;
     }
 
 }

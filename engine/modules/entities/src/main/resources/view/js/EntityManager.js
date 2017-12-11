@@ -1,6 +1,6 @@
 import { CommandParser } from './CommandParser.js';
 import { fitAspectRatio } from './utils.js';
-import { Drawer } from './Drawer.js';
+import { WIDTH, HEIGHT } from './constants.js';
 import { Group } from './Group.js'
 
 export class EntityManager {
@@ -78,7 +78,8 @@ export class EntityManager {
       });
   }
 
-  reinitScene(container) {
+  reinitScene(container, canvasData) {
+    this.globalData.toPixel = Math.max(1, WIDTH / canvasData.width);
     this.container = container;
     this.entities.forEach((e) => {
       e.init();
@@ -146,7 +147,7 @@ export class EntityManager {
     this.globalData.players = players;
     const width = globalData.width;
     const height = globalData.height;
-    this.globalData.coeff = fitAspectRatio(width, height, Drawer.WIDTH, Drawer.HEIGHT);
+    this.globalData.coeff = fitAspectRatio(width, height, WIDTH, HEIGHT);
   }
 
 }

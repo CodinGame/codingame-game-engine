@@ -21,25 +21,23 @@ public class EntityManager implements Module {
     //JAVA
     //TODO: animations
     //TODO: masks
-    //TODO: warnings and exceptions
-    //TODO: javadoc
-    //TODO: decide between builder pattern or whatever
-    //TODO: dumping should be externalized (maybe?) 
+    //TODO: decide between builder pattern or not 
     //TODO: Asynchronous animation system
     //TODO: Allow user to select lerping function somehow (noLerp, bellLerp, easeLerp, etc)
 
     //JS
+    //TODO: in config.js : "players" should be automatic, not configurable
     //TODO: Should PIXI be in window or in Drawer ?
     //TODO: sort out the "getGameName()" problem
     //TODO: sort out the "canSwapPlayers()" pbm
-    //TODO: make lineWidth and strokeThickness retain size on canvas resize (so that the value in pixels is kept)
+    //TODO: "contain within" for Texts (text wrapping)
 
     // HTML + main.js
-    //TODO: make html look more like IDE / simplify interface
-    //TODO: use Drawer implementation found on codingame
-    //TODO: add utility functions ? (to simulate IDE)
-    //TODO: generic end scene + startscreen
     //TODO: default avatars shouldn't be random hardcoded things
+
+    // Workflow
+    //TODO: Should we support sprite sheets?
+    //TODO: Should we support spines?
 
     static int ENTITY_COUNT = 0;
 
@@ -50,10 +48,8 @@ public class EntityManager implements Module {
     private boolean lockWorld;
     private WorldState currentWorldState;
 
-    
-    
-    private GameManager<AbstractPlayer> gameManager;    
-    @Inject private  Serializer serializer; 
+    private GameManager<AbstractPlayer> gameManager;
+    @Inject private Serializer serializer;
 
     @Inject
     public EntityManager(GameManager<AbstractPlayer> gameManager) {
@@ -65,7 +61,6 @@ public class EntityManager implements Module {
         worldStates = new HashMap<>();
         currentWorldState = new WorldState(0);
 
-        
         gameManager.registerModule(this);
     }
 
@@ -200,7 +195,7 @@ public class EntityManager implements Module {
                         out.append("\n");
                     }
                 });
-    }   
+    }
 
     private void autocommit() {
         WorldState state = worldStates.computeIfAbsent(1d, (key) -> new WorldState(1));

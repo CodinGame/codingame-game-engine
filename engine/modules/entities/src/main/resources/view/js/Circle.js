@@ -34,7 +34,7 @@ export class Circle extends Shape {
         this.graphics.beginFill(state.fillColor, state.fillAlpha);
       }
       this.graphics.lineStyle(state.lineWidth, state.lineColor);
-      this.graphics.drawCircle(0, 0, state.radius);
+      this.graphics.drawCircle(0, 0, state.radius * globalData.coeff);
       if (state.fillColor !== null) {
         this.graphics.endFill();
       }

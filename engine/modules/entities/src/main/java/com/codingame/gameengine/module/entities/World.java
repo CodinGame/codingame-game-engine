@@ -6,11 +6,11 @@ public class World {
     public static final int DEFAULT_WIDTH = 1920;
     public static final int DEFAULT_HEIGHT = 1080;
 
-    int getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    int getHeight() {
+    public int getHeight() {
         return height;
     }
 
