@@ -2,9 +2,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.codingame.gameengine</groupId>
+	<parent>
+		<groupId>com.codingame.gameengine</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0-SNAPSHOT</version>
+		<relativePath>../core/parent</relativePath>
+	</parent>
+
 	<artifactId>runner</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<name>CodinGame Game Engine Runner</name>
+	<description>Runner / Testbed to locally run Games created using the CodinGame engine toolkit.</description>
 
 	<dependencies>
 		<dependency>
