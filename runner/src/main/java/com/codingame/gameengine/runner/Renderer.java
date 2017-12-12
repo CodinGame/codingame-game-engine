@@ -1,7 +1,6 @@
 package com.codingame.gameengine.runner;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.JarURLConnection;
@@ -11,15 +10,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import fi.iki.elonen.SimpleWebServer;
 
@@ -85,25 +80,17 @@ public class Renderer {
         deleteFolder(tmpdir.toFile());
         tmpdir.toFile().mkdirs();
 
-        File temp = tmpdir.resolve("test.html").toFile();
-
-        try (PrintWriter writer = new PrintWriter(new FileWriter(temp))) {
-            exportViewToWorkingDir("view", tmpdir);
-
-            File[] listFiles = tmpdir.resolve("js").toFile().listFiles();
-            Arrays.sort(listFiles);
-            String scripts = Stream.of(listFiles)
-                    .map(file -> "<script type='module' src='js/" + file.getName() + "'></script>")
-                    .collect(Collectors.joining("\n"));
-            for (String f : IOUtils.readLines(GameRunner.class.getResourceAsStream("/view/test_tpl.html"))) {
-                f = f.replace("[DATA]", jsonResult);
-                f = f.replace("[PLAYERCOUNT]", String.valueOf(playerCount));
-                f = f.replace("[VIEWERJS]", scripts);
-                writer.println(f);
-            }
-            writer.close();
+        File game = tmpdir.resolve("game.json").toFile();
+        try (PrintWriter out = new PrintWriter(game)) {
+            out.println(jsonResult);
         } catch (IOException e) {
-            throw new RuntimeException("Cannot generate the html file", e);
+            throw new RuntimeException("Cannot generate the game file", e);
+        }
+        
+        try {
+            exportViewToWorkingDir("view", tmpdir);
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot copy resources", e);
         }
 
         return tmpdir;

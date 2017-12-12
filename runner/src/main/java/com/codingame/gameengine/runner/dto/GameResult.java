@@ -16,4 +16,5 @@ public class GameResult {
     public List<Tooltip> tooltips = new ArrayList<>();
     public Map<Integer, Integer> ids = new HashMap<>();
     public String refereeInput;
+    public List<AgentDto> agents = new ArrayList<>();
 }

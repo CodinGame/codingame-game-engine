@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.codingame.gameengine.runner.Command.InputCommand;
 import com.codingame.gameengine.runner.Command.OutputCommand;
+import com.codingame.gameengine.runner.dto.AgentDto;
 import com.codingame.gameengine.runner.dto.GameResult;
 import com.codingame.gameengine.runner.dto.Tooltip;
 import com.google.gson.Gson;
@@ -35,6 +36,9 @@ public class GameRunner {
     private final List<BlockingQueue<String>> queues = new ArrayList<>();
     private int lastPlayerId = 0;
 
+    private String[] avatars = new String[] {"1715936252943", "1719285195844", "2925297592678"};
+    private String[] colors = new String[] {"#ffae16", "#ff1d5c", "#22a1e4", "#de6ddf"};
+    
     private static enum OutputResult {
         OK, TIMEOUT, TOOLONG, TOOSHORT
     };
@@ -75,6 +79,14 @@ public class GameRunner {
 
             List<String> initErrorsValues = new ArrayList<>();
             gameResult.errors.put(id, initErrorsValues);
+            
+            AgentDto agent = new AgentDto();
+            agent.index = i;
+            agent.agentId = player.getAgentId();
+            agent.color = colors[i % colors.length];
+            agent.avatar = "https://static.codingame.com/servlet/fileservlet?id=" + avatars[i] + "&format=viewer_avatar";
+            agent.name = "Player " + i;
+            gameResult.agents.add(agent);
         }
     }
 
@@ -197,6 +209,7 @@ public class GameRunner {
         for (int i = 0; i < players.size(); i++) {
             gameResult.ids.put(i, players.get(i).getAgentId());
         }
+
         return new Gson().toJson(gameResult);
     }
 

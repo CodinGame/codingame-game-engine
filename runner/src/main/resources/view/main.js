@@ -4,13 +4,35 @@ import { createGameManagerFromGameInfo } from './gameManager.js'
 
 // TODO: add tooltips
 
-var progress;
-
 window.DEFAULT_WIDTH = 960;
 window.DEFAULT_HEIGHT = 540;
 window.overSampling = 2;
 
-function go() {
+function fetchGame(callback) {
+  let xhr = new XMLHttpRequest();
+  xhr.onload = function () { 
+    callback(JSON.parse(this.responseText));
+  };
+  xhr.open('GET', 'game.json', true);
+  xhr.send();
+}
+
+function go(data) {
+  window.data = data;
+  window.agents = data.agents;
+  window.frames = data.views.map(v => JSON.parse(v));
+  console.log(data.tooltips ? JSON.stringify(data.tooltips) : 'no tooltips');
+
+  var uinput = {};
+  if (data.uinput) {
+    var tab = data.uinput[0].trim().split('\n');
+    for (var k = 0; k < tab.length; ++k) {
+      var elem = tab[k].split('=');
+      uinput[elem[0]] = elem[1];
+    }
+  }
+  console.log(uinput);
+
   document.getElementById("positionRange").max = frames.length;
   document.getElementById("framelabel").max = frames.length - 1;
 
@@ -23,18 +45,7 @@ function go() {
   window.gameManager = createGameManagerFromGameInfo(d, {agents: window.agents, frames: window.frames})
   window.gameManager.subscribe(updateToFrame);
 
-  var stats = new Stats();
-  stats.setMode(2);
-  stats.domElement.style.position = 'absolute';
-  stats.domElement.style.right = '0px';
-  stats.domElement.style.top = '0px';
-  $("body").append(stats.domElement);
-  d.onBeforeRender = stats.begin;
-  d.onAfterRender = function () {
-    stats.end();
-  };
-
-  resize(1920, 1080);
+  addStats(d);
 
   let container = $('#container');
   setInterval(function() {
@@ -43,81 +54,15 @@ function go() {
     }
   }, 200);
   
-  goTo(0,1);
+  if (!config.demo) {
+    goTo(0,1);
+  }
 }
 
 var d;
 var canvas;
 
-window.speed = 1;
-window.animationId = -1;
-window.lastRender = -1;
 window.init = 0;
-window.data = window.data;
-window.frames = data.views.map(v => JSON.parse(v));
-window.agents = [{
-  index: 0,
-  name: 'Player 1',
-  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1715936252943 + '&format=viewer_avatar',
-  color: '#ffae16'
-}, {
-  index: 1,
-  name: 'Player 2',
-  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1717001354716 + '&format=viewer_avatar',
-  color: '#ff1d5c'
-}, {
-  index: 2,
-  name: 'Player 3',
-  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719001703601 + '&format=viewer_avatar',
-  color: '#22a1e4'
-}, {
-  index: 3,
-  name: 'Player 4',
-  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
-  type: 'CODINGAMER',
-  color: '#de6ddf'
-}, {
-  index: 4,
-  name: 'Player 5',
-  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
-  color: '#9975e2'
-}, {
-  index: 5,
-  name: 'Player 6',
-  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
-  color: '#ff0000'
-}, {
-  index: 6,
-  name: 'Player 7',
-  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
-  color: '#6ac371'
-}, {
-  index: 7,
-  name: 'Player 8',
-  avatar: 'https://static.codingame.com/servlet/fileservlet?id=' + 1719285195844 + '&format=viewer_avatar',
-  color: '#3ac5ca'
-}];
-
-if (config.players) {
-  let idx = 0;
-  for (const player of config.players) {
-    agents[idx].name = player.name;
-    agents[idx].avatar = player.avatar;
-    if (++idx >= agents.length) {
-      break;
-    }
-  }
-}
-console.log(data.tooltips ? JSON.stringify(data.tooltips) : 'no tooltips');
-var uinput = {};
-if (data.uinput) {
-  var tab = data.uinput[0].trim().split('\n');
-  for (var k = 0; k < tab.length; ++k) {
-    var elem = tab[k].split('=');
-    uinput[elem[0]] = elem[1];
-  }
-}
-console.log(uinput);
 
 function updateText(id) {
   document.getElementById("stdout").value = '';
@@ -150,7 +95,7 @@ function updateToFrame(_frame, _progress, _playing, isSubFrame, isTurnBased, atE
 
 function initFrames() {
   if (init == 0) {
-    d.initFrames(frames, agents.slice(0, window.playerCount));
+    d.initFrames(frames, agents);
     init = 1;
   }
 }
@@ -178,7 +123,6 @@ function previousFrame() {
 }
 
 function resize(width, height) {
-  console.log(width, height)
   canvas.width = width;
   canvas.height = height;
   d.init(canvas, canvas.width, canvas.height, agents.map(function (agent) {
@@ -211,6 +155,20 @@ function fullScreen() {
   }
 }
 
+function addStats(d) {
+  var stats = new Stats();
+  stats.setMode(2);
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.right = '0px';
+  stats.domElement.style.top = '0px';
+  $("body").append(stats.domElement);
+
+  d.onBeforeRender = stats.begin;
+  d.onAfterRender = function () {
+    stats.end();
+  };
+}
+
 window.setSpeed = setSpeed;
 window.resize = resize;
 window.nextFrame = nextFrame;
@@ -220,4 +178,4 @@ window.initFrames = initFrames;
 window.goTo = goTo;
 window.fullScreen = fullScreen;
 
-go();
+fetchGame(go);
