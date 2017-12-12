@@ -36,17 +36,26 @@ public class GameRunner {
     private final List<BlockingQueue<String>> queues = new ArrayList<>();
     private int lastPlayerId = 0;
 
-    private String[] avatars = new String[] {"1715936252943", "1719285195844", "2925297592678"};
-    private String[] colors = new String[] {"#ffae16", "#ff1d5c", "#22a1e4", "#de6ddf"};
-    
+    private String[] avatars = new String[] { "1715936252943", "1719285195844", "2925297592678" };
+    private String[] colors = new String[] { "#ffae16", "#ff1d5c", "#22a1e4", "#de6ddf" };
+
     private static enum OutputResult {
         OK, TIMEOUT, TOOLONG, TOOSHORT
     };
 
+    /**
+     * Create a new GameRunner with no referee input.
+     */
     public GameRunner() {
         this(null);
     }
 
+    /**
+     * Create a new GameRunner with no referee input.
+     * 
+     * @param properties
+     *            the values given to the game's referee on init.
+     */
     public GameRunner(Properties properties) {
         try {
             referee = new RefereeAgent();
@@ -61,7 +70,7 @@ public class GameRunner {
         }
     }
 
-    public void initialize(Properties conf) {
+    private void initialize(Properties conf) {
         if (players.size() == 0) throw new RuntimeException("You have to add at least one player");
 
         referee.initialize(conf);
@@ -79,7 +88,7 @@ public class GameRunner {
 
             List<String> initErrorsValues = new ArrayList<>();
             gameResult.errors.put(id, initErrorsValues);
-            
+
             AgentDto agent = new AgentDto();
             agent.index = i;
             agent.agentId = player.getAgentId();
@@ -116,7 +125,7 @@ public class GameRunner {
         }
     }
 
-    public void run() {
+    private void run() {
         referee.execute();
 
         bootstrapPlayers();
@@ -345,18 +354,43 @@ public class GameRunner {
         players.add(player);
     }
 
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * 
+     * @param playerClass
+     *            the Java class of an AI for your game.
+     */
     public void addJavaPlayer(Class<?> playerClass) {
         addPlayer(new JavaPlayerAgent(playerClass.getName()));
     }
 
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * The given command will be executed with <code>Runtime.getRuntime().exec()</code>.
+     * 
+     * @param commandLine
+     *            the system command line to run the AI.
+     */
     public void addCommandLinePlayer(String commandLine) {
         addPlayer(new CommandLinePlayerAgent(commandLine));
     }
 
+    /**
+     * Runs the game and attempts to start a server on the port 8888.
+     * <p>
+     * Open a webpage to the server to watch the game's replay.
+     */
     public void start() {
         start(8888);
     }
 
+    /**
+     * Runs the game and attempts to start a server on the given port.
+     * <p>
+     * Open a webpage to the server to watch the game's replay.
+     */
     public void start(int port) {
         Properties conf = new Properties();
         initialize(conf);
