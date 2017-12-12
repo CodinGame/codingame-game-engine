@@ -11,6 +11,9 @@ import java.util.Properties;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.inject.Inject;
@@ -22,6 +25,7 @@ public final class GameManager<T extends AbstractPlayer> {
     @Inject private Provider<T> playerProvider;
     @Inject private Provider<Referee> refereeProvider;
     @Inject private Gson gson;
+    protected static Log log = LogFactory.getLog(GameManager.class);
 
     private static final int VIEW_DATA_SOFT_QUOTA = 512 * 1024;
     private static final int VIEW_DATA_HARD_QUOTA = 1024 * 1024;
@@ -69,6 +73,7 @@ public final class GameManager<T extends AbstractPlayer> {
         this.referee = refereeProvider.get();
 
         // Init ---------------------------------------------------------------
+        log.info("Init");
         InputCommand iCmd = InputCommand.parse(s.nextLine());
         int playerCount = s.nextInt();
         s.nextLine();
@@ -99,9 +104,10 @@ public final class GameManager<T extends AbstractPlayer> {
         registeredModules.forEach(Module::onGameInit);
         swapInfoAndViewData();
         initDone = true;
-
+        
         // Game Loop ----------------------------------------------------------
         for (turn = 0; turn < getMaxTurns() && !isGameEnd(); turn++) {
+            log.info("Turn " + turn);
             newTurn = true;
             outputsRead = false; // Set as true after first getOutputs() to forbib sendInputs
 
@@ -117,6 +123,8 @@ public final class GameManager<T extends AbstractPlayer> {
             swapInfoAndViewData();
         }
 
+        log.info("End");
+        
         referee.onEnd();
         registeredModules.forEach(Module::onAfterOnEnd);
 
@@ -239,10 +247,10 @@ public final class GameManager<T extends AbstractPlayer> {
         if (totalViewDataBytesSent > VIEW_DATA_HARD_QUOTA) {
             throw new RuntimeException("The amount of data sent to the viewer is too big!");
         } else if (totalViewDataBytesSent > VIEW_DATA_SOFT_QUOTA) {
-            System.err.println("Warning: the amount of data sent to the viewer is too big. Please try to optimize your code to send less data.");
+            log.warn("Warning: the amount of data sent to the viewer is too big. Please try to optimize your code to send less data.");
         }
 
-        System.err.println(viewData);
+        log.trace(viewData);
         out.println(viewData);
         
         frame++;
