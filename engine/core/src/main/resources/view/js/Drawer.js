@@ -29,7 +29,7 @@ export class Drawer {
   instantiateModules() {
     this.modules = {};
     for (const module of config.modules) {
-      this.modules[module.name] = new module.class(module.name, config.assets);
+      this.modules[module.name] = new module(config.assets);
     }
   }
 

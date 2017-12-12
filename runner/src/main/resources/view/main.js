@@ -54,6 +54,8 @@ function go(data) {
     }
   }, 200);
   
+  resize(1920, 1080);
+
   if (!config.demo) {
     goTo(0,1);
   }

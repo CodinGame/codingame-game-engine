@@ -4,8 +4,7 @@ import { WIDTH, HEIGHT } from './constants.js';
 import { Group } from './Group.js'
 
 export class EntityManager {
-  constructor(name, assets) {
-    this.name = name;
+  constructor(assets) {
     this.commandParser = new CommandParser();
     this.entities = new Map();
     this.frames = [];
@@ -20,7 +19,11 @@ export class EntityManager {
     };
 
   }
-
+  
+  static get name() {
+    return 'entitymanager';
+  }
+  
   handleFrameData(number, frameData) {
     for (let line of frameData.split('\n')) {
       if (line) {
