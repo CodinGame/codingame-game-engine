@@ -148,12 +148,12 @@ public class EntityManager implements Module {
     }
 
     private void sendFrameData() {
-        StringBuilder sb = new StringBuilder();
+        List<Object> commands = new ArrayList<>();
 
         autocommit();
 
         newEntities.stream().forEach(e -> {
-            dumpNewEntity(e, sb);
+            dumpNewEntity(e, commands);
         });
         newEntities.clear();
 
@@ -163,20 +163,20 @@ public class EntityManager implements Module {
                 .collect(Collectors.toList());
 
         for (WorldState next : orderedStates) {
-            dumpWorldStateDiff(currentWorldState, next, sb);
+            dumpWorldStateDiff(currentWorldState, next, commands);
             currentWorldState.updateAllEntities(next);
         }
 
         worldStates.clear();
 
-        gameManager.setViewData("entitymanager", sb.toString());
+        gameManager.setViewData("entitymanager", commands);
     }
 
-    private void dumpNewEntity(Entity<?> e, StringBuilder out) {
-        out.append(serializer.serializeCreate(e));
+    private void dumpNewEntity(Entity<?> e, List <Object> commands) {
+        commands.add(serializer.serializeCreate(e));
     }
 
-    private void dumpWorldStateDiff(WorldState previous, WorldState next, StringBuilder out) {
+    private void dumpWorldStateDiff(WorldState previous, WorldState next, List<Object> commands) {
         next.getEntityStateMap()
                 .forEach((entity, state) -> {
                     Optional<EntityState> prevState = Optional.ofNullable(previous.getEntityStateMap().get(entity));
@@ -190,8 +190,7 @@ public class EntityManager implements Module {
                         }
                     });
                     if (!diff.isEmpty()) {
-                        out.append(serializer.serializeUpdate(entity, diff, next.getFrameTime()));
-                        out.append("\n");
+                        commands.add(serializer.serializeUpdate(entity, diff, next.getFrameTime()));
                     }
                 });
     }
