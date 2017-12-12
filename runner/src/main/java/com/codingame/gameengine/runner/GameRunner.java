@@ -36,8 +36,9 @@ public class GameRunner {
     private final List<BlockingQueue<String>> queues = new ArrayList<>();
     private int lastPlayerId = 0;
 
-    private String[] avatars = new String[] { "1715936252943", "1719285195844", "2925297592678" };
-    private String[] colors = new String[] { "#ffae16", "#ff1d5c", "#22a1e4", "#de6ddf" };
+    private String[] avatars = new String[] { "16085713250612", "16085756802960", "16085734516701", "16085746254929", "16085763837151",
+            "16085720641630", "16085846089817", "16085834521247" };
+    private String[] colors = new String[] { "#ffae16", "#ff1d5c", "#22a1e4", "#de6ddf", "#9975e2", "#ff0000", "#6ac371", "#3ac5ca" };
 
     private static enum OutputResult {
         OK, TIMEOUT, TOOLONG, TOOSHORT
