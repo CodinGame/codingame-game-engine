@@ -21,7 +21,6 @@ function go(data) {
   window.data = data;
   window.agents = data.agents;
   window.frames = data.views.map(v => JSON.parse(v));
-  console.log(data.tooltips ? JSON.stringify(data.tooltips) : 'no tooltips');
 
   var uinput = {};
   if (data.uinput) {
@@ -74,7 +73,12 @@ function updateText(id) {
       document.getElementById("stdout").value += text;
   }
 
-  document.getElementById("console").value = "Frame " + id + "/" + (frames.length - 1) + "\n" + data.outputs.referee[id] + '\n' + (data.summaries && data.summaries[id]);
+  let tooltips = data.tooltips.filter(x => x.turn == id);
+  let tooltipsText = '';
+  if (tooltips.length > 0) {
+    tooltipsText = 'Tooltips:\n' + tooltips.map(x => x.event + ' ' + x.text).join('\n');
+  }
+  document.getElementById("console").value = data.outputs.referee[id] + '\n' + (data.summaries && ('Summary:\n' + data.summaries[id])) + '\n' + tooltipsText;
 
   document.getElementById("errors").value = '';
   for (var i in data.ids) {
