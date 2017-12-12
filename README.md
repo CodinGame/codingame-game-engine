@@ -8,15 +8,15 @@ With it one can develop a game for the CodinGame platform. This engine is meant 
 
 ## Using the Game Runner
 
-See [Game Runner readme](runner/README.md).
+See [Game Runner readme](runner/).
 
 ## Using the Game Manager
 
-See [Game Manager readme](engine/core/README.md).
+See [Game Manager readme](engine/core/).
 
 ## Using the Entity Module
 
-See [Entity Module readme](engine/modules/entities/README.md).
+See [Entity Module readme](engine/modules/entities/).
 
 # Documentation
 
