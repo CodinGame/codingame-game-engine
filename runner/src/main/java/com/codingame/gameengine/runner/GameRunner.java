@@ -291,7 +291,8 @@ public class GameRunner {
             int nbLinesToRead = Integer.parseInt(m.group("lineCount"));
 
             if (nbLinesToRead >= 0) {
-                output = agent.getOutput(nbLinesToRead, 500);
+                output = agent.getOutput(nbLinesToRead, 150000);
+                output = output.replace('\r', '\n');
             } else {
                 output = null;
             }
