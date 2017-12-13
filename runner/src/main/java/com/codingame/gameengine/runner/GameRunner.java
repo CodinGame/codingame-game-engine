@@ -36,9 +36,10 @@ public class GameRunner {
     private final List<BlockingQueue<String>> queues = new ArrayList<>();
     private int lastPlayerId = 0;
 
-    private String[] avatars = new String[] { "16085713250612", "16085756802960", "16085734516701", "16085746254929", "16085763837151",
-            "16085720641630", "16085846089817", "16085834521247" };
-    private String[] colors = new String[] { "#ffae16", "#ff1d5c", "#22a1e4", "#de6ddf", "#9975e2", "#ff0000", "#6ac371", "#3ac5ca" };
+    private String[] avatars = new String[] { "16085713250612", "16085756802960", "16085734516701", "16085746254929",
+            "16085763837151", "16085720641630", "16085846089817", "16085834521247" };
+    private String[] colors = new String[] { "#ffae16", "#ff1d5c", "#22a1e4", "#de6ddf", "#9975e2", "#ff0000",
+            "#6ac371", "#3ac5ca" };
 
     private static enum OutputResult {
         OK, TIMEOUT, TOOLONG, TOOSHORT
@@ -94,8 +95,9 @@ public class GameRunner {
             agent.index = i;
             agent.agentId = player.getAgentId();
             agent.color = colors[i % colors.length];
-            agent.avatar = "https://static.codingame.com/servlet/fileservlet?id=" + avatars[i] + "&format=viewer_avatar";
-            agent.name = "Player " + i;
+            agent.avatar = player.getAvatar() != null ? player.getAvatar()
+                    : "https://static.codingame.com/servlet/fileservlet?id=" + avatars[i] + "&format=viewer_avatar";
+            agent.name = player.getNickname() != null ? player.getNickname() : "Player " + i;
             gameResult.agents.add(agent);
         }
     }
@@ -350,8 +352,10 @@ public class GameRunner {
         return OutputResult.OK;
     }
 
-    private void addPlayer(Agent player) {
+    private void addAgent(Agent player, String nickname, String avatar) {
         player.setAgentId(lastPlayerId++);
+        player.setNickname(nickname);
+        player.setAvatar(avatar);
         players.add(player);
     }
 
@@ -362,8 +366,8 @@ public class GameRunner {
      * @param playerClass
      *            the Java class of an AI for your game.
      */
-    public void addJavaPlayer(Class<?> playerClass) {
-        addPlayer(new JavaPlayerAgent(playerClass.getName()));
+    public void addAgent(Class<?> playerClass) {
+        addAgent(new JavaPlayerAgent(playerClass.getName()), null, null);
     }
 
     /**
@@ -374,8 +378,39 @@ public class GameRunner {
      * @param commandLine
      *            the system command line to run the AI.
      */
-    public void addCommandLinePlayer(String commandLine) {
-        addPlayer(new CommandLinePlayerAgent(commandLine));
+    public void addAgent(String commandLine) {
+        addAgent(new CommandLinePlayerAgent(commandLine), null, null);
+    }
+
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * 
+     * @param playerClass
+     *            the Java class of an AI for your game.
+     * @param nickname
+     *            the player's nickname
+     * @param avatarUrl
+     *            the url of the player's avatar
+     */
+    public void addAgent(Class<?> playerClass, String nickname, String avatarUrl) {
+        addAgent(new JavaPlayerAgent(playerClass.getName()), nickname, avatarUrl);
+    }
+
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * The given command will be executed with <code>Runtime.getRuntime().exec()</code>.
+     * 
+     * @param commandLine
+     *            the system command line to run the AI.
+     * @param nickname
+     *            the player's nickname
+     * @param avatarUrl
+     *            the url of the player's avatar
+     */
+    public void addAgent(String commandLine, String nickname, String avatarUrl) {
+        addAgent(new CommandLinePlayerAgent(commandLine), nickname, avatarUrl);
     }
 
     /**

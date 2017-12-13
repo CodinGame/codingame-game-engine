@@ -100,7 +100,7 @@ public final class GameManager<T extends AbstractPlayer> {
         prevViewData = null;
         currentViewData = createNewView(true);
 
-        gameProperties = referee.init(playerCount, gameProperties);
+        gameProperties = referee.init(gameProperties);
         registeredModules.forEach(Module::onGameInit);
         swapInfoAndViewData();
         initDone = true;
@@ -492,19 +492,24 @@ public final class GameManager<T extends AbstractPlayer> {
     }
 
     /**
-     * Helper function to display a colored message (red if error, green if success). Used at the end of the game.
+     * Helper function to display a colored message. Usually used at the end of the game.
      * 
-     * @param error
-     *            true if the message is an error message, false if success
-     * @param reason
+     * @param message
      *            The message to display.
      * @return The formatted string.
      */
-    public static String getColoredReason(boolean error, String reason) {
-        if (error) {
-            return String.format("¤RED¤%s§RED§", reason);
-        } else {
-            return String.format("¤GREEN¤%s§GREEN§", reason);
-        }
+    public static String formatSuccessMessage(String message) {
+        return String.format("¤GREEN¤%s§GREEN§", message);
+    }
+    
+    /**
+     * Helper function to display a colored message. Usually used at the end of the game.
+     * 
+     * @param message
+     *            The message to display.
+     * @return The formatted string.
+     */
+    public static String formatErrorMessage(String message) {
+        return String.format("¤RED¤%s§RED§", message);
     }
 }

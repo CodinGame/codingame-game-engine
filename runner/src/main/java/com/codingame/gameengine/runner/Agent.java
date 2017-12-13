@@ -25,6 +25,9 @@ public abstract class Agent {
     private boolean lastAgentByteIsCarriageReturn = false;
     private boolean failed = false;
 
+    private String nickname;
+    private String avatar;
+
     public Agent() {
     }
 
@@ -186,5 +189,21 @@ public abstract class Agent {
 
     public boolean isFailed() {
         return this.failed;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }
