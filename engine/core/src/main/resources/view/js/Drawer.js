@@ -142,8 +142,7 @@ export class Drawer {
   initDefaultScene(scope, container, canvasWidth, canvasHeight) {
     var scene = new PIXI.Container();
     container.addChild(scene);
-    container.scale.x = canvasWidth / Drawer.WIDTH;
-    container.scale.y = canvasHeight / Drawer.HEIGHT;
+
     scope.drawer = this;
     scope.renderables = [];
     scope.time = 0;
@@ -181,8 +180,6 @@ export class Drawer {
       container.addChild(demoContainer);
       container.addChild(darkness);
     }
-
-    container.addChild(scene);
 
     scope.updateTime = 0;
     scope.frameTime = 0;
