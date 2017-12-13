@@ -100,7 +100,7 @@ public final class GameManager<T extends AbstractPlayer> {
         prevViewData = null;
         currentViewData = createNewView(true);
 
-        gameProperties = referee.init(playerCount, gameProperties);
+        gameProperties = referee.init(gameProperties);
         registeredModules.forEach(Module::onGameInit);
         swapInfoAndViewData();
         initDone = true;
