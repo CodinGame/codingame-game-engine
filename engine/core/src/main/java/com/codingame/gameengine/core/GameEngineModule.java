@@ -19,7 +19,7 @@ public class GameEngineModule extends AbstractModule {
     }
 
     private Class<? extends AbstractPlayer> getPlayerClass() {
-        Reflections reflections = new Reflections("");
+        Reflections reflections = RefereeMain.isInProduction() ? Reflections.collect() : new Reflections("");
         Set<Class<? extends AbstractPlayer>> abstractPlayers = reflections.getSubTypesOf(AbstractPlayer.class);
         if (abstractPlayers.size() == 0) throw new RuntimeException("Player class not found");
         if (abstractPlayers.size() > 1) throw new RuntimeException(String.format("More than 1 player class found: %s", abstractPlayers.toString()));
@@ -32,7 +32,7 @@ public class GameEngineModule extends AbstractModule {
     @Provides
     @Singleton
     Referee provideReferee(Injector injector) throws InstantiationException, IllegalAccessException {
-        Reflections reflections = new Reflections("");
+        Reflections reflections = RefereeMain.isInProduction() ? Reflections.collect() : new Reflections("");
         Set<Class<? extends Referee>> referees = reflections.getSubTypesOf(Referee.class);
         if (referees.size() == 0) throw new RuntimeException("Referee class not found");
         if (referees.size() > 1) throw new RuntimeException(String.format("More than 1 referee class found: %s", referees.toString()));
