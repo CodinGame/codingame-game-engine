@@ -9,7 +9,7 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public abstract class Agent {
+abstract class Agent {
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
     public static final int AGENT_MAX_BUFFER_SIZE = 10000;

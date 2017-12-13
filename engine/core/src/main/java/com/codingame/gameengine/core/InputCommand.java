@@ -2,7 +2,7 @@ package com.codingame.gameengine.core;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class InputCommand {
+class InputCommand {
     public static enum Command {
         INIT, GET_GAME_INFO, SET_PLAYER_OUTPUT, SET_PLAYER_TIMEOUT
     }

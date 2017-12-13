@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @SuppressWarnings("serial")
-public class OutputData extends LinkedList<String> {
+class OutputData extends LinkedList<String> {
     private OutputCommand command;
 
     public OutputData(OutputCommand command) {

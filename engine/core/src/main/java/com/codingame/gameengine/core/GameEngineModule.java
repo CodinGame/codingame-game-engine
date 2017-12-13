@@ -12,7 +12,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.util.Types;
 
-public class GameEngineModule extends AbstractModule {
+class GameEngineModule extends AbstractModule {
 
     @Override
     protected void configure() {

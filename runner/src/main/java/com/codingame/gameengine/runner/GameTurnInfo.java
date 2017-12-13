@@ -8,7 +8,7 @@ import java.util.Optional;
 import com.codingame.gameengine.runner.Command.CommandKey;
 import com.codingame.gameengine.runner.Command.InputCommand;
 
-public class GameTurnInfo {
+class GameTurnInfo {
     private Map<CommandKey, Command> received;
 
     GameTurnInfo() {
