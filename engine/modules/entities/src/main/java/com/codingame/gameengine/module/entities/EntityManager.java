@@ -26,16 +26,11 @@ public class EntityManager implements Module {
     //TODO: Allow user to select lerping function somehow (noLerp, bellLerp, easeLerp, etc)
 
     //JS
-    //TODO: Should PIXI be in window or in Drawer ?
     //TODO: sort out the "getGameName()" problem
-    //TODO: sort out the "canSwapPlayers()" pbm
     //TODO: "contain within" for Texts (text wrapping)
-
-    // HTML + main.js
-    //TODO: default avatars shouldn't be random hardcoded things
+    //TODO: Serialize without JSON
 
     // Workflow
-    //TODO: Should we support sprite sheets?
     //TODO: Should we support spines?
 
     static int ENTITY_COUNT = 0;

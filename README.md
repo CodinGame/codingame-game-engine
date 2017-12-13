@@ -20,7 +20,6 @@ See [Entity Module readme](engine/modules/entities/).
 
 # Documentation
 
-TODO
 
 - Reference API
 

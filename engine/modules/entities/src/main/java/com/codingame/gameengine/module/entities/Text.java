@@ -2,7 +2,7 @@ package com.codingame.gameengine.module.entities;
 
 import java.util.Objects;
 
-public class Text extends Entity<Text> {
+public class Text extends TextureBasedEntity<Text> {
 
     private String text = "";
     private int strokeColor = 0;
