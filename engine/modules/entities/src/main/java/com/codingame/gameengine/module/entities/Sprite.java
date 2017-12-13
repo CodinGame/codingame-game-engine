@@ -5,7 +5,7 @@ public class Sprite extends Shape<Sprite> {
     /**
      * The list of supported PIXI blend modes and their associated constant.
      * 
-     * @see http://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES
+     * @see <a href="http://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES">PIXI BLEND_MODES</a>
      */
     public static enum BlendMode {
         NORMAL(0), ADD(1), MULTIPLY(2), SCREEN(3);
@@ -67,8 +67,8 @@ public class Sprite extends Shape<Sprite> {
     /**
      * Returns the <code>BlendMode</code> this <code>Sprite</code> is to be drawn with.
      * 
-     * @see http://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES
-     * @returns the <code>BlendMode</code> this <code>Sprite</code> is to be drawn with.
+     * @see <a href="http://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES">PIXI BLEND_MODES</a>
+     * @return the <code>BlendMode</code> this <code>Sprite</code> is to be drawn with.
      */
     public BlendMode getBlendMode() {
         return blendMode;
@@ -79,7 +79,7 @@ public class Sprite extends Shape<Sprite> {
      * <p>
      * The possible values are found in <code>BlendMode</code>.
      * 
-     * @see http://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES
+     * @see <a href="http://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES">PIXI BLEND_MODES</a>
      * @param blendMode
      * @return this <code>Sprite</code>.
      */
