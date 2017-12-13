@@ -98,8 +98,12 @@ export const assets = {
   ]
 };
 ```
+You can then use the images in the texture cache with the [Entity Module](../modules/entities/):
+```java
+entityManager.createSprite.setImage("background");
+```
 
-TODO: mention that we use PIXI
+TODO: mention that we use PIXI.
 
 # Documentation
 
