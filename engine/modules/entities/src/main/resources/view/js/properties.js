@@ -42,10 +42,18 @@ export const PROPERTIES = {
   text: {
     ...stringOpts,
     convert(value, globalData) {
-      if (/^\$\d$/.test(value)) {
-        return globalData.players[+value[1]].name;
+      const regexp = /\$(\d)/g;
+      let stop = false;
+      let match;
+      let res = '';
+      let prevIdx = 0;
+      while (match = regexp.exec(value)) {
+        res += value.substring(prevIdx, match.index);
+        res += globalData.players[+match[1]].name;
+        prevIdx = match.index + match[0].length;
       }
-      return value;
+      res += value.substring(prevIdx);
+      return res;
     }
   },
   fontFamily: stringOpts,

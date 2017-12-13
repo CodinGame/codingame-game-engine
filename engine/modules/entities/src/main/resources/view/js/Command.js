@@ -15,7 +15,7 @@ export class CreateCommand {
 }
 
 export class PropertiesCommand {
-  constructor(args, globalData) {
+  depreacted_constructor(args, globalData) {
     let idx = 0;
     this.id = +args[idx++];
     this.t = +args[idx++];
@@ -29,7 +29,7 @@ export class PropertiesCommand {
     }
   }
   
-  deprecatedConstructor(args, globalData) {
+  constructor(args, globalData) {
     let idx = 0;
     this.id = +args[idx++];
     this.t = +args[idx++];

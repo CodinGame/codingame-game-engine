@@ -35,7 +35,6 @@ class Serializer {
         return decimalFormat.format(t);
     }
 
-    @Deprecated
     static String escape(String text) {
         String escaped = text.replaceAll("\\'", "\\\\'");
         if (escaped.contains(" ")) {
@@ -44,8 +43,8 @@ class Serializer {
         return escaped;
     }
 
-    @Deprecated
-    public String serialize(Entity<?> entity, EntityState diff, Double frameInstant) {
+    
+    public String serializeUpdate(Entity<?> entity, EntityState diff, Double frameInstant) {
         return join("UPDATE",
                 entity.getId(),
                 formatFrameTime(frameInstant),
@@ -59,7 +58,8 @@ class Serializer {
                         .collect(Collectors.joining(" ")));
     }
 
-    public String serializeUpdate(Entity<?> entity, EntityState diff, Double frameInstant) {
+    @Deprecated
+    public String serialize(Entity<?> entity, EntityState diff, Double frameInstant) {
         gson.toJsonTree(diff.map);
         return join("UPDATE",
                 entity.getId(),
