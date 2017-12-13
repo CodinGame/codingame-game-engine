@@ -16,6 +16,8 @@ Include the dependency below in the pom.xml of your project.
 
 # Examples
 
+## The Game Manager
+
 Your project should include exactly **one** subclass of `AbstractPlayer` and one class which implements `Referee`.
 Your `Referee` class may then inject (using Guice) a singleton of `GameManager` parametized by your `AbsractPlayer` subclass.
 
@@ -45,9 +47,7 @@ public class MyReferee implements Referee {
 ```
 The Game Manager's API will thus work with your `AbstractPlayer` subclass, which you may modify at leisure.
 
-# Getting Started
 
-TODO
 
 # Documentation
 
@@ -56,3 +56,11 @@ TODO
 - Architecture
 
 - Extending the engine
+
+## Game Manager
+
+## Drawer
+
+- TODO: mention constants.js, utils.js & transitions.js
+
+
