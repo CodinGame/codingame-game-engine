@@ -409,7 +409,7 @@ public class GameRunner {
      * @param avatarUrl
      *            the url of the player's avatar
      */
-    public void addPlayer(String commandLine, String nickname, String avatarUrl) {
+    public void addAgent(String commandLine, String nickname, String avatarUrl) {
         addAgent(new CommandLinePlayerAgent(commandLine), nickname, avatarUrl);
     }
 
