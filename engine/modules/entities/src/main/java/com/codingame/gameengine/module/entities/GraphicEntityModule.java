@@ -16,7 +16,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class EntityManager implements Module {
+public class GraphicEntityModule implements Module {
 
     //JAVA
     //TODO: animations
@@ -46,7 +46,7 @@ public class EntityManager implements Module {
     @Inject private Serializer serializer;
 
     @Inject
-    public EntityManager(GameManager<AbstractPlayer> gameManager) {
+    public GraphicEntityModule(GameManager<AbstractPlayer> gameManager) {
         this.gameManager = gameManager;
         world = new World();
         entities = new ArrayList<>();
@@ -164,7 +164,7 @@ public class EntityManager implements Module {
 
         worldStates.clear();
 
-        gameManager.setViewData("entitymanager", sb.toString());
+        gameManager.setViewData("entitymodule", sb.toString());
     }
 
     private void dumpNewEntity(Entity<?> e, StringBuilder out) {
@@ -277,7 +277,7 @@ public class EntityManager implements Module {
     }
 
     private void sendGlobalData() {
-        gameManager.setViewGlobalData("entitymanager", world);
+        gameManager.setViewGlobalData("entitymodule", world);
         lockWorld = true;
     }
 

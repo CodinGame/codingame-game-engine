@@ -3,7 +3,7 @@ import { fitAspectRatio } from './utils.js';
 import { WIDTH, HEIGHT } from './constants.js';
 import { Group } from './Group.js'
 
-export class EntityManager {
+export class GraphicEntityModule {
   constructor(assets) {
     this.commandParser = new CommandParser();
     this.entities = new Map();
@@ -21,7 +21,7 @@ export class EntityManager {
   }
   
   static get name() {
-    return 'entitymanager';
+    return 'entitymodule';
   }
   
   handleFrameData(number, frameData) {

@@ -14,9 +14,9 @@ See [Game Runner readme](runner/).
 
 See [Game Manager readme](engine/core/).
 
-## Using the Entity Module
+## Using the Graphic Entity Module
 
-See [Entity Module readme](engine/modules/entities/).
+See [Graphic Entity Module readme](engine/modules/entities/).
 
 # Documentation
 

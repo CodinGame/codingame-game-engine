@@ -15,7 +15,7 @@ public abstract class Entity<T extends Entity<?>> {
     }
 
     Entity() {
-        id = ++EntityManager.ENTITY_COUNT;
+        id = ++GraphicEntityModule.ENTITY_COUNT;
         state = new EntityState();
     }
 
