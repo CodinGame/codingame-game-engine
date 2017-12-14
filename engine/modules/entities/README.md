@@ -20,7 +20,7 @@ Or a more recent version.
 
 The EntityModule is an injectable Guice Singleton.
 
-#Examples
+# Examples
 
 ## Creating a circle
 ```java
