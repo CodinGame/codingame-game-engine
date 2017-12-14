@@ -74,8 +74,8 @@ Group system = entityManager.createGroup(planet1, planet2, planet3)
 ## Spinning a group of spinning sprites around a point
 ```java
 	planet1.setRotation(planet1.getRotation() - Math.PI / 4);
-	planet2.setRotation(planet1.getRotation() + Math.PI);
-	planet3.setRotation(planet1.getRotation() + Math.PI / 16);
+	planet2.setRotation(planet2.getRotation() + Math.PI);
+	planet3.setRotation(planet3.getRotation() + Math.PI / 16);
 	
 	system.setRotation(system.getRotation() + Math.PI / 2);
 	
