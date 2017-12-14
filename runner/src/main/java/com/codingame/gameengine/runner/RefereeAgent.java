@@ -9,7 +9,7 @@ import java.io.PrintStream;
 
 import com.codingame.gameengine.core.RefereeMain;
 
-public class RefereeAgent extends Agent {
+class RefereeAgent extends Agent {
 
 	public static final int REFEREE_MAX_BUFFER_SIZE = 30000;
 	private boolean lastRefereeByteIsCarriageReturn = false;
