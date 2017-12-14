@@ -21,9 +21,12 @@ import com.codingame.gameengine.runner.dto.GameResult;
 import com.codingame.gameengine.runner.dto.Tooltip;
 import com.google.gson.Gson;
 
+/**
+ * The class to use to run local games and display the replay in a webpage on a temporary local server.
+ */
 public class GameRunner {
 
-    public static final String INTERRUPT_THREAD = "05&08#1981";
+    static final String INTERRUPT_THREAD = "05&08#1981";
     private static final Pattern COMMAND_HEADER_PATTERN = Pattern
             .compile("\\[\\[(?<cmd>.+)\\] ?(?<lineCount>[0-9]+)\\]");
 
@@ -426,6 +429,9 @@ public class GameRunner {
      * Runs the game and attempts to start a server on the given port.
      * <p>
      * Open a webpage to the server to watch the game's replay.
+     * 
+     * @param port
+     *            the port on which to attempt to start the a server for the game's replay.
      */
     public void start(int port) {
         Properties conf = new Properties();

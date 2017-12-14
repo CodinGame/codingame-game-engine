@@ -105,7 +105,7 @@ public final class GameManager<T extends AbstractPlayer> {
         }
 
         prevViewData = null;
-        currentViewData = createNewView(true);
+        currentViewData = new JsonObject();
 
         gameProperties = referee.init(gameProperties);
         registeredModules.forEach(Module::onGameInit);
@@ -198,19 +198,13 @@ public final class GameManager<T extends AbstractPlayer> {
      */
     private void swapInfoAndViewData() {
         prevViewData = currentViewData;
-        currentViewData = createNewView(true);
+        currentViewData = new JsonObject();
 
         prevGameSummary = currentGameSummary;
         currentGameSummary = null;
 
         prevTooltips = currentTooltips;
         currentTooltips = new ArrayList<>();
-    }
-
-    private JsonObject createNewView(boolean keyFrame) {
-        JsonObject viewData = new JsonObject();
-        viewData.addProperty("key", keyFrame);
-        return viewData;
     }
 
     private void dumpGameProperties() {

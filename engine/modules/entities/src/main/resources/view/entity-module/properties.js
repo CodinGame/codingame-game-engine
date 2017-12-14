@@ -1,4 +1,4 @@
-import { lerp, lerpColor, lerpAngle } from "/core/utils.js";
+import { lerp, lerpColor, lerpAngle } from "../core/utils.js";
 
 const noLerp = (a, b, u) => b;
 
@@ -27,7 +27,7 @@ export const PROPERTIES = {
   },
 
   visible: {
-    type: Number,
+    type: Boolean,
     lerpMethod: noLerp
   },
 

@@ -1,4 +1,4 @@
-import { lerp, unlerp, lerpColor } from '/core/utils.js';
+import { lerp, unlerp, lerpColor } from '../core/utils.js';
 import { PROPERTIES } from "./properties.js";
 
 export class Entity {

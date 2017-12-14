@@ -1,6 +1,10 @@
 package com.codingame.gameengine.module.entities;
 
-abstract public class Shape<T extends Entity<?>> extends Entity<T> {
+/**
+ * A Shape represents a graphical entity with a <b>fill</b> and a <b>line</b>, both of which have an alpha and color. You may also set the line's
+ * width in pixels.
+ */
+abstract class Shape<T extends Entity<?>> extends Entity<T> {
 
     private Integer fillColor = null;
     private int lineColor = 0xffffff, lineWidth = 1;
@@ -16,7 +20,8 @@ abstract public class Shape<T extends Entity<?>> extends Entity<T> {
      * @param color
      *            the color of the fill of this <code>Shape</code>.
      * @return this <code>Shape</code>.
-     * @exception IllegalArgumentException if color isn't a valid RGB integer
+     * @exception IllegalArgumentException
+     *                if color isn't a valid RGB integer
      */
     public T setFillColor(int color) {
         requireValidColor(color);
@@ -120,7 +125,8 @@ abstract public class Shape<T extends Entity<?>> extends Entity<T> {
      * @param lineColor
      *            the color for the border of this <code>Shape</code>.
      * @return this <code>Shape</code>.
-     * @exception IllegalArgumentException if lineColor isn't a valid RGB integer
+     * @exception IllegalArgumentException
+     *                if lineColor isn't a valid RGB integer
      */
     public T setLineColor(int lineColor) {
         requireValidColor(lineColor);

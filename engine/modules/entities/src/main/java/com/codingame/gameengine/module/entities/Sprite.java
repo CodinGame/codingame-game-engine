@@ -1,5 +1,9 @@
 package com.codingame.gameengine.module.entities;
 
+/**
+ * A Sprite is a graphical entity which displays an image. That image must be loaded into the viewer's texture cache, which you can configure by
+ * editing the <code>config.js</code> file of your game's project.
+ */
 public class Sprite extends TextureBasedEntity<Sprite> {
 
     private String image;

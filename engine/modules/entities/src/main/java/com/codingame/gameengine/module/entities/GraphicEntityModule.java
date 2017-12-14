@@ -15,6 +15,13 @@ import com.codingame.gameengine.core.Module;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+/**
+ * The GraphicEntityModule takes care of displaying and animating graphical entities on the replay of the game.
+ * <p>
+ * </p>
+ * Use it by creating shapes, sprites, texts etc, then commiting their states to a certain moment of the frame. By default, the states are commited
+ * automatically at the end of the frame.
+ */
 @Singleton
 public class GraphicEntityModule implements Module {
 
@@ -46,7 +53,7 @@ public class GraphicEntityModule implements Module {
     @Inject private Serializer serializer;
 
     @Inject
-    public GraphicEntityModule(GameManager<AbstractPlayer> gameManager) {
+    GraphicEntityModule(GameManager<AbstractPlayer> gameManager) {
         this.gameManager = gameManager;
         world = new World();
         entities = new ArrayList<>();
@@ -259,6 +266,9 @@ public class GraphicEntityModule implements Module {
      * Creates a new Group entity, its graphical counterpart will be created on the frame currently being computed.
      * <p>
      * A Group represents a collection of other entities. It acts as a container.
+     * 
+     * @param entities
+     *            0 or more entities to immediately add to this group.
      * 
      * @return the entity. Modify its properties to animate the graphical counterpart.
      */
