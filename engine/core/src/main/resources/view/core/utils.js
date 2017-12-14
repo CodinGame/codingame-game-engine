@@ -1,22 +1,18 @@
+/**
+ * return word padded to width with char characters
+ */
 export function paddingString(word, width, char) {
   char = char || ' ';
   word = word + '';
   return Array(Math.max(width - word.length + 1, 0)).join(char) + word;
 }
 
-export function forEach(fn) {
-  for (var i in this) {
-    if (this.hasOwnProperty(i) && typeof this[i] === 'object') {
-      var obj = this[i];
-      fn(obj, i);
-    }
-  }
-}
 /**
- export * Shorthand function to get a random integer in [0;a[ or [a;b[
+ * Returns a random integer from [0;a[ if b is null.
+ * Returns a random integer from [a;b[ if b is not null.
  */
-export function randInt(a, b) {
-  if (b && b > a)
+export function randInt(a, b=null) {
+  if (b != null && b > a)
     return a + Math.floor(Math.random() * (b - a));
   return Math.floor(Math.random() * a);
 }
@@ -66,6 +62,9 @@ export function lerpPosition(from, to, p) {
   };
 }
 
+/**
+ * Gets a color which is the RGB interpolation between start and end by percentage amount
+ */
 export function lerpColor(start, end, amount) {
   if (end === null) {
     return null;
@@ -94,6 +93,9 @@ export function unlerp(a, b, v) {
   return Math.min(1, Math.max(0, unlerpUnclamped(a, b, v)));
 }
 
+/**
+ * calls self.push on all elements of arr
+ */
 export function pushAll(self, arr) {
   self.push.apply(self, arr);
 }

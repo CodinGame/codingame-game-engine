@@ -13,9 +13,10 @@ Include the dependency below in the pom.xml of your project.
 <dependency>
   <groupId>com.codingame.gameengine</groupId>
   <artifactId>runner</artifactId>
-  <version>1.0</version>
+  <version>1.3</version>
 </dependency>
 ```
+Or a more recent version.
 
 Instantiate a `GameRunner` to launch a game with the `start()` method. This will create a temporary directory and start a server to serve the files of that directory. You need not stop the previous server to launch a new game.
 
@@ -103,12 +104,9 @@ You can then use the images in the texture cache with the [Graphic Entity Module
 entityManager.createSprite.setImage("background");
 ```
 
-TODO: mention that we use PIXI.
+The game's replay is run using an engine based on [Pixi.js](http://www.pixijs.com/).
 
 # Documentation
 
-- Reference API
-
-- Architecture
-
-- Extending the engine
+## Reference API
+	TODO
