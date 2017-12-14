@@ -233,7 +233,7 @@ public final class GameManager<T extends AbstractPlayer> {
     private void dumpView() {
         OutputData data = new OutputData(OutputCommand.VIEW);
         if (newTurn) {
-            prevViewData.addProperty("frameNumber", frame);
+            data.add("KEY_FRAME " + frame);
             if (turn == 0) {
                 JsonObject initFrame = new JsonObject();
                 initFrame.add("global", globalViewData);
@@ -243,10 +243,7 @@ public final class GameManager<T extends AbstractPlayer> {
                 data.add(prevViewData.toString());
             }
         } else {
-            JsonObject viewData = createNewView(false);
-            viewData.addProperty("frameNumber", frame);
-
-            data.add(viewData.toString());
+            data.add("INTERMEDIATE_FRAME " + frame);
         }
         String viewData = data.toString();
 

@@ -14,7 +14,7 @@ export class Drawer {
     }
   }
   static get VERSION() {
-    return 3;
+    return 2;
   }
   static get WIDTH() {
     return WIDTH;
@@ -547,7 +547,19 @@ export class Drawer {
 
   _initFrames(playerCount, frames) {
     this.instantiateModules()
-    this._frames = frames;
+
+    this._frames = frames.map(f => {
+      let header = f[0].split(' ');
+
+      let data;
+      try {
+        data = JSON.parse(f.slice(1).join('\n'));
+      } catch (err) {
+        data = {}
+      }
+      return {...data, key: header[0] === 'KEY_FRAME'};
+    });
+
     this.parseGlobalData(this._frames[0].global);
     this.playerCount = playerCount;
     this.reasons = [];
