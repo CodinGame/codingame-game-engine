@@ -11,10 +11,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import org.apache.commons.io.FileUtils;
 
 import fi.iki.elonen.SimpleWebServer;
 
@@ -40,15 +40,21 @@ public class Renderer {
         folder.delete();
     }
 
-    private void exportViewToWorkingDir(String sourceFolder, Path targetFolder) throws IOException {
+    private Set<Path> exportViewToWorkingDir(String sourceFolder, Path targetFolder) throws IOException {
+        Set<Path> exportedPaths = new HashSet<>();
+        exportedPaths.add(targetFolder);
+        
         Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources(sourceFolder);
         while (resources.hasMoreElements()) {
             URL url = resources.nextElement();
+            if (url == null) {
+                continue;
+            }
 
-            if ((url != null) && url.getProtocol().equals("jar")) {
+            if ("jar".equals(url.getProtocol())) {
                 JarURLConnection jarConnection = (JarURLConnection) url.openConnection();
                 ZipFile jar = jarConnection.getJarFile();
-                Enumeration<? extends ZipEntry> entries = jar.entries(); // gives ALL entries in jar
+                Enumeration<? extends ZipEntry> entries = jar.entries();
 
                 while (entries.hasMoreElements()) {
                     ZipEntry entry = entries.nextElement();
@@ -65,17 +71,27 @@ public class Renderer {
                         Files.copy(jar.getInputStream(entry), f.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     }
                 }
-            } else if ((url != null) && url.getProtocol().equals("file")) {
+            } else if ("file".equals(url.getProtocol())) {
                 try {
-                    FileUtils.copyDirectory(new File(url.toURI()), targetFolder.toFile());
+                    String targetClassesFolder = "/target/classes/".replace('/', File.separatorChar) + sourceFolder;
+                    String resourcesClassesFolder = "/src/main/resources/".replace('/', File.separatorChar) + sourceFolder;
+                    
+                    String targetPath = new File(url.toURI()).getAbsolutePath();
+                    targetPath = targetPath.replace(targetClassesFolder, resourcesClassesFolder);
+                    
+                    exportedPaths.add(new File(targetPath).toPath());
                 } catch (URISyntaxException e) {
                     throw new RuntimeException("Cannot copy files", e);
                 }
             }
         }
+        
+        return exportedPaths;
     }
 
-    private Path generateView(int playerCount, String jsonResult) {
+    private Set<Path> generateView(int playerCount, String jsonResult) {
+        Set<Path> paths;
+        
         Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
         deleteFolder(tmpdir.toFile());
         tmpdir.toFile().mkdirs();
@@ -86,24 +102,36 @@ public class Renderer {
         } catch (IOException e) {
             throw new RuntimeException("Cannot generate the game file", e);
         }
-        
+
         try {
-            exportViewToWorkingDir("view", tmpdir);
+            paths = exportViewToWorkingDir("view", tmpdir);
         } catch (IOException e) {
             throw new RuntimeException("Cannot copy resources", e);
         }
+        
+        if(paths.size() == 0) {
+            throw new RuntimeException("No resources folder found");
+        }
 
-        return tmpdir;
+        return paths;
     }
 
-    private void serveHTTP(Path path) {
+    private void serveHTTP(Set<Path> path) {
         System.out.println("http://localhost:" + port + "/test.html");
-        System.out.println("Web server dir 1 : " + path.toAbsolutePath().toString());
-        SimpleWebServer.main(("--quiet --port " + port + " --dir " + path.toAbsolutePath()).split(" "));
+
+        StringBuilder sb = new StringBuilder();
+        for(Path p : path) {
+            sb.append(" --dir ").append(p.toAbsolutePath());
+            System.out.println("Exposed web server dir: " + p.toString());
+        }
+        
+        String commandLine = String.format("--quiet --port %d %s", port, sb.toString());
+        
+        SimpleWebServer.main(commandLine.split(" "));
     }
 
     public void render(int playerCount, String jsonResult) {
-        Path p = generateView(playerCount, jsonResult);
-        serveHTTP(p);
+        Set<Path> paths = generateView(playerCount, jsonResult);
+        serveHTTP(paths);
     }
 }

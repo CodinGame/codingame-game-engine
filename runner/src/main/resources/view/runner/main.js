@@ -1,6 +1,6 @@
-import * as config from './js/config.js';
-import { Drawer } from './js/Drawer.js';
-import { createGameManagerFromGameInfo } from './gameManager.js'
+import * as config from '/config.js';
+import { Drawer } from '/core/Drawer.js';
+import { createGameManagerFromGameInfo } from '/runner/gameManager.js'
 
 // TODO: add tooltips
 
