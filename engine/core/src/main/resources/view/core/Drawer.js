@@ -205,14 +205,29 @@ export class Drawer {
       return agentData;
     });
 
-    this._frames = frames.filter(x => x.key || x.frame);
+    this.instantiateModules()
+
+    this._frames = frames.map(f => {
+      let splittedF = f.split('\n');
+      let header = splittedF[0].split(' ');
+
+      let data;
+      try {
+        data = JSON.parse(splittedF.slice(1).join('\n'));
+      } catch (err) {
+        data = {}
+      }
+      return {...data, key: header[0] === 'KEY_FRAME'};
+    }).filter(x => x.key);
+
     this.parseGlobalData(this._frames[0].global);
     this.playerCount = playerCount;
     this.reasons = [];
     this.frames = [];
     this.currentFrame = 0;
-    this.progress = 0;
+    this.progress = 1;
     const firstFrame = this._frames[0].frame;
+    firstFrame.key = this._frames[0].key;
     this.frames.push(this.parseFrame(firstFrame, this.frames));
     for (var i = 1; i < this._frames.length; ++i) {
       this.frames.push(this.parseFrame(this._frames[i], this.frames));
