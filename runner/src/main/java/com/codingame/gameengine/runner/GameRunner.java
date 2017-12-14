@@ -166,6 +166,11 @@ public class GameRunner {
                         turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null));
                 String nextPlayerOutput = getNextPlayerOutput(nextPlayerInfo,
                         turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null));
+
+                for (Agent a : players) {
+                    gameResult.outputs.get(String.valueOf(a.getAgentId())).add(a.getAgentId() == nextPlayerInfo.nextPlayer ? nextPlayerOutput : null);
+                }
+
                 if (nextPlayerOutput != null) {
                     sendPlayerOutput(nextPlayerOutput, nextPlayerInfo.nbLinesNextOutput);
                 } else {
@@ -277,8 +282,6 @@ public class GameRunner {
         if (playerOutput != null)
             playerOutput = playerOutput.replace('\r', '\n');
         readError(player);
-
-        gameResult.outputs.get(String.valueOf(nextPlayerInfo.nextPlayer)).add(playerOutput);
 
         if (checkOutput(playerOutput, nextPlayerInfo.nbLinesNextOutput) != OutputResult.OK)
             return null;
