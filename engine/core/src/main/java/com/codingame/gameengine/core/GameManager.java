@@ -30,7 +30,7 @@ import com.google.inject.Singleton;
 @Singleton
 public final class GameManager<T extends AbstractPlayer> {
     @Inject private Provider<T> playerProvider;
-    @Inject private Provider<Referee> refereeProvider;
+    @Inject private Provider<AbstractReferee> refereeProvider;
     @Inject private Gson gson;
     protected static Log log = LogFactory.getLog(GameManager.class);
 
@@ -46,7 +46,7 @@ public final class GameManager<T extends AbstractPlayer> {
     private Scanner s;
     private PrintStream out;
     private Properties gameProperties;
-    private Referee referee;
+    private AbstractReferee referee;
     private boolean newTurn;
 
     private List<Tooltip> currentTooltips = new ArrayList<>();

@@ -5,8 +5,8 @@
 	<parent>
 		<groupId>com.codingame.gameengine</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.2-SNAPSHOT</version>
-		<relativePath>../core/parent</relativePath>
+		<version>${revision}</version>
+		<relativePath>../engine/parent</relativePath>
 	</parent>
 
 	<artifactId>runner</artifactId>
@@ -17,54 +17,29 @@
 		<dependency>
 			<groupId>com.codingame.gameengine</groupId>
 			<artifactId>core</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.codingame.gameengine</groupId>
 			<artifactId>module-entities</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.nanohttpd</groupId>
 			<artifactId>nanohttpd-webserver</artifactId>
 			<version>2.3.1</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.1.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
-			<type>jar</type>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.mail</groupId>
-					<artifactId>mail</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.jms</groupId>
-					<artifactId>jms</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jdmk</groupId>
-					<artifactId>jmxtools</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jmx</groupId>
-					<artifactId>jmxri</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.22.0-GA</version>
+        </dependency>
 	</dependencies>
 
 	<build>

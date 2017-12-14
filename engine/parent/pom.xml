@@ -1,14 +1,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.codingame.gameengine</groupId>
-	<artifactId>parent</artifactId>
-	<version>1.2-SNAPSHOT</version>
-	<packaging>pom</packaging>
 
 	<name>CodinGame Game Engine Parent</name>
 	<description>CodinGame Game Engine toolkit to create new Community Games</description>
 	<url>https://github.com/CodinGame/codingame-game-engine</url>
+
+	<properties>
+		<revision>1.2-SNAPSHOT</revision>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<groupId>com.codingame.gameengine</groupId>
+	<artifactId>parent</artifactId>
+	<version>${revision}</version>
+	<packaging>pom</packaging>
 
 	<licenses>
 		<license>
@@ -53,15 +60,6 @@
 					<serverId>ossrh</serverId>
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
 					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>

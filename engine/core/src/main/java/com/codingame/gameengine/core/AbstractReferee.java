@@ -6,7 +6,7 @@ import java.util.Properties;
  * The Referee is the brain of your game, it implements all the rules and the turn order.
  *
  */
-public interface Referee {
+public abstract class AbstractReferee {
 
     /**
      * <p>
@@ -23,7 +23,7 @@ public interface Referee {
      *            a <code>Properties</code> containing input info for the referee.
      * @return a <code>Properties</code> containing game data that can be used as input for a later game.
      */
-    Properties init(Properties params);
+    abstract public Properties init(Properties params);
 
     /**
      * Called on the computation of each turn of the game.
@@ -40,7 +40,7 @@ public interface Referee {
      * @param turn
      *            which turn of the game is currently being computed.
      */
-    void gameTurn(int turn);
+    abstract public void gameTurn(int turn);
 
     /**
      * <p>
@@ -51,6 +51,6 @@ public interface Referee {
      * Typically, this method is used to set the players' final scores according to the final state of the game.
      * </p>
      */
-    default void onEnd() {
+    public void onEnd() {
     }
 }

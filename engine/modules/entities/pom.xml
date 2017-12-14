@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.codingame.gameengine</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.2-SNAPSHOT</version>
+		<version>${revision}</version>
 		<relativePath>../../parent</relativePath>
 	</parent>
 
@@ -16,7 +16,7 @@
 		<dependency>
 			<groupId>com.codingame.gameengine</groupId>
 			<artifactId>core</artifactId>
-			<version>1.2-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>
