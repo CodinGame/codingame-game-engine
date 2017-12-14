@@ -2,6 +2,9 @@ package com.codingame.gameengine.module.entities;
 
 import java.util.Objects;
 
+/**
+ * Represents a label on screen.
+ */
 public class Text extends TextureBasedEntity<Text> {
 
     private String text = "";
@@ -88,7 +91,10 @@ public class Text extends TextureBasedEntity<Text> {
      * <p>
      * Default is 0 (no stroke).
      * 
-     * @return the thickness for the stroke of this <code>Text</code>
+     * 
+     * @param strokeThickness
+     *            the thickness for the stroke of this <code>Text</code>.
+     * @return this <code>Text</code>
      */
     public Text setStrokeThickness(double strokeThickness) {
         this.strokeThickness = strokeThickness;

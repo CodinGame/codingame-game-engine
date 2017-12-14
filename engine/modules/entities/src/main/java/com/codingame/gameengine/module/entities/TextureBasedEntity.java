@@ -1,6 +1,6 @@
 package com.codingame.gameengine.module.entities;
 
-abstract public class TextureBasedEntity<T extends Entity<?>> extends Entity<T> {
+abstract class TextureBasedEntity<T extends Entity<?>> extends Entity<T> {
 
     /**
      * The list of supported PIXI blend modes and their associated constant.

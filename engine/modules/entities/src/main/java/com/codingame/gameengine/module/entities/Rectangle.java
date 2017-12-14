@@ -1,5 +1,10 @@
 package com.codingame.gameengine.module.entities;
 
+/**
+ * A Rectangle specifies an area in a the <code>world</code> enclosed by the Rectangle's upper-left point (x,y), its width, and its height.
+ * <p></p>
+ * The coordinates, width and height are in world units.
+ */
 public class Rectangle extends Shape<Rectangle> {
 
     private int width, height;
