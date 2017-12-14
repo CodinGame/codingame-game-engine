@@ -1,4 +1,4 @@
-import * as config from '/config.js';
+import * as config from '../config.js';
 import { unlerp } from './utils.js';
 import { WIDTH, HEIGHT } from './constants.js';
 

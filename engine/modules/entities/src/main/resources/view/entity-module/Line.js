@@ -1,5 +1,5 @@
 import { Shape } from './Shape.js';
-import { lerp, unlerp, lerpColor } from '/core/utils.js';
+import { lerp, unlerp, lerpColor } from '../core/utils.js';
 
 export default class Line extends Shape {
 

@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-        entry: './js/Drawer.js',
+        entry: './core/Drawer.js',
         output: {
                 path: path.resolve(__dirname, 'bin'),
                 filename: 'bundle.js',

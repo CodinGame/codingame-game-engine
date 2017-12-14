@@ -1,4 +1,4 @@
-import { lerp, lerpColor, lerpAngle } from "/core/utils.js";
+import { lerp, lerpColor, lerpAngle } from "../core/utils.js";
 
 const noLerp = (a, b, u) => b;
 

@@ -1,6 +1,6 @@
 import { CommandParser } from './CommandParser.js';
-import { fitAspectRatio } from '/core/utils.js';
-import { WIDTH, HEIGHT } from '/core/constants.js';
+import { fitAspectRatio } from '../core/utils.js';
+import { WIDTH, HEIGHT } from '../core/constants.js';
 import { Group } from './Group.js'
 
 export class GraphicEntityModule {

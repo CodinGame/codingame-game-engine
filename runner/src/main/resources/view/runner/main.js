@@ -1,6 +1,6 @@
-import * as config from '/config.js';
-import { Drawer } from '/core/Drawer.js';
-import { createGameManagerFromGameInfo } from '/runner/gameManager.js'
+import * as config from '../config.js';
+import { Drawer } from '../core/Drawer.js';
+import { createGameManagerFromGameInfo } from './gameManager.js'
 
 window.DEFAULT_WIDTH = 960;
 window.DEFAULT_HEIGHT = 540;
