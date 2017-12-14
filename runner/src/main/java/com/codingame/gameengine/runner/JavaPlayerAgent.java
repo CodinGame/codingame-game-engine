@@ -72,7 +72,6 @@ public class JavaPlayerAgent extends Agent {
     public void initialize(Properties conf) {
     }
 
-<<<<<<< HEAD
 	/**
 	 * Launch the agent. After the call, agent is ready to process input / output
 	 * 
@@ -84,28 +83,6 @@ public class JavaPlayerAgent extends Agent {
 		javaRunnerThread = new JavaAgentThread(codemain, agentStdin, agentStdout, agentStderr);
 		javaRunnerThread.start();
 	}
-=======
-    @Override
-    public String getOutput(int nbLine, long timeout) {
-        String output = super.getOutput(nbLine, timeout);
-        //		System.out.println("\t=== Read from player");
-        //		System.out.print(output);
-        //		System.out.println("\t=== End Player");
-        return output;
-    }
-
-    /**
-     * Launch the agent. After the call, agent is ready to process input / output
-     * 
-     * @throws Exception
-     *             if an error occurs
-     */
-    @Override
-    protected void runInputOutput() throws Exception {
-        javaRunnerThread = new JavaAgentThread(codemain, agentStdin, agentStdout, agentStderr);
-        javaRunnerThread.start();
-    }
->>>>>>> branch 'master' of ssh://git@gitlab.codingame.com:9022/codingame/game-engine.git
 
     @Override
     public void destroy() {
