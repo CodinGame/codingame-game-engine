@@ -70,26 +70,37 @@ var canvas;
 window.init = 0;
 
 function updateText(id) {
-  document.getElementById("stdout").value = '';
-  for (var i in data.ids) {
-    var text = data.outputs[i][id];
-    if (text != null)
-      document.getElementById("stdout").value += text;
-  }
-
-  let tooltips = data.tooltips.filter(x => x.turn == id);
-  let tooltipsText = '';
-  if (tooltips.length > 0) {
-    tooltipsText = 'Tooltips:\n' + tooltips.map(x => x.event + ' ' + x.text).join('\n');
-  }
-  document.getElementById("console").value = data.outputs.referee[id] + '\n' + (data.summaries && ('Summary:\n' + data.summaries[id])) + '\n' + tooltipsText;
-
-  document.getElementById("errors").value = '';
-  for (var i in data.ids) {
-    var text = data.errors[i][id];
-    if (text != null) {
-      document.getElementById("errors").value += text;
+  let currentFrame = id;
+  if (id > 0) {
+    while (!frames[currentFrame - 1].keyframe) {
+      currentFrame--;
     }
+  }
+
+  document.getElementById("stdout").value = '';
+  document.getElementById("errors").value = '';
+  
+  while (currentFrame <= id) {
+    for (var i in data.ids) {
+      var text = data.outputs[i][currentFrame];
+      if (text != null)
+        document.getElementById("stdout").value += text;
+    }
+  
+    let tooltips = data.tooltips.filter(x => x.turn == id);
+    let tooltipsText = '';
+    if (tooltips.length > 0) {
+      tooltipsText = 'Tooltips:\n' + tooltips.map(x => x.event + ' ' + x.text).join('\n');
+    }
+    document.getElementById("console").value = data.outputs.referee[id] + '\n' + (data.summaries && ('Summary:\n' + data.summaries[id])) + '\n' + tooltipsText;
+  
+    for (var i in data.ids) {
+      var text = data.errors[i][currentFrame];
+      if (text != null) {
+        document.getElementById("errors").value += text;
+      }
+    }
+    currentFrame++;
   }
 }
 
