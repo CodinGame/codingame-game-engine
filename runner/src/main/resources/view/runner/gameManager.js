@@ -265,7 +265,7 @@ GameManager.prototype.next = function() {
 };
 
 GameManager.prototype.isKeyFrame = function(frameIndex) {
-  return !this.frames[frameIndex] || this.frames[frameIndex].keyframe || this.frames[frameIndex].key;
+  return !this.frames[frameIndex] || this.frames[frameIndex].keyframe;
 };
 
 

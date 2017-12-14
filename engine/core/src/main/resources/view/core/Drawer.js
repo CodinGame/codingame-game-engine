@@ -567,6 +567,7 @@ export class Drawer {
     this.currentFrame = 0;
     this.progress = 1;
     const firstFrame = this._frames[0].frame;
+    firstFrame.key = this._frames[0].key;
     this.frames.push(this.parseFrame(firstFrame, this.frames));
     for (var i = 1; i < this._frames.length; ++i) {
       this.frames.push(this.parseFrame(this._frames[i], this.frames));
