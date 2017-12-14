@@ -18,7 +18,7 @@ import java.util.zip.ZipFile;
 
 import fi.iki.elonen.SimpleWebServer;
 
-public class Renderer {
+class Renderer {
 
     private int port = 8080;
 

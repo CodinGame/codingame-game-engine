@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Command {
+class Command {
     interface CommandKey {
         String name();
     }

@@ -6,12 +6,22 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+/**
+ * The representation of the a player's AI during the game's execution.
+ *
+ */
 public abstract class AbstractPlayer {
     @Inject Provider<GameManager<AbstractPlayer>> gameManagerProvider;
 
-    @SuppressWarnings("serial")
+    /**
+     * An Exception thrown by <code>getOutputs()</code> when the player's AI did not respond in time after an <code>execute()</code>.
+     * <p>
+     * You can change the timeout value with <code>GameManager</code>'s <code>setTurnMaxTime</code> method.
+     * </p>
+     *
+     */
     public static class TimeoutException extends Exception {
-
+        private static final long serialVersionUID = 42L;
     }
 
     private int index;
@@ -23,29 +33,29 @@ public abstract class AbstractPlayer {
     private boolean hasBeenExecuted;
 
     /**
-     * Gets the player nickname token.
+     * Returns a string that will be converted into the real nickname by the viewer.
      * 
-     * @return a string that will be converted into the real nickname by the viewer.
+     * @return the player's nickname token.
      */
-    public final String getNickname() {
+    public final String getNicknameToken() {
         return "$" + this.index;
     }
 
     /**
-     * Gets the player color token.
+     * Returns an integer that will be converted into the player's real color by the viewer.
      * 
-     * @return an integer that will be converted into the real color by the viewer.
+     * @return the player's color token.
      */
-    public final int getColor() {
+    public final int getColorToken() {
         return -(this.index + 1);
     }
-    
+
     /**
-     * Gets the player avatar token.
+     * Returns a string that will be converted into the real avatar by the viewer, if it exists.
      * 
-     * @return an integer that will be converted into the real avatr by the viewer, if it exists.
+     * @return the player's avatar token.
      */
-    public final String getAvatar() {
+    public final String getAvatarToken() {
         return "$" + this.index;
     }
 

@@ -2,8 +2,6 @@ import * as config from '/config.js';
 import { Drawer } from '/core/Drawer.js';
 import { createGameManagerFromGameInfo } from '/runner/gameManager.js'
 
-// TODO: add tooltips
-
 window.DEFAULT_WIDTH = 960;
 window.DEFAULT_HEIGHT = 540;
 window.overSampling = 2;
@@ -20,7 +18,13 @@ function fetchGame(callback) {
 function go(data) {
   window.data = data;
   window.agents = data.agents;
-  window.frames = data.views.map(v => JSON.parse(v));
+  window.views = data.views.map(v => v.split('\n'));
+  window.frames = data.views.map(v => {
+    let f = v.split('\n');
+    let header = f[0].split(' ');
+
+    return {view: v, keyframe: header[0] === 'KEY_FRAME'};
+  });
 
   var uinput = {};
   if (data.uinput) {
@@ -101,7 +105,7 @@ function updateToFrame(_frame, _progress, _playing, isSubFrame, isTurnBased, atE
 
 function initFrames() {
   if (init == 0) {
-    d.initFrames(frames, agents);
+    d.initFrames(views, agents);
     init = 1;
   }
 }

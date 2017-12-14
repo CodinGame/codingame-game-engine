@@ -20,6 +20,13 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+/**
+ * The <code>GameManager</code> takes care of running each turn of the game and computing each visual frame of the replay. It provides many utility
+ * methods that handle instances of your implementation of AbstractPlayer.
+ *
+ * @param <T>
+ *            Your implementation of AbstractPlayer
+ */
 @Singleton
 public final class GameManager<T extends AbstractPlayer> {
     @Inject private Provider<T> playerProvider;
@@ -104,7 +111,7 @@ public final class GameManager<T extends AbstractPlayer> {
         registeredModules.forEach(Module::onGameInit);
         swapInfoAndViewData();
         initDone = true;
-        
+
         // Game Loop ----------------------------------------------------------
         for (turn = 0; turn < getMaxTurns() && !isGameEnd(); turn++) {
             log.info("Turn " + turn);
@@ -124,7 +131,7 @@ public final class GameManager<T extends AbstractPlayer> {
         }
 
         log.info("End");
-        
+
         referee.onEnd();
         registeredModules.forEach(Module::onAfterOnEnd);
 
@@ -226,7 +233,7 @@ public final class GameManager<T extends AbstractPlayer> {
     private void dumpView() {
         OutputData data = new OutputData(OutputCommand.VIEW);
         if (newTurn) {
-            prevViewData.addProperty("frameNumber", frame);
+            data.add("KEY_FRAME " + frame);
             if (turn == 0) {
                 JsonObject initFrame = new JsonObject();
                 initFrame.add("global", globalViewData);
@@ -236,10 +243,7 @@ public final class GameManager<T extends AbstractPlayer> {
                 data.add(prevViewData.toString());
             }
         } else {
-            JsonObject viewData = createNewView(false);
-            viewData.addProperty("frameNumber", frame);
-
-            data.add(viewData.toString());
+            data.add("INTERMEDIATE_FRAME " + frame);
         }
         String viewData = data.toString();
 
@@ -252,7 +256,7 @@ public final class GameManager<T extends AbstractPlayer> {
 
         log.trace(viewData);
         out.println(viewData);
-        
+
         frame++;
     }
 
@@ -356,7 +360,9 @@ public final class GameManager<T extends AbstractPlayer> {
     }
 
     /**
-     * Get current frame duration.
+     * Returns the duration in milliseconds for the frame currently being computed.
+     * 
+     * @return the frame duration in milliseconds.
      */
     public int getFrameDuration() {
         return frameDuration;
@@ -501,7 +507,7 @@ public final class GameManager<T extends AbstractPlayer> {
     public static String formatSuccessMessage(String message) {
         return String.format("¤GREEN¤%s§GREEN§", message);
     }
-    
+
     /**
      * Helper function to display a colored message. Usually used at the end of the game.
      * 

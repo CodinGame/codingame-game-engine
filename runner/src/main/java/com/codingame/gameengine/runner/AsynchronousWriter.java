@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.concurrent.BlockingQueue;
 
-public class AsynchronousWriter extends Thread {
+class AsynchronousWriter extends Thread {
 
     private final BlockingQueue<String> queue;
     private final OutputStream stream;
