@@ -27,7 +27,7 @@ export const PROPERTIES = {
   },
 
   visible: {
-    type: Number,
+    type: Boolean,
     lerpMethod: noLerp
   },
 
