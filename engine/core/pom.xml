@@ -9,9 +9,8 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-    <groupId>com.codingame.gameengine</groupId>
+	<groupId>com.codingame.gameengine</groupId>
 	<artifactId>core</artifactId>
-	<version>${revision}</version>
 	<name>CodinGame Game Engine Core</name>
 	<description>Core Project of the CodinGame engine toolkit. Core components to create a game and communicate with the view.</description>
 
@@ -20,11 +19,10 @@
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
 			<version>4.0</version>
-
 			<exclusions>
 				<exclusion>
-					<groupId>org.javassist</groupId>
-					<artifactId>javassist</artifactId>
+					<groupId>com.google.guava</groupId>
+					<artifactId>guava</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
