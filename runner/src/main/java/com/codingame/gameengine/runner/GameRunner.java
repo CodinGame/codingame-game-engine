@@ -252,11 +252,8 @@ public class GameRunner {
         if (agent == referee) {
             gameResult.errors.get("referee").add(referee.readError());
         } else {
-            for (int i = 0; i < players.size(); i++) {
-                if (players.get(i) == agent) {
-                    gameResult.errors.get(String.valueOf(i)).add(agent.readError());
-                    break;
-                }
+            for (Agent a : players) {
+                gameResult.errors.get(String.valueOf(a.getAgentId())).add(a == agent ? agent.readError() : null);
             }
         }
     }
