@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.codingame.gameengine</groupId>
 		<artifactId>parent</artifactId>
-		<version>${revision}</version>
+        <version>1.4</version>
 		<relativePath>../../parent</relativePath>
 	</parent>
 

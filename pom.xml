@@ -2,15 +2,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>com.codingame.gameengine</groupId>
-        <artifactId>parent</artifactId>
-        <version>${revision}</version>
-        <relativePath>engine/parent</relativePath>
-    </parent>
-
 	<groupId>com.codingame</groupId>
 	<artifactId>gameengine</artifactId>
+	<version>1.4</version>
 	<packaging>pom</packaging>
 	
 	<modules>
