@@ -6,6 +6,8 @@
 	<artifactId>gameengine</artifactId>
 	<version>1.4</version>
 	<packaging>pom</packaging>
+    <name>CodinGame Game Engine</name>
+    <description>Parent and Reactor Project of the CodinGame engine toolkit.</description>
 
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
