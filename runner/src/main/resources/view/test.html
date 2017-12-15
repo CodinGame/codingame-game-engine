@@ -20,7 +20,7 @@
 		}
 
 		.player {
-			width: 960px;
+			width: 800px;
 			overflow: auto;
 			resize: horizontal;
 			padding: 10px;
@@ -33,6 +33,10 @@
 			justify-content: space-between;
 			align-items: center;
 			height: 50px;
+		}
+		
+		.buttons {
+			display: flex;
 		}
 
 		.position {
@@ -62,77 +66,95 @@
 		}
 		
 		fieldset {
+			flex: 1;
 			border: 1px solid #41454a;
-			margin-top: 20px;
+			margin-top: 10px;
 		}
 		
 		textarea {
 			background-color: #252e38;
 			color: white;
-			width: 300px;
-			height: 80px;
+			width: 100%;
+			height: calc(100% - 20px);
+			resize: none;
 		}
 		
 		.full-screen {
 			margin-left: 10px;
 		}
+		
+		.speed {
+			margin-left: 10px;
+		}
+		
+		.output-player, .output-referee {
+			display: flex;
+			resize: vertical;
+			overflow-y: scroll;
+			min-height: 115px;
+		}
 	</style>
 </head>
 
 <body>
-	<div class="player">
-		<div id="container">
-			<canvas id="player-canvas" width="960" height="540"></canvas>
+	<div class="viewer">
+		<div class="player">
+			<div id="container">
+				<canvas id="player-canvas" width="960" height="540"></canvas>
+			</div>
+			
+			<div class="controls">
+	
+				<div class="buttons">
+					<button onclick="goTo(0, 1)">&lt;&lt;</button>
+					<button onclick="previousFrame()">&lt;</button>
+					<button onclick="togglePlay()">Play / Pause</button>
+					<button onclick="nextFrame()">&gt;</button>
+					<button onclick="goTo(-1, 1)">&gt;&gt;</button>
+				</div>
+			
+				<div class="position">
+					<input id="positionRange" type="range" value="1" max="0" min="1" step=".001" oninput="goTo(this.value | 0, this.value - (this.value | 0))" />
+					<input type="number" step="1" min="0" max="0" id="framelabel" value="0" onchange="goTo(this.value | 0, 1);" />
+				</div>
+			
+				<div class="buttons">
+					<button class="full-screen" onclick="fullScreen();">Full Screen</button>
+					<div class="speed">
+						<span>Speed: </span>
+						<select onclick="setSpeed(value)">
+							<option>0.1</option>
+							<option>0.2</option>
+							<option>0.5</option>
+							<option selected="selected">1</option>
+							<option>2</option>
+							<option>5</option>
+							<option>10</option>
+						</select>
+					</div>
+				</div>
+	
+			</div>
 		</div>
+	
+		<div class="output">
+			<div id="output-players"></div>
 		
-		<div class="controls">
-
-			<div>
-				<button onclick="goTo(0, 1)">&lt;&lt;</button>
-				<button onclick="previousFrame()">&lt;</button>
-				<button onclick="togglePlay()">Play / Pause</button>
-				<button onclick="nextFrame()">&gt;</button>
-				<button onclick="goTo(-1, 1)">&gt;&gt;</button>
+			<div class="output-referee">
+				<fieldset>
+					<legend>Referee Output</legend>
+					<textarea id="console" readonly></textarea>
+				</fieldset>
 			</div>
-		
-			<div class="position">
-				<input id="positionRange" type="range" value="1" max="0" min="1" step=".001" oninput="goTo(this.value | 0, this.value - (this.value | 0))" />
-				<input type="number" step="1" min="0" max="0" id="framelabel" value="0" onchange="goTo(this.value | 0, 1);" />
-			</div>
-		
-			<div>
-				<button class="full-screen" onclick="fullScreen();">Full Screen</button>
-			</div>
-
 		</div>
 	</div>
-
-
-
-	<fieldset style="display: inline">
-		<legend>Player Standard Output</legend>
-		<textarea id="stdout"readonly></textarea>
-	</fieldset>
-	<fieldset style="display: inline">
-		<legend>Player Error Output</legend>
-		<textarea id="errors" readonly></textarea>
-	</fieldset>
-	<fieldset style="display: inline">
-		<legend>Referee Output</legend>
-		<textarea id="console" readonly></textarea>
-	</fieldset>
-
-	<fieldset style="display: inline">
-		<legend>Speed</legend>
-		<button onclick="setSpeed(0.1);">x0.1</button>
-		<button onclick="setSpeed(0.2);">x0.2</button>
-		<button onclick="setSpeed(0.5);">x0.5</button>
-		<button onclick="setSpeed(1);">x1</button>
-		<button onclick="setSpeed(2);">x2</button>
-		<button onclick="setSpeed(5);">x5</button>
-		<button onclick="setSpeed(10);">x10</button> | 
-		Custom speed: <input type="number" id="speedlabel" min="0.01" max="100" value="1" step="0.1" style="width:40px" onchange="setSpeed(this.value);" />
-	</fieldset>
+	
+	<div>
+		<fieldset>
+			<legend>Game properties</legend>
+			<textarea id="uinput" readonly></textarea>
+		</fieldset>
+	</div>
 
 </body>
 
