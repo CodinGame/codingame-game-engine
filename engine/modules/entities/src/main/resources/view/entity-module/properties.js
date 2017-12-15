@@ -27,7 +27,15 @@ export const PROPERTIES = {
   },
 
   visible: {
-    type: Boolean,
+    type: value => {
+      if (value === 'true') {
+        return true;
+      } else if (value == 'false') {
+        return false;
+      } else {
+        throw 'Cannot convert to boolean: ' + value + '.';
+      }
+    },
     lerpMethod: noLerp
   },
 
