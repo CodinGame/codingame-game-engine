@@ -26,15 +26,18 @@ function go(data) {
     return {view: v, keyframe: header[0] === 'KEY_FRAME'};
   });
 
-  var uinput = {};
+  data.agents.forEach(agent => {
+    let out = $('<fieldset><legend>Player ' + agent.index + ' Standard Output</legend><textarea id="stdout' + agent.index + '" readonly></textarea></fieldset>');
+    let err = $('<fieldset><legend>Player ' + agent.index + ' Standard Error</legend><textarea id="stderr' + agent.index + '" readonly></textarea></fieldset>');
+    let playerOutput = $('<div class="output-player"></div>');
+    playerOutput.append(out).append(err);
+    $('#output-players').append(playerOutput);
+  });
+
+  document.getElementById("uinput").value = '';
   if (data.uinput) {
-    var tab = data.uinput[0].trim().split('\n');
-    for (var k = 0; k < tab.length; ++k) {
-      var elem = tab[k].split('=');
-      uinput[elem[0]] = elem[1];
-    }
+    document.getElementById("uinput").value = data.uinput;
   }
-  console.log(uinput);
 
   document.getElementById("positionRange").max = frames.length;
   document.getElementById("framelabel").max = frames.length - 1;
@@ -77,14 +80,16 @@ function updateText(id) {
     }
   }
 
-  document.getElementById("stdout").value = '';
-  document.getElementById("errors").value = '';
-  
+  window.agents.forEach(agent => {
+    document.getElementById("stdout" + agent.index).value = '';
+    document.getElementById("stderr" + agent.index).value = '';
+  });
+
   while (currentFrame <= id) {
     for (var i in data.ids) {
       var text = data.outputs[i][currentFrame];
       if (text != null)
-        document.getElementById("stdout").value += text;
+        document.getElementById("stdout" + i).value += text;
     }
   
     let tooltips = data.tooltips.filter(x => x.turn == id);
@@ -97,7 +102,7 @@ function updateText(id) {
     for (var i in data.ids) {
       var text = data.errors[i][currentFrame];
       if (text != null) {
-        document.getElementById("errors").value += text;
+        document.getElementById("stderr" + i).value += text;
       }
     }
     currentFrame++;
