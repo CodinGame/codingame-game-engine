@@ -11,6 +11,7 @@
 
     <groupId>com.codingame.gameengine</groupId>
 	<artifactId>core</artifactId>
+	<version>${revision}</version>
 	<name>CodinGame Game Engine Core</name>
 	<description>Core Project of the CodinGame engine toolkit. Core components to create a game and communicate with the view.</description>
 

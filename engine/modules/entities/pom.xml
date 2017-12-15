@@ -11,7 +11,7 @@
 
     <groupId>com.codingame.gameengine</groupId>
     <artifactId>module-entities</artifactId>
-
+    <version>${revision}</version>
 	<name>CodinGame Game Engine Entity Manager Module</name>
 	<description>Entity Manager module for the CodinGame engine toolkit. Simplify the management of shapes and drawings.</description>
 

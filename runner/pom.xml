@@ -10,6 +10,7 @@
 
     <groupId>com.codingame.gameengine</groupId>
 	<artifactId>runner</artifactId>
+    <version>${revision}</version>
 	<name>CodinGame Game Engine Runner</name>
 	<description>Runner / Testbed to locally run Games created using the CodinGame engine toolkit.</description>
 
