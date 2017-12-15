@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.codingame.gameengine</groupId>
-		<artifactId>parent</artifactId>
+		<groupId>com.codingame</groupId>
+		<artifactId>gameengine</artifactId>
         <version>1.4</version>
-		<relativePath>../engine/parent</relativePath>
 	</parent>
 
+    <groupId>com.codingame.gameengine</groupId>
 	<artifactId>runner</artifactId>
 	<name>CodinGame Game Engine Runner</name>
 	<description>Runner / Testbed to locally run Games created using the CodinGame engine toolkit.</description>
