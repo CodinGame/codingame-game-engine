@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.codingame.gameengine.core.AbstractPlayer;
 import com.codingame.gameengine.core.GameManager;
@@ -109,7 +109,7 @@ public class GraphicEntityModule implements Module {
      * 
      */
     public void commitWorldState(double t) {
-        entities.stream().forEach(entity -> commitEntityState(entity, t));
+        commitEntityState(t, entities.toArray(new Entity[entities.size()]));
     }
 
     /**
@@ -118,29 +118,35 @@ public class GraphicEntityModule implements Module {
      * <p>
      * Only the most recent commit is kept for a given t.
      * 
-     * 
-     * @param entity
-     *            The java object representing a graphical entity.
      * @param t
      *            The instant of the frame 0 &ge; t &ge; 1.
+     * @param entities
+     *            The entity objects to commit.
      * @exception IllegalArgumentException
-     *                if the t is not a valid instant.
-     * @exception NullPointerException
-     *                if entity is null.
+     *                if the t is not a valid instant or id entities is empty.
      * 
      */
-    public void commitEntityState(Entity<?> entity, double t) {
+    public void commitEntityState(double t, Entity<?>... entities) {
         requireValidFrameInstant(t);
-        Objects.requireNonNull(entity);
+        requireNonEmpty(entities);
 
         WorldState state = worldStates.get(t);
         if (state == null) {
             state = new WorldState(t);
             worldStates.put(t, state);
         } else {
-            //TODO: log warning.
+            //TODO: log warning about multiple commits at one t.
         }
-        state.flushEntityState(entity);
+        
+        final WorldState finalState = state;
+        Stream.of(entities).forEach(entity -> finalState.flushEntityState(entity));
+
+    }
+
+    private void requireNonEmpty(Object[] items) {
+        if (items.length == 0) {
+            throw new IllegalArgumentException("Must not be an empty array");
+        }
     }
 
     private static void requireValidFrameInstant(double t) {
