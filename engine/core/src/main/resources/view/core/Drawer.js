@@ -141,7 +141,6 @@ export class Drawer {
   /** Mandatory */
   initDefaultScene(scope, container, canvasWidth, canvasHeight) {
     var scene = new PIXI.Container();
-    container.addChild(scene);
 
     scope.drawer = this;
     scope.renderables = [];
@@ -150,7 +149,7 @@ export class Drawer {
     if (this.demo) {
 
       if (this.demo.logo) {
-        const logo = PIXI.Sprite.fromFrame('demo-logo');
+        const logo = PIXI.Sprite.fromFrame(this.demo.logo);
         logo.position.set(Drawer.WIDTH / 2, Drawer.HEIGHT / 2);
         logo.anchor.x = logo.anchor.y = 0.5;
         scene.addChild(logo);
@@ -168,7 +167,7 @@ export class Drawer {
 
       this.initDefaultFrames(this.demo.playerCount, this.demo.frames, this.demo.agents);
       /** **************************************************************************************************************************************** */
-      this.preconstructScene(this.scope, demoContainer, this.initWidth, this.initHeight);
+      this.preconstructScene(this.scope, container, this.initWidth, this.initHeight);
       this.initScene(this.scope, demoContainer, this.frames, true);
       this.updateScene(this.scope, this.question, this.frames, this.currentFrame, this.progress, 1, this.reasons[this.currentFrame], true);
       /** **************************************************************************************************************************************** */
@@ -179,6 +178,7 @@ export class Drawer {
       this.currentFrame = -1;
       container.addChild(demoContainer);
       container.addChild(darkness);
+      container.addChild(scene);
     }
 
     scope.updateTime = 0;
@@ -710,9 +710,6 @@ export class Drawer {
       }
 
       if (this.demo) {
-        if (this.demo.logo) {
-          loader.add('demo-logo', this.demo.logo);
-        }
         this.demo.agents.forEach(agent => {
           loader.add('avatar' + agent.index, agent.avatar, { loadType: 2 }, function (event) {
             agent.avatarTexture = event.texture;
