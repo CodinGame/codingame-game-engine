@@ -113,7 +113,7 @@ public class GraphicEntityModule implements Module {
     }
 
     /**
-     * This entity's graphical counterpart, at instant t of the frame being computed, will have the same properties as the java object as they are
+     * This entity's graphical counterpart, at instant t of the frame being computed, will have the same properties as the java object as it is
      * now.
      * <p>
      * Only the most recent commit is kept for a given t.
