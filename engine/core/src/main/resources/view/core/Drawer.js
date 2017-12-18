@@ -158,7 +158,7 @@ export class Drawer {
 
       var darkness = new PIXI.Graphics();
       darkness.beginFill(0, this.demo.overlayAlpha || 0);
-      darkness.drawRect(0, 0, 1940, 1100);
+      darkness.drawRect(0, 0, Drawer.WIDTH + 20, Drawer.HEIGHT + 20);
       darkness.endFill()
       darkness.x -= 10;
       darkness.y -= 10;
