@@ -1,3 +1,4 @@
+import { assets } from '../assets.js';
 import * as config from '../config.js';
 import { unlerp } from './utils.js';
 import { WIDTH, HEIGHT } from './constants.js';
@@ -29,7 +30,7 @@ export class Drawer {
   instantiateModules() {
     this.modules = {};
     for (const module of config.modules) {
-      this.modules[module.name] = new module(config.assets);
+      this.modules[module.name] = new module(assets);
     }
   }
 
@@ -66,7 +67,7 @@ export class Drawer {
       sprites: [],
       fonts: [],
       others: []
-    }, config.assets);
+    }, assets);
   }
 
   getOptions() {
