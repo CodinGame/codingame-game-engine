@@ -5,7 +5,7 @@ module.exports = {
         entry: './core/Drawer.js',
         output: {
                 path: path.resolve(__dirname, 'bin'),
-                filename: 'bundle.js',
+                filename: 'viewer.js',
                 library: 'Drawer',
                 libraryExport: 'Drawer'
         },
