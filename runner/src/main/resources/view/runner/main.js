@@ -8,34 +8,41 @@ window.overSampling = 2;
 
 function fetchGame(callback) {
   let xhr = new XMLHttpRequest();
-  xhr.onload = function () { 
-    callback(JSON.parse(this.responseText));
+  xhr.onload = function () {
+    try {
+      const json = JSON.parse(this.responseText);
+      callback(json);
+    } catch (e) {
+      callback();
+    }
   };
   xhr.open('GET', 'game.json', true);
   xhr.send();
 }
 
 function go(data) {
-  window.data = data;
-  window.agents = data.agents;
-  window.views = data.views.map(v => v.split('\n'));
-  window.frames = data.views.map(v => {
-    let f = v.split('\n');
-    let header = f[0].split(' ');
-
-    return {view: v, keyframe: header[0] === 'KEY_FRAME'};
-  });
-
-  data.agents.forEach(agent => {
-    let out = $('<fieldset><legend>Player ' + agent.index + ' Standard Output</legend><textarea id="stdout' + agent.index + '" readonly></textarea></fieldset>');
-    let err = $('<fieldset><legend>Player ' + agent.index + ' Standard Error</legend><textarea id="stderr' + agent.index + '" readonly></textarea></fieldset>');
-    let playerOutput = $('<div class="output-player"></div>');
-    playerOutput.append(out).append(err);
-    $('#output-players').append(playerOutput);
-  });
+  if (data) {
+    window.data = data;
+    window.agents = data.agents;
+    window.views = data.views.map(v => v.split('\n'));
+    window.frames = data.views.map(v => {
+      let f = v.split('\n');
+      let header = f[0].split(' ');
+  
+      return {view: v, keyframe: header[0] === 'KEY_FRAME'};
+    });
+  
+    data.agents.forEach(agent => {
+      let out = $('<fieldset><legend>Player ' + agent.index + ' Standard Output</legend><textarea id="stdout' + agent.index + '" readonly></textarea></fieldset>');
+      let err = $('<fieldset><legend>Player ' + agent.index + ' Standard Error</legend><textarea id="stderr' + agent.index + '" readonly></textarea></fieldset>');
+      let playerOutput = $('<div class="output-player"></div>');
+      playerOutput.append(out).append(err);
+      $('#output-players').append(playerOutput);
+    });
+  }
 
   document.getElementById("uinput").value = '';
-  if (data.uinput) {
+  if (data && data.uinput) {
     document.getElementById("uinput").value = data.uinput;
   }
 
@@ -48,8 +55,10 @@ function go(data) {
   d = new Drawer(canvas, DEFAULT_WIDTH, DEFAULT_HEIGHT);
   window.d = d;
 
-  window.gameManager = createGameManagerFromGameInfo(d, {agents: window.agents, frames: window.frames})
-  window.gameManager.subscribe(updateToFrame);
+  if (data) {
+    window.gameManager = createGameManagerFromGameInfo(d, {agents: window.agents, frames: window.frames})
+    window.gameManager.subscribe(updateToFrame);
+  }
 
   addStats(d);
 
@@ -151,9 +160,10 @@ function previousFrame() {
 function resize(width, height) {
   canvas.width = width;
   canvas.height = height;
-  d.init(canvas, canvas.width, canvas.height, agents.map(function (agent) {
+  const colors = window.agents ? agents.map(function (agent) {
     return agent.color;
-  }), overSampling);
+  }) : [];
+  d.init(canvas, canvas.width, canvas.height, colors, overSampling);
 }
 
 function setSpeed(speed) {
