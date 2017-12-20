@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
@@ -102,6 +103,9 @@ public final class GameManager<T extends AbstractPlayer> {
                     e.printStackTrace();
                 }
             }
+        }
+        if (!gameProperties.containsKey("seed")) {
+            gameProperties.setProperty("seed", String.valueOf(ThreadLocalRandom.current().nextInt()));
         }
 
         prevViewData = null;
