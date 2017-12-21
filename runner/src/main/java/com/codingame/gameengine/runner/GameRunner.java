@@ -41,8 +41,6 @@ public class GameRunner {
 
     private String[] avatars = new String[] { "16085713250612", "16085756802960", "16085734516701", "16085746254929",
             "16085763837151", "16085720641630", "16085846089817", "16085834521247" };
-    private String[] colors = new String[] { "#ffae16", "#ff1d5c", "#22a1e4", "#de6ddf", "#9975e2", "#ff0000",
-            "#6ac371", "#3ac5ca" };
 
     private static enum OutputResult {
         OK, TIMEOUT, TOOLONG, TOOSHORT
@@ -97,7 +95,6 @@ public class GameRunner {
             AgentDto agent = new AgentDto();
             agent.index = i;
             agent.agentId = player.getAgentId();
-            agent.color = colors[i % colors.length];
             agent.avatar = player.getAvatar() != null ? player.getAvatar()
                     : "https://static.codingame.com/servlet/fileservlet?id=" + avatars[i] + "&format=viewer_avatar";
             agent.name = player.getNickname() != null ? player.getNickname() : "Player " + i;

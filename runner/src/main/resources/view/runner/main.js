@@ -9,12 +9,15 @@ window.overSampling = 2;
 function fetchGame(callback) {
   let xhr = new XMLHttpRequest();
   xhr.onload = function () {
+    let result = null;
     try {
       const json = JSON.parse(this.responseText);
-      callback(json);
+      json.agents.forEach(agent => agent.color = Drawer.playerColors[agent.index]);
+      result = json
     } catch (e) {
-      callback();
+      console.error(e);
     }
+    callback(result);
   };
   xhr.open('GET', 'game.json', true);
   xhr.send();
@@ -33,8 +36,8 @@ function go(data) {
     });
   
     data.agents.forEach(agent => {
-      let out = $('<fieldset><legend>Player ' + agent.index + ' Standard Output</legend><textarea id="stdout' + agent.index + '" readonly></textarea></fieldset>');
-      let err = $('<fieldset><legend>Player ' + agent.index + ' Standard Error</legend><textarea id="stderr' + agent.index + '" readonly></textarea></fieldset>');
+      let out = $('<fieldset style="color:' + agent.color + '"><legend>Player ' + agent.index + ' Standard Output</legend><textarea id="stdout' + agent.index + '" readonly></textarea></fieldset>');
+      let err = $('<fieldset style="color:' + agent.color + '"><legend>Player ' + agent.index + ' Standard Error</legend><textarea id="stderr' + agent.index + '" readonly></textarea></fieldset>');
       let playerOutput = $('<div class="output-player"></div>');
       playerOutput.append(out).append(err);
       $('#output-players').append(playerOutput);
