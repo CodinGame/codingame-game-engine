@@ -38,7 +38,7 @@ function go(data) {
     data.agents.forEach(agent => {
       let out = $('<fieldset style="color:' + agent.color + '"><legend>Player ' + agent.index + ' Standard Output</legend><textarea id="stdout' + agent.index + '" readonly></textarea></fieldset>');
       let err = $('<fieldset style="color:' + agent.color + '"><legend>Player ' + agent.index + ' Standard Error</legend><textarea id="stderr' + agent.index + '" readonly></textarea></fieldset>');
-      let playerOutput = $('<div class="output-player"></div>');
+      let playerOutput = $('<div id="output-player-' + agent.index + '" class="output-player"></div>');
       playerOutput.append(out).append(err);
       $('#output-players').append(playerOutput);
     });
@@ -99,9 +99,15 @@ function updateText(id) {
 
   while (currentFrame <= id) {
     for (var i in data.ids) {
-      var text = data.outputs[i][currentFrame];
-      if (text != null)
-        document.getElementById("stdout" + i).value += text;
+      const stdout = data.outputs[i][currentFrame];
+      if (stdout != null) {
+        document.getElementById("stdout" + i).value += stdout;
+      }
+      
+      const stderr = data.errors[i][currentFrame];
+      if (stderr != null) {
+        document.getElementById("stderr" + i).value += stderr;
+      }
     }
   
     let tooltips = data.tooltips.filter(x => x.turn == id);
@@ -111,14 +117,17 @@ function updateText(id) {
     }
     document.getElementById("console").value = data.outputs.referee[id] + '\n' + (data.summaries && ('Summary:\n' + data.summaries[id])) + '\n' + tooltipsText;
   
-    for (var i in data.ids) {
-      var text = data.errors[i][currentFrame];
-      if (text != null) {
-        document.getElementById("stderr" + i).value += text;
-      }
-    }
     currentFrame++;
   }
+  
+  for (var i in data.ids) {
+    if (!$('#stdout'+i).val() && !$('#stderr'+i).val()) {
+      $('#output-player-' + i).hide();
+    } else {
+      $('#output-player-' + i).show();
+    }  
+  }
+  
 }
 
 function updateToFrame(_frame, _progress, _playing, isSubFrame, isTurnBased, atEnd) {

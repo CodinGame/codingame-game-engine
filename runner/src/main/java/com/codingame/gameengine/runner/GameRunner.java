@@ -75,6 +75,7 @@ public class GameRunner {
 
     private void initialize(Properties conf) {
         if (players.size() == 0) throw new RuntimeException("You have to add at least one player");
+        if (players.size() > 8) throw new RuntimeException("You may add up to eight players only");
 
         referee.initialize(conf);
         gameResult.outputs.put("referee", new ArrayList<>());
