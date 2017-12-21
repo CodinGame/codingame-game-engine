@@ -28,9 +28,11 @@ public class GraphicEntityModule implements Module {
     //JAVA
     //TODO: animations
     //TODO: masks
+    //TODO: Tooltip on mouse Hover 
     //TODO: decide between builder pattern or not 
     //TODO: Asynchronous animation system
-    //TODO: Allow user to select lerping function somehow (noLerp, bellLerp, easeLerp, etc)    
+    //TODO: Allow user to select lerping function somehow (noLerp, bellLerp, easeLerp, etc)
+    //
 
     //JS
     //TODO: sort out the "getGameName()" problem
