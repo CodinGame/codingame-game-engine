@@ -21,7 +21,7 @@ abstract class TextureBasedEntity<T extends Entity<?>> extends Entity<T> {
     }
 
     private BlendMode blendMode;
-    private double anchorX = 0.5, anchorY = 0.5;
+    private double anchorX = 0, anchorY = 0;
     private int tint = 0xFFFFFF;
 
     TextureBasedEntity() {
@@ -71,7 +71,7 @@ abstract class TextureBasedEntity<T extends Entity<?>> extends Entity<T> {
     /**
      * Returns the X anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      * <p>
-     * Default is 0.5.
+     * Default is 0.
      * 
      * @return the X anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      */
@@ -97,7 +97,7 @@ abstract class TextureBasedEntity<T extends Entity<?>> extends Entity<T> {
     /**
      * Returns the Y anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      * <p>
-     * Default is 0.5.
+     * Default is 0.
      * 
      * @return the Y anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      */

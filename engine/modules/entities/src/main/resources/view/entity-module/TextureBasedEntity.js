@@ -2,7 +2,7 @@ import { Entity } from './Entity.js';
 
 export class TextureBasedEntity extends Entity {
   static defaultAnchor() {
-    return 0.5;
+    return 0;
   }
 
   constructor() {
