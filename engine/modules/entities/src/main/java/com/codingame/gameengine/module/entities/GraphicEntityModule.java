@@ -31,6 +31,7 @@ public class GraphicEntityModule implements Module {
     //TODO: decide between builder pattern or not 
     //TODO: Asynchronous animation system
     //TODO: Allow user to select lerping function somehow (noLerp, bellLerp, easeLerp, etc)
+    
 
     //JS
     //TODO: sort out the "getGameName()" problem
@@ -39,6 +40,7 @@ public class GraphicEntityModule implements Module {
 
     // Workflow
     //TODO: Should we support spines?
+    //allow users to set custom player colours
 
     static int ENTITY_COUNT = 0;
 

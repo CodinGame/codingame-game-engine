@@ -1,6 +1,6 @@
-import { Entity } from './Entity.js';
+import { TextureBasedEntity } from './TextureBasedEntity.js';
 
-export class Text extends Entity {
+export class Text extends TextureBasedEntity {
   constructor() {
     super();
     Object.assign(this.defaultState, {
