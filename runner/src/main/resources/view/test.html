@@ -93,6 +93,13 @@
 			overflow: auto;
 			min-height: 115px;
 		}
+
+		.log {
+			display: flex;
+			resize: vertical;
+			overflow: auto;
+		}
+
 	</style>
 </head>
 
@@ -153,6 +160,13 @@
 		<fieldset>
 			<legend>Game properties</legend>
 			<textarea id="uinput" readonly></textarea>
+		</fieldset>
+	</div>
+		
+	<div class="log">
+		<fieldset>
+			<legend>Error Log</legend>
+			<textarea id="errors" readonly></textarea>
 		</fieldset>
 	</div>
 

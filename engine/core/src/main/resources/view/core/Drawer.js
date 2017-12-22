@@ -2,6 +2,7 @@ import { assets } from '../assets.js';
 import * as config from '../config.js';
 import { unlerp } from './utils.js';
 import { WIDTH, HEIGHT } from './constants.js';
+import { ErrorLog } from '../core/ErrorLog.js';
 
 export class Drawer {
   constructor() {
@@ -34,9 +35,9 @@ export class Drawer {
       '#6ac371', // mantis green
       '#9975e2', // medium purple
       '#3ac5ca', // scooter blue
-      '#de6ddf', // lavender pink      
+      '#de6ddf', // lavender pink
       '#ff0000'  // solid red
-    ];      
+    ];
   }
 
   instantiateModules() {
@@ -230,7 +231,7 @@ export class Drawer {
       } catch (err) {
         data = {}
       }
-      return {...data, key: header[0] === 'KEY_FRAME'};
+      return { ...data, key: header[0] === 'KEY_FRAME' };
     }).filter(x => x.key);
 
     this.parseGlobalData(this._frames[0].global);
@@ -585,7 +586,7 @@ export class Drawer {
       } catch (err) {
         data = {}
       }
-      return {...data, key: header[0] === 'KEY_FRAME'};
+      return { ...data, key: header[0] === 'KEY_FRAME' };
     });
 
     this.parseGlobalData(this._frames[0].global);
@@ -679,10 +680,13 @@ export class Drawer {
     this.oversampling = oversampling || 1;
     this.canvas = $(canvas);
     if (colors) this.colors = this.parseColor(colors);
-    if (!this.debugModeSetByUser && location === 'ide') {
-      this.debugMode = true;
-    }
 
+    if (location === 'ide') {
+      if (!this.debugModeSetByUser) {
+        this.debugMode = true;
+      }
+      ErrorLog.listen((err) => console.error(err.cause ? err.cause : err));
+    }
     this.asyncRendering = true;
     this.asyncRenderingTime = 0;
     this.destroyed = false;

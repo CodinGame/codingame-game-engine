@@ -1,6 +1,7 @@
 import * as config from '../config.js';
 import { Drawer } from '../core/Drawer.js';
 import { createGameManagerFromGameInfo } from './gameManager.js'
+import { ErrorLog } from '../core/ErrorLog.js';
 
 window.DEFAULT_WIDTH = 960;
 window.DEFAULT_HEIGHT = 540;
@@ -227,3 +228,6 @@ window.goTo = goTo;
 window.fullScreen = fullScreen;
 
 fetchGame(go);
+ErrorLog.listen(function(error) {
+  $('#errors').append(error.message + '\n');
+});
