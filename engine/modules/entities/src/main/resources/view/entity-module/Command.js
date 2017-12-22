@@ -1,6 +1,36 @@
 import {PROPERTIES} from "./properties.js";
 import {EntityFactory} from './EntityFactory.js';
 
+const PROPERTY_KEY_MAP = {
+  r: 'rotation',
+  R: 'radius',
+  X: 'x2',
+  Y: 'y2',
+  w: 'width',
+  h: 'height',
+  t: 'tint',
+  f: 'fillColor',
+  F: 'fillAlpha',
+  c: 'lineColor',
+  W: 'lineWidth',
+  A: 'lineAlpha',
+  a: 'alpha',
+  i: 'image',
+  S: 'strokeThickness',
+  sc: 'strokeColor',
+  ff: 'fontFamily',
+  s: 'fontSize',
+  T: 'text',
+  C: 'children',
+  sx: 'scaleX',
+  sy: 'scaleY',
+  ax: 'anchorX',
+  ay: 'anchorY',
+  v: 'visiblz',
+  z: 'zIndex',
+  b: 'blendMode'
+};
+
 export class CreateCommand {
   constructor(args) {
     this.id = +args[0];
@@ -15,20 +45,6 @@ export class CreateCommand {
 }
 
 export class PropertiesCommand {
-  depreacted_constructor(args, globalData) {
-    let idx = 0;
-    this.id = +args[idx++];
-    this.t = +args[idx++];
-    this.params = JSON.parse(args.slice(2).join(' '));
-    for (const key in this.params) {
-      const value = this.params[key];
-      let opts = (PROPERTIES[key] || PROPERTIES.default);
-      if (typeof opts.convert === 'function') {
-        this.params[key] = opts.convert(value, globalData);
-      }
-    }
-  }
-  
   constructor(args, globalData) {
     let idx = 0;
     this.id = +args[idx++];
@@ -36,7 +52,7 @@ export class PropertiesCommand {
     this.params = {};
 
     while (idx + 1 < args.length) {
-      let key = args[idx];
+      let key = PROPERTY_KEY_MAP[args[idx]] || args[idx];
       let opts = (PROPERTIES[key] || PROPERTIES.default);
       let value = opts.type(args[idx + 1]);
       if (typeof opts.convert === 'function') {

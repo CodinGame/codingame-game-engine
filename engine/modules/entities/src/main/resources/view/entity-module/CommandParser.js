@@ -36,8 +36,8 @@ function splitOnSpaceOutsideQuotes(text) {
 export class CommandParser {
   constructor() {
     this.parsers = {
-      CREATE: commands.CreateCommand,
-      UPDATE: commands.UpdateCommand,
+      C: commands.CreateCommand,
+      U: commands.UpdateCommand,
       SET: commands.SetCommand
     };
   }

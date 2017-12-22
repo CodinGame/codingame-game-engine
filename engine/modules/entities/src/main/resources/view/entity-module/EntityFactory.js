@@ -9,22 +9,22 @@ export class EntityFactory {
   static create(type) {
     var entity;
     switch (type) {
-      case 'CIRCLE':
+      case 'C':
         entity = new Circle();
         break;
-      case 'RECTANGLE':
+      case 'R':
         entity = new Rectangle();
         break;
-      case 'LINE':
+      case 'L':
         entity = new Line();
         break;
-      case 'SPRITE':
+      case 'S':
         entity = new Sprite();
         break;
-      case 'TEXT':
+      case 'T':
         entity = new Text();
         break;
-      case 'GROUP':
+      case 'G':
         entity = new Group();
         break;
       default:

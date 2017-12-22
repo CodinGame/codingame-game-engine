@@ -3,15 +3,11 @@ package com.codingame.gameengine.module.entities;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.codingame.gameengine.module.entities.Entity.Type;
-import com.google.gson.Gson;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
@@ -21,7 +17,6 @@ class Serializer {
     Map<String, String> commands;
     Map<Entity.Type, String> types;
     private DecimalFormat decimalFormat;
-    @Inject private Gson gson;
 
     Serializer() {
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
@@ -87,7 +82,6 @@ class Serializer {
     /**
      * Join multiple object into a space separated string
      */
-    @SuppressWarnings("unused")
     static private String join(Object... args) {
         return Stream.of(args).map(String::valueOf).collect(Collectors.joining(" "));
     }
@@ -105,27 +99,27 @@ class Serializer {
     }
 
     
-    public Object[] serializeUpdate(Entity<?> entity, EntityState diff, Double frameInstant) {
-        Object[] res = new Object[] {
+    public String serializeUpdate(Entity<?> entity, EntityState diff, Double frameInstant) {
+        return join(
                 commands.get("UPDATE"),
                 entity.getId(),
                 formatFrameTime(frameInstant),
-                minify(diff.map)
-        };
-        return res;
+                minify(diff)
+        );
     }
 
-    private Map<String, Object> minify(Map<String, Object> map) {
-        return map.entrySet().stream()
-                .collect(Collectors.toMap((entry) -> keys.getOrDefault(entry.getKey(), entry.getKey()), Entry::getValue));
+    private String minify(EntityState diff) {
+        return diff.entrySet().stream()
+                .map((entry) -> join(keys.getOrDefault(entry.getKey(), entry.getKey()), escape(entry.getValue().toString())))
+                .collect(Collectors.joining(" "));
     }
 
-    public Object[] serializeCreate(Entity<?> e) {
-        return new Object[] {
+    public String serializeCreate(Entity<?> e) {
+        return join(
                 commands.get("CREATE"),
                 e.getId(),
                 types.get(e.getType())
-        };
+        );
     }
 
 }

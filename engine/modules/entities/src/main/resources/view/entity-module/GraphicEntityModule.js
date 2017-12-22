@@ -25,7 +25,7 @@ export class GraphicEntityModule {
   }
   
   handleFrameData(number, frameData) {
-    for (let line of frameData.split('\n')) {
+    for (let line of frameData) {
       if (line) {
         let command = this.commandParser.parse(line, this.globalData);
         command.apply(this.entities, number);
