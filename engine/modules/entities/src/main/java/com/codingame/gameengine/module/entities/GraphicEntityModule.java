@@ -26,13 +26,11 @@ import com.google.inject.Singleton;
 public class GraphicEntityModule implements Module {
 
     //JAVA
-    //TODO: animations
-    //TODO: masks
-    //TODO: Tooltip on mouse Hover 
-    //TODO: decide between builder pattern or not 
-    //TODO: Asynchronous animation system
+    //TODO: animations (separate module?)
+    //TODO: masks (separate module?)
+    //TODO: Tooltip on mouse Hover  (separate module?)
+    //TODO: Asynchronous animation system (separate module?)
     //TODO: Allow user to select lerping function somehow (noLerp, bellLerp, easeLerp, etc)
-    //
 
     //JS
     //TODO: sort out the "getGameName()" problem
@@ -84,7 +82,7 @@ public class GraphicEntityModule implements Module {
      */
     public World createWorld(int width, int height) {
         if (lockWorld) {
-            throw new IllegalStateException("Cannot create another world.");
+            throw new IllegalStateException("World creation must be the first use of this module.");
         }
         lockWorld = true;
         world = new World(width, height);
