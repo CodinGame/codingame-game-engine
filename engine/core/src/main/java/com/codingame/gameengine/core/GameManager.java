@@ -53,7 +53,8 @@ public final class GameManager<T extends AbstractPlayer> {
     private List<Tooltip> currentTooltips = new ArrayList<>();
     private List<Tooltip> prevTooltips;
 
-    private List<String> currentGameSummary, prevGameSummary;
+    private List<String> currentGameSummary = new ArrayList<>();
+    private List<String> prevGameSummary;
 
     private JsonObject currentViewData, prevViewData;
 
@@ -205,7 +206,7 @@ public final class GameManager<T extends AbstractPlayer> {
         currentViewData = new JsonObject();
 
         prevGameSummary = currentGameSummary;
-        currentGameSummary = null;
+        currentGameSummary = new ArrayList<>();
 
         prevTooltips = currentTooltips;
         currentTooltips = new ArrayList<>();
@@ -477,13 +478,13 @@ public final class GameManager<T extends AbstractPlayer> {
     }
 
     /**
-     * Set the game summary for the current turn.
+     * Add a new line to the game summary for the current turn.
      * 
-     * @param gameSummary
-     *            a list of strings to give a game summary.
+     * @param summary
+     *            summary line to add to the current summary.
      */
-    public void setGameSummary(List<String> gameSummary) {
-        this.currentGameSummary = gameSummary;
+    public void addToGameSummary(String summary) {
+        this.currentGameSummary.add(summary);
     }
 
     /**
