@@ -1,18 +1,13 @@
-import { Entity } from './Entity.js';
+import { TextureBasedEntity } from './TextureBasedEntity.js';
+import { ErrorLog } from '../core/ErrorLog.js';
+import { MissingImageError } from './errors/MissingImageError.js';
 
-export class Sprite extends Entity {
-  static defaultAnchor() {
-    return 0.5;
-  }
+export class Sprite extends TextureBasedEntity {
 
   constructor() {
     super();
     Object.assign(this.defaultState, {
-      anchorX: Sprite.defaultAnchor(),
-      anchorY: Sprite.defaultAnchor(),
-      image: null,
-      blendMode: PIXI.BLEND_MODES.NORMAL,
-      tint: 0xFFFFFF
+      image: null
     });
   }
 
@@ -25,16 +20,16 @@ export class Sprite extends Entity {
     } else {
       this.graphics = PIXI.Sprite.fromFrame(this.defaultState.image);
     }
-    this.graphics.anchor.set(this.defaultState.anchorX, this.defaultState.anchorY);
   }
 
   updateDisplay(state, changed, globalData) {
     super.updateDisplay(state, changed, globalData);
     if (changed.image) {
+      try {
         this.graphics.texture = PIXI.Texture.fromFrame(state.image);
+      } catch (error) {
+        ErrorLog.push(new MissingImageError(state.image, error));
+      }
     }
-    this.graphics.anchor.set(state.anchorX, state.anchorY);
-    this.graphics.blendMode = state.blendMode;
-    this.graphics.tint = state.tint;
   }
 }

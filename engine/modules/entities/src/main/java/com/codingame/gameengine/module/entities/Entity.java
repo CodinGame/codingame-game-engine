@@ -1,5 +1,14 @@
 package com.codingame.gameengine.module.entities;
 
+/**
+ * A graphical entity, displayed on screen in the game's replay.
+ * <p>
+ * </p>
+ * The graphical counterpart's coordinates are converted from world units to pixel coordinates.
+ * 
+ * @param <T>
+ *            a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of an Entity.
+ */
 public abstract class Entity<T extends Entity<?>> {
     final int id;
     EntityState state;
@@ -15,7 +24,7 @@ public abstract class Entity<T extends Entity<?>> {
     }
 
     Entity() {
-        id = ++EntityManager.ENTITY_COUNT;
+        id = ++GraphicEntityModule.ENTITY_COUNT;
         state = new EntityState();
     }
 

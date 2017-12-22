@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.codingame.gameengine.core.AbstractPlayer;
 import com.codingame.gameengine.core.GameManager;
@@ -15,28 +15,30 @@ import com.codingame.gameengine.core.Module;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+/**
+ * The GraphicEntityModule takes care of displaying and animating graphical entities on the replay of the game.
+ * <p>
+ * </p>
+ * Use it by creating shapes, sprites, texts etc, then commiting their states to a certain moment of the frame. By default, the states are commited
+ * automatically at the end of the frame.
+ */
 @Singleton
-public class EntityManager implements Module {
+public class GraphicEntityModule implements Module {
 
     //JAVA
-    //TODO: animations
-    //TODO: masks
-    //TODO: decide between builder pattern or not 
-    //TODO: Asynchronous animation system
+    //TODO: animations (separate module?)
+    //TODO: masks (separate module?)
+    //TODO: Tooltip on mouse Hover  (separate module?)
+    //TODO: Asynchronous animation system (separate module?)
     //TODO: Allow user to select lerping function somehow (noLerp, bellLerp, easeLerp, etc)
 
     //JS
-    //TODO: Should PIXI be in window or in Drawer ?
     //TODO: sort out the "getGameName()" problem
-    //TODO: sort out the "canSwapPlayers()" pbm
     //TODO: "contain within" for Texts (text wrapping)
 
-    // HTML + main.js
-    //TODO: default avatars shouldn't be random hardcoded things
-
     // Workflow
-    //TODO: Should we support sprite sheets?
     //TODO: Should we support spines?
+    //TODO: allow users to set custom player colours
 
     static int ENTITY_COUNT = 0;
 
@@ -51,7 +53,7 @@ public class EntityManager implements Module {
     @Inject private Serializer serializer;
 
     @Inject
-    public EntityManager(GameManager<AbstractPlayer> gameManager) {
+    GraphicEntityModule(GameManager<AbstractPlayer> gameManager) {
         this.gameManager = gameManager;
         world = new World();
         entities = new ArrayList<>();
@@ -80,7 +82,7 @@ public class EntityManager implements Module {
      */
     public World createWorld(int width, int height) {
         if (lockWorld) {
-            throw new IllegalStateException("Cannot create another world.");
+            throw new IllegalStateException("World creation must be the first use of this module.");
         }
         lockWorld = true;
         world = new World(width, height);
@@ -107,38 +109,44 @@ public class EntityManager implements Module {
      * 
      */
     public void commitWorldState(double t) {
-        entities.stream().forEach(entity -> commitEntityState(entity, t));
+        commitEntityState(t, entities.toArray(new Entity[entities.size()]));
     }
 
     /**
-     * This entity's graphical counterpart, at instant t of the frame being computed, will have the same properties as the java object as they are
+     * This entity's graphical counterpart, at instant t of the frame being computed, will have the same properties as the java object as it is
      * now.
      * <p>
      * Only the most recent commit is kept for a given t.
      * 
-     * 
-     * @param entity
-     *            The java object representing a graphical entity.
      * @param t
      *            The instant of the frame 0 &ge; t &ge; 1.
+     * @param entities
+     *            The entity objects to commit.
      * @exception IllegalArgumentException
-     *                if the t is not a valid instant.
-     * @exception NullPointerException
-     *                if entity is null.
+     *                if the t is not a valid instant or id entities is empty.
      * 
      */
-    public void commitEntityState(Entity<?> entity, double t) {
+    public void commitEntityState(double t, Entity<?>... entities) {
         requireValidFrameInstant(t);
-        Objects.requireNonNull(entity);
+        requireNonEmpty(entities);
 
         WorldState state = worldStates.get(t);
         if (state == null) {
             state = new WorldState(t);
             worldStates.put(t, state);
         } else {
-            //TODO: log warning.
+            //TODO: log warning about multiple commits at one t.
         }
-        state.flushEntityState(entity);
+        
+        final WorldState finalState = state;
+        Stream.of(entities).forEach(entity -> finalState.flushEntityState(entity));
+
+    }
+
+    private void requireNonEmpty(Object[] items) {
+        if (items.length == 0) {
+            throw new IllegalArgumentException("Must not be an empty array");
+        }
     }
 
     private static void requireValidFrameInstant(double t) {
@@ -169,7 +177,7 @@ public class EntityManager implements Module {
 
         worldStates.clear();
 
-        gameManager.setViewData("entitymanager", commands);
+        gameManager.setViewData("entitymodule", commands);
     }
 
     private void dumpNewEntity(Entity<?> e, List <Object> commands) {
@@ -264,6 +272,9 @@ public class EntityManager implements Module {
      * <p>
      * A Group represents a collection of other entities. It acts as a container.
      * 
+     * @param entities
+     *            0 or more entities to immediately add to this group.
+     * 
      * @return the entity. Modify its properties to animate the graphical counterpart.
      */
     public Group createGroup(Entity<?>... entities) {
@@ -281,7 +292,7 @@ public class EntityManager implements Module {
     }
 
     private void sendGlobalData() {
-        gameManager.setViewGlobalData("entitymanager", world);
+        gameManager.setViewGlobalData("entitymodule", world);
         lockWorld = true;
     }
 

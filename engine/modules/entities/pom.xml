@@ -1,22 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.codingame.gameengine</groupId>
-		<artifactId>parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
-		<relativePath>../../parent</relativePath>
+
+    <parent>
+        <groupId>com.codingame</groupId>
+        <artifactId>gameengine</artifactId>
+        <version>1.5</version>
+        <relativePath>../../../pom.xml</relativePath>
 	</parent>
 
+    <groupId>com.codingame.gameengine</groupId>
+    <artifactId>module-entities</artifactId>
 	<name>CodinGame Game Engine Entity Manager Module</name>
 	<description>Entity Manager module for the CodinGame engine toolkit. Simplify the management of shapes and drawings.</description>
 
-	<artifactId>module-entities</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>com.codingame.gameengine</groupId>
 			<artifactId>core</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>

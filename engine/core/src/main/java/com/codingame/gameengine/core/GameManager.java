@@ -9,7 +9,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -17,11 +21,19 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+/**
+ * The <code>GameManager</code> takes care of running each turn of the game and computing each visual frame of the replay. It provides many utility
+ * methods that handle instances of your implementation of AbstractPlayer.
+ *
+ * @param <T>
+ *            Your implementation of AbstractPlayer
+ */
 @Singleton
 public final class GameManager<T extends AbstractPlayer> {
     @Inject private Provider<T> playerProvider;
-    @Inject private Provider<Referee> refereeProvider;
+    @Inject private Provider<AbstractReferee> refereeProvider;
     @Inject private Gson gson;
+    protected static Log log = LogFactory.getLog(GameManager.class);
 
     private static final int VIEW_DATA_SOFT_QUOTA = 512 * 1024;
     private static final int VIEW_DATA_HARD_QUOTA = 1024 * 1024;
@@ -35,13 +47,14 @@ public final class GameManager<T extends AbstractPlayer> {
     private Scanner s;
     private PrintStream out;
     private Properties gameProperties;
-    private Referee referee;
+    private AbstractReferee referee;
     private boolean newTurn;
 
     private List<Tooltip> currentTooltips = new ArrayList<>();
     private List<Tooltip> prevTooltips;
 
-    private List<String> currentGameSummary, prevGameSummary;
+    private List<String> currentGameSummary = new ArrayList<>();
+    private List<String> prevGameSummary;
 
     private JsonObject currentViewData, prevViewData;
 
@@ -69,6 +82,7 @@ public final class GameManager<T extends AbstractPlayer> {
         this.referee = refereeProvider.get();
 
         // Init ---------------------------------------------------------------
+        log.info("Init");
         InputCommand iCmd = InputCommand.parse(s.nextLine());
         int playerCount = s.nextInt();
         s.nextLine();
@@ -91,17 +105,21 @@ public final class GameManager<T extends AbstractPlayer> {
                 }
             }
         }
+        if (!gameProperties.containsKey("seed")) {
+            gameProperties.setProperty("seed", String.valueOf(ThreadLocalRandom.current().nextInt()));
+        }
 
         prevViewData = null;
-        currentViewData = createNewView(true);
+        currentViewData = new JsonObject();
 
-        gameProperties = referee.init(playerCount, gameProperties);
+        gameProperties = referee.init(gameProperties);
         registeredModules.forEach(Module::onGameInit);
         swapInfoAndViewData();
         initDone = true;
 
         // Game Loop ----------------------------------------------------------
         for (turn = 0; turn < getMaxTurns() && !isGameEnd(); turn++) {
+            log.info("Turn " + turn);
             newTurn = true;
             outputsRead = false; // Set as true after first getOutputs() to forbib sendInputs
 
@@ -116,6 +134,8 @@ public final class GameManager<T extends AbstractPlayer> {
 
             swapInfoAndViewData();
         }
+
+        log.info("End");
 
         referee.onEnd();
         registeredModules.forEach(Module::onAfterOnEnd);
@@ -183,19 +203,13 @@ public final class GameManager<T extends AbstractPlayer> {
      */
     private void swapInfoAndViewData() {
         prevViewData = currentViewData;
-        currentViewData = createNewView(true);
+        currentViewData = new JsonObject();
 
         prevGameSummary = currentGameSummary;
-        currentGameSummary = null;
+        currentGameSummary = new ArrayList<>();
 
         prevTooltips = currentTooltips;
         currentTooltips = new ArrayList<>();
-    }
-
-    private JsonObject createNewView(boolean keyFrame) {
-        JsonObject viewData = new JsonObject();
-        viewData.addProperty("key", keyFrame);
-        return viewData;
     }
 
     private void dumpGameProperties() {
@@ -218,7 +232,7 @@ public final class GameManager<T extends AbstractPlayer> {
     private void dumpView() {
         OutputData data = new OutputData(OutputCommand.VIEW);
         if (newTurn) {
-            prevViewData.addProperty("frameNumber", frame);
+            data.add("KEY_FRAME " + frame);
             if (turn == 0) {
                 JsonObject initFrame = new JsonObject();
                 initFrame.add("global", globalViewData);
@@ -228,10 +242,7 @@ public final class GameManager<T extends AbstractPlayer> {
                 data.add(prevViewData.toString());
             }
         } else {
-            JsonObject viewData = createNewView(false);
-            viewData.addProperty("frameNumber", frame);
-
-            data.add(viewData.toString());
+            data.add("INTERMEDIATE_FRAME " + frame);
         }
         String viewData = data.toString();
 
@@ -239,12 +250,12 @@ public final class GameManager<T extends AbstractPlayer> {
         if (totalViewDataBytesSent > VIEW_DATA_HARD_QUOTA) {
             throw new RuntimeException("The amount of data sent to the viewer is too big!");
         } else if (totalViewDataBytesSent > VIEW_DATA_SOFT_QUOTA) {
-            System.err.println("Warning: the amount of data sent to the viewer is too big. Please try to optimize your code to send less data.");
+            log.warn("Warning: the amount of data sent to the viewer is too big. Please try to optimize your code to send less data.");
         }
 
-        System.err.println(viewData);
+        log.trace(viewData);
         out.println(viewData);
-        
+
         frame++;
     }
 
@@ -348,7 +359,9 @@ public final class GameManager<T extends AbstractPlayer> {
     }
 
     /**
-     * Get current frame duration.
+     * Returns the duration in milliseconds for the frame currently being computed.
+     * 
+     * @return the frame duration in milliseconds.
      */
     public int getFrameDuration() {
         return frameDuration;
@@ -465,13 +478,13 @@ public final class GameManager<T extends AbstractPlayer> {
     }
 
     /**
-     * Set the game summary for the current turn.
+     * Add a new line to the game summary for the current turn.
      * 
-     * @param gameSummary
-     *            a list of strings to give a game summary.
+     * @param summary
+     *            summary line to add to the current summary.
      */
-    public void setGameSummary(List<String> gameSummary) {
-        this.currentGameSummary = gameSummary;
+    public void addToGameSummary(String summary) {
+        this.currentGameSummary.add(summary);
     }
 
     /**
@@ -484,19 +497,24 @@ public final class GameManager<T extends AbstractPlayer> {
     }
 
     /**
-     * Helper function to display a colored message (red if error, green if success). Used at the end of the game.
+     * Helper function to display a colored message. Usually used at the end of the game.
      * 
-     * @param error
-     *            true if the message is an error message, false if success
-     * @param reason
+     * @param message
      *            The message to display.
      * @return The formatted string.
      */
-    public static String getColoredReason(boolean error, String reason) {
-        if (error) {
-            return String.format("¤RED¤%s§RED§", reason);
-        } else {
-            return String.format("¤GREEN¤%s§GREEN§", reason);
-        }
+    public static String formatSuccessMessage(String message) {
+        return String.format("¤GREEN¤%s§GREEN§", message);
+    }
+
+    /**
+     * Helper function to display a colored message. Usually used at the end of the game.
+     * 
+     * @param message
+     *            The message to display.
+     * @return The formatted string.
+     */
+    public static String formatErrorMessage(String message) {
+        return String.format("¤RED¤%s§RED§", message);
     }
 }

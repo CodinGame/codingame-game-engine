@@ -1,6 +1,8 @@
-import * as config from './config.js';
+import { assets } from '../assets.js';
+import * as config from '../config.js';
 import { unlerp } from './utils.js';
 import { WIDTH, HEIGHT } from './constants.js';
+import { ErrorLog } from '../core/ErrorLog.js';
 
 export class Drawer {
   constructor() {
@@ -14,7 +16,7 @@ export class Drawer {
     }
   }
   static get VERSION() {
-    return 3;
+    return 2;
   }
   static get WIDTH() {
     return WIDTH;
@@ -25,11 +27,23 @@ export class Drawer {
   static getGameRatio() {
     return Drawer.WIDTH / Drawer.HEIGHT;
   }
+  static get playerColors() {
+    return [
+      '#ff1d5c', // radical red
+      '#22a1e4', // curious blue
+      '#ff8f16', // west side orange
+      '#6ac371', // mantis green
+      '#9975e2', // medium purple
+      '#3ac5ca', // scooter blue
+      '#de6ddf', // lavender pink
+      '#ff0000'  // solid red
+    ];
+  }
 
   instantiateModules() {
     this.modules = {};
     for (const module of config.modules) {
-      this.modules[module.name] = new module.class(module.name, config.assets);
+      this.modules[module.name] = new module(assets);
     }
   }
 
@@ -66,7 +80,7 @@ export class Drawer {
       sprites: [],
       fonts: [],
       others: []
-    }, config.assets);
+    }, assets);
   }
 
   getOptions() {
@@ -141,9 +155,7 @@ export class Drawer {
   /** Mandatory */
   initDefaultScene(scope, container, canvasWidth, canvasHeight) {
     var scene = new PIXI.Container();
-    container.addChild(scene);
-    container.scale.x = canvasWidth / Drawer.WIDTH;
-    container.scale.y = canvasHeight / Drawer.HEIGHT;
+
     scope.drawer = this;
     scope.renderables = [];
     scope.time = 0;
@@ -151,7 +163,7 @@ export class Drawer {
     if (this.demo) {
 
       if (this.demo.logo) {
-        const logo = PIXI.Sprite.fromFrame('demo-logo');
+        const logo = PIXI.Sprite.fromFrame(this.demo.logo);
         logo.position.set(Drawer.WIDTH / 2, Drawer.HEIGHT / 2);
         logo.anchor.x = logo.anchor.y = 0.5;
         scene.addChild(logo);
@@ -160,7 +172,7 @@ export class Drawer {
 
       var darkness = new PIXI.Graphics();
       darkness.beginFill(0, this.demo.overlayAlpha || 0);
-      darkness.drawRect(0, 0, 1940, 1100);
+      darkness.drawRect(0, 0, Drawer.WIDTH + 20, Drawer.HEIGHT + 20);
       darkness.endFill()
       darkness.x -= 10;
       darkness.y -= 10;
@@ -169,7 +181,7 @@ export class Drawer {
 
       this.initDefaultFrames(this.demo.playerCount, this.demo.frames, this.demo.agents);
       /** **************************************************************************************************************************************** */
-      this.preconstructScene(this.scope, demoContainer, this.initWidth, this.initHeight);
+      this.preconstructScene(this.scope, container, this.initWidth, this.initHeight);
       this.initScene(this.scope, demoContainer, this.frames, true);
       this.updateScene(this.scope, this.question, this.frames, this.currentFrame, this.progress, 1, this.reasons[this.currentFrame], true);
       /** **************************************************************************************************************************************** */
@@ -180,9 +192,8 @@ export class Drawer {
       this.currentFrame = -1;
       container.addChild(demoContainer);
       container.addChild(darkness);
+      container.addChild(scene);
     }
-
-    container.addChild(scene);
 
     scope.updateTime = 0;
     scope.frameTime = 0;
@@ -208,14 +219,29 @@ export class Drawer {
       return agentData;
     });
 
-    this._frames = frames.filter(x => x.key || x.frame);
+    this.instantiateModules()
+
+    this._frames = frames.map(f => {
+      let splittedF = f.split('\n');
+      let header = splittedF[0].split(' ');
+
+      let data;
+      try {
+        data = JSON.parse(splittedF.slice(1).join('\n'));
+      } catch (err) {
+        data = {}
+      }
+      return { ...data, key: header[0] === 'KEY_FRAME' };
+    }).filter(x => x.key);
+
     this.parseGlobalData(this._frames[0].global);
     this.playerCount = playerCount;
     this.reasons = [];
     this.frames = [];
     this.currentFrame = 0;
-    this.progress = 0;
+    this.progress = 1;
     const firstFrame = this._frames[0].frame;
+    firstFrame.key = this._frames[0].key;
     this.frames.push(this.parseFrame(firstFrame, this.frames));
     for (var i = 1; i < this._frames.length; ++i) {
       this.frames.push(this.parseFrame(this._frames[i], this.frames));
@@ -550,7 +576,19 @@ export class Drawer {
 
   _initFrames(playerCount, frames) {
     this.instantiateModules()
-    this._frames = frames;
+
+    this._frames = frames.map(f => {
+      let header = f[0].split(' ');
+
+      let data;
+      try {
+        data = JSON.parse(f.slice(1).join('\n'));
+      } catch (err) {
+        data = {}
+      }
+      return { ...data, key: header[0] === 'KEY_FRAME' };
+    });
+
     this.parseGlobalData(this._frames[0].global);
     this.playerCount = playerCount;
     this.reasons = [];
@@ -558,6 +596,7 @@ export class Drawer {
     this.currentFrame = 0;
     this.progress = 1;
     const firstFrame = this._frames[0].frame;
+    firstFrame.key = this._frames[0].key;
     this.frames.push(this.parseFrame(firstFrame, this.frames));
     for (var i = 1; i < this._frames.length; ++i) {
       this.frames.push(this.parseFrame(this._frames[i], this.frames));
@@ -641,10 +680,13 @@ export class Drawer {
     this.oversampling = oversampling || 1;
     this.canvas = $(canvas);
     if (colors) this.colors = this.parseColor(colors);
-    if (!this.debugModeSetByUser && location === 'ide') {
-      this.debugMode = true;
-    }
 
+    if (location === 'ide') {
+      if (!this.debugModeSetByUser) {
+        this.debugMode = true;
+      }
+      ErrorLog.listen((err) => console.error(err.cause ? err.cause : err));
+    }
     this.asyncRendering = true;
     this.asyncRenderingTime = 0;
     this.destroyed = false;
@@ -685,9 +727,6 @@ export class Drawer {
       }
 
       if (this.demo) {
-        if (this.demo.logo) {
-          loader.add('demo-logo', this.demo.logo);
-        }
         this.demo.agents.forEach(agent => {
           loader.add('avatar' + agent.index, agent.avatar, { loadType: 2 }, function (event) {
             agent.avatarTexture = event.texture;

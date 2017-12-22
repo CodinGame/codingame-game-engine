@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	<script type='text/javascript' src="runner/lib/jquery.js"></script>
+	<script type='text/javascript' src="runner/lib/pixi.js"></script>
+	<script type='text/javascript' src="runner/lib/stats.min.js"></script>
+	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
+	<link href="http://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" type="text/css">
+
+	<script src="./runner/main.js" type="module"></script>
+	
+	<style>
+		body {
+			background-color: #20252a;
+			color: white;
+			font-family: 'Open Sans',Lato,sans-serif!important;
+		}
+
+		.player {
+			width: 800px;
+			overflow: auto;
+			resize: horizontal;
+			padding: 10px;
+			border: 1px solid #41454a;
+			min-width: 470px
+		}
+
+		.controls {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 50px;
+		}
+		
+		.buttons {
+			display: flex;
+		}
+
+		.position {
+			display: flex;
+			flex: 1;
+		}
+		
+		#container {
+			position: relative;
+			height: 0;
+			padding-bottom: 56.25%;
+		}
+		
+		#positionRange {
+			flex: 1;
+			margin: 0 10px;
+		}
+		
+		#player-canvas {
+			position: absolute;
+			margin: 0;
+			padding: 0;
+			left:0;
+			top:0;
+			width: 100%;
+			height: 100% 
+		}
+		
+		fieldset {
+			flex: 1;
+			border: 1px solid #41454a;
+			margin-top: 10px;
+		}
+		
+		textarea {
+			background-color: #252e38;
+			color: white;
+			width: 100%;
+			height: calc(100% - 20px);
+			resize: none;
+		}
+		
+		.full-screen {
+			margin-left: 10px;
+		}
+		
+		.speed {
+			margin-left: 10px;
+		}
+		
+		.output-player, .output-referee {
+			display: flex;
+			resize: vertical;
+			overflow: auto;
+			min-height: 115px;
+		}
+
+		.log {
+			display: flex;
+			resize: vertical;
+			overflow: auto;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div class="viewer">
+		<div class="player">
+			<div id="container">
+				<canvas id="player-canvas" width="960" height="540"></canvas>
+			</div>
+			
+			<div class="controls">
+	
+				<div class="buttons">
+					<button onclick="goTo(0, 1)">&lt;&lt;</button>
+					<button onclick="previousFrame()">&lt;</button>
+					<button onclick="togglePlay()">Play / Pause</button>
+					<button onclick="nextFrame()">&gt;</button>
+					<button onclick="goTo(-1, 1)">&gt;&gt;</button>
+				</div>
+			
+				<div class="position">
+					<input id="positionRange" type="range" value="1" max="0" min="1" step=".001" oninput="goTo(this.value | 0, this.value - (this.value | 0))" />
+					<input type="number" step="1" min="0" max="0" id="framelabel" value="0" onchange="goTo(this.value | 0, 1);" />
+				</div>
+			
+				<div class="buttons">
+					<button class="full-screen" onclick="fullScreen();">Full Screen</button>
+					<div class="speed">
+						<span>Speed: </span>
+						<select onclick="setSpeed(value)">
+							<option>0.1</option>
+							<option>0.2</option>
+							<option>0.5</option>
+							<option selected="selected">1</option>
+							<option>2</option>
+							<option>5</option>
+							<option>10</option>
+						</select>
+					</div>
+				</div>
+	
+			</div>
+		</div>
+	
+		<div class="output">
+			<div id="output-players"></div>
+		
+			<div class="output-referee">
+				<fieldset>
+					<legend>Referee Output</legend>
+					<textarea id="console" readonly></textarea>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+	
+	<div>
+		<fieldset>
+			<legend>Game properties</legend>
+			<textarea id="uinput" readonly></textarea>
+		</fieldset>
+	</div>
+		
+	<div class="log">
+		<fieldset>
+			<legend>Error Log</legend>
+			<textarea id="errors" readonly></textarea>
+		</fieldset>
+	</div>
+
+</body>
+
+</html>

@@ -1,11 +1,10 @@
 import { CommandParser } from './CommandParser.js';
-import { fitAspectRatio } from './utils.js';
-import { WIDTH, HEIGHT } from './constants.js';
+import { fitAspectRatio } from '../core/utils.js';
+import { WIDTH, HEIGHT } from '../core/constants.js';
 import { Group } from './Group.js'
 
-export class EntityManager {
-  constructor(name, assets) {
-    this.name = name;
+export class GraphicEntityModule {
+  constructor(assets) {
     this.commandParser = new CommandParser();
     this.entities = new Map();
     this.frames = [];
@@ -20,7 +19,11 @@ export class EntityManager {
     };
 
   }
-
+  
+  static get name() {
+    return 'entitymodule';
+  }
+  
   handleFrameData(number, frameData) {
     for (let line of frameData.split('\n')) {
       if (line) {
@@ -80,6 +83,7 @@ export class EntityManager {
 
   reinitScene(container, canvasData) {
     this.globalData.toPixel = Math.max(1, WIDTH / canvasData.width);
+    this.globalData.mustResetTree = true;
     this.container = container;
     this.entities.forEach((e) => {
       e.init();

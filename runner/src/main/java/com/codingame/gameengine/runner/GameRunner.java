@@ -16,13 +16,17 @@ import org.apache.commons.logging.LogFactory;
 
 import com.codingame.gameengine.runner.Command.InputCommand;
 import com.codingame.gameengine.runner.Command.OutputCommand;
+import com.codingame.gameengine.runner.dto.AgentDto;
 import com.codingame.gameengine.runner.dto.GameResult;
 import com.codingame.gameengine.runner.dto.Tooltip;
 import com.google.gson.Gson;
 
+/**
+ * The class to use to run local games and display the replay in a webpage on a temporary local server.
+ */
 public class GameRunner {
 
-    public static final String INTERRUPT_THREAD = "05&08#1981";
+    static final String INTERRUPT_THREAD = "05&08#1981";
     private static final Pattern COMMAND_HEADER_PATTERN = Pattern
             .compile("\\[\\[(?<cmd>.+)\\] ?(?<lineCount>[0-9]+)\\]");
 
@@ -35,14 +39,26 @@ public class GameRunner {
     private final List<BlockingQueue<String>> queues = new ArrayList<>();
     private int lastPlayerId = 0;
 
+    private String[] avatars = new String[] { "16085713250612", "16085756802960", "16085734516701", "16085746254929",
+            "16085763837151", "16085720641630", "16085846089817", "16085834521247" };
+
     private static enum OutputResult {
         OK, TIMEOUT, TOOLONG, TOOSHORT
     };
 
+    /**
+     * Create a new GameRunner with no referee input.
+     */
     public GameRunner() {
         this(null);
     }
 
+    /**
+     * Create a new GameRunner with no referee input.
+     * 
+     * @param properties
+     *            the values given to the game's referee on init.
+     */
     public GameRunner(Properties properties) {
         try {
             referee = new RefereeAgent();
@@ -57,8 +73,9 @@ public class GameRunner {
         }
     }
 
-    public void initialize(Properties conf) {
+    private void initialize(Properties conf) {
         if (players.size() == 0) throw new RuntimeException("You have to add at least one player");
+        if (players.size() > 8) throw new RuntimeException("You may add up to eight players only");
 
         referee.initialize(conf);
         gameResult.outputs.put("referee", new ArrayList<>());
@@ -75,6 +92,14 @@ public class GameRunner {
 
             List<String> initErrorsValues = new ArrayList<>();
             gameResult.errors.put(id, initErrorsValues);
+
+            AgentDto agent = new AgentDto();
+            agent.index = i;
+            agent.agentId = player.getAgentId();
+            agent.avatar = player.getAvatar() != null ? player.getAvatar()
+                    : "https://static.codingame.com/servlet/fileservlet?id=" + avatars[i] + "&format=viewer_avatar";
+            agent.name = player.getNickname() != null ? player.getNickname() : "Player " + i;
+            gameResult.agents.add(agent);
         }
     }
 
@@ -104,7 +129,7 @@ public class GameRunner {
         }
     }
 
-    public void run() {
+    private void run() {
         referee.execute();
 
         bootstrapPlayers();
@@ -139,6 +164,11 @@ public class GameRunner {
                         turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null));
                 String nextPlayerOutput = getNextPlayerOutput(nextPlayerInfo,
                         turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null));
+
+                for (Agent a : players) {
+                    gameResult.outputs.get(String.valueOf(a.getAgentId())).add(a.getAgentId() == nextPlayerInfo.nextPlayer ? nextPlayerOutput : null);
+                }
+
                 if (nextPlayerOutput != null) {
                     sendPlayerOutput(nextPlayerOutput, nextPlayerInfo.nbLinesNextOutput);
                 } else {
@@ -197,6 +227,7 @@ public class GameRunner {
         for (int i = 0; i < players.size(); i++) {
             gameResult.ids.put(i, players.get(i).getAgentId());
         }
+
         return new Gson().toJson(gameResult);
     }
 
@@ -219,11 +250,8 @@ public class GameRunner {
         if (agent == referee) {
             gameResult.errors.get("referee").add(referee.readError());
         } else {
-            for (int i = 0; i < players.size(); i++) {
-                if (players.get(i) == agent) {
-                    gameResult.errors.get(String.valueOf(i)).add(agent.readError());
-                    break;
-                }
+            for (Agent a : players) {
+                gameResult.errors.get(String.valueOf(a.getAgentId())).add(a == agent ? agent.readError() : null);
             }
         }
     }
@@ -249,8 +277,6 @@ public class GameRunner {
         if (playerOutput != null)
             playerOutput = playerOutput.replace('\r', '\n');
         readError(player);
-
-        gameResult.outputs.get(String.valueOf(nextPlayerInfo.nextPlayer)).add(playerOutput);
 
         if (checkOutput(playerOutput, nextPlayerInfo.nbLinesNextOutput) != OutputResult.OK)
             return null;
@@ -291,7 +317,8 @@ public class GameRunner {
             int nbLinesToRead = Integer.parseInt(m.group("lineCount"));
 
             if (nbLinesToRead >= 0) {
-                output = agent.getOutput(nbLinesToRead, 500);
+                output = agent.getOutput(nbLinesToRead, 150000);
+                output = output.replace('\r', '\n');
             } else {
                 output = null;
             }
@@ -326,23 +353,84 @@ public class GameRunner {
         return OutputResult.OK;
     }
 
-    private void addPlayer(Agent player) {
+    private void addAgent(Agent player, String nickname, String avatar) {
         player.setAgentId(lastPlayerId++);
+        player.setNickname(nickname);
+        player.setAvatar(avatar);
         players.add(player);
     }
 
-    public void addJavaPlayer(Class<?> playerClass) {
-        addPlayer(new JavaPlayerAgent(playerClass.getName()));
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * 
+     * @param playerClass
+     *            the Java class of an AI for your game.
+     */
+    public void addAgent(Class<?> playerClass) {
+        addAgent(new JavaPlayerAgent(playerClass.getName()), null, null);
     }
 
-    public void addCommandLinePlayer(String commandLine) {
-        addPlayer(new CommandLinePlayerAgent(commandLine));
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * The given command will be executed with <code>Runtime.getRuntime().exec()</code>.
+     * 
+     * @param commandLine
+     *            the system command line to run the AI.
+     */
+    public void addAgent(String commandLine) {
+        addAgent(new CommandLinePlayerAgent(commandLine), null, null);
     }
 
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * 
+     * @param playerClass
+     *            the Java class of an AI for your game.
+     * @param nickname
+     *            the player's nickname
+     * @param avatarUrl
+     *            the url of the player's avatar
+     */
+    public void addAgent(Class<?> playerClass, String nickname, String avatarUrl) {
+        addAgent(new JavaPlayerAgent(playerClass.getName()), nickname, avatarUrl);
+    }
+
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * The given command will be executed with <code>Runtime.getRuntime().exec()</code>.
+     * 
+     * @param commandLine
+     *            the system command line to run the AI.
+     * @param nickname
+     *            the player's nickname
+     * @param avatarUrl
+     *            the url of the player's avatar
+     */
+    public void addAgent(String commandLine, String nickname, String avatarUrl) {
+        addAgent(new CommandLinePlayerAgent(commandLine), nickname, avatarUrl);
+    }
+
+    /**
+     * Runs the game and attempts to start a server on the port 8888.
+     * <p>
+     * Open a webpage to the server to watch the game's replay.
+     */
     public void start() {
         start(8888);
     }
 
+    /**
+     * Runs the game and attempts to start a server on the given port.
+     * <p>
+     * Open a webpage to the server to watch the game's replay.
+     * 
+     * @param port
+     *            the port on which to attempt to start the a server for the game's replay.
+     */
     public void start(int port) {
         Properties conf = new Properties();
         initialize(conf);

@@ -9,7 +9,7 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public abstract class Agent {
+abstract class Agent {
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
     public static final int AGENT_MAX_BUFFER_SIZE = 10000;
@@ -24,6 +24,9 @@ public abstract class Agent {
     private int agentId;
     private boolean lastAgentByteIsCarriageReturn = false;
     private boolean failed = false;
+
+    private String nickname;
+    private String avatar;
 
     public Agent() {
     }
@@ -186,5 +189,21 @@ public abstract class Agent {
 
     public boolean isFailed() {
         return this.failed;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 }

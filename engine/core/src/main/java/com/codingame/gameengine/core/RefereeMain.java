@@ -10,8 +10,15 @@ import com.google.inject.Key;
 import com.google.inject.util.Types;
 
 public class RefereeMain {
+    
+    private static boolean inProduction = false;
+    
+    public static boolean isInProduction() {
+        return inProduction;
+    }
 
     public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+        inProduction = true;
         start(System.in, System.out);
     }
 

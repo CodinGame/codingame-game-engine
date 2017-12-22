@@ -1,5 +1,8 @@
 package com.codingame.gameengine.module.entities;
 
+/**
+ * Represents a line segment from (x,y) to (x2,y2) in world units. This Shape does not have a fill.
+ */
 public class Line extends Shape<Line> {
 
     private int x2, y2;

@@ -87,6 +87,7 @@ class Serializer {
     /**
      * Join multiple object into a space separated string
      */
+    @SuppressWarnings("unused")
     static private String join(Object... args) {
         return Stream.of(args).map(String::valueOf).collect(Collectors.joining(" "));
     }
@@ -95,7 +96,14 @@ class Serializer {
         return decimalFormat.format(t);
     }
 
-    
+    static String escape(String text) {
+        String escaped = text.replaceAll("\\'", "\\\\'");
+        if (escaped.contains(" ")) {
+            return "'" + escaped + "'";
+        }
+        return escaped;
+    }
+
     
     public Object[] serializeUpdate(Entity<?> entity, EntityState diff, Double frameInstant) {
         Object[] res = new Object[] {

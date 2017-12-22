@@ -5,6 +5,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * A Group is an Entity which acts as a container for other entities.
+ */
 public class Group extends Entity<Group> {
 
     private Set<Entity<?>> entities;

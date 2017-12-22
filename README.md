@@ -1,19 +1,30 @@
 # About
 
-TODO
+This is the Game Engine Toolkit of CodinGame.
 
-# Examples
+With it one can develop a game for the CodinGame platform. This engine is meant to be imported with maven from a project such as [the Game Engine skeleton](https://github.com/CodinGame/game-skeleton).
 
-TODO
+# Usage
 
-## Getting Started
+## Using the Game Runner
 
-TODO
+See [Game Runner readme](runner/).
 
-## Documentation
+## Using the Game Manager
 
-- Reference API
+See [Game Manager readme](engine/core/).
 
-- Architecture
+## Using the Graphic Entity Module
 
-- Extending the engine
+See [Graphic Entity Module readme](engine/modules/entities/).
+
+# Documentation
+
+## Reference API
+	TODO
+ 
+## Architecture
+	TODO
+
+## Extending the engine
+	TODO
