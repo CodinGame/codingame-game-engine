@@ -7,6 +7,7 @@ import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -115,24 +116,28 @@ class Renderer {
             jsonAssets.add("images", images);
 
             Path origAssetsPath = tmpdir.resolve("assets");
-            Files.find(origAssetsPath, 100, (p, bfa) -> bfa.isRegularFile()).forEach(f -> {
-                try {
-                    if (assetsPath != null) {
-                        HashCode hash = com.google.common.io.Files.asByteSource(new File(f.toUri()))
-                                .hash(Hashing.sha256());
-                        String newName = hash.toString() + "."
-                                + FilenameUtils.getExtension(f.getFileName().toString());
-
-                        images.addProperty(origAssetsPath.relativize(f).toString(), newName);
-                        Files.copy(f, tmpdir.resolve("hashed_assets").resolve(newName),
-                                StandardCopyOption.REPLACE_EXISTING);
-                    } else {
-                        images.addProperty(origAssetsPath.relativize(f).toString(), tmpdir.relativize(f).toString());
+            try {
+                Files.find(origAssetsPath, 100, (p, bfa) -> bfa.isRegularFile()).forEach(f -> {
+                    try {
+                        if (assetsPath != null) {
+                            HashCode hash = com.google.common.io.Files.asByteSource(new File(f.toUri()))
+                                    .hash(Hashing.sha256());
+                            String newName = hash.toString() + "."
+                                    + FilenameUtils.getExtension(f.getFileName().toString());
+    
+                            images.addProperty(origAssetsPath.relativize(f).toString(), newName);
+                            Files.copy(f, tmpdir.resolve("hashed_assets").resolve(newName),
+                                    StandardCopyOption.REPLACE_EXISTING);
+                        } else {
+                            images.addProperty(origAssetsPath.relativize(f).toString(), tmpdir.relativize(f).toString());
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+                });
+            } catch (NoSuchFileException e) {
+                System.out.println("Directory src/main/resources/view/assets not found.");
+            }
 
             out.print("export const assets = ");
             out.println(jsonAssets.toString());
