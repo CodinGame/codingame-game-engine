@@ -5,10 +5,10 @@
 	<parent>
 		<groupId>com.codingame</groupId>
 		<artifactId>gameengine</artifactId>
-        <version>1.5</version>
+		<version>1.5</version>
 	</parent>
 
-    <groupId>com.codingame.gameengine</groupId>
+	<groupId>com.codingame.gameengine</groupId>
 	<artifactId>runner</artifactId>
 	<name>CodinGame Game Engine Runner</name>
 	<description>Runner / Testbed to locally run Games created using the CodinGame engine toolkit.</description>
@@ -24,22 +24,22 @@
 			<artifactId>module-entities</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
 		<dependency>
-			<groupId>org.nanohttpd</groupId>
-			<artifactId>nanohttpd-webserver</artifactId>
-			<version>2.3.1</version>
+			<groupId>io.undertow</groupId>
+			<artifactId>undertow-core</artifactId>
+			<version>1.4.21.Final</version>
 		</dependency>
+
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-        <dependency>
-            <groupId>org.javassist</groupId>
-            <artifactId>javassist</artifactId>
-            <version>3.22.0-GA</version>
-        </dependency>
+		<dependency>
+			<groupId>org.javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.22.0-GA</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -53,7 +53,6 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 </project>

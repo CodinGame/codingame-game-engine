@@ -24,10 +24,37 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.gson.JsonObject;
 
-import fi.iki.elonen.SimpleWebServer;
+import io.undertow.Handlers;
+import io.undertow.Undertow;
+import io.undertow.server.HttpServerExchange;
+import io.undertow.server.handlers.resource.FileResourceManager;
+import io.undertow.server.handlers.resource.Resource;
+import io.undertow.server.handlers.resource.ResourceHandler;
+import io.undertow.server.handlers.resource.ResourceSupplier;
 
 class Renderer {
 
+    public class MultipleResourceSupplier implements ResourceSupplier {
+
+        private List<FileResourceManager> directories = new ArrayList<>();
+
+        public void addDirectory(File directory) {
+            FileResourceManager p = new FileResourceManager(directory);
+            directories.add(p);
+        }
+
+        @Override
+        public Resource getResource(HttpServerExchange exchange, String path) throws IOException {
+            for (FileResourceManager dir : directories) {
+                Resource resource = dir.getResource(path);
+                if (resource != null) {
+                    return resource;
+                }
+            }
+            return null;
+        }
+    }
+    
     private int port = 8080;
 
     public Renderer(int port) {
@@ -181,15 +208,16 @@ class Renderer {
     private void serveHTTP(List<Path> path) {
         System.out.println("http://localhost:" + port + "/test.html");
 
-        StringBuilder sb = new StringBuilder();
+        MultipleResourceSupplier mrs = new MultipleResourceSupplier();
         for (Path p : path) {
-            sb.append(" --dir ").append(p.toAbsolutePath());
+            mrs.addDirectory(p.toFile());
             System.out.println("Exposed web server dir: " + p.toString());
         }
 
-        String commandLine = String.format("--quiet --port %d %s", port, sb.toString());
-
-        SimpleWebServer.main(commandLine.split(" "));
+        Undertow server = Undertow.builder()
+                .addHttpListener(port, "localhost")
+                .setHandler(Handlers.path(new ResourceHandler(mrs).addWelcomeFiles("test.html"))).build();
+        server.start();
     }
 
     public void render(int playerCount, String jsonResult) {
