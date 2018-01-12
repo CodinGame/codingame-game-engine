@@ -448,6 +448,13 @@ export class Drawer {
     }
 
     this.renderRenderables(step, scope);
+    
+    for (let moduleName in this.modules) {
+      const module = this.modules[moduleName];
+      if (typeof module.animateScene === 'function') {
+        module.animateScene(step);
+      }
+    }
 
     return true;
   }
