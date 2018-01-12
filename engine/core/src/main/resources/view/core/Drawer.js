@@ -28,7 +28,7 @@ export class Drawer {
     return Drawer.WIDTH / Drawer.HEIGHT;
   }
   static get playerColors() {
-    return [
+    return config.playerColors || [
       '#ff1d5c', // radical red
       '#22a1e4', // curious blue
       '#ff8f16', // west side orange
@@ -448,6 +448,13 @@ export class Drawer {
     }
 
     this.renderRenderables(step, scope);
+    
+    for (let moduleName in this.modules) {
+      const module = this.modules[moduleName];
+      if (typeof module.animateScene === 'function') {
+        module.animateScene(step);
+      }
+    }
 
     return true;
   }

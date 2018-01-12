@@ -181,7 +181,6 @@ function resize(width, height) {
 
 function setSpeed(speed) {
   gameManager.setSpeed(speed);
-  document.getElementById('speedlabel').value = speed;
 }
 
 function goTo(frame, progress) {
