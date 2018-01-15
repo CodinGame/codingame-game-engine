@@ -2,7 +2,7 @@ package com.codingame.gameengine.module.entities;
 
 /**
  * A Sprite is a graphical entity which displays an image. That image must be loaded into the viewer's texture cache, which you can configure by
- * editing the <code>config.js</code> file of your game's project.
+ * adding files to the <code>assets</code> folder of your game's project.
  */
 public class Sprite extends TextureBasedEntity<Sprite> {
 
@@ -22,7 +22,7 @@ public class Sprite extends TextureBasedEntity<Sprite> {
      * <p>
      * You must either:
      * <ul>
-     * <li>use the name of an image manually referenced in the config.js file of the JavaScript project.
+     * <li>use the filename of an image relative to the assets folder of the Java project.
      * <li>use the a player's nickname token.
      * </ul>
      * 

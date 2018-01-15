@@ -20,7 +20,7 @@ public abstract class Entity<T extends Entity<?>> {
     Group parent;
 
     static enum Type {
-        CIRCLE, LINE, RECTANGLE, SPRITE, TEXT, GROUP
+        CIRCLE, LINE, RECTANGLE, SPRITE, TEXT, GROUP, SPRITEANIMATION
     }
 
     Entity() {

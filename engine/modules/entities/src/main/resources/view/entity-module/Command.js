@@ -28,7 +28,11 @@ const PROPERTY_KEY_MAP = {
   ay: 'anchorY',
   v: 'visiblz',
   z: 'zIndex',
-  b: 'blendMode'
+  b: 'blendMode',
+  I: 'images',
+  p: 'started',
+  l: 'loop',
+  d: 'duration'
 };
 
 export class CreateCommand {
@@ -45,7 +49,7 @@ export class CreateCommand {
 }
 
 export class PropertiesCommand {
-  constructor(args, globalData) {
+  constructor(args, globalData, frameInfo) {
     let idx = 0;
     this.id = +args[idx++];
     this.t = +args[idx++];
@@ -56,7 +60,7 @@ export class PropertiesCommand {
       let opts = (PROPERTIES[key] || PROPERTIES.default);
       let value = opts.type(args[idx + 1]);
       if (typeof opts.convert === 'function') {
-        value = opts.convert(value, globalData);
+        value = opts.convert(value, globalData, frameInfo, this.t);
       }
       this.params[key] = value;
       idx += 2;

@@ -41,9 +41,9 @@ export class CommandParser {
       SET: commands.SetCommand
     };
   }
-  parse(line, globalData) {
+  parse(line, globalData, frameInfo) {
     let args = splitOnSpaceOutsideQuotes(line);
     let keyword = args[0];
-    return new this.parsers[keyword](args.slice(1), globalData);
+    return new this.parsers[keyword](args.slice(1), globalData, frameInfo);
   }
 }

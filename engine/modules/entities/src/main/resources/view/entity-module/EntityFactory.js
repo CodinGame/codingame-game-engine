@@ -4,6 +4,7 @@ import { Rectangle } from "./Rectangle.js";
 import { Sprite } from "./Sprite.js";
 import { Text } from "./Text.js";
 import { Group } from "./Group.js";
+import { SpriteAnimation } from "./SpriteAnimation.js";
 
 export class EntityFactory {
   static create(type) {
@@ -26,6 +27,9 @@ export class EntityFactory {
         break;
       case 'G':
         entity = new Group();
+      case 'A':
+        entity = new SpriteAnimation();
+        
         break;
       default:
         throw "Exception: entity type not found: " + type;

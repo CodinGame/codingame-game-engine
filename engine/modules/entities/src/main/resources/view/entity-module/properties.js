@@ -20,13 +20,8 @@ const angleOpts = {
   lerpMethod: lerpAngle
 };
 
-export const PROPERTIES = {
-  default: {
-    type: Number,
-    lerpMethod: lerp
-  },
-
-  visible: {
+const boolOpts =
+  {
     type: value => {
       if (value === 'true') {
         return true;
@@ -37,7 +32,16 @@ export const PROPERTIES = {
       }
     },
     lerpMethod: noLerp
+
+  };
+
+export const PROPERTIES = {
+  default: {
+    type: Number,
+    lerpMethod: lerp
   },
+
+  visible: boolOpts,
 
   rotation: angleOpts,
 
@@ -47,6 +51,25 @@ export const PROPERTIES = {
   tint: colorOpts,
 
   image: stringOpts,
+  images: stringOpts,
+  started: {
+    ...stringOpts,
+    convert(value, globalData, frameInfo, t) {
+      if (value) {
+        //return frameInfo.date + (t * frameInfo.frameDuration);
+        return {
+          date: frameInfo.date + (t * frameInfo.frameDuration)
+        };
+      }
+      return null;
+    }
+  },
+  duration: {
+    type: Number,
+    lerpMethod: noLerp
+  },
+  loop: boolOpts,
+
   text: {
     ...stringOpts,
     convert(value, globalData) {

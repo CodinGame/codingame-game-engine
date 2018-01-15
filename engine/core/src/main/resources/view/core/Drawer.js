@@ -316,11 +316,13 @@ export class Drawer {
 
   /** Mandatory */
   parseFrame(frame, previousFrames) {
-    var number = previousFrames.length;
-    var parsedFrame = {
-      number: number,
-      data: {}
+    const parsedFrame = {
+      data: {},
+      frameInfo: {
+        number: previousFrames.length
+      }
     };
+
     parsedFrame.previous = previousFrames[previousFrames.length - 1] || parsedFrame;
     if (parsedFrame !== parsedFrame.previous) {
       parsedFrame.previous.next = parsedFrame;
@@ -331,15 +333,22 @@ export class Drawer {
     }
 
     if (frame.duration) {
-      parsedFrame.frameDuration = frame.duration;
+      parsedFrame.frameInfo.frameDuration = frame.duration;
     } else {
-      parsedFrame.frameDuration = parsedFrame.previous.frameDuration || 1000;
+      parsedFrame.frameInfo.frameDuration = parsedFrame.previous.frameDuration || 1000;
     }
+    if (parsedFrame === parsedFrame.previous) {
+      parsedFrame.frameInfo.date = 0;  
+    } else {
+      parsedFrame.frameInfo.date = parsedFrame.previous.frameInfo.date + parsedFrame.previous.frameInfo.frameDuration;
+    }
+    
+
 
     for (let moduleName in this.modules) {
       if (frame.hasOwnProperty(moduleName)) {
         const module = this.modules[moduleName];
-        parsedFrame.data[moduleName] = module.handleFrameData(number, frame[moduleName]);
+        parsedFrame.data[moduleName] = module.handleFrameData(parsedFrame.frameInfo, frame[moduleName]);
       }
     }
 
