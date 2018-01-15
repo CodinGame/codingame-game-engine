@@ -70,6 +70,19 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
     }
 
     /**
+     * Calls setStarted(true);
+     */
+    public void start() {
+        setStarted(true);
+    }
+    /**
+     * Calls setStarted(false);
+     */
+    public void stop() {
+        setStarted(true);
+    }
+    
+    /**
      * Returns whether the animation should loop.
      * <p>
      * Default is false.
