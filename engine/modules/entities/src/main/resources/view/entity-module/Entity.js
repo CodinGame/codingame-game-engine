@@ -91,7 +91,7 @@ export class Entity {
             state[property] = newValue;
           }
         }
-        this.updateDisplay(state, changed, globalData);
+        this.updateDisplay(state, changed, globalData, data, progress);
         Object.assign(this.currentState, state);
         this.container.visible = this.container._visible;
         if (changed.children) {
@@ -101,6 +101,8 @@ export class Entity {
           globalData.mustResort = true;
         }
       }
+    } else {
+      Object.assign(this.currentState, this.defaultState);
     }
   }
 

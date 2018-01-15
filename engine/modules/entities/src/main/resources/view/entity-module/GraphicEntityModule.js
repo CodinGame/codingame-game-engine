@@ -24,18 +24,18 @@ export class GraphicEntityModule {
     return 'entitymodule';
   }
   
-  handleFrameData(number, frameData) {
-    for (let line of frameData) {
+  handleFrameData(frameInfo, frameData) {
+    const number = frameInfo.number;
+    for (const line of frameData) {
       if (line) {
-        let command = this.commandParser.parse(line, this.globalData);
+        const command = this.commandParser.parse(line, this.globalData, frameInfo);
         command.apply(this.entities, number);
       }
     }
     this.extrapolate(number);
 
-    var parsedFrame = {
-      number: number
-    };
+    const parsedFrame = {...frameInfo};
+
     parsedFrame.previous = this.frames[this.frames.length - 1] || parsedFrame;
     if (parsedFrame !== parsedFrame.previous) {
       parsedFrame.previous.next = parsedFrame;

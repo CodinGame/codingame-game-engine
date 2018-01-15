@@ -226,6 +226,26 @@ window.initFrames = initFrames;
 window.goTo = goTo;
 window.fullScreen = fullScreen;
 
+$(document).keydown(function (e) {
+  switch (e.key) {
+    case 'ArrowLeft':
+      previousFrame();
+      break;
+
+    case 'ArrowRight':
+      nextFrame();
+      break;
+
+    case ' ':
+      togglePlay();
+      break;
+
+    default:
+      return;
+  }
+  e.preventDefault();
+});
+
 fetchGame(go);
 ErrorLog.listen(function(error) {
   $('#errors').append(error.message + '\n');

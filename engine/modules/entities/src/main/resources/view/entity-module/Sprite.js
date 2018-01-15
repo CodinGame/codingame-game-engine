@@ -11,12 +11,10 @@ export class Sprite extends TextureBasedEntity {
     });
   }
 
-
-
   initDisplay() {
     super.initDisplay();
     if (this.defaultState.image === null) {
-      this.graphics = new PIXI.Sprite(PIXI.Texture.WHITE);
+      this.graphics = new PIXI.Sprite(PIXI.Texture.EMPTY);
     } else {
       this.graphics = PIXI.Sprite.fromFrame(this.defaultState.image);
     }

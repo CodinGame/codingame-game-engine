@@ -54,7 +54,12 @@ class Serializer {
         keys.put("visiblz", "v");
         keys.put("zIndex", "z");
         keys.put("blendMode", "b");
-
+        keys.put("images", "I");
+        keys.put("started", "p");
+        keys.put("loop", "l");
+        keys.put("duration", "d");
+        
+        
         commands = new HashMap<>();
         commands.put("CREATE", "C");
         commands.put("UPDATE", "U");
@@ -66,6 +71,7 @@ class Serializer {
         types.put(Type.LINE, "L");
         types.put(Type.SPRITE, "S");
         types.put(Type.TEXT, "T");
+        types.put(Type.SPRITEANIMATION, "A");
 
         if (keys.values().stream().distinct().count() != keys.values().size()) {
             throw new RuntimeException("Duplicate keys");

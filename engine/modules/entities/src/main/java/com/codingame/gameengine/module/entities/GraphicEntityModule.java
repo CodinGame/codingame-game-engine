@@ -26,19 +26,13 @@ import com.google.inject.Singleton;
 public class GraphicEntityModule implements Module {
 
     //JAVA
-    //TODO: animations (separate module?)
     //TODO: masks (separate module?)
     //TODO: Tooltip on mouse Hover  (separate module?)
-    //TODO: Asynchronous animation system (separate module?)
     //TODO: Allow user to select lerping function somehow (noLerp, bellLerp, easeLerp, etc)
 
     //JS
     //TODO: sort out the "getGameName()" problem
-    //TODO: "contain within" for Texts (text wrapping)
-
-    // Workflow
-    //TODO: Should we support spines?
-    //TODO: allow users to set custom player colours
+    //TODO: extra properties for Texts (text wrapping, alignement, ...)
 
     static int ENTITY_COUNT = 0;
 
@@ -113,8 +107,7 @@ public class GraphicEntityModule implements Module {
     }
 
     /**
-     * This entity's graphical counterpart, at instant t of the frame being computed, will have the same properties as the java object as it is
-     * now.
+     * This entity's graphical counterpart, at instant t of the frame being computed, will have the same properties as the java object as it is now.
      * <p>
      * Only the most recent commit is kept for a given t.
      * 
@@ -137,7 +130,7 @@ public class GraphicEntityModule implements Module {
         } else {
             //TODO: log warning about multiple commits at one t.
         }
-        
+
         final WorldState finalState = state;
         Stream.of(entities).forEach(entity -> finalState.flushEntityState(entity));
 
@@ -180,7 +173,7 @@ public class GraphicEntityModule implements Module {
         gameManager.setViewData("entitymodule", commands);
     }
 
-    private void dumpNewEntity(Entity<?> e, List <Object> commands) {
+    private void dumpNewEntity(Entity<?> e, List<Object> commands) {
         commands.add(serializer.serializeCreate(e));
     }
 
@@ -283,6 +276,17 @@ public class GraphicEntityModule implements Module {
         e.add(entities);
         return e;
 
+    }
+    
+    /**
+     * Creates a new Sprite animation, its graphical counterpart will be created on the frame currently being computed.
+     * 
+     * @return the entity. Modify its properties to animate the graphical counterpart.
+     */
+    public SpriteAnimation createSpriteAnimation() {
+        SpriteAnimation c = new SpriteAnimation();
+        newEntity(c);
+        return c;
     }
 
     private void newEntity(Entity<?> e) {

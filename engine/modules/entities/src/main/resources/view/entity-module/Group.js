@@ -15,6 +15,5 @@ export class Group extends Entity {
 
   updateDisplay(state, changed, globalData) {
     super.updateDisplay(state, changed, globalData);
-    
   }
 }
