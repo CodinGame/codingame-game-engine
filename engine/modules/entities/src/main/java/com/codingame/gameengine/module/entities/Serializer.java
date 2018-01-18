@@ -51,7 +51,7 @@ class Serializer {
         keys.put("scaleY", "sy");
         keys.put("anchorX", "ax");
         keys.put("anchorY", "ay");
-        keys.put("visiblz", "v");
+        keys.put("visible", "v");
         keys.put("zIndex", "z");
         keys.put("blendMode", "b");
         keys.put("images", "I");
@@ -80,7 +80,7 @@ class Serializer {
             throw new RuntimeException("Duplicate commands");
         }
         if (types.values().stream().distinct().count() != types.values().size()) {
-            throw new RuntimeException("Duplicate commands");
+            throw new RuntimeException("Duplicate types");
         }
 
     }
@@ -113,10 +113,17 @@ class Serializer {
                 minify(diff)
         );
     }
+    
+    private String handleValue(Object value) {
+        if (value instanceof Double) {
+            return decimalFormat.format(value);
+        }
+        return escape(value.toString());
+    }
 
     private String minify(EntityState diff) {
         return diff.entrySet().stream()
-                .map((entry) -> join(keys.getOrDefault(entry.getKey(), entry.getKey()), escape(entry.getValue().toString())))
+                .map((entry) -> join(keys.getOrDefault(entry.getKey(), entry.getKey()), handleValue(entry.getValue())))
                 .collect(Collectors.joining(" "));
     }
 

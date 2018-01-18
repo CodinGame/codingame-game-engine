@@ -26,7 +26,7 @@ const PROPERTY_KEY_MAP = {
   sy: 'scaleY',
   ax: 'anchorX',
   ay: 'anchorY',
-  v: 'visiblz',
+  v: 'visible',
   z: 'zIndex',
   b: 'blendMode',
   I: 'images',

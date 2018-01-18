@@ -10,7 +10,7 @@ export function bell(x) {
 }
 
 /**
- * The output value quickly increseas and wobbles around 1 a little before settling.
+ * The output value quickly increases and wobbles around 1 a little before settling.
  */
 export function elastic(t) {
     var b = 0, c = 1, d = 1;
