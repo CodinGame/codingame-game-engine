@@ -30,10 +30,11 @@ export class SpriteAnimation extends TextureBasedEntity {
       const images = state.images.split(',');
 
       const animationProgress = (state.loop ? unlerpUnclamped : unlerp)(startDate, startDate + duration, date);
-      const animationIndex = Math.floor(images.length * animationProgress);
-      const image = state.loop ? images[animationIndex % images.length] : (images[animationIndex] || images[images.length - 1]);
-
-      this.graphics.texture = PIXI.Texture.fromFrame(image);
+      if (animationProgress >= 0) {
+        const animationIndex = Math.floor(images.length * animationProgress);
+        const image = state.loop ? images[animationIndex % images.length] : (images[animationIndex] || images[images.length - 1]); 
+        this.graphics.texture = PIXI.Texture.fromFrame(image);
+      }
     } else {
       this.graphics.texture = PIXI.Texture.EMPTY;
     }
