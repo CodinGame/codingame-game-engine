@@ -127,8 +127,6 @@ public class GraphicEntityModule implements Module {
         if (state == null) {
             state = new WorldState(t);
             worldStates.put(t, state);
-        } else {
-            //TODO: log warning about multiple commits at one t.
         }
 
         final WorldState finalState = state;
@@ -190,14 +188,16 @@ public class GraphicEntityModule implements Module {
                             diff.put(param, value);
                         }
                     });
-                    if (!diff.isEmpty()) {
+
+                    // Manual commits are sent even if they are empty
+                    if (!next.isAutocommit() || !diff.isEmpty()) {
                         commands.add(serializer.serializeUpdate(entity, diff, next.getFrameTime()));
                     }
                 });
     }
 
     private void autocommit() {
-        WorldState state = worldStates.computeIfAbsent(1d, (key) -> new WorldState(1));
+        WorldState state = worldStates.computeIfAbsent(1d, (key) -> new WorldState(1, true));
         state.flushMissingEntities(entities);
     }
 

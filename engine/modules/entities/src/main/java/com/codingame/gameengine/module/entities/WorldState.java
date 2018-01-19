@@ -7,10 +7,16 @@ import java.util.Map;
 class WorldState {
     private Map<Entity<?>, EntityState> entityStateMap;
     private final double t;
+    private boolean autocommit;
 
     WorldState(double t) {
+        this(t, false);
+    }
+
+    public WorldState(double t, boolean autocommit) {
         this.t = t;
         entityStateMap = new HashMap<>();
+        this.autocommit = autocommit;
     }
 
     Double getFrameTime() {
@@ -31,6 +37,7 @@ class WorldState {
                 entityStateMap.put(entity, entity.state);
                 entity.state = new EntityState();
             }
+            
         });
 
     }
@@ -54,5 +61,9 @@ class WorldState {
             EntityState oldState = entityStateMap.get(entity);
             updateStateMap(oldState, nextState, entity);
         });
+    }
+
+    public boolean isAutocommit() {
+        return autocommit;
     };
 }
