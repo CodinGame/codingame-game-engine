@@ -95,6 +95,10 @@ public class GraphicEntityModule implements Module {
      * now.
      * <p>
      * Only the most recent commits are kept for a given t.
+     * </p>
+     * <p>
+     * If an entity hasn't changed since its previous commit, its commit is ignored.
+     * </p>
      * 
      * @param t
      *            The instant of the frame 0 &ge; t &ge; 1.
@@ -110,6 +114,8 @@ public class GraphicEntityModule implements Module {
      * This entity's graphical counterpart, at instant t of the frame being computed, will have the same properties as the java object as it is now.
      * <p>
      * Only the most recent commit is kept for a given t.
+     * <p>
+     * If the entity hasn't changed since its previous commit, the commit is ignored.
      * 
      * @param t
      *            The instant of the frame 0 &ge; t &ge; 1.
@@ -189,8 +195,8 @@ public class GraphicEntityModule implements Module {
                         }
                     });
 
-                    // Manual commits are sent even if they are empty
-                    if (!next.isAutocommit() || !diff.isEmpty()) {
+                    // Forced commits are sent even if they are empty
+                    if (next.isForce() || !diff.isEmpty()) {
                         commands.add(serializer.serializeUpdate(entity, diff, next.getFrameTime()));
                     }
                 });
@@ -277,7 +283,7 @@ public class GraphicEntityModule implements Module {
         return e;
 
     }
-    
+
     /**
      * Creates a new Sprite animation, its graphical counterpart will be created on the frame currently being computed.
      * 

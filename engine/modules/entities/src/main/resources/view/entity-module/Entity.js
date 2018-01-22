@@ -35,7 +35,7 @@ export class Entity {
     let state = Object.assign({ t: t, lerp: withLerp }, params);
 
     if (this.states[frame].find(v => v.t === t)) {
-      throw new Exception('Different updates for same t ' + t);
+      throw new Error('Different updates for same t ' + t);
     } else {
       this.states[frame].push(state);
     }

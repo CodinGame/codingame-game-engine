@@ -7,7 +7,7 @@ import java.util.Map;
 class WorldState {
     private Map<Entity<?>, EntityState> entityStateMap;
     private final double t;
-    private boolean autocommit;
+    private boolean autocommit, force;
 
     WorldState(double t) {
         this(t, false);
@@ -65,5 +65,13 @@ class WorldState {
 
     public boolean isAutocommit() {
         return autocommit;
+    }
+
+    public boolean isForce() {
+        return force;
+    }
+
+    public void setForce(boolean force) {
+        this.force = force;
     };
 }
