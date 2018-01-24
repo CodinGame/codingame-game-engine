@@ -1,4 +1,5 @@
-import * as commands from "./Command.js";
+import {CreateCommand, PropertiesCommand} from "./Command.js";
+
 
 function splitOnSpaceOutsideQuotes(text) {
   const res = [];
@@ -33,17 +34,17 @@ function splitOnSpaceOutsideQuotes(text) {
   return res;
 };
 
+
 export class CommandParser {
-  constructor() {
-    this.parsers = {
-      C: commands.CreateCommand,
-      U: commands.UpdateCommand,
-      SET: commands.SetCommand
-    };
-  }
-  parse(line, globalData, frameInfo) {
-    let args = splitOnSpaceOutsideQuotes(line);
-    let keyword = args[0];
-    return new this.parsers[keyword](args.slice(1), globalData, frameInfo);
+  static parse(line, globalData, frameInfo) {
+    const args = splitOnSpaceOutsideQuotes(line);
+    const keyword = args[0];
+    if (keyword === 'C') {
+      return new CreateCommand(args.slice(1));
+    } else if (keyword === 'U') {
+      return new PropertiesCommand(args.slice(1), globalData, frameInfo);
+    } else {
+      throw new Error("Unrecognised command : " + keyword);
+    }
   }
 }

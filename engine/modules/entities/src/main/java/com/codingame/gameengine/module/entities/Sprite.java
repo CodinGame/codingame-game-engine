@@ -31,8 +31,27 @@ public class Sprite extends TextureBasedEntity<Sprite> {
      * @return this <code>Sprite</code>.
      */
     public Sprite setImage(String image) {
+        return setImage(image, null);
+    }
+
+    /**
+     * Sets the image for this <code>Sprite</code>.
+     * <p>
+     * You must either:
+     * <ul>
+     * <li>use the filename of an image relative to the assets folder of the Java project.
+     * <li>use the a player's nickname token.
+     * </ul>
+     * 
+     * @param image
+     *            the name of the image to use for this <code>Sprite</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Sprite</code>.
+     */
+    public Sprite setImage(String image, Curve curve) {
         this.image = image;
-        set("image", image);
+        set("image", image, curve);
         return this;
     }
 

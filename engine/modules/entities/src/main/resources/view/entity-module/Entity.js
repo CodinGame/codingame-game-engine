@@ -27,12 +27,12 @@ export class Entity {
 
   }
 
-  addState(t, params, frame, withLerp) {
+  addState(t, params, frame) {
     if (!this.states[frame]) {
       this.states[frame] = [];
     }
 
-    let state = Object.assign({ t: t, lerp: withLerp }, params);
+    let state = Object.assign({ t: t, curve: params.curve}, params.values);
 
     if (this.states[frame].find(v => v.t === t)) {
       throw new Error('Different updates for same t ' + t);
@@ -40,11 +40,8 @@ export class Entity {
       this.states[frame].push(state);
     }
   }
-  update(t, params, frame) {
-    this.addState(t, params, frame, true);
-  }
   set(t, params, frame) {
-    this.addState(t, params, frame, false);
+    this.addState(t, params, frame);
   }
 
   render(progress, data, globalData) {
@@ -66,14 +63,14 @@ export class Entity {
         // The start frame must be at the end of the previous turn
         var prev = this.states[data.previous.number] || [];
         start = prev[prev.length - 1];
-        
+
         // If it didn't exist on the previous turn, don't even animate it
-        if (!start && progress >= end.t) { 
+        if (!start && progress >= end.t) {
           start = end;
           t = 1;
         } else {
           // Interpolate from zero since their is always a substate at t=1 no matter what
-          t = unlerp(0, end.t, progress); 
+          t = unlerp(0, end.t, progress);
         }
       } else {
         t = unlerp(start.t, end.t, progress);
@@ -85,7 +82,8 @@ export class Entity {
         for (let property of this.properties) {
           const opts = PROPERTIES[property] || PROPERTIES.default;
           const lerpMethod = opts.lerpMethod;
-          const newValue = end.lerp ? lerpMethod(start[property], end[property], t) : end[property];
+          const curve = end.curve[property] || (a => a);
+          const newValue = lerpMethod(start[property], end[property], curve(t));
           if (newValue !== this.currentState[property]) {
             changed[property] = true;
             state[property] = newValue;
@@ -121,7 +119,7 @@ export class Entity {
     this.container.zIndex = state.zIndex;
     this.container.alpha = state.alpha;
     this.container.position.set(state.x * globalData.coeff, state.y * globalData.coeff);
-    this.container.scale.set(state.scaleX ||  eps, state.scaleY ||  eps);
+    this.container.scale.set(state.scaleX || eps, state.scaleY || eps);
     this.container.rotation = state.rotation;
     this.container._visible = state.visible;
   }

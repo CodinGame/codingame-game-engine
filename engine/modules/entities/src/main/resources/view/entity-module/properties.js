@@ -20,6 +20,11 @@ const angleOpts = {
   lerpMethod: lerpAngle
 };
 
+const constOpts = {
+  type: Number,
+  lerpMethod: noLerp
+}
+
 const boolOpts =
   {
     type: value => {
@@ -56,7 +61,6 @@ export const PROPERTIES = {
     ...stringOpts,
     convert(value, globalData, frameInfo, t) {
       if (value) {
-        //return frameInfo.date + (t * frameInfo.frameDuration);
         return {
           date: frameInfo.date + (t * frameInfo.frameDuration)
         };
@@ -64,10 +68,10 @@ export const PROPERTIES = {
       return null;
     }
   },
-  duration: {
-    type: Number,
-    lerpMethod: noLerp
-  },
+  
+  duration: constOpts,
+  blendMode: constOpts,
+  
   loop: boolOpts,
 
   text: {

@@ -62,9 +62,9 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
     public SpriteAnimation setStarted(boolean started) {
         this.started = started;
         if (started) {
-            set("started", INSTANCES++);
+            set("started", INSTANCES++, null);
         } else {
-            set("started", "");
+            set("started", "", null);
         }
         return this;
     }
@@ -104,7 +104,7 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
      */
     public SpriteAnimation setLoop(boolean loop) {
         this.loop = loop;
-        set("loop", loop);
+        set("loop", loop, null);
         return this;
     }
 
@@ -133,7 +133,7 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
     public SpriteAnimation setDuration(int duration) {
         requireValidDuration(duration);
         this.duration = duration;
-        set("duration", duration);
+        set("duration", duration, null);
         return this;
     }
 
@@ -151,7 +151,7 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
             throw new IllegalArgumentException("Animation must contain at least 1 image.");
         }
         this.images = images;
-        set("images", Stream.of(images).collect(Collectors.joining(",")));
+        set("images", Stream.of(images).collect(Collectors.joining(",")), null);
         return this;
     }
 

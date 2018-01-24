@@ -186,12 +186,12 @@ public class GraphicEntityModule implements Module {
                 .forEach((entity, state) -> {
                     Optional<EntityState> prevState = Optional.ofNullable(previous.getEntityStateMap().get(entity));
                     EntityState diff = new EntityState();
-                    state.forEach((param, value) -> {
-                        Object prevValue = prevState
-                                .map(s -> s.get(param))
+                    state.forEach((key, value) -> {
+                        EntityState.Param prevValue = prevState
+                                .map(s -> s.get(key))
                                 .orElse(null);
                         if (!value.equals(prevValue)) {
-                            diff.put(param, value);
+                            diff.put(key, value);
                         }
                     });
 

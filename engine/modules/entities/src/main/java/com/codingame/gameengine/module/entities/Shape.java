@@ -24,9 +24,24 @@ abstract class Shape<T extends Entity<?>> extends Entity<T> {
      *                if color isn't a valid RGB integer
      */
     public T setFillColor(int color) {
+        return setFillColor(color, null);
+    }
+
+    /**
+     * Sets the color of the fill of this <code>Shape</code> as an RGB integer or null if the fill should not be drawn.
+     * 
+     * @param color
+     *            the color of the fill of this <code>Shape</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Shape</code>.
+     * @exception IllegalArgumentException
+     *                if color isn't a valid RGB integer
+     */
+    public T setFillColor(int color, Curve curve) {
         requireValidColor(color);
         this.fillColor = color;
-        set("fillColor", color);
+        set("fillColor", color, curve);
         return self();
     }
 
@@ -51,9 +66,24 @@ abstract class Shape<T extends Entity<?>> extends Entity<T> {
      *                if alpha &lt; 0 or alpha &gt; 1
      */
     public T setFillAlpha(double alpha) {
+        return setFillAlpha(alpha, null);
+    }
+
+    /**
+     * Sets the alpha of the fill of this <code>Shape</code> as a percentage.
+     * 
+     * @param alpha
+     *            the alpha of the fill of this <code>Shape</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Shape</code>.
+     * @exception IllegalArgumentException
+     *                if alpha &lt; 0 or alpha &gt; 1
+     */
+    public T setFillAlpha(double alpha, Curve curve) {
         requireValidAlpha(alpha);
         this.fillAlpha = alpha;
-        set("fillAlpha", alpha);
+        set("fillAlpha", alpha, curve);
         return self();
     }
 
@@ -78,9 +108,24 @@ abstract class Shape<T extends Entity<?>> extends Entity<T> {
      *                if alpha &lt; 0 or alpha &gt; 1
      */
     public T setLineAlpha(double alpha) {
+        return setLineAlpha(alpha, null);
+    }
+
+    /**
+     * Sets the alpha of the border of this <code>Shape</code> as a percentage.
+     * 
+     * @param alpha
+     *            the alpha for the border of this <code>Shape</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Shape</code>.
+     * @exception IllegalArgumentException
+     *                if alpha &lt; 0 or alpha &gt; 1
+     */
+    public T setLineAlpha(double alpha, Curve curve) {
         requireValidAlpha(alpha);
         this.lineAlpha = alpha;
-        set("lineAlpha", alpha);
+        set("lineAlpha", alpha, curve);
         return self();
     }
 
@@ -103,8 +148,21 @@ abstract class Shape<T extends Entity<?>> extends Entity<T> {
      * @return this <code>Shape</code>.
      */
     public T setLineWidth(int lineWidth) {
+        return setLineWidth(lineWidth, null);
+    }
+
+    /**
+     * Sets the width of the border of this <code>Shape</code> in world units.
+     * 
+     * @param lineWidth
+     *            the width for the border of this <code>Shape</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Shape</code>.
+     */
+    public T setLineWidth(int lineWidth, Curve curve) {
         this.lineWidth = lineWidth;
-        set("lineWidth", lineWidth);
+        set("lineWidth", lineWidth, curve);
         return self();
     }
 
@@ -129,9 +187,24 @@ abstract class Shape<T extends Entity<?>> extends Entity<T> {
      *                if lineColor isn't a valid RGB integer
      */
     public T setLineColor(int lineColor) {
+        return setLineColor(lineColor, null);
+    }
+
+    /**
+     * Sets the color of the border of this <code>Shape</code> as an RGB integer.
+     * 
+     * @param lineColor
+     *            the color for the border of this <code>Shape</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Shape</code>.
+     * @exception IllegalArgumentException
+     *                if lineColor isn't a valid RGB integer
+     */
+    public T setLineColor(int lineColor, Curve curve) {
         requireValidColor(lineColor);
         this.lineColor = lineColor;
-        set("lineColor", lineColor);
+        set("lineColor", lineColor, curve);
         return self();
     }
 

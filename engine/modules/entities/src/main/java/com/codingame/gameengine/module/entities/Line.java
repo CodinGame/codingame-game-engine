@@ -21,8 +21,23 @@ public class Line extends Shape<Line> {
      * @return this <code>Line</code>.
      */
     public Line setX2(int x2) {
+        return setX2(x2, null);
+    }
+
+    /**
+     * Sets the X coordinate of the end point of this <code>Line</code>.
+     * <p>
+     * The starting point of this line is its position.
+     * 
+     * @param x2
+     *            the X coordinate for the end point of this <code>Line</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Line</code>.
+     */
+    public Line setX2(int x2, Curve curve) {
         this.x2 = x2;
-        set("x2", x2);
+        set("x2", x2, curve);
         return this;
     }
 
@@ -45,8 +60,23 @@ public class Line extends Shape<Line> {
      * @return this <code>Line</code>.
      */
     public Line setY2(int y2) {
+        return setY2(y2, null);
+    }
+
+    /**
+     * Sets the y coordinate of the end point of this <code>Line</code>.
+     * <p>
+     * The starting point of this line is its position.
+     * 
+     * @param y2
+     *            the Y coordinate for the end point of this <code>Line</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Line</code>.
+     */
+    public Line setY2(int y2, Curve curve) {
         this.y2 = y2;
-        set("y2", y2);
+        set("y2", y2, curve);
         return this;
     }
 

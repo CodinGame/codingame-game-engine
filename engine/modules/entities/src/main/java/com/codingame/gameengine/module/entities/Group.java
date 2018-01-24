@@ -27,7 +27,7 @@ public class Group extends Entity<Group> {
         if (entity.parent == this) {
             entity.parent = null;
             entities.remove(entity);
-            set("children", asString(entities));
+            set("children", asString(entities), null);
         }
     }
 
@@ -49,7 +49,7 @@ public class Group extends Entity<Group> {
             this.entities.add(entity);
         });
 
-        set("children", asString(this.entities));
+        set("children", asString(this.entities), null);
     }
 
     private String asString(Set<Entity<?>> entities) {

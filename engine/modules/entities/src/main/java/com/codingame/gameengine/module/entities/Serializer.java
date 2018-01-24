@@ -13,9 +13,9 @@ import com.google.inject.Singleton;
 @Singleton
 class Serializer {
 
-    Map<String, String> keys;
-    Map<String, String> commands;
+    Map<String, String> commands, keys;
     Map<Entity.Type, String> types;
+    Map<Curve, String> curves;
     private DecimalFormat decimalFormat;
 
     Serializer() {
@@ -64,6 +64,12 @@ class Serializer {
         commands.put("CREATE", "C");
         commands.put("UPDATE", "U");
         
+        curves = new HashMap<>();
+        curves.put(Curve.NONE, "_");
+        curves.put(Curve.LINEAR, "/");
+        curves.put(Curve.EASE_IN_AND_OUT, "S");
+        curves.put(Curve.ELASTIC, "~");
+        
         types = new HashMap<>();
         types.put(Type.RECTANGLE, "R");
         types.put(Type.CIRCLE, "C");
@@ -81,6 +87,9 @@ class Serializer {
         }
         if (types.values().stream().distinct().count() != types.values().size()) {
             throw new RuntimeException("Duplicate types");
+        }
+        if (curves.values().stream().distinct().count() != curves.values().size()) {
+            throw new RuntimeException("Duplicate curves");
         }
 
     }
@@ -110,20 +119,32 @@ class Serializer {
                 commands.get("UPDATE"),
                 entity.getId(),
                 formatFrameTime(frameInstant),
-                minify(diff)
+                minifyDiff(diff)
         );
     }
     
-    private String handleValue(Object value) {
-        if (value instanceof Double) {
-            return decimalFormat.format(value);
+    private String minifyParam(EntityState.Param param) {
+        String value;
+        if (param.value instanceof Double) {
+            value = decimalFormat.format(param.value);
+        } else {
+            value = escape(param.value.toString());    
         }
-        return escape(value.toString());
+        // We don't send the default value, it will be implied. 
+        
+        if (param.curve.equals(Curve.DEFAULT)) {
+            return value;
+        }
+        return join(value, curves.get(param.curve));
     }
 
-    private String minify(EntityState diff) {
+    private String minifyKey(String key) {
+        return keys.getOrDefault(key, key);
+    }
+    
+    private String minifyDiff(EntityState diff) {
         return diff.entrySet().stream()
-                .map((entry) -> join(keys.getOrDefault(entry.getKey(), entry.getKey()), handleValue(entry.getValue())))
+                .map((entry) -> join(minifyKey(entry.getKey()), minifyParam(entry.getValue())))
                 .collect(Collectors.joining(" "));
     }
 

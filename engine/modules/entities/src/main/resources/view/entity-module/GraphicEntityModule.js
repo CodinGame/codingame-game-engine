@@ -5,7 +5,6 @@ import { Group } from './Group.js'
 
 export class GraphicEntityModule {
   constructor(assets) {
-    this.commandParser = new CommandParser();
     this.entities = new Map();
     this.frames = [];
 
@@ -28,7 +27,7 @@ export class GraphicEntityModule {
     const number = frameInfo.number;
     for (const line of frameData) {
       if (line) {
-        const command = this.commandParser.parse(line, this.globalData, frameInfo);
+        const command = CommandParser.parse(line, this.globalData, frameInfo);
         command.apply(this.entities, number);
       }
     }

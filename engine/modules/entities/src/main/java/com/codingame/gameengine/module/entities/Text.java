@@ -46,7 +46,7 @@ public class Text extends TextureBasedEntity<Text> {
     public Text setText(String text) {
         Objects.requireNonNull(text);
         this.text = text;
-        set("text", text);
+        set("text", text, null);
         return this;
     }
 
@@ -71,9 +71,24 @@ public class Text extends TextureBasedEntity<Text> {
      *                if strokeColor is not a valid RGB integer.
      */
     public Text setStrokeColor(int strokeColor) {
+        return setStrokeColor(strokeColor, null);
+    }
+
+    /**
+     * Sets the color of the stroke of this <code>Text</code> as an RGB integer.
+     * 
+     * @param strokeColor
+     *            the color for the stroke of this <code>Text</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Text</code>.
+     * @exception IllegalArgumentException
+     *                if strokeColor is not a valid RGB integer.
+     */
+    public Text setStrokeColor(int strokeColor, Curve curve) {
         requireValidColor(strokeColor);
         this.strokeColor = strokeColor;
-        set("strokeColor", strokeColor);
+        set("strokeColor", strokeColor, curve);
         return this;
     }
 
@@ -97,8 +112,24 @@ public class Text extends TextureBasedEntity<Text> {
      * @return this <code>Text</code>
      */
     public Text setStrokeThickness(double strokeThickness) {
+        return setStrokeThickness(strokeThickness, null);
+    }
+
+    /**
+     * Returns the thickness of the stroke of this <code>Text</code> in pixels.
+     * <p>
+     * Default is 0 (no stroke).
+     * 
+     * 
+     * @param strokeThickness
+     *            the thickness for the stroke of this <code>Text</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Text</code>
+     */
+    public Text setStrokeThickness(double strokeThickness, Curve curve) {
         this.strokeThickness = strokeThickness;
-        set("strokeThickness", strokeThickness);
+        set("strokeThickness", strokeThickness, curve);
         return this;
     }
 
@@ -125,8 +156,25 @@ public class Text extends TextureBasedEntity<Text> {
      *                if fillColor is not a valid RGB integer.
      */
     public Text setFillColor(int fillColor) {
+        return setFillColor(fillColor, null);
+    }
+
+    /**
+     * Sets the color of the fill of this <code>Text</code> as an RGB integer.
+     * 
+     * 
+     * @param fillColor
+     *            the color for the fill of this <code>Text</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Text</code>.
+     * 
+     * @exception IllegalArgumentException
+     *                if fillColor is not a valid RGB integer.
+     */
+    public Text setFillColor(int fillColor, Curve curve) {
         this.fillColor = fillColor;
-        set("fillColor", fillColor);
+        set("fillColor", fillColor, curve);
         return this;
     }
 
@@ -150,8 +198,22 @@ public class Text extends TextureBasedEntity<Text> {
      * @return this <code>Text</code>.
      */
     public Text setFontSize(int fontSize) {
+        return setFontSize(fontSize, null);
+    }
+
+    /**
+     * Sets the size of the font of this <code>Text</code> in px.
+     * 
+     * 
+     * @param fontSize
+     *            the size for the font sof this <code>Text</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Text</code>.
+     */
+    public Text setFontSize(int fontSize, Curve curve) {
         this.fontSize = fontSize;
-        set("fontSize", fontSize);
+        set("fontSize", fontSize, curve);
         return this;
     }
 
@@ -178,7 +240,7 @@ public class Text extends TextureBasedEntity<Text> {
      */
     public Text setFontFamily(String fontFamily) {
         this.fontFamily = fontFamily;
-        set("fontFamily", fontFamily);
+        set("fontFamily", fontFamily, null);
         return this;
     }
 
