@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
@@ -40,6 +41,7 @@ import io.undertow.server.handlers.resource.FileResourceManager;
 import io.undertow.server.handlers.resource.Resource;
 import io.undertow.server.handlers.resource.ResourceHandler;
 import io.undertow.server.handlers.resource.ResourceSupplier;
+import io.undertow.util.Headers;
 import io.undertow.util.StatusCodes;
 
 class Renderer {
@@ -272,20 +274,42 @@ class Renderer {
                         .addPrefixPath("/services/", new HttpHandler() {
                             @Override
                             public void handleRequest(HttpServerExchange exchange) throws Exception {
-                                if (exchange.getRelativePath().equals("/export")) {
-                                    Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
+                                Path sourceFolderPath = new File(System.getProperty("user.dir")).toPath();
+                                try {
+                                    if (exchange.getRelativePath().equals("/export")) {
+                                        Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
 
-                                    Path sourceFolderPath = new File(System.getProperty("user.dir")).toPath();
-                                    Path zipPath = tmpdir.resolve("source.zip");
+                                        Path zipPath = tmpdir.resolve("source.zip");
 
-                                    try {
                                         checkConfig(sourceFolderPath);
                                         byte[] data = Files.readAllBytes(exportSourceCode(sourceFolderPath, zipPath));
                                         exchange.getResponseSender().send(ByteBuffer.wrap(data));
-                                    } catch (Exception e) {
-                                        exchange.setStatusCode(StatusCodes.BAD_REQUEST);
-                                        exchange.getResponseSender().send(e.getMessage());
+
+                                    } else if (exchange.getRelativePath().equals("/init-config")) {
+                                        if (!sourceFolderPath.resolve("config").toFile().isDirectory()) {
+                                            sourceFolderPath.resolve("config").toFile().mkdir();
+                                        }
+                                        File configFile = sourceFolderPath.resolve("config/config.ini").toFile();
+                                        if (!configFile.exists()) {
+                                            configFile.createNewFile();
+                                        }
+                                        FileOutputStream configOutput = new FileOutputStream(configFile);
+                                        Properties config = new Properties();
+                                        
+                                        exchange.getQueryParameters().forEach((k, v) -> {
+                                            config.put(k, v.stream().collect(Collectors.joining(",")));
+                                        });
+                                        
+                                        config.store(configOutput, null);
+                                        exchange.setStatusCode(StatusCodes.FOUND);
+                                        exchange.getResponseHeaders().put(Headers.LOCATION, "/export.html");
+                                        exchange.endExchange();
+//                                        exchange.setStatusCode(StatusCodes.OK);
                                     }
+                                } catch (Exception e) {
+                                    exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                                    exchange.setStatusCode(StatusCodes.BAD_REQUEST);
+                                    exchange.getResponseSender().send(e.getMessage());
                                 }
                             }
                         }))
