@@ -36,7 +36,11 @@ public abstract class Entity<T extends Entity<?>> {
         return (T) this;
     }
 
-    int getId() {
+    /**
+     * Returns a unique identifier for this <code>Entity</code>.
+     * @return A unique identifier.
+     */
+    public int getId() {
         return id;
     }
 
