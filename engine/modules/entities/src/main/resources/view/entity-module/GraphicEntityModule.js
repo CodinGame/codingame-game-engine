@@ -3,6 +3,8 @@ import { fitAspectRatio } from '../core/utils.js';
 import { WIDTH, HEIGHT } from '../core/constants.js';
 import { Group } from './Group.js'
 
+export const api = {};
+
 export class GraphicEntityModule {
   constructor(assets) {
     this.entities = new Map();
@@ -16,7 +18,8 @@ export class GraphicEntityModule {
       mustResort: true,
       players: []
     };
-
+    
+    api.entities = this.entities;
   }
   
   static get name() {
@@ -151,6 +154,7 @@ export class GraphicEntityModule {
     const width = globalData.width;
     const height = globalData.height;
     this.globalData.coeff = fitAspectRatio(width, height, WIDTH, HEIGHT);
+    api.coeff = this.globalData.coeff;
   }
 
 }
