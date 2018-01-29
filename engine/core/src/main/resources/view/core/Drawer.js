@@ -474,7 +474,7 @@ export class Drawer {
   }
 
   getFrameDuration(frameNumber) {
-    return this.frames && this.frames[frameNumber] && this.frames[frameNumber].frameDuration || 1000;
+    return this.frames && this.frames[frameNumber] && this.frames[frameNumber].frameInfo.frameDuration || 1000;
   }
 
   static get RenderTimeout() { return window.location.hostname === "localhost" ? Infinity : 20000; }
