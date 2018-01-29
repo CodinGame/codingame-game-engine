@@ -1,7 +1,7 @@
 import { assets } from '../assets.js';
 import * as config from '../config.js';
 import { unlerp } from './utils.js';
-import { WIDTH, HEIGHT } from './constants.js';
+import { WIDTH, HEIGHT, BASE_FRAME_DURATION } from './constants.js';
 import { ErrorLog } from '../core/ErrorLog.js';
 
 export class Drawer {
@@ -464,13 +464,11 @@ export class Drawer {
         module.animateScene(step);
       }
     }
-
     return true;
   }
 
-  getFrameSpeed(frameNumber, playerSpeed) {
-    //Will be multiplied by current playerSpeed
-    return 1;
+  getFrameSpeed(frameNumber) {
+    return BASE_FRAME_DURATION / this.getFrameDuration(frameNumber);
   }
 
   getFrameDuration(frameNumber) {

@@ -1,3 +1,5 @@
+import {BASE_FRAME_DURATION} from '../core/constants.js '
+
 var GameManager = function(drawer, gameId, agents, frames, tooltips, refereeInput) {
   this.drawer = drawer;
   this.gameId = gameId;
@@ -58,8 +60,8 @@ GameManager.prototype.animate = function(timestamp) {
 
     var currentFrameIdx = (this.progress === 100) ? this.getNextKeyFrameIndex() : this.currentFrame;
     var currentframeSpeed = this.drawer.getFrameSpeed(currentFrameIdx, this.speed);
-    var baseFrameDuration = this.drawer.getFrameDuration(currentFrameIdx, this.speed);
-    var delta = this.speed * 100 * elapsed / baseFrameDuration * currentframeSpeed;
+    var delta = this.speed * 100 * elapsed / BASE_FRAME_DURATION * currentframeSpeed;
+    
     var timeCrop = ((this.progress + delta) % (this.speed * 10));
     var isSubFrame = true;
     if (timeCrop < delta) {
