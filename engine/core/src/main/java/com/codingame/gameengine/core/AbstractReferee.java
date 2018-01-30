@@ -29,13 +29,13 @@ public abstract class AbstractReferee {
      * Called on the computation of each turn of the game.
      * <p>
      * A typical game turn:
+     * </p>
      * <ul>
      * <li>Send game information to each <code>Player</code> active on this turn.</li>
      * <li>Those players' code are <code>executed</code>.</li>
      * <li>Those players' inputs are read.</li>
      * <li>The game logic is applied.</li>
      * </ul>
-     * </p>
      * 
      * @param turn
      *            which turn of the game is currently being computed.

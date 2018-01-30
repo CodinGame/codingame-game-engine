@@ -127,7 +127,7 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
      * @param duration
      *            the duration of the animation in milliseconds.
      * @return this animation.
-     * @throws InvalidArgumentException
+     * @throws IllegalArgumentException
      *             if duration is negative.
      */
     public SpriteAnimation setDuration(int duration) {
