@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Optional;
 import java.util.Properties;
 
 import javassist.ClassPool;
@@ -194,6 +195,7 @@ public class JavaPlayerAgent extends Agent {
                     }
                 }
             } catch (InvocationTargetException e) {
+                Optional.ofNullable(e.getCause()).orElse(e).printStackTrace(stderr);                
             } catch (Exception ex) {
                 if (!stopping) {
                     System.err.println("Agent failed!");
