@@ -170,6 +170,9 @@ public class GameRunner {
                 }
 
                 if (nextPlayerOutput != null) {
+                    log.info("\t=== Read from player");
+                    log.info(nextPlayerOutput);
+                    log.info("\t=== End Player");
                     sendPlayerOutput(nextPlayerOutput, nextPlayerInfo.nbLinesNextOutput);
                 } else {
                     sendTimeOut();
