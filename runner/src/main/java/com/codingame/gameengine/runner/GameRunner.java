@@ -364,6 +364,7 @@ public class GameRunner {
     }
 
     /**
+     * @deprecated
      * Adds an AI to the next game to run.
      * <p>
      * 
@@ -387,6 +388,7 @@ public class GameRunner {
     }
 
     /**
+     * @deprecated
      * Adds an AI to the next game to run.
      * <p>
      * 
