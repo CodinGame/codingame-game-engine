@@ -37,6 +37,7 @@ import io.undertow.Handlers;
 import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
+import io.undertow.server.handlers.DisableCacheHandler;
 import io.undertow.server.handlers.resource.FileResourceManager;
 import io.undertow.server.handlers.resource.Resource;
 import io.undertow.server.handlers.resource.ResourceHandler;
@@ -270,7 +271,7 @@ class Renderer {
 
         Undertow server = Undertow.builder()
                 .addHttpListener(port, "localhost")
-                .setHandler(Handlers.path(new ResourceHandler(mrs).addWelcomeFiles("test.html"))
+                .setHandler(new DisableCacheHandler(Handlers.path(new ResourceHandler(mrs).addWelcomeFiles("test.html"))
                         .addPrefixPath("/services/", new HttpHandler() {
                             @Override
                             public void handleRequest(HttpServerExchange exchange) throws Exception {
@@ -312,7 +313,7 @@ class Renderer {
                                     exchange.getResponseSender().send(e.getMessage());
                                 }
                             }
-                        }))
+                        })))
                 .build();
         server.start();
     }

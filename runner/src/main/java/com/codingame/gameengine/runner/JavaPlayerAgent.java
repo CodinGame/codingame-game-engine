@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Optional;
 import java.util.Properties;
 
 import javassist.ClassPool;
@@ -25,7 +26,7 @@ import javassist.Loader;
  */
 public class JavaPlayerAgent extends Agent {
     private JavaAgentThread javaRunnerThread = null;
-    private String codemain = "Player";
+    private String codeMain = "Player";
 
     private PipedInputStream agentStdin = new PipedInputStream(100000);
     private PipedOutputStream agentStdout = new PipedOutputStream();
@@ -42,7 +43,7 @@ public class JavaPlayerAgent extends Agent {
     public JavaPlayerAgent(String className) {
         super();
 
-        codemain = className;
+        codeMain = className;
 
         try {
             processStdin = new PipedOutputStream(agentStdin);
@@ -72,17 +73,17 @@ public class JavaPlayerAgent extends Agent {
     public void initialize(Properties conf) {
     }
 
-	/**
-	 * Launch the agent. After the call, agent is ready to process input / output
-	 * 
-	 * @throws Exception
-	 *             if an error occurs
-	 */
-	@Override
-	protected void runInputOutput() throws Exception {
-		javaRunnerThread = new JavaAgentThread(codemain, agentStdin, agentStdout, agentStderr);
-		javaRunnerThread.start();
-	}
+    /**
+     * Launch the agent. After the call, agent is ready to process input / output
+     * 
+     * @throws Exception
+     *             if an error occurs
+     */
+    @Override
+    protected void runInputOutput() throws Exception {
+        javaRunnerThread = new JavaAgentThread(codeMain, agentStdin, agentStdout, agentStderr);
+        javaRunnerThread.start();
+    }
 
     @Override
     public void destroy() {
@@ -194,6 +195,7 @@ public class JavaPlayerAgent extends Agent {
                     }
                 }
             } catch (InvocationTargetException e) {
+                Optional.ofNullable(e.getCause()).orElse(e).printStackTrace(stderr);
             } catch (Exception ex) {
                 if (!stopping) {
                     System.err.println("Agent failed!");

@@ -170,6 +170,9 @@ public class GameRunner {
                 }
 
                 if (nextPlayerOutput != null) {
+                    log.info("\t=== Read from player");
+                    log.info(nextPlayerOutput);
+                    log.info("\t=== End Player");
                     sendPlayerOutput(nextPlayerOutput, nextPlayerInfo.nbLinesNextOutput);
                 } else {
                     sendTimeOut();
@@ -361,6 +364,7 @@ public class GameRunner {
     }
 
     /**
+     * @deprecated
      * Adds an AI to the next game to run.
      * <p>
      * 
@@ -384,6 +388,7 @@ public class GameRunner {
     }
 
     /**
+     * @deprecated
      * Adds an AI to the next game to run.
      * <p>
      * 

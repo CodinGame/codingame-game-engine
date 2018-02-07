@@ -52,9 +52,6 @@ class CommandLinePlayerAgent extends Agent {
     @Override
     public String getOutput(int nbLine, long timeout) {
         String output = super.getOutput(nbLine, timeout);
-        System.out.println("\t=== Read from player");
-        System.out.print(output);
-        System.out.println("\t=== End Player");
         return output;
     }
 
