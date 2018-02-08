@@ -497,6 +497,15 @@ public final class GameManager<T extends AbstractPlayer> {
     }
 
     /**
+     * Get current league level. The value can be set by using -Dleague.level=X where X is the league level.
+     *
+     * @return a strictly positive integer. 1 is the lowest level and default value.
+     */
+    public int getLeagueLevel() {
+        return Integer.valueOf(System.getProperty("league.level", "1"));
+    }
+
+    /**
      * Helper function to display a colored message. Usually used at the end of the game.
      * 
      * @param message
