@@ -3,33 +3,33 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-	<script type='text/javascript' src="runner/lib/jquery.js"></script>
-	<script type='text/javascript' src="runner/lib/pixi.js"></script>
-	<script type='text/javascript' src="runner/lib/stats.min.js"></script>
+	<script type="text/javascript" src="lib/jquery.js"></script>
+	<script type="text/javascript" src="lib/player.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
 	<link href="http://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" type="text/css">
 
-	<script src="./runner/main.js" type="module"></script>
-	
+	<script src="app.js" type="module"></script>
+
 	<style>
+		.viewer-wrapper {
+			width: 800px;
+			min-width: 470px;
+			resize: horizontal;
+			overflow: auto;
+			padding: 10px;
+			border: 1px solid #41454a;
+			margin: auto;
+		}
 		body {
 			background-color: #20252a;
 			color: white;
 			font-family: 'Open Sans',Lato,sans-serif!important;
+			font-weight: 400;
+			overflow: auto;
 		}
 
 		a {
-			color: white;
-		}
-
-		.player {
-			width: 800px;
-			overflow: auto;
-			resize: horizontal;
-			padding: 10px;
-			border: 1px solid #41454a;
-			min-width: 470px
+			color: white !important;
 		}
 
 		.controls {
@@ -73,6 +73,7 @@
 			flex: 1;
 			border: 1px solid #41454a;
 			margin-top: 10px;
+			padding: 10px;
 		}
 		
 		textarea {
@@ -104,80 +105,99 @@
 			overflow: auto;
 		}
 
+		.header-bar {
+			border: 1px solid #41454a;
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+
+		.load-game-button {
+			border: 1px solid #41454a;
+			padding-left: 10px;
+			padding-right: 10px;
+			padding-top: 5px;
+			padding-bottom: 5px;
+			margin: 5px;
+		}
+
+		.load-game-button:hover {
+			color: white;
+			border-color: white;
+		}
+
+		.player-button-wrapper {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 100px;
+		}
 	</style>
 </head>
 
 <body>
-	<div class="viewer">
-		<div class="player">
-			<div id="container">
-				<canvas id="player-canvas" width="960" height="540"></canvas>
-			</div>
-			
-			<div class="controls">
-	
-				<div class="buttons">
-					<button onclick="goTo(0, 1)">&lt;&lt;</button>
-					<button onclick="previousFrame()">&lt;</button>
-					<button onclick="togglePlay()">Play / Pause</button>
-					<button onclick="nextFrame()">&gt;</button>
-					<button onclick="goTo(-1, 1)">&gt;&gt;</button>
-				</div>
-			
-				<div class="position">
-					<input id="positionRange" type="range" value="1" max="0" min="1" step=".001" oninput="goTo(this.value | 0, this.value - (this.value | 0))" />
-					<input type="number" step="1" min="0" max="0" id="framelabel" value="0" onchange="goTo(this.value | 0, 1);" />
-				</div>
-			
-				<div class="buttons">
-					<button class="full-screen" onclick="fullScreen();">Full Screen</button>
-					<div class="speed">
-						<span>Speed: </span>
-						<select onclick="setSpeed(value)">
-							<option>0.1</option>
-							<option>0.2</option>
-							<option>0.5</option>
-							<option selected="selected">1</option>
-							<option>2</option>
-							<option>5</option>
-							<option>10</option>
-						</select>
-					</div>
-				</div>
-	
-			</div>
+	<div ng-app="player" ng-controller="PlayerCtrl">
+
+		<div class="header-bar">
+			<a href="/export.html" target="_blank">Export project</a>
 		</div>
-	
-		<div class="output">
-			<div id="output-players"></div>
+
+		<div class="viewer-wrapper" ng-click="loadGame()">
+			<cg-player
+						ng-if="drawer"
+						on-player-ready="playerLoaded($playerApi)"
+						drawer="drawer"
+						show-console="false"
+						show-rankings="false"
+						show-small-rankings="false"
+						async-rendering="true"
+						shareable="false"
+						show-replay-prompt="false"
+						game-params="gameParams"></cg-player>
+		</div>
+
+		<div class="player-button-wrapper" ng-if="!gameLoaded">
+			<button class="load-game-button" ng-click="loadGame()">Load game</button>
+		</div>
+
+		<div ng-if="gameLoaded">
+			<div class="output">
+				<div id="output-players">
+
+					<div ng-repeat="(index, agent) in agents" class="output-player">
+						<fieldset ng-style="{color: agent.color}"><legend>Player {{agent.index}} Standard Output</legend><textarea ng-model="agent.stdout" readonly></textarea></fieldset>
+						<fieldset ng-style="{color: agent.color}"><legend>Player {{agent.index}} Standard Error</legend><textarea ng-model="agent.stderr" readonly></textarea></fieldset>
+					</div>
+			
+				</div>
+			
+				<div class="output-referee">
+					<fieldset>
+						<legend>Referee Output</legend>
+						<textarea id="console" ng-model="stdout" ng-model="referee.stdout" readonly></textarea>
+					</fieldset>
+					<fieldset>
+						<legend>Summary</legend>
+						<textarea id="console" ng-model="stdout" ng-model="summary" readonly></textarea>
+					</fieldset>
+				</div>
+			</div>
 		
-			<div class="output-referee">
+			<div>
 				<fieldset>
-					<legend>Referee Output</legend>
-					<textarea id="console" readonly></textarea>
+					<legend>Game properties</legend>
+					<textarea id="uinput" readonly></textarea>
+				</fieldset>
+			</div>
+				
+			<div class="log">
+				<fieldset>
+					<legend>Error Log</legend>
+					<textarea id="errors" ng-model="errors" readonly></textarea>
 				</fieldset>
 			</div>
 		</div>
-	</div>
-	
-	<div>
-		<fieldset>
-			<legend>Game properties</legend>
-			<textarea id="uinput" readonly></textarea>
-		</fieldset>
-	</div>
-		
-	<div class="log">
-		<fieldset>
-			<legend>Error Log</legend>
-			<textarea id="errors" readonly></textarea>
-		</fieldset>
-	</div>
 
-	<div>
-		<a href="/export.html" target="_blank">Export project</a>
 	</div>
-
 </body>
 
 </html>
