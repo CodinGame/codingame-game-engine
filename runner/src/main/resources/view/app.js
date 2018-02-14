@@ -2,7 +2,7 @@ import * as config from '../config.js';
 import { Drawer } from '../core/Drawer.js';
 import { ErrorLog } from '../core/ErrorLog.js';
 
-function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, gameManagerFactory) {
+function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, gameManagerFactory, $localStorage) {
   'ngInject';
   const ctrl = this;
   let player = null;
@@ -16,7 +16,9 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     };
   });
   
-  $scope.gameParams = {};
+  $scope.gameParams = $localStorage.$default({
+    gameParams: {}
+  }).gameParams;
   $scope.loadGame = loadGame;
   
   $interval(checkSize, 1000);
