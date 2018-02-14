@@ -478,6 +478,18 @@ public final class GameManager<T extends AbstractPlayer> {
     }
 
     /**
+     * Adds a tooltip for the current turn.
+     * 
+     * @param player
+     *            The player the tooltip information is about.
+     * @param message
+     *            Tooltip message.
+     */
+    public void addTooltip(AbstractPlayer player, String message) {
+        addTooltip(new Tooltip(player.getIndex(), message));
+    }
+
+    /**
      * Add a new line to the game summary for the current turn.
      * 
      * @param summary
