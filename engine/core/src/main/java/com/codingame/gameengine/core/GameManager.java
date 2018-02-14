@@ -478,6 +478,18 @@ public final class GameManager<T extends AbstractPlayer> {
     }
 
     /**
+     * Adds a tooltip for the current turn.
+     * 
+     * @param player
+     *            The player the tooltip information is about.
+     * @param message
+     *            Tooltip message.
+     */
+    public void addTooltip(AbstractPlayer player, String message) {
+        addTooltip(new Tooltip(player.getIndex(), message));
+    }
+
+    /**
      * Add a new line to the game summary for the current turn.
      * 
      * @param summary
@@ -494,6 +506,15 @@ public final class GameManager<T extends AbstractPlayer> {
      */
     public void registerModule(Module m) {
         registeredModules.add(m);
+    }
+
+    /**
+     * Get current league level. The value can be set by using -Dleague.level=X where X is the league level.
+     *
+     * @return a strictly positive integer. 1 is the lowest level and default value.
+     */
+    public int getLeagueLevel() {
+        return Integer.valueOf(System.getProperty("league.level", "1"));
     }
 
     /**

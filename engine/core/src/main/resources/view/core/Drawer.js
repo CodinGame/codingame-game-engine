@@ -84,21 +84,7 @@ export class Drawer {
   }
 
   getOptions() {
-    var drawer = this;
-    return [{
-      get: function () {
-        return drawer.debugMode;
-      },
-      set: function (value) {
-        drawer.debugMode = value;
-        drawer.setDebug(value);
-      },
-      title: 'DEBUG MODE',
-      values: {
-        'ON': true,
-        'OFF': false
-      }
-    }];
+    return [];
   }
 
   setDebug(v) {
