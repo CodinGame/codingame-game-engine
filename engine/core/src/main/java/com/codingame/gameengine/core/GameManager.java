@@ -37,11 +37,11 @@ public final class GameManager<T extends AbstractPlayer> {
 
     private static final int VIEW_DATA_SOFT_QUOTA = 512 * 1024;
     private static final int VIEW_DATA_HARD_QUOTA = 1024 * 1024;
-    private static final int FIRST_TURN_EXTRA_TIME = 950;
     
     private List<T> players;
     private int maxTurns = 400;
     private int turnMaxTime = 50;
+    private int firstTurnMaxTime = 1000;
     private Integer turn = null;
     private int frame = 0;
     private boolean gameEnd = false;
@@ -176,7 +176,7 @@ public final class GameManager<T extends AbstractPlayer> {
         dumpView();
         dumpInfos();
         dumpNextPlayerInput(player.getInputs().toArray(new String[0]));
-        dumpNextPlayerInfos(player.getIndex(), player.getExpectedOutputLines(), (this.turn == 0 ? FIRST_TURN_EXTRA_TIME : 0) + getTurnMaxTime());
+        dumpNextPlayerInfos(player.getIndex(), player.getExpectedOutputLines(), this.turn == 0 ? firstTurnMaxTime : turnMaxTime);
 
         // READ PLAYER OUTPUTS
         iCmd = InputCommand.parse(s.nextLine());
