@@ -84,7 +84,7 @@ export class Drawer {
   }
 
   getOptions() {
-    return [];
+    return config.options || [];
   }
 
   setDebug(v) {
