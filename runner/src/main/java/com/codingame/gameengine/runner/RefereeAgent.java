@@ -15,7 +15,7 @@ class RefereeAgent extends Agent {
     public static final int REFEREE_MAX_BUFFER_SIZE = 30_000;
 	private boolean lastRefereeByteIsCarriageReturn = false;
 
-	private PipedInputStream agentStdin = new PipedInputStream(100000);
+	private PipedInputStream agentStdin = new PipedInputStream(100_000);
 	private PipedOutputStream agentStdout = new PipedOutputStream();
 	private PipedOutputStream agentStderr = new PipedOutputStream();
 
@@ -28,8 +28,8 @@ class RefereeAgent extends Agent {
 
 		try {
 			processStdin = new PipedOutputStream(agentStdin);
-			processStdout = new PipedInputStream(agentStdout, 100000);
-			processStderr = new PipedInputStream(agentStderr, 100000);
+			processStdout = new PipedInputStream(agentStdout, 100_000);
+			processStderr = new PipedInputStream(agentStderr, 100_000);
 		} catch(IOException e) {
 			throw new RuntimeException("Cannot initialize Referee Agent");
 		}
@@ -82,14 +82,14 @@ class RefereeAgent extends Agent {
 
 			while ((offset < maxBufferSize) && (nbOccurences < nbLine)) {
 				long current = System.nanoTime();
-				if ((current - t0) > (timeout * 1000000L)) {
+				if ((current - t0) > (timeout * 1_000_000L)) {
 					break;
 				}
 
 				while ((offset < maxBufferSize) && (processStdout.available() > 0)
 						&& (nbOccurences < nbLine)) {
 					current = System.nanoTime();
-					if ((current - t0) > (timeout * 1000000L)) {
+					if ((current - t0) > (timeout * 1_000_000L)) {
 						break;
 					}
 

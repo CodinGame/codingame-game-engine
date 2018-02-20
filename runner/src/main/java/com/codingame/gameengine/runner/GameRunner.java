@@ -307,7 +307,7 @@ public class GameRunner {
     }
 
     private Command readCommand(Agent agent, int round) {
-        String output = agent.getOutput(1, 150000);
+        String output = agent.getOutput(1, 150_000);
         if (output != null)
             output = output.replace('\r', '\n');
         if (checkOutput(output, 1) != OutputResult.OK) {
@@ -320,7 +320,7 @@ public class GameRunner {
             int nbLinesToRead = Integer.parseInt(m.group("lineCount"));
 
             if (nbLinesToRead >= 0) {
-                output = agent.getOutput(nbLinesToRead, 150000, round == 0);
+                output = agent.getOutput(nbLinesToRead, 150_000, round == 0);
                 output = output.replace('\r', '\n');
             } else {
                 throw new RuntimeException("Invalid Referee command line count: " + output);
