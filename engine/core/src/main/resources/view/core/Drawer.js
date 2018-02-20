@@ -84,7 +84,7 @@ export class Drawer {
   }
 
   getOptions() {
-    return [];
+    return config.options || [];
   }
 
   setDebug(v) {
@@ -363,7 +363,8 @@ export class Drawer {
       var stage = new PIXI.Container();
       module.reinitScene(stage, {
         width: scope.canvasWidth,
-        height: scope.canvasHeight
+        height: scope.canvasHeight,
+        oversampling: this.oversampling
       });
       container.addChild(stage);
     }

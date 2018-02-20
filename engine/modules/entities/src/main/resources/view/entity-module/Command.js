@@ -37,10 +37,12 @@ const PROPERTY_KEY_MAP = {
   d: 'duration'
 };
 
+var INSTANCE_COUNT = 0;
+
 export class CreateCommand {
   constructor(args) {
-    this.id = +args[0];
-    this.type = args[1];
+    this.id = ++INSTANCE_COUNT;
+    this.type = args[0];
   }
 
   apply(entities, frameNumber) {

@@ -12,7 +12,7 @@ import org.apache.commons.logging.LogFactory;
 abstract class Agent {
 
     public static final Charset UTF8 = Charset.forName("UTF-8");
-    public static final int AGENT_MAX_BUFFER_SIZE = 10000;
+    public static final int AGENT_MAX_BUFFER_SIZE = 10_000;
     public static final int THRESHOLD_LIMIT_STDERR_SIZE = 4096 * 50;
 
     private static Log log = LogFactory.getLog(Agent.class);
@@ -105,6 +105,7 @@ abstract class Agent {
         if (processStdout == null) {
             return null;
         }
+
         try {
             byte[] tmp = new byte[AGENT_MAX_BUFFER_SIZE];
             int offset = 0;
@@ -114,7 +115,7 @@ abstract class Agent {
 
             while ((offset < AGENT_MAX_BUFFER_SIZE) && (nbOccurences < nbLine)) {
                 long current = System.nanoTime();
-                if ((current - t0) > (timeout * 1000000l)){
+                if ((current - t0) > (timeout * 1_000_000l)) {
                     break;
                 }
 
@@ -205,5 +206,9 @@ abstract class Agent {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getOutput(int nbLine, long timeout, boolean extraBufferSpace) {
+        return getOutput(nbLine, timeout);
     }
 }

@@ -1,6 +1,11 @@
 package com.codingame.gameengine.module.entities;
 
-abstract class TextureBasedEntity<T extends Entity<?>> extends Entity<T> {
+/**
+ * Any PIXI Entity based on a texture shares the properties found in this <code>TextureBasedEntity</code>.
+ *
+ * @param <T> a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of a <code>TextureBasedEntity</code>.
+ */
+public abstract class TextureBasedEntity<T extends Entity<?>> extends Entity<T> {
 
     /**
      * The list of supported PIXI blend modes and their associated constant.

@@ -28,7 +28,7 @@ public class JavaPlayerAgent extends Agent {
     private JavaAgentThread javaRunnerThread = null;
     private String codeMain = "Player";
 
-    private PipedInputStream agentStdin = new PipedInputStream(100000);
+    private PipedInputStream agentStdin = new PipedInputStream(100_000);
     private PipedOutputStream agentStdout = new PipedOutputStream();
     private PipedOutputStream agentStderr = new PipedOutputStream();
 
@@ -47,8 +47,8 @@ public class JavaPlayerAgent extends Agent {
 
         try {
             processStdin = new PipedOutputStream(agentStdin);
-            processStdout = new PipedInputStream(agentStdout, 100000);
-            processStderr = new PipedInputStream(agentStderr, 100000);
+            processStdout = new PipedInputStream(agentStdout, 100_000);
+            processStderr = new PipedInputStream(agentStderr, 100_000);
         } catch (IOException e) {
             throw new RuntimeException("Cannot initialize Player Agent", e);
         }
@@ -127,7 +127,7 @@ public class JavaPlayerAgent extends Agent {
 
         private static Class<?> redirectIOs(String className, PrintStream out, PrintStream err, InputStream in) {
             try {
-                String newName = "Agent" + (int) (Math.random() * 1000000);
+                String newName = "Agent" + (int) (Math.random() * 1_000_000);
                 ClassPool pool = ClassPool.getDefault();
                 CtClass cc = pool.getAndRename(className, newName);
 

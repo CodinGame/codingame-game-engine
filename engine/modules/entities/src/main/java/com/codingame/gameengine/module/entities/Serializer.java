@@ -151,7 +151,6 @@ class Serializer {
     public String serializeCreate(Entity<?> e) {
         return join(
                 commands.get("CREATE"),
-                e.getId(),
                 types.get(e.getType())
         );
     }
