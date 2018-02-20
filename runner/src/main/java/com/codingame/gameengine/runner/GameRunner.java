@@ -281,14 +281,16 @@ public class GameRunner {
             playerOutput = playerOutput.replace('\r', '\n');
         readError(player);
 
-        if (checkOutput(playerOutput, nextPlayerInfo.nbLinesNextOutput) != OutputResult.OK)
+        if (checkOutput(playerOutput, nextPlayerInfo.nbLinesNextOutput) != OutputResult.OK) {
             return null;
-        if ((playerOutput != null) && playerOutput.isEmpty() && (nextPlayerInfo.nbLinesNextOutput == 1))
+        }
+        if ((playerOutput != null) && playerOutput.isEmpty() && (nextPlayerInfo.nbLinesNextOutput == 1)) {
             return "\n";
+        }
         if ((playerOutput != null) && (playerOutput.length() > 0)
-                && (playerOutput.charAt(playerOutput.length() - 1) != '\n'))
+                && (playerOutput.charAt(playerOutput.length() - 1) != '\n')) {
             return playerOutput + '\n';
-
+        }
         return playerOutput;
     }
 
@@ -299,8 +301,9 @@ public class GameRunner {
 
         while (!turnInfo.isComplete()) {
             Command command = readCommand(referee, round);
-            if (command == null)
+            if (command == null) {
                 return turnInfo;
+            }
             turnInfo.put(command);
         }
         return turnInfo;
@@ -308,8 +311,9 @@ public class GameRunner {
 
     private Command readCommand(Agent agent, int round) {
         String output = agent.getOutput(1, 150_000);
-        if (output != null)
+        if (output != null) {
             output = output.replace('\r', '\n');
+        }
         if (checkOutput(output, 1) != OutputResult.OK) {
             throw new RuntimeException("Invalid Referee command: " + output);
         }
@@ -351,10 +355,12 @@ public class GameRunner {
             }
         }
 
-        if (nbOccurences < nbExpectedLines)
+        if (nbOccurences < nbExpectedLines) {
             return OutputResult.TOOSHORT;
-        if (nbOccurences > nbExpectedLines)
+        }
+        if (nbOccurences > nbExpectedLines) {
             return OutputResult.TOOLONG;
+        }
         return OutputResult.OK;
     }
 
