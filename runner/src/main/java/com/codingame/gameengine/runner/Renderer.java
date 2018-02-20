@@ -296,16 +296,16 @@ class Renderer {
                                         }
                                         FileOutputStream configOutput = new FileOutputStream(configFile);
                                         Properties config = new Properties();
-                                        
+
                                         exchange.getQueryParameters().forEach((k, v) -> {
                                             config.put(k, v.stream().collect(Collectors.joining(",")));
                                         });
-                                        
+
                                         config.store(configOutput, null);
                                         exchange.setStatusCode(StatusCodes.FOUND);
                                         exchange.getResponseHeaders().put(Headers.LOCATION, "/export.html");
                                         exchange.endExchange();
-//                                        exchange.setStatusCode(StatusCodes.OK);
+                                        //                                        exchange.setStatusCode(StatusCodes.OK);
                                     }
                                 } catch (Exception e) {
                                     exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");

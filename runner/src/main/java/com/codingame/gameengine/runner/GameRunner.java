@@ -372,9 +372,8 @@ public class GameRunner {
     }
 
     /**
-     * @deprecated
-     * Adds an AI to the next game to run.
-     * <p>
+     * @deprecated Adds an AI to the next game to run.
+     *             <p>
      * 
      * @param playerClass
      *            the Java class of an AI for your game.
@@ -396,9 +395,8 @@ public class GameRunner {
     }
 
     /**
-     * @deprecated
-     * Adds an AI to the next game to run.
-     * <p>
+     * @deprecated Adds an AI to the next game to run.
+     *             <p>
      * 
      * @param playerClass
      *            the Java class of an AI for your game.

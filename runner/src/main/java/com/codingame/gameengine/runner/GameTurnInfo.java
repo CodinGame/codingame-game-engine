@@ -22,7 +22,7 @@ class GameTurnInfo {
     boolean isComplete() {
         return isCompleteNormalTurn() || isCompleteEndTurn();
     }
-    
+
     boolean isEndTurn() {
         return isCompleteEndTurn();
     }
