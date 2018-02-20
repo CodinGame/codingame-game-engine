@@ -105,6 +105,7 @@ abstract class Agent {
         if (processStdout == null) {
             return null;
         }
+        
         try {
             byte[] tmp = new byte[AGENT_MAX_BUFFER_SIZE];
             int offset = 0;
@@ -205,5 +206,9 @@ abstract class Agent {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public String getOutput(int nbLine, long timeout, boolean extraBufferSpace) {
+        return getOutput(nbLine, timeout);
     }
 }

@@ -151,7 +151,7 @@ public class GameRunner {
         referee.sendInput(initCommand.toString());
         int round = 0;
         while (true) {
-            GameTurnInfo turnInfo = readGameInfo();
+            GameTurnInfo turnInfo = readGameInfo(round);
             boolean validTurn = turnInfo.isComplete();
 
             if (validTurn) {
@@ -292,13 +292,13 @@ public class GameRunner {
         return playerOutput;
     }
 
-    private GameTurnInfo readGameInfo() {
+    private GameTurnInfo readGameInfo(int round) {
         GameTurnInfo turnInfo = new GameTurnInfo();
 
         referee.sendInput(new Command(OutputCommand.GET_GAME_INFO).toString());
 
         while (!turnInfo.isComplete()) {
-            Command command = readCommand(referee);
+            Command command = readCommand(referee, round);
             if (command == null)
                 return turnInfo;
             turnInfo.put(command);
@@ -306,13 +306,13 @@ public class GameRunner {
         return turnInfo;
     }
 
-    private Command readCommand(Agent agent) {
-        String output = "";
-        output = agent.getOutput(1, 150000);
+    private Command readCommand(Agent agent, int round) {
+        String output = agent.getOutput(1, 150000);
         if (output != null)
             output = output.replace('\r', '\n');
-        if (checkOutput(output, 1) != OutputResult.OK)
-            return null;
+        if (checkOutput(output, 1) != OutputResult.OK) {
+            throw new RuntimeException("Invalid Referee command: " + output);
+        }
 
         Matcher m = COMMAND_HEADER_PATTERN.matcher(output.trim());
         if (m.matches()) {
@@ -320,13 +320,15 @@ public class GameRunner {
             int nbLinesToRead = Integer.parseInt(m.group("lineCount"));
 
             if (nbLinesToRead >= 0) {
-                output = agent.getOutput(nbLinesToRead, 150000);
+                output = agent.getOutput(nbLinesToRead, 150000, round == 0);
                 output = output.replace('\r', '\n');
             } else {
-                output = null;
+                throw new RuntimeException("Invalid Referee command line count: " + output);
             }
-            if (checkOutput(output, nbLinesToRead) != OutputResult.OK)
-                return null;
+            if (checkOutput(output, nbLinesToRead) != OutputResult.OK) {
+                throw new RuntimeException("Error reading Referee command. Buffer capacity: " + output.length() + " / "
+                        + (round == 0 ? RefereeAgent.REFEREE_MAX_BUFFER_SIZE_EXTRA : RefereeAgent.REFEREE_MAX_BUFFER_SIZE));
+            }
             return new Command(InputCommand.valueOf(command), output);
         } else {
             throw new RuntimeException("Invalid referee command: " + output);

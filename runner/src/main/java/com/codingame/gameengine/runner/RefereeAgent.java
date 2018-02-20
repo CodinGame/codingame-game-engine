@@ -11,7 +11,8 @@ import com.codingame.gameengine.core.RefereeMain;
 
 class RefereeAgent extends Agent {
 
-	public static final int REFEREE_MAX_BUFFER_SIZE = 30000;
+    public static final int REFEREE_MAX_BUFFER_SIZE_EXTRA = 100_000;
+    public static final int REFEREE_MAX_BUFFER_SIZE = 30_000;
 	private boolean lastRefereeByteIsCarriageReturn = false;
 
 	private PipedInputStream agentStdin = new PipedInputStream(100000);
@@ -63,23 +64,29 @@ class RefereeAgent extends Agent {
 
     @Override
     public String getOutput(int nbLine, long timeout) {
+        return getOutput(nbLine, timeout, false);
+    }
+    
+    @Override
+    public String getOutput(int nbLine, long timeout, boolean extraBufferSpace) {
 		if (processStdout == null) {
 			return null;
 		}
+		int maxBufferSize = extraBufferSpace ? REFEREE_MAX_BUFFER_SIZE_EXTRA : REFEREE_MAX_BUFFER_SIZE;
 		try {
-			byte[] tmp = new byte[REFEREE_MAX_BUFFER_SIZE];
+			byte[] tmp = new byte[maxBufferSize];
 			int offset = 0;
 			int nbOccurences = 0;
 
 			long t0 = System.nanoTime();
 
-			while ((offset < REFEREE_MAX_BUFFER_SIZE) && (nbOccurences < nbLine)) {
+			while ((offset < maxBufferSize) && (nbOccurences < nbLine)) {
 				long current = System.nanoTime();
 				if ((current - t0) > (timeout * 1000000L)) {
 					break;
 				}
 
-				while ((offset < REFEREE_MAX_BUFFER_SIZE) && (processStdout.available() > 0)
+				while ((offset < maxBufferSize) && (processStdout.available() > 0)
 						&& (nbOccurences < nbLine)) {
 					current = System.nanoTime();
 					if ((current - t0) > (timeout * 1000000L)) {
@@ -111,6 +118,7 @@ class RefereeAgent extends Agent {
 			}
 			return new String(tmp, 0, offset, UTF8);
 		} catch (IOException e) {
+		    e.printStackTrace();
 			processStdout = null;
 		}
 		return null;
