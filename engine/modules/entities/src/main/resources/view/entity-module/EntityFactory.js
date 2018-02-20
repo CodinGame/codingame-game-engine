@@ -27,9 +27,9 @@ export class EntityFactory {
         break;
       case 'G':
         entity = new Group();
+        break;
       case 'A':
         entity = new SpriteAnimation();
-        
         break;
       default:
         throw "Exception: entity type not found: " + type;
