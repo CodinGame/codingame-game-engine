@@ -248,7 +248,7 @@ class Renderer {
                 public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                     String relativePath = sourceFolderPath.relativize(file).toString();
                     if (relativePath.startsWith("config") || relativePath.startsWith("src") || relativePath.equals("pom.xml")) {
-                        zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString()));
+                        zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString().replace('\\', '/')));
                         Files.copy(file, zos);
                         zos.closeEntry();
                     }
