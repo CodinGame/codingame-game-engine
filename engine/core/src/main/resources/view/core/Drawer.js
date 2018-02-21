@@ -39,6 +39,9 @@ export class Drawer {
       '#ff0000'  // solid red
     ];
   }
+  static getDefaultOverSampling() {
+    return config.defaultOverSampling || 2;
+  }
 
   instantiateModules() {
     this.modules = {};
@@ -836,6 +839,6 @@ export class Drawer {
   isReady() {
     return this.loaded >= 1;
   }
-
+  
 
 }
