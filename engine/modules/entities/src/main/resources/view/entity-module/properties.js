@@ -92,6 +92,11 @@ export const PROPERTIES = {
     }
   },
   fontFamily: stringOpts,
-  children: stringOpts
+  children: {
+    ...stringOpts,
+    convert(value) {
+      return value ? value.split(',').map(id=>+id) : [];
+    }
+  }
 };
 
