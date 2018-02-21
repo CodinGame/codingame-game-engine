@@ -135,8 +135,8 @@ export class GraphicEntityModule {
     this.entities.forEach(e => {
       if (e instanceof Group) {
         e.graphics.removeChildren();
-        e.currentState.children.split(',').forEach(id => {
-          e.graphics.addChild(this.entities.get(+id).container);
+        e.currentState.children.forEach(id => {
+          e.graphics.addChild(this.entities.get(id).container);
         });
       }
     });
