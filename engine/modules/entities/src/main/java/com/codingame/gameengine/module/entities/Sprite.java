@@ -7,6 +7,7 @@ package com.codingame.gameengine.module.entities;
 public class Sprite extends TextureBasedEntity<Sprite> {
 
     private String image;
+    private Integer baseWidth, baseHeight;
 
     Sprite() {
         super();
@@ -31,28 +32,35 @@ public class Sprite extends TextureBasedEntity<Sprite> {
      * @return this <code>Sprite</code>.
      */
     public Sprite setImage(String image) {
-        return setImage(image, null);
+        this.image = image;
+        set("image", image, null);
+        return this;
     }
 
     /**
-     * Sets the image for this <code>Sprite</code>.
-     * <p>
-     * You must either:
-     * <ul>
-     * <li>use the filename of an image relative to the assets folder of the Java project.
-     * <li>use the a player's nickname token.
-     * </ul>
+     * Sets the image base width for this <code>Sprite</code>. If not set, the image base width is the real image width. 
      * 
-     * @param image
-     *            the name of the image to use for this <code>Sprite</code>.
-     * @param curve
-     *            the transition to animate between values of this property.
-     * @return this <code>Sprite</code>.
+     * @param baseWidth
+     *              image width
+     * @return
      */
-    public Sprite setImage(String image, Curve curve) {
-        this.image = image;
-        set("image", image, curve);
-        return this;
+    public Sprite setBaseWidth(int baseWidth) {
+        this.baseWidth = baseWidth;
+        set("baseWidth", baseWidth, null);
+        return self();
+    }
+
+    /**
+     * Sets the image base height for this <code>Sprite</code>. If not set, the image base height is the real image height. 
+     * 
+     * @param baseHeight
+     *              image height
+     * @return
+     */
+    public Sprite setBaseHeight(int baseHeight) {
+        this.baseHeight = baseHeight;
+        set("baseHeight", baseHeight, null);
+        return self();
     }
 
     /**
@@ -64,5 +72,13 @@ public class Sprite extends TextureBasedEntity<Sprite> {
      */
     public String getImage() {
         return image;
+    }
+
+    public Integer getBaseWidth() {
+        return baseWidth;
+    }
+
+    public Integer getBaseHeight() {
+        return baseHeight;
     }
 }
