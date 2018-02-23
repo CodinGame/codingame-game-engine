@@ -55,7 +55,10 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     ctrl.gameManager = gameManagerFactory.createGameManagerFromGameInfo($scope.drawer, ctrl.gameInfo, true);
     ctrl.gameManager.subscribe(onUpdate);
 
-    return playerLoadedPromise.then(playerApi => playerApi.initReplay(ctrl.gameManager));
+    return playerLoadedPromise.then(playerApi => {
+      playerApi.initReplay(ctrl.gameManager);
+      playerApi.initReplay(ctrl.gameManager);
+    });
   }
 
   function onUpdate(frame, progress, playing, isSubFrame, isTurnBased, atEnd) {

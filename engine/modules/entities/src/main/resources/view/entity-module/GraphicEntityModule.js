@@ -16,7 +16,8 @@ export class GraphicEntityModule {
       coeff: 1,
       mustResetTree: true,
       mustResort: true,
-      players: []
+      players: [],
+      instanceCount: 0
     };
     
     api.entities = this.entities;
