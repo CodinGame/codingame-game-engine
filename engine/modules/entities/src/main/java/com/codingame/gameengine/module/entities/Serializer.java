@@ -58,8 +58,10 @@ class Serializer {
         keys.put("started", "p");
         keys.put("loop", "l");
         keys.put("duration", "d");
-        
-        
+        keys.put("baseWidth", "bw");
+        keys.put("baseHeight", "bh");
+
+
         commands = new HashMap<>();
         commands.put("CREATE", "C");
         commands.put("UPDATE", "U");

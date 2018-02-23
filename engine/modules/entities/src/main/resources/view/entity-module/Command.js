@@ -34,7 +34,9 @@ const PROPERTY_KEY_MAP = {
   I: 'images',
   p: 'started',
   l: 'loop',
-  d: 'duration'
+  d: 'duration',
+  bw: 'baseWidth',
+  bh: 'baseHeight'
 };
 
 var INSTANCE_COUNT = 0;

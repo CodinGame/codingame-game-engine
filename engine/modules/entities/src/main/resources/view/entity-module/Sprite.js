@@ -7,7 +7,9 @@ export class Sprite extends TextureBasedEntity {
   constructor() {
     super();
     Object.assign(this.defaultState, {
-      image: null
+      image: null,
+      baseWidth: null,
+      baseHeight: null,
     });
   }
 
@@ -28,6 +30,12 @@ export class Sprite extends TextureBasedEntity {
       } catch (error) {
         ErrorLog.push(new MissingImageError(state.image, error));
       }
+    }
+    if (changed.baseWidth) {
+      this.graphics.width = state.baseWidth;
+    }
+    if (changed.baseHeight) {
+      this.graphics.height = state.baseHeight;
     }
   }
 }
