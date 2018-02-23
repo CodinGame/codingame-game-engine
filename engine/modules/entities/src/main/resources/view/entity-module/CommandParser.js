@@ -40,7 +40,7 @@ export class CommandParser {
     const args = splitOnSpaceOutsideQuotes(line);
     const keyword = args[0];
     if (keyword === 'C') {
-      return new CreateCommand(args.slice(1));
+      return new CreateCommand(args.slice(1), globalData);
     } else if (keyword === 'U') {
       return new PropertiesCommand(args.slice(1), globalData, frameInfo);
     } else {

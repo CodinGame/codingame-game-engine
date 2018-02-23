@@ -39,11 +39,9 @@ const PROPERTY_KEY_MAP = {
   bh: 'baseHeight'
 };
 
-var INSTANCE_COUNT = 0;
-
 export class CreateCommand {
-  constructor(args) {
-    this.id = ++INSTANCE_COUNT;
+  constructor(args, globalData) {
+    this.id = ++globalData.instanceCount;
     this.type = args[0];
   }
 
