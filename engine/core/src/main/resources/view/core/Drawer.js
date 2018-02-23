@@ -39,7 +39,8 @@ export class Drawer {
       '#ff0000'  // solid red
     ];
   }
-  static getDefaultOverSampling() {
+  
+  getDefaultOverSampling() {
     return config.defaultOverSampling || 2;
   }
 
