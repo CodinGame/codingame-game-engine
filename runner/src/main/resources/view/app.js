@@ -63,8 +63,10 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
 
   function onUpdate(frame, progress, playing, isSubFrame, isTurnBased, atEnd) {
     if (frame !== currentFrame) {
-      currentFrame = frame;
-      onFrameChange(frame); 
+      $timeout(() => {
+        currentFrame = frame;
+        onFrameChange(frame);
+      });
     }
   }
 
@@ -94,7 +96,6 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
       $scope.summary = ctrl.data.summaries[startFrame];
       startFrame++;
     }
-
   }
 
   function convertFrameFormat(data) {
