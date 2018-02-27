@@ -71,15 +71,17 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
 
     /**
      * Calls setStarted(true);
+     * @return this animation.
      */
-    public void start() {
-        setStarted(true);
+    public SpriteAnimation start() {
+        return setStarted(true);
     }
     /**
      * Calls setStarted(false);
+     * @return this animation.
      */
-    public void stop() {
-        setStarted(false);
+    public SpriteAnimation stop() {
+        return setStarted(false);
     }
     
     /**
