@@ -60,7 +60,7 @@ export const PROPERTIES = {
   image: stringOpts,
   images: stringOpts,
   started: {
-    ...stringOpts,
+    type: String,
     convert(value, globalData, frameInfo, t) {
       if (value) {
         return {
@@ -68,7 +68,8 @@ export const PROPERTIES = {
         };
       }
       return null;
-    }
+    },
+    lerpMethod: (a,b,u) => a || b
   },
   
   duration: constOpts,
