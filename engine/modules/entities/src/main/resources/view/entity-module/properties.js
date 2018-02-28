@@ -17,7 +17,10 @@ const stringOpts = {
 
 const angleOpts = {
   type: Number,
-  lerpMethod: lerpAngle
+  lerpMethod: lerpAngle,
+  convert(value) {
+    return Math.radians(value);
+  }
 };
 
 const constOpts = {
@@ -25,20 +28,12 @@ const constOpts = {
   lerpMethod: noLerp
 }
 
-const boolOpts =
-  {
-    type: value => {
-      if (value === 'true') {
-        return true;
-      } else if (value == 'false') {
-        return false;
-      } else {
-        throw 'Cannot convert to boolean: ' + value + '.';
-      }
-    },
-    lerpMethod: noLerp
-
-  };
+const boolOpts = {
+  type: value => {
+    return value === '1';
+  },
+  lerpMethod: noLerp
+};
 
 export const PROPERTIES = {
   default: {
@@ -69,12 +64,12 @@ export const PROPERTIES = {
       }
       return null;
     },
-    lerpMethod: (a,b,u) => a || b
+    lerpMethod: (a, b, u) => a || b
   },
-  
+
   duration: constOpts,
   blendMode: constOpts,
-  
+
   loop: boolOpts,
 
   text: {
@@ -98,7 +93,7 @@ export const PROPERTIES = {
   children: {
     ...stringOpts,
     convert(value) {
-      return value ? value.split(',').map(id=>+id) : [];
+      return value ? value.split(',').map(id => +id) : [];
     }
   }
 };
