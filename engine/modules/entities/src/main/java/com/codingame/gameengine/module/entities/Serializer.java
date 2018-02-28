@@ -61,17 +61,16 @@ class Serializer {
         keys.put("baseWidth", "bw");
         keys.put("baseHeight", "bh");
 
-
         commands = new HashMap<>();
         commands.put("CREATE", "C");
         commands.put("UPDATE", "U");
-        
+
         curves = new HashMap<>();
         curves.put(Curve.NONE, "_");
         curves.put(Curve.LINEAR, "/");
         curves.put(Curve.EASE_IN_AND_OUT, "S");
         curves.put(Curve.ELASTIC, "~");
-        
+
         types = new HashMap<>();
         types.put(Type.RECTANGLE, "R");
         types.put(Type.CIRCLE, "C");
@@ -115,46 +114,48 @@ class Serializer {
         return escaped;
     }
 
-    
     public String serializeUpdate(Entity<?> entity, EntityState diff, Double frameInstant) {
         return join(
                 commands.get("UPDATE"),
                 entity.getId(),
                 formatFrameTime(frameInstant),
-                minifyDiff(diff)
-        );
+                minifyDiff(diff));
     }
-    
-    private String minifyParam(EntityState.Param param) {
-        String value;
-        if (param.value instanceof Double) {
-            value = decimalFormat.format(param.value);
+
+    private String minifyParam(String key, EntityState.Param param) {
+        String result;
+
+        if (key.equals("rotation")) {
+            result = String.valueOf((int) Math.toDegrees((double) param.value));
+        } else if (param.value instanceof Double) {
+            result = decimalFormat.format(param.value);
+        } else if (param.value instanceof Boolean) {
+            result = (boolean) param.value ? "1" : "0";
         } else {
-            value = escape(param.value.toString());    
+            result = escape(param.value.toString());
         }
-        // We don't send the default value, it will be implied. 
-        
+
+        // We don't send the default curve, it will be implied.
         if (param.curve.equals(Curve.DEFAULT)) {
-            return value;
+            return result;
         }
-        return join(value, curves.get(param.curve));
+        return join(result, curves.get(param.curve));
     }
 
     private String minifyKey(String key) {
         return keys.getOrDefault(key, key);
     }
-    
+
     private String minifyDiff(EntityState diff) {
         return diff.entrySet().stream()
-                .map((entry) -> join(minifyKey(entry.getKey()), minifyParam(entry.getValue())))
+                .map((entry) -> join(minifyKey(entry.getKey()), minifyParam(entry.getKey(), entry.getValue())))
                 .collect(Collectors.joining(" "));
     }
 
     public String serializeCreate(Entity<?> e) {
         return join(
                 commands.get("CREATE"),
-                types.get(e.getType())
-        );
+                types.get(e.getType()));
     }
 
 }

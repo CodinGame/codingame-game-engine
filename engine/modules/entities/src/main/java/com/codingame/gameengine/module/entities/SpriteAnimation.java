@@ -13,7 +13,7 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
 
     @Inject GraphicEntityModule entityModule;
 
-    private static int INSTANCES = 0;
+    private int START_INDEX = 0;
 
     private String[] images = new String[] {};
 
@@ -61,8 +61,9 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
      */
     public SpriteAnimation setStarted(boolean started) {
         this.started = started;
+
         if (started) {
-            set("started", INSTANCES++, null);
+            set("started", START_INDEX, null);
         } else {
             set("started", "", null);
         }
@@ -70,20 +71,33 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
     }
 
     /**
+     * Calls setStarted(true) and forces the animation to play from the start;
+     * 
+     * @return this animation.
+     */
+    public SpriteAnimation reset() {
+        START_INDEX++;
+        return setStarted(true);
+    }
+
+    /**
      * Calls setStarted(true);
+     * 
      * @return this animation.
      */
     public SpriteAnimation start() {
         return setStarted(true);
     }
+
     /**
      * Calls setStarted(false);
+     * 
      * @return this animation.
      */
     public SpriteAnimation stop() {
         return setStarted(false);
     }
-    
+
     /**
      * Returns whether the animation should loop.
      * <p>

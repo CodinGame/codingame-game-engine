@@ -1,5 +1,6 @@
 import { lerp, unlerp, lerpColor } from '../core/utils.js';
 import { PROPERTIES } from "./properties.js";
+import { ErrorLog } from '../core/ErrorLog.js';
 
 export class Entity {
   constructor() {
@@ -24,7 +25,6 @@ export class Entity {
     if (typeof this.graphics === 'object') {
       this.container.addChild(this.graphics);
     }
-
   }
 
   addState(t, params, frame) {
@@ -34,8 +34,10 @@ export class Entity {
 
     let state = Object.assign({ t: t, curve: params.curve}, params.values);
 
-    if (this.states[frame].find(v => v.t === t)) {
-      throw new Error('Different updates for same t ' + t);
+    const collision = this.states[frame].find(v => v.t === t);
+    if (collision) {
+      ErrorLog.push(new Error('Different updates for same t ' + t));
+      Object.assign(collision, state);
     } else {
       this.states[frame].push(state);
     }

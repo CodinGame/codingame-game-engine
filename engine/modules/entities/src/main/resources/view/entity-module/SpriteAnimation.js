@@ -33,7 +33,12 @@ export class SpriteAnimation extends TextureBasedEntity {
       if (animationProgress >= 0) {
         const animationIndex = Math.floor(images.length * animationProgress);
         const image = state.loop ? images[animationIndex % images.length] : (images[animationIndex] || images[images.length - 1]); 
-        this.graphics.texture = PIXI.Texture.fromFrame(image);
+        try {
+          this.graphics.texture = PIXI.Texture.fromFrame(image);
+        } catch (error) {
+          ErrorLog.push(new MissingImageError(state.image, error));
+        }
+        
       }
     } else {
       this.graphics.texture = PIXI.Texture.EMPTY;
