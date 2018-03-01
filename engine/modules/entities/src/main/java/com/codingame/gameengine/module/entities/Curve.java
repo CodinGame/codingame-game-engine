@@ -10,9 +10,14 @@ public enum Curve {
     LINEAR,
 
     /**
-     * Don't animate the transition.
+     * Don't animate the transition, wait for next commit for the new value to be used in the display.
      */
     NONE,
+    
+    /**
+     * Don't animate the transition, immediately use the new value to be used in the display.
+     */
+    IMMEDIATE,
 
     /**
      * Start changing slowly, accelerate, then slowly again.
