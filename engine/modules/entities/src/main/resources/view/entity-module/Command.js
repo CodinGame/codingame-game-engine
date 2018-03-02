@@ -57,7 +57,7 @@ export class PropertiesCommand {
     return {
       // '/': (a => a), this will be used by default
       '_': (a => 0),
-      'S': transitions.ease,
+      '∫': transitions.ease,
       '~': transitions.elastic,
       'Γ': (a => 1)
     }
