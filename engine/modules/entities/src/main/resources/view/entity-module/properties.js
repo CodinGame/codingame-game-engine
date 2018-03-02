@@ -64,7 +64,7 @@ export const PROPERTIES = {
       }
       return null;
     },
-    lerpMethod: (a, b, u) => a || b
+    lerpMethod: (a, b, u) => a
   },
 
   duration: constOpts,
