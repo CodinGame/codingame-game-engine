@@ -101,7 +101,7 @@ export class Drawer {
     scope.canvasHeight = canvasHeight;
 
     scope.loaderProgress = new PIXI.Text('100', {
-      fontSize: (canvasHeight * 0.117),
+      fontSize: (canvasHeight * 0.117) || 30,
       fontFamily: 'Lato',
       fontWeight: '900',
       fill: 'white',

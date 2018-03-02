@@ -32,7 +32,7 @@ export class Text extends TextureBasedEntity {
     this.graphics.style.stroke = state.strokeColor;
     this.graphics.style.strokeThickness = state.strokeThickness * globalData.toPixel;
     this.graphics.style.fill = state.fillColor;
-    this.graphics.style.fontSize = state.fontSize;
+    this.graphics.style.fontSize = state.fontSize || 1;
     this.graphics.style.fontFamily = state.fontFamily;
   }
 }
