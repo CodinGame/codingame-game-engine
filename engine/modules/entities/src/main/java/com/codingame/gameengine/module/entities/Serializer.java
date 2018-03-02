@@ -24,10 +24,6 @@ class Serializer {
         decimalFormat.setGroupingUsed(false);
         decimalFormat.setDecimalFormatSymbols(otherSymbols);
     }
-
-    public static void main(String[] args) {
-        System.out.println(formatFrameTime(1.0));
-    }
     
     Serializer() {
         keys = new HashMap<>();
