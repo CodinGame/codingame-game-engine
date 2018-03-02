@@ -69,7 +69,7 @@ class Serializer {
         curves.put(Curve.NONE, "_");
         curves.put(Curve.IMMEDIATE, "Γ");
         curves.put(Curve.LINEAR, "/");
-        curves.put(Curve.EASE_IN_AND_OUT, "S");
+        curves.put(Curve.EASE_IN_AND_OUT, "∫");
         curves.put(Curve.ELASTIC, "~");
 
         types = new HashMap<>();
@@ -92,6 +92,9 @@ class Serializer {
         }
         if (curves.values().stream().distinct().count() != curves.values().size()) {
             throw new RuntimeException("Duplicate curves");
+        }
+        if (keys.values().stream().anyMatch(character -> curves.containsValue(character))) {
+            throw new RuntimeException("Same string used for a curve and a property");
         }
 
     }
