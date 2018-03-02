@@ -36,7 +36,7 @@ export class SpriteAnimation extends TextureBasedEntity {
         try {
           this.graphics.texture = PIXI.Texture.fromFrame(image);
         } catch (error) {
-          ErrorLog.push(new MissingImageError(state.image, error));
+          ErrorLog.push(new MissingImageError(image, error));
         }
         
       }
