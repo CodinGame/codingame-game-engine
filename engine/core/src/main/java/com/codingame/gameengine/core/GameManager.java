@@ -176,7 +176,7 @@ public final class GameManager<T extends AbstractPlayer> {
         dumpView();
         dumpInfos();
         dumpNextPlayerInput(player.getInputs().toArray(new String[0]));
-        dumpNextPlayerInfos(player.getIndex(), player.getExpectedOutputLines(), this.turn == 0 ? firstTurnMaxTime : turnMaxTime);
+        dumpNextPlayerInfos(player.getIndex(), player.getExpectedOutputLines(), player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime);
 
         // READ PLAYER OUTPUTS
         iCmd = InputCommand.parse(s.nextLine());

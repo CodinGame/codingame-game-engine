@@ -31,6 +31,7 @@ public abstract class AbstractPlayer {
     private boolean timeout;
     private int score;
     private boolean hasBeenExecuted;
+    private boolean hasNeverBeenExecuted = true;
 
     /**
      * Returns a string that will be converted into the real nickname by the viewer.
@@ -137,6 +138,7 @@ public abstract class AbstractPlayer {
     public final void execute() {
         gameManagerProvider.get().execute(this);
         this.hasBeenExecuted = true;
+        this.hasNeverBeenExecuted = false;
     }
 
     /**
@@ -200,5 +202,9 @@ public abstract class AbstractPlayer {
 
     final void setHasBeenExecuted(boolean hasBeenExecuted) {
         this.hasBeenExecuted = hasBeenExecuted;
+    }
+
+    final boolean hasNeverBeenExecuted() {
+        return hasNeverBeenExecuted;
     }
 }
