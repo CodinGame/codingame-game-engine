@@ -6,20 +6,20 @@ import java.util.Map;
 
 class WorldState {
     private Map<Entity<?>, EntityState> entityStateMap;
-    private final double t;
+    private final String t;
     private boolean autocommit, force;
 
-    WorldState(double t) {
+    WorldState(String t) {
         this(t, false);
     }
 
-    public WorldState(double t, boolean autocommit) {
+    public WorldState(String t, boolean autocommit) {
         this.t = t;
         entityStateMap = new HashMap<>();
         this.autocommit = autocommit;
     }
 
-    Double getFrameTime() {
+    String getFrameTime() {
         return t;
     }
 

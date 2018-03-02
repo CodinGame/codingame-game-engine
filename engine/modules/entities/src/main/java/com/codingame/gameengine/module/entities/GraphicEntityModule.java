@@ -38,7 +38,7 @@ public class GraphicEntityModule implements Module {
 
     private List<Entity<?>> newEntities;
     private List<Entity<?>> entities;
-    private Map<Double, WorldState> worldStates;
+    private Map<String, WorldState> worldStates;
     private World world;
     private boolean lockWorld;
     private WorldState currentWorldState;
@@ -54,7 +54,7 @@ public class GraphicEntityModule implements Module {
         newEntities = new ArrayList<>();
         lockWorld = false;
         worldStates = new HashMap<>();
-        currentWorldState = new WorldState(0);
+        currentWorldState = new WorldState("0");
 
         gameManager.registerModule(this);
     }
@@ -129,10 +129,12 @@ public class GraphicEntityModule implements Module {
         requireValidFrameInstant(t);
         requireNonEmpty(entities);
 
-        WorldState state = worldStates.get(t);
+        String actualT = Serializer.formatFrameTime(t);
+        
+        WorldState state = worldStates.get(actualT);
         if (state == null) {
-            state = new WorldState(t);
-            worldStates.put(t, state);
+            state = new WorldState(actualT);
+            worldStates.put(actualT, state);
         }
 
         final WorldState finalState = state;
@@ -203,7 +205,7 @@ public class GraphicEntityModule implements Module {
     }
 
     private void autocommit() {
-        WorldState state = worldStates.computeIfAbsent(1d, (key) -> new WorldState(1, true));
+        WorldState state = worldStates.computeIfAbsent("1", (key) -> new WorldState("1", true));
         state.flushMissingEntities(entities);
     }
 

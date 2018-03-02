@@ -16,16 +16,20 @@ class Serializer {
     Map<String, String> commands, keys;
     Map<Entity.Type, String> types;
     Map<Curve, String> curves;
-    private DecimalFormat decimalFormat;
-
-    Serializer() {
+    private static DecimalFormat decimalFormat;
+    static {
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols();
         otherSymbols.setDecimalSeparator('.');
-
         decimalFormat = new DecimalFormat("0.######");
         decimalFormat.setGroupingUsed(false);
         decimalFormat.setDecimalFormatSymbols(otherSymbols);
+    }
 
+    public static void main(String[] args) {
+        System.out.println(formatFrameTime(1.0));
+    }
+    
+    Serializer() {
         keys = new HashMap<>();
         keys.put("rotation", "r");
         keys.put("radius", "R");
@@ -103,7 +107,7 @@ class Serializer {
         return Stream.of(args).map(String::valueOf).collect(Collectors.joining(" "));
     }
 
-    private String formatFrameTime(double t) {
+    static String formatFrameTime(double t) {
         return decimalFormat.format(t);
     }
 
@@ -115,11 +119,11 @@ class Serializer {
         return escaped;
     }
 
-    public String serializeUpdate(Entity<?> entity, EntityState diff, Double frameInstant) {
+    public String serializeUpdate(Entity<?> entity, EntityState diff, String frameInstant) {
         return join(
                 commands.get("UPDATE"),
                 entity.getId(),
-                formatFrameTime(frameInstant),
+                frameInstant,
                 minifyDiff(diff));
     }
 
