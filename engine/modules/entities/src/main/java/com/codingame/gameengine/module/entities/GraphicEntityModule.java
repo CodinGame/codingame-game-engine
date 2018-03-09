@@ -26,12 +26,7 @@ import com.google.inject.Singleton;
 public class GraphicEntityModule implements Module {
 
     //JAVA
-    //TODO: masks (separate module?)
-    //TODO: Tooltip on mouse Hover  (separate module?)
-    //TODO: Allow user to select lerping function somehow (noLerp, bellLerp, easeLerp, etc)
-
-    //JS
-    //TODO: sort out the "getGameName()" problem
+    //TODO: masks
     //TODO: extra properties for Texts (text wrapping, alignement, ...)
 
     static int ENTITY_COUNT = 0;

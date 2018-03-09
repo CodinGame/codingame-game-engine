@@ -56,7 +56,7 @@ export class PropertiesCommand {
   static get curves() {
     return {
       // '/': (a => a), this will be used by default
-      '_': (a => 0),
+      '_': (a => a < 1 ? 0 : 1),
       '∫': transitions.ease,
       '~': transitions.elastic,
       'Γ': (a => 1)
