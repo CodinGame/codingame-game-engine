@@ -269,7 +269,7 @@ export class Drawer {
       scope.demo.x = scope.demo.y = 0;
     }
     var updateInterval = 30;
-    var frameInterval = this.frames[this.currentFrame].frameDuration || 500;
+    var frameInterval = this.getFrameDuration(this.currentFrame);
 
     if (scope.updateTime >= updateInterval) {
       scope.updateTime -= updateInterval;
