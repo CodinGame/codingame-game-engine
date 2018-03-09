@@ -20,10 +20,11 @@
 			border: 1px solid #41454a;
 			margin: auto;
 		}
+
 		body {
 			background-color: #20252a;
 			color: white;
-			font-family: 'Open Sans',Lato,sans-serif!important;
+			font-family: 'Open Sans', Lato, sans-serif!important;
 			font-weight: 400;
 			overflow: auto;
 		}
@@ -38,7 +39,7 @@
 			align-items: center;
 			height: 50px;
 		}
-		
+
 		.buttons {
 			display: flex;
 		}
@@ -47,35 +48,35 @@
 			display: flex;
 			flex: 1;
 		}
-		
+
 		#container {
 			position: relative;
 			height: 0;
 			padding-bottom: 56.25%;
 		}
-		
+
 		#positionRange {
 			flex: 1;
 			margin: 0 10px;
 		}
-		
+
 		#player-canvas {
 			position: absolute;
 			margin: 0;
 			padding: 0;
-			left:0;
-			top:0;
+			left: 0;
+			top: 0;
 			width: 100%;
-			height: 100% 
+			height: 100%
 		}
-		
+
 		fieldset {
 			flex: 1;
 			border: 1px solid #41454a;
 			margin-top: 10px;
 			padding: 10px;
 		}
-		
+
 		textarea {
 			background-color: #252e38;
 			color: white;
@@ -83,15 +84,15 @@
 			height: calc(100% - 20px);
 			resize: none;
 		}
-		
+
 		.full-screen {
 			margin-left: 10px;
 		}
-		
+
 		.speed {
 			margin-left: 10px;
 		}
-		
+
 		.output-player, .output-referee {
 			display: flex;
 			resize: vertical;
@@ -111,6 +112,17 @@
 			margin-bottom: 10px;
 		}
 
+		.header-bar-button {
+			margin-right: 30px;
+			display: inline-block;
+			color: white;
+			font-weight: 600;
+			cursor: pointer;
+		}
+		.header-bar-button:disabled {
+			color: gray;
+			cursor: auto;
+		}
 		.load-game-button {
 			border: 1px solid #41454a;
 			padding-left: 10px;
@@ -138,21 +150,26 @@
 	<div ng-app="player" ng-controller="PlayerCtrl">
 
 		<div class="header-bar">
-			<a href="/export.html" target="_blank">Export project</a>
+			<a class="header-bar-button" href="/export.html" target="_blank">Export project</a>
+			<button ng-show="gameLoaded" ng-disabled="!!selectProgress" ng-click="selectReplay()" class="header-bar-button">
+					<span ng-if="selectProgress === 0">Choose this replay for intro</span>
+					<span ng-if="selectProgress === 1">Saving...</span>
+					<span ng-if="selectProgress === 2">Replay saved!</span>
+			</button>
 		</div>
 
 		<div class="viewer-wrapper" ng-click="loadGame()">
 			<cg-player
-						ng-if="drawer"
-						on-player-ready="playerLoaded($playerApi)"
-						drawer="drawer"
-						show-console="false"
-						show-rankings="false"
-						show-small-rankings="false"
-						async-rendering="true"
-						shareable="false"
-						show-replay-prompt="false"
-						game-params="gameParams"></cg-player>
+					ng-if="drawer"
+					on-player-ready="playerLoaded($playerApi)" 
+					drawer="drawer" 
+					show-console="false" 
+					show-rankings="false" 
+					show-small-rankings="false" 
+					async-rendering="true" 
+					shareable="false" 
+					show-replay-prompt="false" 
+					game-params="gameParams"></cg-player> 
 		</div>
 
 		<div class="player-button-wrapper" ng-if="!gameLoaded">
@@ -164,12 +181,18 @@
 				<div id="output-players">
 
 					<div ng-repeat="(index, agent) in agents" class="output-player">
-						<fieldset ng-style="{color: agent.color}"><legend>Player {{agent.index}} Standard Output</legend><textarea ng-model="agent.stdout" readonly></textarea></fieldset>
-						<fieldset ng-style="{color: agent.color}"><legend>Player {{agent.index}} Standard Error</legend><textarea ng-model="agent.stderr" readonly></textarea></fieldset>
+						<fieldset ng-style="{color: agent.color}">
+							<legend>Player {{agent.index}} Standard Output</legend>
+							<textarea ng-model="agent.stdout" readonly></textarea>
+						</fieldset>
+						<fieldset ng-style="{color: agent.color}">
+							<legend>Player {{agent.index}} Standard Error</legend>
+							<textarea ng-model="agent.stderr" readonly></textarea>
+						</fieldset>
 					</div>
-			
+
 				</div>
-			
+
 				<div class="output-referee">
 					<fieldset>
 						<legend>Referee Output</legend>
@@ -181,14 +204,14 @@
 					</fieldset>
 				</div>
 			</div>
-		
+
 			<div>
 				<fieldset>
 					<legend>Game properties</legend>
 					<textarea id="uinput" readonly></textarea>
 				</fieldset>
 			</div>
-				
+
 			<div class="log">
 				<fieldset>
 					<legend>Error Log</legend>

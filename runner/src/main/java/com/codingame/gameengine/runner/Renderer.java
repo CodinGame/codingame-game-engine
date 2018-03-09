@@ -1,14 +1,17 @@
 package com.codingame.gameengine.runner;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.nio.file.CopyOption;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -28,6 +31,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
@@ -42,6 +46,7 @@ import io.undertow.server.handlers.resource.FileResourceManager;
 import io.undertow.server.handlers.resource.Resource;
 import io.undertow.server.handlers.resource.ResourceHandler;
 import io.undertow.server.handlers.resource.ResourceSupplier;
+import io.undertow.util.HeaderMap;
 import io.undertow.util.Headers;
 import io.undertow.util.StatusCodes;
 
@@ -305,7 +310,13 @@ class Renderer {
                                         exchange.setStatusCode(StatusCodes.FOUND);
                                         exchange.getResponseHeaders().put(Headers.LOCATION, "/export.html");
                                         exchange.endExchange();
-                                        //                                        exchange.setStatusCode(StatusCodes.OK);
+                                    } else if (exchange.getRelativePath().equals("/save-replay")) {
+                                        Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
+                                        File demoFile = sourceFolderPath.resolve("src/main/resources/view/demo.json").toFile();
+                                        File gameFile = tmpdir.resolve("game.json").toFile();
+                                        Files.copy(gameFile.toPath(), demoFile.toPath(), StandardCopyOption.REPLACE_EXISTING);                                        
+                                        exchange.setStatusCode(StatusCodes.OK);
+                                        exchange.endExchange();
                                     }
                                 } catch (Exception e) {
                                     exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");

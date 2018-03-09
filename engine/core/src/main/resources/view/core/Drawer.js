@@ -1,13 +1,13 @@
 import {assets} from '../assets.js';
 import * as config from '../config.js';
-import {unlerp} from './utils.js';
+import {unlerp, fitAspectRatio} from './utils.js';
 import {WIDTH, HEIGHT, BASE_FRAME_DURATION} from './constants.js';
 import {ErrorLog} from '../core/ErrorLog.js';
 
 export class Drawer {
   constructor() {
     this.toDestroy = [];
-    this.demo = config.demo;
+    this.demo = Drawer.demo || config.demo;
   }
 
   static get requirements() {
@@ -151,11 +151,11 @@ export class Drawer {
     scope.time = 0;
 
     if (this.demo) {
-
       if (this.demo.logo) {
         const logo = PIXI.Sprite.fromFrame(this.demo.logo);
         logo.position.set(Drawer.WIDTH / 2, Drawer.HEIGHT / 2);
         logo.anchor.x = logo.anchor.y = 0.5;
+        logo.baseScale = fitAspectRatio(logo.texture.width, logo.texture.height, 2 * Drawer.WIDTH / 3, Drawer.HEIGHT / 2, 0);
         scene.addChild(logo);
         scope.logo = logo;
       }
@@ -257,7 +257,7 @@ export class Drawer {
     var animProgress = Math.max(0, Math.min(1, (scope.demotime - 1) / 0.5));
     if (scope.logo) {
       scope.logo.alpha = animProgress;
-      scope.logo.scale.x = scope.logo.scale.y = 3 - animProgress * 2;
+      scope.logo.scale.x = scope.logo.scale.y = (3 - animProgress * 2) * scope.logo.baseScale;
     }
 
     if (scope.demotime > 1.5 && scope.demotime <= 2.2) {

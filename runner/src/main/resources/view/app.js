@@ -20,6 +20,7 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     gameParams: {}
   }).gameParams;
   $scope.loadGame = loadGame;
+  $scope.selectReplay = selectReplay;
 
   $interval(checkSize, 1000);
 
@@ -32,12 +33,29 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
 
   /////////////////
 
-  function init() {
+  async function init() {
+    const demoData = await fetchGame({demo: true});
+
+    if (demoData) {
+      const frames = demoData.views;
+      const agents = demoData.agents;
+      const logo = 'logo.png';
+      Drawer.demo = {
+        playerCount: agents.length,
+        logo,
+        overlayAlpha: 0.2,
+        agents,
+        frames
+      };
+    }
+
+
+
     drawerFactory.createDrawer(Drawer).then(drawer => {
       $scope.drawer = drawer;
       let data = fetchGame().then(data => {
         ctrl.data = data;
-        if (!config.demo) {
+        if (!Drawer.demo) {
           loadGame();
         }
       });
@@ -131,24 +149,35 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     }
   }
 
-  function fetchGame() {
+  function fetchGame({demo} = {demo: false}) {
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.onload = function() {
         let result = null;
-        try {
-          const json = JSON.parse(this.responseText);
-          json.agents.forEach(agent => agent.color = Drawer.playerColors[agent.index]);
-          result = json
-        } catch (e) {
-          console.error(e);
-          reject(e);
+        if (demo && this.status === 404) {
+          result = null;
+        } else {
+          try {
+            const json = JSON.parse(this.responseText);
+            json.agents.forEach(agent => agent.color = Drawer.playerColors[agent.index]);
+            result = json;
+          } catch (e) {
+            console.error(e);
+            result = null;
+          }
         }
         resolve(result);
       };
-      xhr.open('GET', 'game.json', true);
+      xhr.open('GET', (demo ? 'demo.json' : 'game.json'), true);
       xhr.send();
     });
+  }
+
+  $scope.selectProgress = 0;
+  async function selectReplay() {
+    $scope.selectProgress = 1;
+    const response = await fetch('/services/save-replay');
+    $scope.selectProgress = 2;
   }
 }
 
