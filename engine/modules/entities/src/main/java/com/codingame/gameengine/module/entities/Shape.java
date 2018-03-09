@@ -9,8 +9,7 @@ package com.codingame.gameengine.module.entities;
  */
 public abstract class Shape<T extends Entity<?>> extends Entity<T> {
 
-    private Integer fillColor = 0xffffff;
-    private int lineColor = 0x0, lineWidth = 0;
+    private int lineColor = 0x0, lineWidth = 0, fillColor = 0xffffff;
     private double fillAlpha = 1, lineAlpha = 1;
 
     Shape() {
