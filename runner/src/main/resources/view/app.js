@@ -1,6 +1,6 @@
 import * as config from '../config.js';
-import { Drawer } from '../core/Drawer.js';
-import { ErrorLog } from '../core/ErrorLog.js';
+import {Drawer} from '../core/Drawer.js';
+import {ErrorLog} from '../core/ErrorLog.js';
 
 function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, gameManagerFactory, $localStorage) {
   'ngInject';
@@ -8,21 +8,21 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
   let player = null;
   let lastWidth;
   let currentFrame = null;
-  
+
   let playerLoadedPromise = new Promise((resolve) => {
     $scope.playerLoaded = function(playerApi) {
       ctrl.playerApi = playerApi;
       resolve(playerApi);
     };
   });
-  
+
   $scope.gameParams = $localStorage.$default({
     gameParams: {}
   }).gameParams;
   $scope.loadGame = loadGame;
-  
+
   $interval(checkSize, 1000);
-  
+
   $scope.errors = "";
   ErrorLog.listen(function(error) {
     $scope.errors += error.message + '\n';
@@ -102,7 +102,7 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     const frames = data.views.map(v => {
       let f = v.split('\n');
       let header = f[0].split(' ');
-  
+
       return {view: v.replace(/^(KEY_FRAME)|(INTERMEDIATE_FRAME)/, ''), keyframe: header[0] === 'KEY_FRAME'};
     });
     for (let i = 0; i < frames.length; i++) {
@@ -130,11 +130,11 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
       }
     }
   }
-  
+
   function fetchGame() {
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
-      xhr.onload = function () {
+      xhr.onload = function() {
         let result = null;
         try {
           const json = JSON.parse(this.responseText);
