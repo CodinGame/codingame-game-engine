@@ -1,6 +1,6 @@
 import { lerp, lerpColor, lerpAngle } from "../core/utils.js";
 
-const noLerp = (a, b, u) => a;
+const noLerp = (a, b, u) => u < 1 ? a : b;
 
 const colorOpts = {
   type: Number,
