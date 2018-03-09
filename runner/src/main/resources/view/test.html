@@ -151,7 +151,7 @@
 
 		<div class="header-bar">
 			<a class="header-bar-button" href="/export.html" target="_blank">Export project</a>
-			<button ng-show="gameLoaded" ng-disabled="!!selectProgress" ng-click="selectReplay()" class="header-bar-button">
+			<button ng-show="gameLoaded" ng-disabled="selectProgress !== 'inactive'" ng-click="selectReplay()" class="header-bar-button">
 				<span ng-if="selectProgress === 'inactive'">Choose this replay for intro</span>
 				<span ng-if="selectProgress === 'saving'">Saving...</span>
 				<span ng-if="selectProgress === 'complete'">Replay saved!</span>
