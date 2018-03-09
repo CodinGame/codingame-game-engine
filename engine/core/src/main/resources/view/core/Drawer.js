@@ -69,7 +69,7 @@ export class Drawer {
 
   /** Mandatory */
   getGameName() {
-    return "CodinGame";
+    return config.gameName || "CodinGame";
   }
   canSwapPlayers() {
     return false;
