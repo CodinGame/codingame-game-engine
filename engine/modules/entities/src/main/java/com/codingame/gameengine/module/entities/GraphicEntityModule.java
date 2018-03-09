@@ -13,6 +13,7 @@ import com.codingame.gameengine.core.AbstractPlayer;
 import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.core.Module;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 /**
@@ -36,6 +37,7 @@ public class GraphicEntityModule implements Module {
 
     static int ENTITY_COUNT = 0;
 
+    private List<SpriteSheetLoader> newSpriteSheets;
     private List<Entity<?>> newEntities;
     private List<Entity<?>> entities;
     private Map<String, WorldState> worldStates;
@@ -45,6 +47,7 @@ public class GraphicEntityModule implements Module {
 
     private GameManager<AbstractPlayer> gameManager;
     @Inject private Serializer serializer;
+    @Inject private Provider<SpriteSheetLoader> spriteSheetProvider;
 
     @Inject
     GraphicEntityModule(GameManager<AbstractPlayer> gameManager) {
@@ -52,6 +55,7 @@ public class GraphicEntityModule implements Module {
         world = new World();
         entities = new ArrayList<>();
         newEntities = new ArrayList<>();
+        newSpriteSheets = new ArrayList<>();
         lockWorld = false;
         worldStates = new HashMap<>();
         currentWorldState = new WorldState("0");
@@ -88,7 +92,19 @@ public class GraphicEntityModule implements Module {
      */
     public World getWorld() {
         return world;
-    };
+    }
+
+    void loadSpriteSheet(SpriteSheetLoader spritesheet) {
+        newSpriteSheets.add(spritesheet);
+    }
+    
+    /**
+     * Create a spritesheet loader.
+     * @return a SpriteSheetLoader
+     */
+    public SpriteSheetLoader createSpriteSheetLoader() {
+        return spriteSheetProvider.get();
+    }
 
     /**
      * Every entity's graphical counterpart, at instant t of the frame being computed, will have the same properties as the java object as they are
@@ -159,6 +175,9 @@ public class GraphicEntityModule implements Module {
 
         autocommit();
 
+        newSpriteSheets.forEach(e -> dumpLoadSpriteSheet(e, commands));
+        newSpriteSheets.clear();
+
         newEntities.stream().forEach(e -> {
             dumpNewEntity(e, commands);
         });
@@ -181,6 +200,10 @@ public class GraphicEntityModule implements Module {
 
     private void dumpNewEntity(Entity<?> e, List<Object> commands) {
         commands.add(serializer.serializeCreate(e));
+    }
+    
+    private void dumpLoadSpriteSheet(SpriteSheetLoader spriteSheet, List<Object> commands) {
+        commands.add(serializer.serializeLoadSpriteSheet(spriteSheet));
     }
 
     private void dumpWorldStateDiff(WorldState previous, WorldState next, List<Object> commands) {

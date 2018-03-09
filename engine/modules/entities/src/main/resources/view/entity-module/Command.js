@@ -52,6 +52,43 @@ export class CreateCommand {
   }
 }
 
+export class LoadCommand {
+  constructor([assetName, sourceImage, imageWidth, imageHeight, origRow, origCol, imageCount, imagesPerRow], globalData) {
+    this.loader = new PIXI.loaders.Loader();
+
+    const _imagesPerRow = imagesPerRow > 0 ? imagesPerRow : imageCount;
+    const data = {
+      frames: {},
+      meta: {
+        image: '/assets/' + sourceImage
+      }
+    };
+    for (let i = 0; i < imageCount; i++) {
+      const frameName = imageCount > 1 ? (assetName + i) : assetName;
+      data.frames[frameName] = {
+        frame: {
+          x: imageWidth * origCol + (i % _imagesPerRow) * imageWidth,
+          y: imageHeight * origRow + Math.floor(i / _imagesPerRow) * imageHeight,
+          w: imageWidth,
+          h: imageHeight
+        },
+        sourceSize: {
+          w: imageWidth,
+          h: imageHeight
+        },
+        rotated: false,
+        trimmed: false
+      };
+    }
+
+    this.loader.add('data:text/json;charset=UTF-8,' + JSON.stringify(data));
+  }
+
+  apply() {
+    this.loader.load();
+  }
+}
+
 export class PropertiesCommand {
   static get curves() {
     return {
