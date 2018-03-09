@@ -173,11 +173,11 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     });
   }
 
-  $scope.selectProgress = 0;
+  $scope.selectProgress = 'inactive';
   async function selectReplay() {
-    $scope.selectProgress = 1;
+    $scope.selectProgress = 'saving';
     const response = await fetch('/services/save-replay');
-    $scope.selectProgress = 2;
+    $scope.selectProgress = 'complete';
   }
 }
 
