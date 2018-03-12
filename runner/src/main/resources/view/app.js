@@ -126,7 +126,7 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     for (let i = 0; i < frames.length; i++) {
       frames[i].gameSummary = data.summaries[i];
       for (var pi in data.ids) {
-        frames[i].error = frames[i].error || data.errors[pi][i];
+        frames[i].stderr = frames[i].stderr || data.errors[pi][i];
         frames[i].stdout = frames[i].stdout || data.outputs[pi][i];
       }
       frames[i].agentId = -1;
