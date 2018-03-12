@@ -61,7 +61,7 @@ export class LoadCommand {
     const data = {
       frames: {},
       meta: {
-        image: assets.images[sourceImage]
+        image: (assets.baseUrl ? assets.baseUrl : '') + assets.images[sourceImage]
       }
     };
     for (let i = 0; i < imageCount; i++) {
