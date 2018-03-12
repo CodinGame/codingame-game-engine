@@ -1,7 +1,8 @@
 import {PROPERTIES} from "./properties.js";
 import {EntityFactory} from './EntityFactory.js';
 import * as transitions from "../core/transitions.js";
-import { lerp} from '../core/utils.js';
+import { lerp } from '../core/utils.js';
+import { assets } from '../assets.js';
 
 const PROPERTY_KEY_MAP = {
   r: 'rotation',
@@ -60,7 +61,7 @@ export class LoadCommand {
     const data = {
       frames: {},
       meta: {
-        image: '/assets/' + sourceImage
+        image: assets.images[sourceImage]
       }
     };
     for (let i = 0; i < imageCount; i++) {
