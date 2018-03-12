@@ -24,7 +24,7 @@ class Serializer {
         decimalFormat.setGroupingUsed(false);
         decimalFormat.setDecimalFormatSymbols(otherSymbols);
     }
-    
+
     Serializer() {
         keys = new HashMap<>();
         keys.put("rotation", "r");
@@ -64,6 +64,7 @@ class Serializer {
         commands = new HashMap<>();
         commands.put("CREATE", "C");
         commands.put("UPDATE", "U");
+        commands.put("LOADSPRITESHEET", "L");
 
         curves = new HashMap<>();
         curves.put(Curve.NONE, "_");
@@ -160,6 +161,11 @@ class Serializer {
         return join(
                 commands.get("CREATE"),
                 types.get(e.getType()));
+    }
+
+    public Object serializeLoadSpriteSheet(SpriteSheetLoader spriteSheet) {
+        return join(commands.get("LOADSPRITESHEET"), spriteSheet.getName(), spriteSheet.getSourceImage(),
+                spriteSheet.getWidth(), spriteSheet.getHeight(), spriteSheet.getOrigRow(), spriteSheet.getOrigCol(), spriteSheet.getImageCount(), spriteSheet.getImagesPerRow());
     }
 
 }

@@ -1,7 +1,8 @@
 import {PROPERTIES} from "./properties.js";
 import {EntityFactory} from './EntityFactory.js';
 import * as transitions from "../core/transitions.js";
-import { lerp} from '../core/utils.js';
+import { lerp } from '../core/utils.js';
+import { assets } from '../assets.js';
 
 const PROPERTY_KEY_MAP = {
   r: 'rotation',
@@ -49,6 +50,43 @@ export class CreateCommand {
     let entity = EntityFactory.create(this.type);
     entity.id = this.id;
     entities.set(this.id, entity);
+  }
+}
+
+export class LoadCommand {
+  constructor([assetName, sourceImage, imageWidth, imageHeight, origRow, origCol, imageCount, imagesPerRow], globalData) {
+    this.loader = new PIXI.loaders.Loader();
+
+    const _imagesPerRow = imagesPerRow > 0 ? imagesPerRow : imageCount;
+    const data = {
+      frames: {},
+      meta: {
+        image: assets.images[sourceImage]
+      }
+    };
+    for (let i = 0; i < imageCount; i++) {
+      const frameName = imageCount > 1 ? (assetName + i) : assetName;
+      data.frames[frameName] = {
+        frame: {
+          x: imageWidth * origCol + (i % _imagesPerRow) * imageWidth,
+          y: imageHeight * origRow + Math.floor(i / _imagesPerRow) * imageHeight,
+          w: imageWidth,
+          h: imageHeight
+        },
+        sourceSize: {
+          w: imageWidth,
+          h: imageHeight
+        },
+        rotated: false,
+        trimmed: false
+      };
+    }
+
+    this.loader.add('data:text/json;charset=UTF-8,' + JSON.stringify(data));
+  }
+
+  apply() {
+    this.loader.load();
   }
 }
 

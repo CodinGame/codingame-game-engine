@@ -1,4 +1,4 @@
-import {CreateCommand, PropertiesCommand} from "./Command.js";
+import {CreateCommand, PropertiesCommand, LoadCommand} from "./Command.js";
 
 
 function splitOnSpaceOutsideQuotes(text) {
@@ -43,6 +43,8 @@ export class CommandParser {
       return new CreateCommand(args.slice(1), globalData);
     } else if (keyword === 'U') {
       return new PropertiesCommand(args.slice(1), globalData, frameInfo);
+    } else if (keyword === 'L') {
+      return new LoadCommand(args.slice(1), globalData);
     } else {
       throw new Error("Unrecognised command : " + keyword);
     }
