@@ -110,7 +110,7 @@ public class SpriteSheetLoader {
         if (height == null || height <= 0) {
             throw new IllegalStateException("invalid height");
         }
-        if (imageCount == null || imagesPerRow > 0 && imageCount > imagesPerRow || imageCount <= 0) {
+        if (imageCount == null || imageCount <= 0) {
             throw new IllegalStateException("invalid imageCount");
         }
         if (origRow == null || origRow < 0) {
