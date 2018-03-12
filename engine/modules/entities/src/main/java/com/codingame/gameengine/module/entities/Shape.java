@@ -5,7 +5,7 @@ package com.codingame.gameengine.module.entities;
  * width in world units.
  * 
  * @param <T>
- *            a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of an Shape.
+ *            a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of a Shape.
  */
 public abstract class Shape<T extends Entity<?>> extends Entity<T> {
 

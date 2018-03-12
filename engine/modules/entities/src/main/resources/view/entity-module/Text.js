@@ -30,7 +30,7 @@ export class Text extends TextureBasedEntity {
     super.updateDisplay(state, changed, globalData);
     this.graphics.text = state.text;
     this.graphics.style.stroke = state.strokeColor;
-    this.graphics.style.strokeThickness = state.strokeThickness * globalData.toPixel;
+    this.graphics.style.strokeThickness = globalData.atLeastOnePixel(state.strokeThickness);
     this.graphics.style.fill = state.fillColor;
     this.graphics.style.fontSize = state.fontSize || 1;
     this.graphics.style.fontFamily = state.fontFamily;

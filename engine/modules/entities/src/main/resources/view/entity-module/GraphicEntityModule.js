@@ -17,7 +17,13 @@ export class GraphicEntityModule {
       mustResetTree: true,
       mustResort: true,
       players: [],
-      instanceCount: 0
+      instanceCount: 0,
+      atLeastOnePixel: function(width) {
+        if (width < this.toPixel) {
+          return this.toPixel;
+        }
+        return width;
+      }
     };
     
     api.entities = this.entities;

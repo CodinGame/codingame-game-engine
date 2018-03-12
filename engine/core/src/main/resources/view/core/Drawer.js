@@ -1,13 +1,13 @@
-import { assets } from '../assets.js';
+import {assets} from '../assets.js';
 import * as config from '../config.js';
-import { unlerp } from './utils.js';
-import { WIDTH, HEIGHT, BASE_FRAME_DURATION } from './constants.js';
-import { ErrorLog } from '../core/ErrorLog.js';
+import {unlerp, fitAspectRatio} from './utils.js';
+import {WIDTH, HEIGHT, BASE_FRAME_DURATION} from './constants.js';
+import {ErrorLog} from '../core/ErrorLog.js';
 
 export class Drawer {
   constructor() {
     this.toDestroy = [];
-    this.demo = config.demo;
+    this.demo = Drawer.demo || config.demo;
   }
 
   static get requirements() {
@@ -39,7 +39,7 @@ export class Drawer {
       '#ff0000'  // solid red
     ];
   }
-  
+
   getDefaultOverSampling() {
     return config.defaultOverSampling || 2;
   }
@@ -69,7 +69,7 @@ export class Drawer {
 
   /** Mandatory */
   getGameName() {
-    return "CodinGame";
+    return config.gameName || "CodinGame";
   }
   canSwapPlayers() {
     return false;
@@ -151,11 +151,11 @@ export class Drawer {
     scope.time = 0;
 
     if (this.demo) {
-
       if (this.demo.logo) {
         const logo = PIXI.Sprite.fromFrame(this.demo.logo);
         logo.position.set(Drawer.WIDTH / 2, Drawer.HEIGHT / 2);
         logo.anchor.x = logo.anchor.y = 0.5;
+        logo.baseScale = fitAspectRatio(logo.texture.width, logo.texture.height, 2 * Drawer.WIDTH / 3, Drawer.HEIGHT / 2, 0);
         scene.addChild(logo);
         scope.logo = logo;
       }
@@ -195,7 +195,7 @@ export class Drawer {
 
     this.instantiateModules();
 
-    this.playerInfo = agents.map(function (agent, index) {
+    this.playerInfo = agents.map(function(agent, index) {
       var agentData = {
         name: agent.name || 'Anonymous',
         color: agent.color ? drawer.parseColor(agent.color) : '#ffffff',
@@ -221,7 +221,7 @@ export class Drawer {
       } catch (err) {
         data = {}
       }
-      return { ...data, key: header[0] === 'KEY_FRAME' };
+      return {...data, key: header[0] === 'KEY_FRAME'};
     }).filter(x => x.key);
 
     this.parseGlobalData(this._frames[0].global);
@@ -257,7 +257,7 @@ export class Drawer {
     var animProgress = Math.max(0, Math.min(1, (scope.demotime - 1) / 0.5));
     if (scope.logo) {
       scope.logo.alpha = animProgress;
-      scope.logo.scale.x = scope.logo.scale.y = 3 - animProgress * 2;
+      scope.logo.scale.x = scope.logo.scale.y = (3 - animProgress * 2) * scope.logo.baseScale;
     }
 
     if (scope.demotime > 1.5 && scope.demotime <= 2.2) {
@@ -269,7 +269,7 @@ export class Drawer {
       scope.demo.x = scope.demo.y = 0;
     }
     var updateInterval = 30;
-    var frameInterval = this.frames[this.currentFrame].frameDuration || 500;
+    var frameInterval = this.getFrameDuration(this.currentFrame);
 
     if (scope.updateTime >= updateInterval) {
       scope.updateTime -= updateInterval;
@@ -328,11 +328,11 @@ export class Drawer {
       parsedFrame.frameInfo.frameDuration = parsedFrame.previous.frameInfo.frameDuration || 1000;
     }
     if (parsedFrame === parsedFrame.previous) {
-      parsedFrame.frameInfo.date = 0;  
+      parsedFrame.frameInfo.date = 0;
     } else {
       parsedFrame.frameInfo.date = parsedFrame.previous.frameInfo.date + parsedFrame.previous.frameInfo.frameDuration;
     }
-    
+
 
 
     for (let moduleName in this.modules) {
@@ -448,7 +448,7 @@ export class Drawer {
     }
 
     this.renderRenderables(step, scope);
-    
+
     for (let moduleName in this.modules) {
       const module = this.modules[moduleName];
       if (typeof module.animateScene === 'function') {
@@ -466,7 +466,7 @@ export class Drawer {
     return this.frames && this.frames[frameNumber] && this.frames[frameNumber].frameInfo.frameDuration || 1000;
   }
 
-  static get RenderTimeout() { return window.location.hostname === "localhost" ? Infinity : 20000; }
+  static get RenderTimeout() {return window.location.hostname === "localhost" ? Infinity : 20000;}
 
   enableAsyncRendering(enabled) {
     this.asyncRendering = enabled;
@@ -591,7 +591,7 @@ export class Drawer {
       } catch (err) {
         data = {}
       }
-      return { ...data, key: header[0] === 'KEY_FRAME' };
+      return {...data, key: header[0] === 'KEY_FRAME'};
     });
 
     this.parseGlobalData(this._frames[0].global);
@@ -614,7 +614,7 @@ export class Drawer {
 
   initFrames(frames, agents) {
     if (this.playerInfo) {
-      this.playerInfo.forEach(function (playerInfo) {
+      this.playerInfo.forEach(function(playerInfo) {
         if (playerInfo.avatar) {
           playerInfo.avatar.destroy(true);
         }
@@ -624,7 +624,7 @@ export class Drawer {
     var drawer = this;
 
     var loader = new PIXI.loaders.Loader(window.location.origin);
-    this.playerInfo = agents.map(function (agent, index) {
+    this.playerInfo = agents.map(function(agent, index) {
       var agentData = {
         name: agent.name || 'Anonymous',
         color: drawer.parseColor(agent.color),
@@ -635,19 +635,19 @@ export class Drawer {
         avatar: null
       };
 
-      loader.add('avatar' + index, agent.avatar, { loadType: 2, crossOrigin: true }, function (event) {
+      loader.add('avatar' + index, agent.avatar, {loadType: 2, crossOrigin: true}, function(event) {
         agentData.avatar = event.texture;
         PIXI.Texture.addTextureToCache(event.texture, '$' + agentData.index);
       });
       return agentData;
     });
     this.loading = true;
-    loader.on('complete', function (loader) {
+    loader.on('complete', function(loader) {
       drawer._initFrames(agents.length, frames);
       drawer.loading = false;
       drawer.reinit(false);
     });
-    loader.on('error', function (e) {
+    loader.on('error', function(e) {
       console.warn(e);
     });
     loader.load();
@@ -733,7 +733,7 @@ export class Drawer {
 
       if (this.demo) {
         this.demo.agents.forEach(agent => {
-          loader.add('avatar' + agent.index, agent.avatar, { loadType: 2, crossOrigin: true }, function (event) {
+          loader.add('avatar' + agent.index, agent.avatar, {loadType: 2, crossOrigin: true}, function(event) {
             agent.avatarTexture = event.texture;
             PIXI.Texture.addTextureToCache(event.texture, '$' + agent.index);
           });
@@ -742,18 +742,18 @@ export class Drawer {
 
       self.scope = {};
 
-      const onStart = function (loader, resource) {
+      const onStart = function(loader, resource) {
         requestAnimationFrame(self.animate.bind(self));
         self.initPreload(self.scope, self.container, self.loaded = 0, self.initWidth, self.initHeight);
       }
       loader.on('start', onStart);
-      loader.on('progress', function (loader, resource) {
+      loader.on('progress', function(loader, resource) {
         if (loader.progress < 100) {
           self.preload(self.scope, self.container, self.loaded = loader.progress / 100, self.initWidth, self.initHeight, resource);
         }
       });
 
-      const onComplete = function () {
+      const onComplete = function() {
         var key;
         for (key in resources.images) {
           if (resources.images.hasOwnProperty(key)) {
@@ -771,7 +771,7 @@ export class Drawer {
       };
 
       loader.on('complete', onComplete);
-      loader.on('error', function (e) {
+      loader.on('error', function(e) {
         console.warn(e);
       });
 
@@ -840,6 +840,6 @@ export class Drawer {
   isReady() {
     return this.loaded >= 1;
   }
-  
+
 
 }
