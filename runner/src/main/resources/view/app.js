@@ -63,7 +63,7 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
   }
 
   function loadGame() {
-    if ($scope.gameLoaded) {
+    if ($scope.gameLoaded || !ctrl.data) {
       return;
     }
     $scope.gameLoaded = true;
