@@ -179,8 +179,7 @@
 		<div ng-if="gameLoaded">
 			<div class="output">
 				<div id="output-players">
-
-					<div ng-repeat="(index, agent) in agents" class="output-player">
+					<div ng-show="agent.stdout || agent.stderr" ng-repeat="(index, agent) in agents" class="output-player">
 						<fieldset ng-style="{color: agent.color}">
 							<legend>Player {{agent.index}} Standard Output</legend>
 							<textarea ng-model="agent.stdout" readonly></textarea>
