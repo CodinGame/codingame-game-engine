@@ -116,7 +116,7 @@ public class SpriteSheetLoader {
         if (origRow == null || origRow < 0) {
             throw new IllegalStateException("invalid origRow");
         }
-        if (origCol == null || origRow < 0) {
+        if (origCol == null || origCol < 0) {
             throw new IllegalStateException("invalid origCol");
         }
 
