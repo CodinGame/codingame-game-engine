@@ -2,13 +2,13 @@ import { Entity } from "./Entity.js";
 
 export class Shape extends Entity {
   static defaultLineWidth() {
-    return 1;
+    return 0;
   }
   static defaultFillColor() {
-    return null;
+    return 0xffffff;
   }
   static defaultLineColor() {
-    return 0xffffff;
+    return 0x0;
   }
   static defaultLineAlpha() {
     return 1;
