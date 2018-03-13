@@ -19,7 +19,7 @@ export class GraphicEntityModule {
       players: [],
       instanceCount: 0,
       atLeastOnePixel: function(width) {
-        if (width < this.toPixel) {
+        if (width > 0 && width < this.toPixel) {
           return this.toPixel;
         }
         return width;
