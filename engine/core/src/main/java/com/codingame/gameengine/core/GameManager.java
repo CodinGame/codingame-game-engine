@@ -292,6 +292,9 @@ public final class GameManager<T extends AbstractPlayer> {
         OutputData data = new OutputData(OutputCommand.NEXT_PLAYER_INPUT);
         data.addAll(input);
         out.println(data);
+        if (log.isInfoEnabled()) {
+            log.info(data);
+        }
     }
 
     void setOuputsRead(boolean outputsRead) {
