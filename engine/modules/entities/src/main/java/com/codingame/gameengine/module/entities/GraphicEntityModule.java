@@ -216,7 +216,7 @@ public class GraphicEntityModule implements Module {
                     });
 
                     // Forced commits are sent even if they are empty
-                    if (next.isForce() || !diff.isEmpty()) {
+                    if (!next.isAutocommit() || !diff.isEmpty()) {
                         commands.add(serializer.serializeUpdate(entity, diff, next.getFrameTime()));
                     }
                 });
