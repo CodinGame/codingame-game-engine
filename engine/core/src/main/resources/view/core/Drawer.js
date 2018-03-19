@@ -21,6 +21,8 @@ export class Drawer {
         frames
       };
       this.demo.agents.forEach(agent => agent.color = Drawer.playerColors[agent.index]);
+    } else {
+      this.demo = config.demo;
     }
   }
 
