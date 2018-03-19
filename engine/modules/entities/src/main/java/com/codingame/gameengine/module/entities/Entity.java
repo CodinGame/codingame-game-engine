@@ -20,6 +20,7 @@ public abstract class Entity<T extends Entity<?>> {
     private boolean visible = true;
     private double rotation, alpha = 1;
     Group parent;
+    Shape<?> maskId;
 
     static enum Type {
         CIRCLE, LINE, RECTANGLE, SPRITE, TEXT, GROUP, SPRITEANIMATION
@@ -46,6 +47,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     protected void set(String key, Object value, Curve curve) {
         state.put(key, value, Optional.ofNullable(curve).orElse(Curve.DEFAULT));
+    }
+    protected void set(String key, Object value) {
+        set(key, value);
     }
 
     abstract Type getType();
@@ -351,6 +355,12 @@ public abstract class Entity<T extends Entity<?>> {
      */
     public boolean isVisible() {
         return visible;
+    }
+    
+    public T setMask(Shape<?> shape) {
+        maskId = shape;
+        set("mask", shape == null ? null : shape.getId());
+        return self();
     }
 
     protected static void requireValidAlpha(double alpha) {
