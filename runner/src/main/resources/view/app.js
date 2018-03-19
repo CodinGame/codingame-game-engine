@@ -39,7 +39,7 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
       $scope.drawer = drawer;
       let data = fetchGame().then(data => {
         ctrl.data = data;
-        if (!demo) {
+        if (!demo && !config.demo) {
           loadGame();
         }
       });
