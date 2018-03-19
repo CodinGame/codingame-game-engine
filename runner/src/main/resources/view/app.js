@@ -1,6 +1,7 @@
 import * as config from '../config.js';
 import {Drawer} from '../core/Drawer.js';
 import {ErrorLog} from '../core/ErrorLog.js';
+import {demo} from '../demo.js';
 
 function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, gameManagerFactory, $localStorage) {
   'ngInject';
@@ -33,29 +34,12 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
 
   /////////////////
 
-  async function init() {
-    const demoData = await fetchGame({demo: true});
-
-    if (demoData) {
-      const frames = demoData.views;
-      const agents = demoData.agents;
-      const logo = 'logo.png';
-      Drawer.demo = {
-        playerCount: agents.length,
-        logo,
-        overlayAlpha: 0.2,
-        agents,
-        frames
-      };
-    }
-
-
-
+  function init() {
     drawerFactory.createDrawer(Drawer).then(drawer => {
       $scope.drawer = drawer;
       let data = fetchGame().then(data => {
         ctrl.data = data;
-        if (!Drawer.demo) {
+        if (!demo) {
           loadGame();
         }
       });
@@ -149,30 +133,25 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     }
   }
 
-  function fetchGame({demo} = {demo: false}) {
+  function fetchGame() {
     return new Promise((resolve, reject) => {
       let xhr = new XMLHttpRequest();
       xhr.onload = function() {
         let result = null;
-        if (demo && this.status === 404) {
-          result = null;
-        } else {
-          try {
-            const json = JSON.parse(this.responseText);
-            json.agents.forEach(agent => agent.color = Drawer.playerColors[agent.index]);
-            result = json;
-          } catch (e) {
-            console.error(e);
-            result = null;
-          }
+        try {
+          const json = JSON.parse(this.responseText);
+          json.agents.forEach(agent => agent.color = Drawer.playerColors[agent.index]);
+          result = json
+        } catch (e) {
+          console.error(e);
+          reject(e);
         }
         resolve(result);
       };
-      xhr.open('GET', (demo ? 'demo.json' : 'game.json'), true);
+      xhr.open('GET', 'game.json', true);
       xhr.send();
     });
   }
-
   $scope.selectProgress = 'inactive';
   async function selectReplay() {
     $scope.selectProgress = 'saving';

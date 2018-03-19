@@ -1,17 +1,17 @@
 package com.codingame.gameengine.runner;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.file.CopyOption;
+import java.nio.charset.Charset;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -31,7 +31,6 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
@@ -46,7 +45,6 @@ import io.undertow.server.handlers.resource.FileResourceManager;
 import io.undertow.server.handlers.resource.Resource;
 import io.undertow.server.handlers.resource.ResourceHandler;
 import io.undertow.server.handlers.resource.ResourceSupplier;
-import io.undertow.util.HeaderMap;
 import io.undertow.util.Headers;
 import io.undertow.util.StatusCodes;
 
@@ -94,7 +92,7 @@ class Renderer {
     }
 
     private static List<Path> exportViewToWorkingDir(String sourceFolder, Path targetFolder)
-            throws IOException {
+        throws IOException {
         List<Path> exportedPaths = new ArrayList<>();
 
         Enumeration<URL> resources = ClassLoader.getSystemClassLoader().getResources(sourceFolder);
@@ -128,7 +126,7 @@ class Renderer {
                 try {
                     String targetClassesFolder = "/target/classes/".replace('/', File.separatorChar) + sourceFolder;
                     String resourcesClassesFolder = "/src/main/resources/".replace('/', File.separatorChar)
-                            + sourceFolder;
+                        + sourceFolder;
 
                     String targetPath = new File(url.toURI()).getAbsolutePath();
                     targetPath = targetPath.replace(targetClassesFolder, resourcesClassesFolder);
@@ -162,25 +160,31 @@ class Renderer {
 
             Path origAssetsPath = tmpdir.resolve("assets");
             try {
-                Files.find(origAssetsPath, 100, (p, bfa) -> bfa.isRegularFile()).forEach(f -> {
-                    try {
-                        if (assetsPath != null) {
-                            HashCode hash = com.google.common.io.Files.asByteSource(new File(f.toUri()))
+                Files.find(origAssetsPath, 100, (p, bfa) -> bfa.isRegularFile()).forEach(
+                    f -> {
+                        try {
+                            if (assetsPath != null) {
+                                HashCode hash = com.google.common.io.Files.asByteSource(new File(f.toUri()))
                                     .hash(Hashing.sha256());
-                            String newName = hash.toString() + "."
+                                String newName = hash.toString() + "."
                                     + FilenameUtils.getExtension(f.getFileName().toString());
 
-                            images.addProperty(origAssetsPath.relativize(f).toString(), newName);
-                            Files.copy(f, tmpdir.resolve("hashed_assets").resolve(newName),
-                                    StandardCopyOption.REPLACE_EXISTING);
-                        } else {
-                            images.addProperty(origAssetsPath.relativize(f).toString(),
-                                    tmpdir.relativize(f).toString());
+                                images.addProperty(origAssetsPath.relativize(f).toString(), newName);
+                                Files.copy(
+                                    f, tmpdir.resolve("hashed_assets").resolve(newName),
+                                    StandardCopyOption.REPLACE_EXISTING
+                                );
+                            } else {
+                                images.addProperty(
+                                    origAssetsPath.relativize(f).toString(),
+                                    tmpdir.relativize(f).toString()
+                                );
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                });
+                );
             } catch (NoSuchFileException e) {
                 System.out.println("Directory src/main/resources/view/assets not found.");
             }
@@ -221,6 +225,17 @@ class Renderer {
             throw new RuntimeException("No resources folder found");
         }
 
+        // Create empty demo.js if needed
+        Path sourceFolderPath = new File(System.getProperty("user.dir")).toPath();
+        File demoFile = sourceFolderPath.resolve("src/main/resources/view/demo.js").toFile();
+        if (!demoFile.exists()) {
+            try (PrintWriter out = new PrintWriter(demoFile)) {
+                out.println("export const demo = null;");
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
         return paths;
     }
 
@@ -248,18 +263,20 @@ class Renderer {
 
     private Path exportSourceCode(Path sourceFolderPath, Path zipPath) throws IOException {
         try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipPath.toFile()))) {
-            Files.walkFileTree(sourceFolderPath, new SimpleFileVisitor<Path>() {
-                @Override
-                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                    String relativePath = sourceFolderPath.relativize(file).toString();
-                    if (relativePath.startsWith("config") || relativePath.startsWith("src") || relativePath.equals("pom.xml")) {
-                        zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString().replace('\\', '/')));
-                        Files.copy(file, zos);
-                        zos.closeEntry();
+            Files.walkFileTree(
+                sourceFolderPath, new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                        String relativePath = sourceFolderPath.relativize(file).toString();
+                        if (relativePath.startsWith("config") || relativePath.startsWith("src") || relativePath.equals("pom.xml")) {
+                            zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString().replace('\\', '/')));
+                            Files.copy(file, zos);
+                            zos.closeEntry();
+                        }
+                        return FileVisitResult.CONTINUE;
                     }
-                    return FileVisitResult.CONTINUE;
                 }
-            });
+            );
         }
 
         return zipPath;
@@ -275,57 +292,75 @@ class Renderer {
         }
 
         Undertow server = Undertow.builder()
-                .addHttpListener(port, "localhost")
-                .setHandler(new DisableCacheHandler(Handlers.path(new ResourceHandler(mrs).addWelcomeFiles("test.html"))
-                        .addPrefixPath("/services/", new HttpHandler() {
-                            @Override
-                            public void handleRequest(HttpServerExchange exchange) throws Exception {
-                                Path sourceFolderPath = new File(System.getProperty("user.dir")).toPath();
-                                try {
-                                    if (exchange.getRelativePath().equals("/export")) {
-                                        Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
+            .addHttpListener(port, "localhost")
+            .setHandler(
+                new DisableCacheHandler(
+                    Handlers.path(new ResourceHandler(mrs).addWelcomeFiles("test.html"))
+                        .addPrefixPath(
+                            "/services/", new HttpHandler() {
+                                @Override
+                                public void handleRequest(HttpServerExchange exchange) throws Exception {
+                                    Path sourceFolderPath = new File(System.getProperty("user.dir")).toPath();
+                                    try {
+                                        if (exchange.getRelativePath().equals("/export")) {
+                                            Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
 
-                                        Path zipPath = tmpdir.resolve("source.zip");
+                                            Path zipPath = tmpdir.resolve("source.zip");
 
-                                        checkConfig(sourceFolderPath);
-                                        byte[] data = Files.readAllBytes(exportSourceCode(sourceFolderPath, zipPath));
-                                        exchange.getResponseSender().send(ByteBuffer.wrap(data));
+                                            checkConfig(sourceFolderPath);
+                                            byte[] data = Files.readAllBytes(exportSourceCode(sourceFolderPath, zipPath));
+                                            exchange.getResponseSender().send(ByteBuffer.wrap(data));
 
-                                    } else if (exchange.getRelativePath().equals("/init-config")) {
-                                        if (!sourceFolderPath.resolve("config").toFile().isDirectory()) {
-                                            sourceFolderPath.resolve("config").toFile().mkdir();
+                                        } else if (exchange.getRelativePath().equals("/init-config")) {
+                                            if (!sourceFolderPath.resolve("config").toFile().isDirectory()) {
+                                                sourceFolderPath.resolve("config").toFile().mkdir();
+                                            }
+                                            File configFile = sourceFolderPath.resolve("config/config.ini").toFile();
+                                            if (!configFile.exists()) {
+                                                configFile.createNewFile();
+                                            }
+                                            FileOutputStream configOutput = new FileOutputStream(configFile);
+                                            Properties config = new Properties();
+
+                                            exchange.getQueryParameters().forEach(
+                                                (k, v) -> {
+                                                    config.put(k, v.stream().collect(Collectors.joining(",")));
+                                                }
+                                            );
+
+                                            config.store(configOutput, null);
+                                            exchange.setStatusCode(StatusCodes.FOUND);
+                                            exchange.getResponseHeaders().put(Headers.LOCATION, "/export.html");
+                                            exchange.endExchange();
+                                        } else if (exchange.getRelativePath().equals("/save-replay")) {
+                                            Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
+                                            File demoFile = sourceFolderPath.resolve("src/main/resources/view/demo.js").toFile();
+                                            File gameFile = tmpdir.resolve("game.json").toFile();
+
+                                            try (PrintWriter out = new PrintWriter(demoFile)) {
+                                                out.println("export const demo = ");
+
+                                                List<String> lines = Files.readAllLines(gameFile.toPath());
+                                                for (String line : lines) {
+                                                    out.println(line);
+                                                }
+                                                out.println(";");
+                                            }
+
+                                            exchange.setStatusCode(StatusCodes.OK);
+                                            exchange.endExchange();
                                         }
-                                        File configFile = sourceFolderPath.resolve("config/config.ini").toFile();
-                                        if (!configFile.exists()) {
-                                            configFile.createNewFile();
-                                        }
-                                        FileOutputStream configOutput = new FileOutputStream(configFile);
-                                        Properties config = new Properties();
-
-                                        exchange.getQueryParameters().forEach((k, v) -> {
-                                            config.put(k, v.stream().collect(Collectors.joining(",")));
-                                        });
-
-                                        config.store(configOutput, null);
-                                        exchange.setStatusCode(StatusCodes.FOUND);
-                                        exchange.getResponseHeaders().put(Headers.LOCATION, "/export.html");
-                                        exchange.endExchange();
-                                    } else if (exchange.getRelativePath().equals("/save-replay")) {
-                                        Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
-                                        File demoFile = sourceFolderPath.resolve("src/main/resources/view/demo.json").toFile();
-                                        File gameFile = tmpdir.resolve("game.json").toFile();
-                                        Files.copy(gameFile.toPath(), demoFile.toPath(), StandardCopyOption.REPLACE_EXISTING);                                        
-                                        exchange.setStatusCode(StatusCodes.OK);
-                                        exchange.endExchange();
+                                    } catch (Exception e) {
+                                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                                        exchange.setStatusCode(StatusCodes.BAD_REQUEST);
+                                        exchange.getResponseSender().send(e.getMessage());
                                     }
-                                } catch (Exception e) {
-                                    exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-                                    exchange.setStatusCode(StatusCodes.BAD_REQUEST);
-                                    exchange.getResponseSender().send(e.getMessage());
                                 }
                             }
-                        })))
-                .build();
+                        )
+                )
+            )
+            .build();
         server.start();
     }
 

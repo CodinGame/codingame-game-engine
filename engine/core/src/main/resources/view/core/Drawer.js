@@ -3,11 +3,25 @@ import * as config from '../config.js';
 import {unlerp, fitAspectRatio} from './utils.js';
 import {WIDTH, HEIGHT, BASE_FRAME_DURATION} from './constants.js';
 import {ErrorLog} from '../core/ErrorLog.js';
+import {demo} from '../demo.js'
 
 export class Drawer {
   constructor() {
     this.toDestroy = [];
-    this.demo = Drawer.demo || config.demo;
+
+    if (demo) {
+      const frames = demo.views;
+      const agents = demo.agents;
+      const logo = 'logo.png';
+      this.demo = {
+        playerCount: agents.length,
+        logo,
+        overlayAlpha: 0.2,
+        agents,
+        frames
+      };
+      this.demo.agents.forEach(agent => agent.color = Drawer.playerColors[agent.index]);
+    }
   }
 
   static get requirements() {
@@ -152,12 +166,22 @@ export class Drawer {
 
     if (this.demo) {
       if (this.demo.logo) {
-        const logo = PIXI.Sprite.fromFrame(this.demo.logo);
-        logo.position.set(Drawer.WIDTH / 2, Drawer.HEIGHT / 2);
-        logo.anchor.x = logo.anchor.y = 0.5;
-        logo.baseScale = fitAspectRatio(logo.texture.width, logo.texture.height, 2 * Drawer.WIDTH / 3, Drawer.HEIGHT / 2, 0);
-        scene.addChild(logo);
-        scope.logo = logo;
+        try {
+          const logo = PIXI.Sprite.fromFrame(this.demo.logo);
+          logo.position.set(Drawer.WIDTH / 2, Drawer.HEIGHT / 2);
+          logo.anchor.set(0.5);
+          logo.baseScale = fitAspectRatio(logo.texture.width, logo.texture.height, 2 * Drawer.WIDTH / 3, Drawer.HEIGHT / 2, 0);
+          scene.addChild(logo);
+          scope.logo = logo;
+        } catch (error) {
+          ErrorLog.push({
+            cause: error,
+            message: 'Missing "logo.png" to complete demo.',
+          });
+          scope.logo = new PIXI.Container();
+          scope.logo.baseScale = 1;
+          scene.addChild(scope.logo);
+        }
       }
 
       var darkness = new PIXI.Graphics();
