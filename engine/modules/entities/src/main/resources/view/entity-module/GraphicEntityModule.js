@@ -93,7 +93,7 @@ export class GraphicEntityModule {
   reinitScene(container, canvasData) {
     this.globalData.toPixel = (WIDTH / canvasData.width)* canvasData.oversampling;
     this.globalData.mustResetTree = true;
-    this.container = container;
+    api.container = this.container = container;
     this.entities.forEach((e) => {
       e.init();
     });
