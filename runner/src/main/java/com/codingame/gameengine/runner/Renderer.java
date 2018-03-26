@@ -4,14 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -200,6 +198,15 @@ class Renderer {
         List<Path> paths;
 
         Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
+        
+        
+        // Windows compatibility hack
+        try {
+            tmpdir = tmpdir.toRealPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }        
+        
         deleteFolder(tmpdir.toFile());
         tmpdir.toFile().mkdirs();
 
