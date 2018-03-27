@@ -20,7 +20,7 @@ public abstract class Entity<T extends Entity<?>> {
     private boolean visible = true;
     private double rotation, alpha = 1;
     Group parent;
-    private Shape<?> maskId;
+    Mask mask;
 
     static enum Type {
         CIRCLE, LINE, RECTANGLE, SPRITE, TEXT, GROUP, SPRITEANIMATION
@@ -39,6 +39,7 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Returns a unique identifier for this <code>Entity</code>.
+     * 
      * @return A unique identifier.
      */
     public int getId() {
@@ -48,8 +49,9 @@ public abstract class Entity<T extends Entity<?>> {
     protected void set(String key, Object value, Curve curve) {
         state.put(key, value, Optional.ofNullable(curve).orElse(Curve.DEFAULT));
     }
+
     protected void set(String key, Object value) {
-        set(key, value);
+        set(key, value, null);
     }
 
     abstract Type getType();
@@ -119,7 +121,7 @@ public abstract class Entity<T extends Entity<?>> {
      */
     public T setZIndex(int zIndex) {
         this.zIndex = zIndex;
-        set("zIndex", zIndex, null);
+        set("zIndex", zIndex);
         return self();
     }
 
@@ -275,7 +277,7 @@ public abstract class Entity<T extends Entity<?>> {
      */
     public T setVisible(boolean visible) {
         this.visible = visible;
-        set("visible", visible, null);
+        set("visible", visible);
         return self();
     }
 
@@ -356,11 +358,64 @@ public abstract class Entity<T extends Entity<?>> {
     public boolean isVisible() {
         return visible;
     }
-    
-    private T setMask(Shape<?> shape) {
-        maskId = shape;
-        set("mask", shape == null ? null : shape.getId());
+
+    /**
+     * Sets a given <code>Shape</code> as this <code>Entity</code>'s <code>Mask</code>.
+     * 
+     * @param shape
+     *            the mask.
+     * @return this <code>Entity</code>.
+     */
+    public T setMask(Shape<?> shape) {
+        return saveMask(shape);
+    }
+
+    /**
+     * Sets a given <code>Sprite</code> as this <code>Entity</code>'s <code>Mask</code>.
+     * 
+     * @param sprite
+     *            the mask.
+     * @return this <code>Entity</code>.
+     */
+    public T setMask(Sprite sprite) {
+        return saveMask(sprite);
+    }
+
+    /**
+     * Sets a given <code>SpriteAnimation</code> as this <code>Entity</code>'s <code>Mask</code>.
+     * 
+     * @param animation
+     *            the mask.
+     * @return this <code>Entity</code>.
+     */
+    public T setMask(SpriteAnimation animation) {
+        return saveMask(animation);
+    }
+
+    private T saveMask(Mask entity) {
+        mask = entity;
+        set("mask", entity == null ? -1 : entity.getId());
         return self();
+    }
+
+    /**
+     * Returns this <code>Entity</code>'s <code>Mask</code>.
+     * <p>
+     * </p>
+     * A <code>Mask</code> can be:
+     * <ul>
+     * <li>a <code>Shape</code></li>
+     * <li>a <code>Sprite</code></li>
+     * <li>a <code>SpriteAnimation</code></li>
+     * </ul>
+     * <p>
+     * </p>
+     * Default is null.
+     * 
+     * @return this <code>Entity</code>'s <code>Mask</code>.
+     */
+    public Mask getMask() {
+        return mask;
     }
 
     protected static void requireValidAlpha(double alpha) {

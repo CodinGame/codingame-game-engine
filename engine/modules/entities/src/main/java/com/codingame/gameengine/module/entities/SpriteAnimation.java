@@ -9,7 +9,7 @@ import com.google.inject.Inject;
  * A <code>SpriteAnimation</code> is a graphical entity which displays a sequence of images. You can use this class to animate a sprite based on
  * milliseconds, rather than frame time.
  */
-public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> {
+public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> implements Mask {
 
     @Inject GraphicEntityModule entityModule;
 

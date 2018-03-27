@@ -4,7 +4,7 @@ package com.codingame.gameengine.module.entities;
  * A Sprite is a graphical entity which displays an image. That image must be loaded into the viewer's texture cache, which you can configure by
  * adding files to the <code>assets</code> folder of your game's project.
  */
-public class Sprite extends TextureBasedEntity<Sprite> {
+public class Sprite extends TextureBasedEntity<Sprite> implements Mask {
 
     private String image;
     private Integer baseWidth, baseHeight;
@@ -38,11 +38,11 @@ public class Sprite extends TextureBasedEntity<Sprite> {
     }
 
     /**
-     * Sets the image base width for this <code>Sprite</code>. If not set, the image base width is the real image width. 
+     * Sets the image base width for this <code>Sprite</code>. If not set, the image base width is the real image width.
      * 
      * @param baseWidth
-     *              image width
-     * @return
+     *            image width
+     * @return this <code>Sprite</code>.
      */
     public Sprite setBaseWidth(int baseWidth) {
         this.baseWidth = baseWidth;
@@ -51,11 +51,11 @@ public class Sprite extends TextureBasedEntity<Sprite> {
     }
 
     /**
-     * Sets the image base height for this <code>Sprite</code>. If not set, the image base height is the real image height. 
+     * Sets the image base height for this <code>Sprite</code>. If not set, the image base height is the real image height.
      * 
      * @param baseHeight
-     *              image height
-     * @return
+     *            image height
+     * @return this <code>Sprite</code>.
      */
     public Sprite setBaseHeight(int baseHeight) {
         this.baseHeight = baseHeight;
@@ -74,10 +74,21 @@ public class Sprite extends TextureBasedEntity<Sprite> {
         return image;
     }
 
+    /**
+     * Returns the image base width for this <code>Sprite</code>. If not set, the image base width is the real image width, but this will return null.
+     * 
+     * @return the image base width for this <code>Sprite</code>.
+     */
     public Integer getBaseWidth() {
         return baseWidth;
     }
 
+    /**
+     * Returns the image base height for this <code>Sprite</code>. If not set, the image base height is the real image height, but this will return
+     * null.
+     * 
+     * @return the image base height for this <code>Sprite</code>.
+     */
     public Integer getBaseHeight() {
         return baseHeight;
     }
