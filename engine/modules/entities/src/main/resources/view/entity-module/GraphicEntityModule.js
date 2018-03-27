@@ -16,6 +16,7 @@ export class GraphicEntityModule {
       coeff: 1,
       mustResetTree: true,
       mustResort: true,
+      maskUpdates: {},
       players: [],
       instanceCount: 0,
       atLeastOnePixel: function(width) {
@@ -122,6 +123,16 @@ export class GraphicEntityModule {
       this.resortTree();
       this.globalData.mustResort = false;
     }
+    for (let entityId in this.globalData.maskUpdates) {
+      const entity = this.entities.get(+entityId);
+      const maskId = this.globalData.maskUpdates[entityId];
+      if (maskId === -1) {
+        entity.container.mask = null;
+      } else {
+        entity.container.mask = this.entities.get(maskId).graphics;
+      }
+    }
+    this.globalData.maskUpdates = {};
   }
 
   resortTree() {

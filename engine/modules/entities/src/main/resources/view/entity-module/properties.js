@@ -50,6 +50,7 @@ export const PROPERTIES = {
   strokeColor: colorOpts,
   tint: colorOpts,
 
+  mask: constOpts,
   baseWidth: constOpts,
   baseHeight: constOpts,
   image: stringOpts,

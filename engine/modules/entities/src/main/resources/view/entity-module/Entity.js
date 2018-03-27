@@ -12,7 +12,8 @@ export class Entity {
       zIndex: 0,
       alpha: 1,
       visible: true,
-      rotation: 0
+      rotation: 0,
+      mask: -1
     };
 
     this.states = {};
@@ -99,6 +100,9 @@ export class Entity {
         }
         if (changed.zIndex) {
           globalData.mustResort = true;
+        }
+        if (changed.mask) {
+          globalData.maskUpdates[this.id] = state.mask;
         }
       }
     } else {
