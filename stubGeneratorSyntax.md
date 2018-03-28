@@ -42,7 +42,7 @@ You may assign comments to any of the input variable by adding an **input block*
 read row:int col:int
 write action
 
-INPUT:
+INPUT
 row: The row of the grid containing your unit.
 col: The column of the grid containing your unit.
 ```
@@ -53,7 +53,7 @@ You may assign comments to the unique `write` command by adding an **output bloc
 read row:int col:int
 write action
 
-OUTPUT:
+OUTPUT
 MOVE <row> <col> to change the position of your unit
 ```
 
@@ -64,7 +64,7 @@ This will override the default text which reads _"# Auto-generated code below ai
 read row:int col:int
 write action
 
-STATEMENT:
+STATEMENT
 Move your unit around the grid and win the game!
 ```
 
