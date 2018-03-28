@@ -24,6 +24,14 @@ See [Graphic Entity Module readme](engine/modules/entities/).
 
 ## Configuring your game
 
+
+### Code Stub
+
+You may add to the config/ folder a text file named `stub.txt`. If the contents of this file is a syntaxically valid **CodinGame Stub Generator** input, the IDE will be prefilled with input/output code.
+
+See [Stub Generator Syntax](stubGeneratorSyntax.md) for details.
+
+
 ### Viewer configuration
 
 You can change the default player colors to whatever you wish by adding an export to `config.js`:
@@ -47,10 +55,4 @@ export const gameName = 'MyGame';
 ```
 This doesn't have any effect on user experience yet.
 
-
-### Code Stub
-
-You may add to the config/ folder a text file named `stub.txt`. If the contents of this file is a syntaxically valid **CodinGame Stub Generator** input, the IDE will be prefilled with input/output code.
-
-See [Stub Generator Syntax](stubGeneratorSyntax.md/) for details.
 

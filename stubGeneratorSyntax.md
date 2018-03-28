@@ -5,15 +5,17 @@ The stub generator is the program which will write in every available language t
 
 Each line of the **main block** must contain one of the following commands:
 
-`read <variable sequence>`
-`write <text>`
-`gameloop`
-`loop <amount> <command>`
-`loopline <amount> <variable sequence>`
+* `read <variable sequence>`
+* `write <text>`
+* `gameloop`
+* `loop <amount> <command>`
+* `loopline <amount> <variable sequence>`
 
 A `<variable sequence>` is a sequence of space-separated variable declarations. Variable declaration are as follows:
 
-```[name]:[type]```
+```
+[name]:[type]
+```
 
 where [name] is a valid variable name in **camelCase** and [type] is one of the following:
 
