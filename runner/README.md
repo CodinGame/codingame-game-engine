@@ -63,6 +63,15 @@ gameRunner.addJavaPlayer(Player1.class);
 gameRunner.addJavaPlayer(Player2.class);
 gameRunner.start();
 ```
+
+### Activating game logs
+
+You can view the data that the Referee and the Players send each other by editing the built-in logger's settings.
+To do this, open `log4j2.properties` in the root of your project and replace ```rootLogger.level = warn``` with ```rootLogger.level = info```.
+Additionally, if you would like to see the output of the different modules, you can use:
+`rootLogger.level = trace`.
+
+
 ## Viewing a replay
 
 Once a game is run, files are copied into a temporary folder. A server is started to serve those files on `localhost:8888`.

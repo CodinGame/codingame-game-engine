@@ -18,18 +18,18 @@ Or a more recent version.
 
 ## The Game Manager
 
-Your project should include exactly **one** subclass of `AbstractPlayer` and one class which implements `Referee`.
-Your `Referee` class may then inject (using Guice) a singleton of `GameManager` parametized by your `AbsractPlayer` subclass.
+Your project should include the class `Player` and the class `Referee`.
+Your `Referee` class may then inject (using Guice) a singleton of `GameManager` parametized by your `Player` class.
 
 ```java
-class MyPlayer extends AbstractPlayer {
+class Player extends AbstractPlayer {
     @Override
     public int getExpectedOutputLines() {
         return 1;
     }
 }
 
-public class MyReferee implements Referee {
+public class Referee extends AbstractReferee {
     @Inject private GameManager<MyPlayer> gameManager;
     @Override
     public Properties init(int playerCount, Properties params) {
@@ -45,7 +45,7 @@ public class MyReferee implements Referee {
     }
 }
 ```
-The Game Manager's API will thus work with your `AbstractPlayer` subclass, which you may modify at leisure.
+The Game Manager's API will thus work with your `Player` class, which you may modify at leisure.
 
 # Documentation
 
