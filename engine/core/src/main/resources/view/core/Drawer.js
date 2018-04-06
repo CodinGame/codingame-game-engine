@@ -741,20 +741,20 @@ export class Drawer {
       this.renderer = this.createRenderer(this.initWidth, this.initHeight, canvas);
       var loader = new PIXI.loaders.Loader(resources.baseUrl);
       for (key in resources.images) {
-        loader.add(key, resources.images[key]);
+        loader.add(key, resources.images[key], {crossOrigin: true});
       }
       var i;
       for (i = 0; i < resources.sprites.length; ++i) {
-        loader.add(resources.sprites[i]);
+        loader.add(resources.sprites[i], {crossOrigin: true});
       }
       for (i = 0; i < resources.fonts.length; ++i) {
-        loader.add(resources.fonts[i]);
+        loader.add(resources.fonts[i], {crossOrigin: true});
       }
       for (key in resources.spines) {
-        loader.add(key, resources.spines[key]);
+        loader.add(key, resources.spines[key], {crossOrigin: true});
       }
       for (i = 0; i < resources.others.length; ++i) {
-        loader.add(resources.others[i]);
+        loader.add(resources.others[i], {crossOrigin: true});
       }
 
       if (this.demo) {
