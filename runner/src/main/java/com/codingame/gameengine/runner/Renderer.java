@@ -202,7 +202,7 @@ class Renderer {
         tmpdir.toFile().mkdirs();
         
         // Windows compatibility hack
-        try {    
+        try {
             tmpdir = tmpdir.toRealPath();
         } catch (IOException e) {
             e.printStackTrace();
