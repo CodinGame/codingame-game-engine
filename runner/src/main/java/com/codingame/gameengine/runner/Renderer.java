@@ -198,18 +198,15 @@ class Renderer {
         List<Path> paths;
 
         Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
-        
+        deleteFolder(tmpdir.toFile());
+        tmpdir.toFile().mkdirs();
         
         // Windows compatibility hack
-        try {
-            tmpdir.toFile().mkdirs();
+        try {    
             tmpdir = tmpdir.toRealPath();
         } catch (IOException e) {
             e.printStackTrace();
-        }        
-        
-        deleteFolder(tmpdir.toFile());
-        tmpdir.toFile().mkdirs();
+        }
 
         if (jsonResult != null) {
             File game = tmpdir.resolve("game.json").toFile();
