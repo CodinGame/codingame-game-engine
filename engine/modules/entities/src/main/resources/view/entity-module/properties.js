@@ -19,7 +19,7 @@ const angleOpts = {
   type: Number,
   lerpMethod: lerpAngle,
   convert(value) {
-    return Math.radians(value);
+    return value * Math.PI / 180;
   }
 };
 
