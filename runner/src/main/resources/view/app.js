@@ -64,7 +64,7 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
   }
 
   function onUpdate(frame, progress, playing, isSubFrame, isTurnBased, atEnd) {
-    if (frame !== currentFrame) {
+    if (ctrl.gameInfo.frames[frame].keyframe && frame !== currentFrame) {
       $timeout(() => {
         currentFrame = frame;
         onFrameChange(frame);
