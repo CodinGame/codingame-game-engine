@@ -254,7 +254,7 @@ public final class GameManager<T extends AbstractPlayer> {
             log.warn("Warning: the amount of data sent to the viewer is too big. Please try to optimize your code to send less data.");
         }
 
-        log.trace(viewData);
+        log.info(viewData);
         out.println(viewData);
 
         frame++;
