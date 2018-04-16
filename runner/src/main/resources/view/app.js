@@ -95,11 +95,15 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
         }
       }
       $scope.referee.stdout = $scope.referee.stdout || ctrl.data.outputs.referee[startFrame];
-      $scope.summary = ctrl.data.summaries[startFrame];
+      $scope.summary = convertNameTokens(ctrl.data.summaries[startFrame]);
       startFrame++;
     }
   }
 
+  function convertNameTokens(value) {
+    return value && value.replace(/\$(\d)/g, 'Player $1');
+  }
+  
   function convertFrameFormat(data) {
     const frames = data.views.map(v => {
       let f = v.split('\n');
