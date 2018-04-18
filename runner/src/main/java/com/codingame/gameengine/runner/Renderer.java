@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.JarURLConnection;
@@ -32,7 +34,13 @@ import org.apache.commons.io.FilenameUtils;
 
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 import io.undertow.Handlers;
 import io.undertow.Undertow;
@@ -143,40 +151,76 @@ class Renderer {
         return exportedPaths;
     }
 
+    private static String hashAsset(Path asset) throws IOException {
+        HashCode hash = com.google.common.io.Files.asByteSource(new File(asset.toUri()))
+            .hash(Hashing.sha256());
+        String newName = hash.toString() + "."
+            + FilenameUtils.getExtension(asset.getFileName().toString());
+        return newName;
+
+    }
+
     private static void generateAssetsFile(Path tmpdir, String assetsPath) {
-        if (assetsPath != null) {
+        boolean assetsNeedHashing = assetsPath != null;
+
+        if (assetsNeedHashing) {
             tmpdir.resolve("hashed_assets").toFile().mkdirs();
         }
         File assets = tmpdir.resolve("assets.js").toFile();
         try (PrintWriter out = new PrintWriter(assets)) {
             JsonObject jsonAssets = new JsonObject();
-            if (assetsPath != null) {
+            if (assetsNeedHashing) {
                 jsonAssets.addProperty("baseUrl", assetsPath);
             }
             JsonObject images = new JsonObject();
+            JsonArray sprites = new JsonArray();
             jsonAssets.add("images", images);
+            jsonAssets.add("sprites", sprites);
 
             Path origAssetsPath = tmpdir.resolve("assets");
             try {
                 Files.find(origAssetsPath, 100, (p, bfa) -> bfa.isRegularFile()).forEach(
                     f -> {
                         try {
-                            if (assetsPath != null) {
-                                HashCode hash = com.google.common.io.Files.asByteSource(new File(f.toUri()))
-                                    .hash(Hashing.sha256());
-                                String newName = hash.toString() + "."
-                                    + FilenameUtils.getExtension(f.getFileName().toString());
+                            if (isSpriteJson(f)) {
+                                JsonParser parser = new JsonParser();
+                                JsonElement jsonElement = parser.parse(new FileReader(f.toString()));
+                                JsonObject jsonObject = jsonElement.getAsJsonObject();
+                                String image = jsonObject.getAsJsonObject("meta").get("image").getAsString();
+                                Path imagePath = origAssetsPath.resolve(image);
 
-                                images.addProperty(origAssetsPath.relativize(f).toString(), newName);
-                                Files.copy(
-                                    f, tmpdir.resolve("hashed_assets").resolve(newName),
-                                    StandardCopyOption.REPLACE_EXISTING
-                                );
+                                String jsonToWriteTo = null;
+                                if (assetsNeedHashing) {
+                                    String hashedImageName = hashAsset(imagePath);
+                                    jsonObject.getAsJsonObject("meta").add("image", new JsonPrimitive(hashedImageName));
+                                    String newName = hashAsset(f);
+                                    jsonToWriteTo = tmpdir.resolve("hashed_assets").resolve(newName).toString();
+                                    Files.createDirectories(tmpdir.resolve("hashed_assets"));
+                                    sprites.add(newName);
+                                } else {
+                                    String relativeImagePath = tmpdir.relativize(imagePath).toString();
+                                    jsonObject.getAsJsonObject("meta").add("image", new JsonPrimitive(relativeImagePath));
+                                    jsonToWriteTo = f.toString();
+                                    sprites.add(tmpdir.relativize(f).toString());
+                                }
+                                try (FileWriter writer = new FileWriter(jsonToWriteTo)) {
+                                    Gson gson = new GsonBuilder().create();
+                                    gson.toJson(jsonObject, writer);
+                                }
                             } else {
-                                images.addProperty(
-                                    origAssetsPath.relativize(f).toString(),
-                                    tmpdir.relativize(f).toString()
-                                );
+                                if (assetsNeedHashing) {
+                                    String newName = hashAsset(f);
+                                    images.addProperty(origAssetsPath.relativize(f).toString(), newName);
+                                    Files.copy(
+                                        f, tmpdir.resolve("hashed_assets").resolve(newName),
+                                        StandardCopyOption.REPLACE_EXISTING
+                                    );
+                                } else {
+                                    images.addProperty(
+                                        origAssetsPath.relativize(f).toString(),
+                                        tmpdir.relativize(f).toString()
+                                    );
+                                }
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -194,13 +238,17 @@ class Renderer {
         }
     }
 
+    private static boolean isSpriteJson(Path f) {
+        return "json".equals(FilenameUtils.getExtension(f.toString()));
+    }
+
     public static List<Path> generateView(String jsonResult, String assetsPath) {
         List<Path> paths;
 
         Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
         deleteFolder(tmpdir.toFile());
         tmpdir.toFile().mkdirs();
-        
+
         // Windows compatibility hack
         try {
             tmpdir = tmpdir.toRealPath();
@@ -370,7 +418,7 @@ class Renderer {
     }
 
     public void render(int playerCount, String jsonResult) {
-        List<Path> paths = generateView(jsonResult, null);
+        List<Path> paths = generateView(jsonResult, "http://localhost:8888/hashed_assets/");
         serveHTTP(paths);
     }
 }
