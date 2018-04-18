@@ -418,7 +418,7 @@ class Renderer {
     }
 
     public void render(int playerCount, String jsonResult) {
-        List<Path> paths = generateView(jsonResult, "http://localhost:8888/hashed_assets/");
+        List<Path> paths = generateView(jsonResult, null);
         serveHTTP(paths);
     }
 }
