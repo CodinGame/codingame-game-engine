@@ -20,10 +20,14 @@ export class Drawer {
         agents,
         frames
       };
+      if (config.overlayAlpha || config.overlayAlpha === 0) {
+        this.demo.overlayAlpha = config.overlayAlpha;
+      }
       this.demo.agents.forEach(agent => agent.color = Drawer.playerColors[agent.index]);
     } else {
       this.demo = config.demo;
     }
+    debugger
   }
 
   static get requirements() {
