@@ -27,7 +27,6 @@ export class Drawer {
     } else {
       this.demo = config.demo;
     }
-    debugger
   }
 
   static get requirements() {
