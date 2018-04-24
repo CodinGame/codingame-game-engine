@@ -201,7 +201,7 @@ class Renderer {
                                     String relativeImagePath = tmpdir.relativize(imagePath).toString();
                                     jsonObject.getAsJsonObject("meta").add("image", new JsonPrimitive(relativeImagePath));
                                     jsonToWriteTo = f.toString();
-                                    sprites.add(tmpdir.relativize(f).toString());
+                                    sprites.add(tmpdir.relativize(f).toString().replace("\\", "/"));
                                 }
                                 try (FileWriter writer = new FileWriter(jsonToWriteTo)) {
                                     Gson gson = new GsonBuilder().create();
@@ -218,7 +218,7 @@ class Renderer {
                                 } else {
                                     images.addProperty(
                                         origAssetsPath.relativize(f).toString(),
-                                        tmpdir.relativize(f).toString()
+                                        tmpdir.relativize(f).toString().replace("\\", "/")
                                     );
                                 }
                             }
