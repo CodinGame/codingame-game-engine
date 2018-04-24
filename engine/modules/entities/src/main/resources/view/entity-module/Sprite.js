@@ -1,6 +1,6 @@
-import { TextureBasedEntity } from './TextureBasedEntity.js';
-import { ErrorLog } from '../core/ErrorLog.js';
-import { MissingImageError } from './errors/MissingImageError.js';
+import {TextureBasedEntity} from './TextureBasedEntity.js';
+import {ErrorLog} from '../core/ErrorLog.js';
+import {MissingImageError} from './errors/MissingImageError.js';
 
 export class Sprite extends TextureBasedEntity {
 
@@ -11,6 +11,7 @@ export class Sprite extends TextureBasedEntity {
       baseWidth: null,
       baseHeight: null,
     });
+    this.missingTextures = {};
   }
 
   initDisplay() {
@@ -28,7 +29,10 @@ export class Sprite extends TextureBasedEntity {
       try {
         this.graphics.texture = PIXI.Texture.fromFrame(state.image);
       } catch (error) {
-        ErrorLog.push(new MissingImageError(state.image, error));
+        if (!this.missingTextures[state.image]) {
+          this.missingTextures[state.image] = true;
+          ErrorLog.push(new MissingImageError(state.image, error));
+        }
       }
     }
     if (changed.baseWidth) {
