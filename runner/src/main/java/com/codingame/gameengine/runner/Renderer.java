@@ -21,8 +21,12 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -59,6 +63,7 @@ class Renderer {
 
     private static final int MIN_PLAYERS = 1;
     private static final int MAX_PLAYERS = 8;
+    private static final Pattern HTML_IMG_MARKER = Pattern.compile("<\\s*img [^\\>]*src\\s*=\\s*([\"\\'])(?<source>.*?)\\1");
 
     public class MultipleResourceSupplier implements ResourceSupplier {
 
@@ -317,13 +322,50 @@ class Renderer {
             checkBoss(gameConfig, questionConfig, tag, exportReport);
 
             //Check League popups
-            checkLeaguePopups(gameConfig, questionConfig, tag, exportReport);
+            if (gameConfig.isLeaguesDetected()) {
+                checkLeaguePopups(gameConfig, questionConfig, tag, exportReport);
+            }
         }
 
     }
 
     private void checkLeaguePopups(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+        if (!questionConfig.getWelcomeLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
+            || questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()) {
+            exportReport.addItem(
+                ReportItemType.WARNING, tag + "Missing welcome_"
+                    + Constants.LANGUAGE_CODE[Constants.LANGUAGE_ID_ENGLISH - 1] + ".html file."
+            );
+        } else {
+            for (int languageId : questionConfig.getWelcomeLanguageMap().keySet()) {
+                //Avoid checking the same popup twice if duplicated
+                if (languageId != Constants.LANGUAGE_ID_ENGLISH
+                    && questionConfig.getWelcomeLanguageMap().get(languageId)
+                        .equals(questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH))) {
+                    continue;
+                }
 
+                //List of all images used in the welcome popup
+                Matcher imageMatcher = HTML_IMG_MARKER.matcher(questionConfig.getWelcomeLanguageMap().get(languageId));
+                Set<String> imagesName = new HashSet<>();
+
+                while (imageMatcher.find()) {
+                    imagesName.add(imageMatcher.group("source"));
+                }
+
+                //Substract all found images to present ones: elements left in the list do not exist in config
+                imagesName.removeAll(
+                    questionConfig.getWelcomeImagesList().stream().map(f -> f.getName()).collect(Collectors.toSet())
+                );
+
+                for (String imageName : imagesName) {
+                    exportReport.addItem(
+                        ReportItemType.WARNING, tag + "File " + imageName + " is used in welcome_"
+                            + Constants.LANGUAGE_CODE[languageId - 1] + ".html but is missing."
+                    );
+                }
+            }
+        }
     }
 
     private void checkBoss(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
