@@ -1,7 +1,6 @@
 package com.codingame.gameengine.runner;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -11,7 +10,6 @@ import java.io.PrintWriter;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -21,6 +19,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
@@ -32,6 +31,8 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
+import com.codingame.gameengine.runner.ConfigHelper.GameConfig;
+import com.codingame.gameengine.runner.ConfigHelper.QuestionConfig;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
@@ -55,6 +56,9 @@ import io.undertow.util.Headers;
 import io.undertow.util.StatusCodes;
 
 class Renderer {
+
+    private static final int MIN_PLAYERS = 1;
+    private static final int MAX_PLAYERS = 8;
 
     public class MultipleResourceSupplier implements ResourceSupplier {
 
@@ -292,25 +296,81 @@ class Renderer {
         return paths;
     }
 
-    private void checkConfig(Path sourceFolderPath) throws IOException {
-        if (!sourceFolderPath.resolve("config").toFile().isDirectory()) {
-            throw new RuntimeException("Missing config directory.");
+    private void checkConfig(Path sourceFolderPath, ExportReport exportReport) throws IOException {
+        ConfigHelper configHelper = new ConfigHelper();
+        GameConfig gameConfig = configHelper.findConfig(sourceFolderPath.resolve("config"));
+
+        for (String league : gameConfig.getQuestionsConfig().keySet()) {
+            QuestionConfig questionConfig = gameConfig.getQuestionsConfig().get(league);
+            String tag = league + (league.isEmpty() ? "" : ": ");
+
+            //Check config.ini
+            checkConfigIni(gameConfig, questionConfig, tag, exportReport);
+
+            //Check stub
+            checkStub(gameConfig, questionConfig, tag, exportReport);
+
+            //Check statement
+            checkStatement(gameConfig, questionConfig, tag, exportReport);
+
+            //Check Boss
+            checkBoss(gameConfig, questionConfig, tag, exportReport);
+
+            //Check League popups
+            checkLeaguePopups(gameConfig, questionConfig, tag, exportReport);
         }
-        File configFile = sourceFolderPath.resolve("config/config.ini").toFile();
-        if (!sourceFolderPath.resolve("config/config.ini").toFile().isFile()) {
-            throw new RuntimeException("Missing config.ini file.");
-        }
-        FileInputStream configInput = new FileInputStream(configFile);
-        Properties config = new Properties();
-        config.load(configInput);
-        if (!config.containsKey("title")) {
-            throw new RuntimeException("Missing title property in config.ini.");
-        }
-        if (!config.containsKey("min_players")) {
-            throw new RuntimeException("Missing min_players property in config.ini.");
-        }
-        if (!config.containsKey("max_players")) {
-            throw new RuntimeException("Missing max_players property in config.ini.");
+
+    }
+
+    private void checkLeaguePopups(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+
+    }
+
+    private void checkBoss(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+
+    }
+
+    private void checkStatement(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+
+    }
+
+    private void checkStub(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+
+    }
+
+    private void checkConfigIni(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+        if (!questionConfig.isConfigDetected()) {
+            throw new RuntimeException(tag + "Missing config.ini file");
+        } else if (gameConfig.getTitle() == null || gameConfig.getTitle().isEmpty()) {
+            throw new RuntimeException(tag + "Missing title property in config.ini.");
+        } else if (questionConfig.getMinPlayers() == null) {
+            throw new RuntimeException(tag + "Missing min_players property in config.ini.");
+        } else if (questionConfig.getMaxPlayers() == null) {
+            throw new RuntimeException(tag + "Missing max_players property in config.ini.");
+        } else {
+            if (questionConfig.getMinPlayers() < MIN_PLAYERS) {
+                exportReport.addItem(
+                    ReportItemType.ERROR, tag + "Min players ("
+                        + questionConfig.getMinPlayers()
+                        + ") should be greater or equal to " + MIN_PLAYERS + "."
+                );
+            }
+            if (questionConfig.getMaxPlayers() < questionConfig.getMinPlayers()) {
+                exportReport.addItem(
+                    ReportItemType.ERROR, tag + "Max players ("
+                        + questionConfig.getMaxPlayers()
+                        + ") should be greater or equal to min players ("
+                        + questionConfig.getMinPlayers()
+                        + ")."
+                );
+            }
+            if (questionConfig.getMaxPlayers() > MAX_PLAYERS) {
+                exportReport.addItem(
+                    ReportItemType.ERROR, tag + "Max players ("
+                        + questionConfig.getMaxPlayers()
+                        + ") should be lower or equal to " + MAX_PLAYERS + "."
+                );
+            }
         }
     }
 
@@ -360,9 +420,14 @@ class Renderer {
 
                                             Path zipPath = tmpdir.resolve("source.zip");
 
-                                            checkConfig(sourceFolderPath);
-                                            byte[] data = Files.readAllBytes(exportSourceCode(sourceFolderPath, zipPath));
-                                            exchange.getResponseSender().send(ByteBuffer.wrap(data));
+                                            ExportReport exportReport = new ExportReport();
+                                            checkConfig(sourceFolderPath, exportReport);
+                                            if (exportReport.getExportStatus() == ExportStatus.SUCCESS) {
+                                                byte[] data = Files.readAllBytes(exportSourceCode(sourceFolderPath, zipPath));
+                                                exportReport.setData(Base64.getEncoder().encodeToString(data));
+                                            }
+                                            String jsonExportReport = new Gson().toJson(exportReport);
+                                            exchange.getResponseSender().send(jsonExportReport);
 
                                         } else if (exchange.getRelativePath().equals("/init-config")) {
                                             if (!sourceFolderPath.resolve("config").toFile().isDirectory()) {
@@ -383,7 +448,7 @@ class Renderer {
 
                                             config.store(configOutput, null);
                                             exchange.setStatusCode(StatusCodes.FOUND);
-                                            exchange.getResponseHeaders().put(Headers.LOCATION, "/export.html");
+                                            exchange.getResponseHeaders().put(Headers.LOCATION, "/");
                                             exchange.endExchange();
                                         } else if (exchange.getRelativePath().equals("/save-replay")) {
                                             Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
