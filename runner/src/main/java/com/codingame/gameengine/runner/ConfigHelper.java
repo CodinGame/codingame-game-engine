@@ -61,6 +61,7 @@ public class ConfigHelper {
 
     public static class QuestionConfig {
         private String title;
+        private boolean configDetected;
         private Map<Integer, String> statementsLanguageMap = new HashMap<Integer, String>();
         private Map<Integer, String> welcomeLanguageMap = new HashMap<Integer, String>();
         private List<File> welcomeImagesList = new ArrayList<>();
@@ -141,6 +142,14 @@ public class ConfigHelper {
 
         public void setStubGenerator(String stubGenerator) {
             this.stubGenerator = stubGenerator;
+        }
+
+        public boolean isConfigDetected() {
+            return configDetected;
+        }
+
+        public void setConfigDetected(boolean configDetected) {
+            this.configDetected = configDetected;
         }
 
         public void merge(QuestionConfig defaultConfig) {
@@ -288,7 +297,10 @@ public class ConfigHelper {
                     String.format("%s - %s", defaultConfig.title, leagueKey)
                 );
                 questionConfig.merge(defaultConfig);
+                questionConfig.configDetected = isPresentConfigIni(gameConfig, questionConfig);
             }
+        } else {
+            defaultConfig.configDetected = isPresentConfigIni(gameConfig, defaultConfig);
         }
 
         // copy english statement & welcome to french if not translated
@@ -301,5 +313,10 @@ public class ConfigHelper {
         });
 
         return gameConfig;
+    }
+
+    private boolean isPresentConfigIni(GameConfig gameConfig, QuestionConfig questionConfig) {
+        return gameConfig.getTitle() != null
+            || questionConfig.minPlayers != null || questionConfig.maxPlayers != null;
     }
 }
