@@ -331,13 +331,14 @@ class Renderer {
     }
 
     private void checkStatement(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
-        if (!questionConfig.getStatementsLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)) {
+        if (!questionConfig.getStatementsLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
+            || questionConfig.getStatementsLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()) {
             exportReport.addItem(ReportItemType.ERROR, tag + "Missing statement_en.html file. An English statement is mandatory.");
         }
     }
 
     private void checkStub(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
-        if (questionConfig.getStubGenerator() == null) {
+        if (questionConfig.getStubGenerator() == null || questionConfig.getStubGenerator().isEmpty()) {
             exportReport.addItem(
                 ReportItemType.WARNING, tag + "Missing stub.txt file.",
                 "https://github.com/CodinGame/codingame-game-engine/blob/master/stubGeneratorSyntax.md"
