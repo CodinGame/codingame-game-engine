@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -311,6 +312,9 @@ public class ConfigHelper {
             if (welcomeEn != null)
                 c.getWelcomeLanguageMap().putIfAbsent(Constants.LANGUAGE_ID_FRENCH, welcomeEn);
         });
+
+        //Sort leagues alphabetically
+        gameConfig.setQuestionConfigs(new TreeMap<>(questionsConfig));
 
         return gameConfig;
     }
