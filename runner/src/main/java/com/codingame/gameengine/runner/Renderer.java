@@ -335,7 +335,14 @@ class Renderer {
     }
 
     private void checkStub(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
-
+        if (questionConfig.getStubGenerator() == null) {
+            exportReport.addItem(
+                ReportItemType.WARNING, tag + "Missing stub.txt file.",
+                "https://github.com/CodinGame/codingame-game-engine/blob/master/stubGeneratorSyntax.md"
+            );
+        } else {
+            exportReport.getStubs().put(tag, questionConfig.getStubGenerator());
+        }
     }
 
     private void checkConfigIni(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
