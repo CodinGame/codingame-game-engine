@@ -327,7 +327,9 @@ class Renderer {
     }
 
     private void checkBoss(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
-
+        if (questionConfig.getAiCode() == null || questionConfig.getAiCode().isEmpty()) {
+            exportReport.addItem(ReportItemType.ERROR, tag + "Missing Boss.* file.");
+        }
     }
 
     private void checkStatement(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
