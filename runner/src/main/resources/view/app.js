@@ -180,7 +180,7 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
   $scope.showConfigForm = false;
   async function exportZip() {
     const data = await fetch('/services/export');
-    if (data.status >= 400 && data.status < 500) {
+    if (data.status === 422) {
       const text = await data.text();
       $scope.formStatement = text;
       $scope.showConfigForm = true;

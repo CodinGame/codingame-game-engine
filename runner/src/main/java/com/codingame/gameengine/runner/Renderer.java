@@ -303,7 +303,7 @@ class Renderer {
         return paths;
     }
 
-    private void checkConfig(Path sourceFolderPath, ExportReport exportReport) throws IOException {
+    private void checkConfig(Path sourceFolderPath, ExportReport exportReport) throws IOException, MissingConfigException {
         ConfigHelper configHelper = new ConfigHelper();
         GameConfig gameConfig = configHelper.findConfig(sourceFolderPath.resolve("config"));
 
@@ -394,15 +394,15 @@ class Renderer {
         }
     }
 
-    private void checkConfigIni(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+    private void checkConfigIni(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) throws MissingConfigException {
         if (!questionConfig.isConfigDetected()) {
-            throw new RuntimeException(tag + "Missing config.ini file");
+            throw new MissingConfigException(tag + "Missing config.ini file");
         } else if (gameConfig.getTitle() == null || gameConfig.getTitle().isEmpty()) {
-            throw new RuntimeException(tag + "Missing title property in config.ini.");
+            throw new MissingConfigException(tag + "Missing title property in config.ini.");
         } else if (questionConfig.getMinPlayers() == null) {
-            throw new RuntimeException(tag + "Missing min_players property in config.ini.");
+            throw new MissingConfigException(tag + "Missing min_players property in config.ini.");
         } else if (questionConfig.getMaxPlayers() == null) {
-            throw new RuntimeException(tag + "Missing max_players property in config.ini.");
+            throw new MissingConfigException(tag + "Missing max_players property in config.ini.");
         } else {
             if (questionConfig.getMinPlayers() < MIN_PLAYERS) {
                 exportReport.addItem(
@@ -527,11 +527,19 @@ class Renderer {
                                             exchange.setStatusCode(StatusCodes.OK);
                                             exchange.endExchange();
                                         }
+                                    } catch (MissingConfigException e) {
+                                        sendException(exchange, e, StatusCodes.UNPROCESSABLE_ENTITY);
+                                        exchange.endExchange();
                                     } catch (Exception e) {
-                                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-                                        exchange.setStatusCode(StatusCodes.BAD_REQUEST);
-                                        exchange.getResponseSender().send(e.getMessage());
+                                        sendException(exchange, e, StatusCodes.BAD_REQUEST);
+                                        exchange.endExchange();
                                     }
+                                }
+
+                                private void sendException(HttpServerExchange exchange, Exception e, int statusCode) {
+                                    exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                                    exchange.setStatusCode(statusCode);
+                                    exchange.getResponseSender().send(e.getMessage());
                                 }
                             }
                         )
