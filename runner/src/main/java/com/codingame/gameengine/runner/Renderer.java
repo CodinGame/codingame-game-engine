@@ -21,8 +21,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -465,6 +467,7 @@ class Renderer {
                     Handlers.path(new ResourceHandler(mrs).addWelcomeFiles("test.html"))
                         .addPrefixPath(
                             "/services/", new HttpHandler() {
+                                @SuppressWarnings("unchecked")
                                 @Override
                                 public void handleRequest(HttpServerExchange exchange) throws Exception {
                                     Path sourceFolderPath = new File(System.getProperty("user.dir")).toPath();
@@ -494,11 +497,13 @@ class Renderer {
                                             FileOutputStream configOutput = new FileOutputStream(configFile);
                                             Properties config = new Properties();
 
-                                            exchange.getQueryParameters().forEach(
-                                                (k, v) -> {
-                                                    config.put(k, v.stream().collect(Collectors.joining(",")));
-                                                }
-                                            );
+                                            exchange.getRequestReceiver().receiveFullString((e, data) -> {
+                                                Map<String, Object> configResponse = new HashMap<>();
+                                                configResponse = (Map<String, Object>) new Gson().fromJson(data, configResponse.getClass());
+                                                configResponse.forEach((k, v) -> {
+                                                    config.put(k, v.toString());
+                                                });
+                                            });
 
                                             config.store(configOutput, null);
                                             exchange.setStatusCode(StatusCodes.FOUND);
