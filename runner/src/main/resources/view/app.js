@@ -2,6 +2,7 @@ import * as config from '../config.js';
 import {Drawer} from '../core/Drawer.js';
 import {ErrorLog} from '../core/ErrorLog.js';
 import {demo} from '../demo.js';
+import Parser from './lib/Parser.js';
 
 function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, gameManagerFactory, $localStorage) {
   'ngInject';
@@ -22,6 +23,9 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
   }).gameParams;
   $scope.loadGame = loadGame;
   $scope.selectReplay = selectReplay;
+  $scope.exportZip = exportZip;
+  $scope.reportItems = {};
+  $scope.closeReportPopup = closeReportPopup;
 
   $interval(checkSize, 1000);
 
@@ -162,6 +166,57 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     const response = await fetch('/services/save-replay');
     $scope.selectProgress = 'complete';
   }
+
+  function closeReportPopup() {
+    $scope.showExport = false;
+  }
+
+  $scope.showExport = false;
+  async function exportZip() {
+    const data = await fetch('/services/export');
+    if (data.status >= 400 && data.status < 500) {
+      const text = await data.text();
+      $scope.formStatement = text;
+      $scope.showConfigForm = true;
+    } else {
+      const jsonStr = await data.text();
+      var jsonObj = JSON.parse(jsonStr);
+
+      var parser = new Parser();
+      for (var stub in jsonObj.stubs) {
+        try {
+          parser.parse(jsonObj.stubs[stub], 0);
+        } catch (e) {
+          jsonObj.reportItems.push({ "type": "WARNING", "message": stub, "details": { "name": e.name, "params": e.params } });
+        }
+      }
+
+      if (jsonObj.exportStatus === "SUCCESS") {
+        jsonObj.reportItems.push({ "type": "SUCCESS", "message": "Export success." });
+        var url = window.URL.createObjectURL(new Blob(
+          _base64ToArrayBuffer(jsonObj.data)));
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = "export.zip";
+        a.click();
+      } else {
+        jsonObj.reportItems.push({ "type": "FAIL", "message": "Export fail." });
+      }
+      $scope.reportItems = jsonObj.reportItems;
+      $scope.showExport = true;
+    }
+  }
+
+  function _base64ToArrayBuffer(base64) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
+    }
+    return [bytes];
+  }
+
 }
 
 angular.module('player').controller('PlayerCtrl', PlayerCtrl);
