@@ -501,6 +501,10 @@ class Renderer {
                                                 Map<String, Object> configResponse = new HashMap<>();
                                                 configResponse = (Map<String, Object>) new Gson().fromJson(data, configResponse.getClass());
                                                 configResponse.forEach((k, v) -> {
+                                                    //Response returns Double values for number fields in the form
+                                                    if(v instanceof Double) {
+                                                        v = ((Double) v).intValue();
+                                                    }
                                                     config.put(k, v.toString());
                                                 });
                                             });

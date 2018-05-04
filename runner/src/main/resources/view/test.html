@@ -243,28 +243,28 @@
 
 		<div ng-show="showConfigForm" class="report-popup-wrapper">
 			<div class="form-popup">
-				<form novalidate id="form">
+				<form id="form" name="form">
 					<p>{{formStatement}}</p>
 					<p>
 						<label for="title">Title*</label>
 					</p>
 					<p>
-						<input required="required" type="text" ng-model="config.title" />
+						<input required type="text" ng-model="config.title" />
 					</p>
 					<p>
 						<label for="min_players">Min players*</label>
 					</p>
 					<p>
-						<input required="required" type="number" min="1" max="8" ng-model="config.min_players" ng-pattern="[1-8]"/>
+						<input required type="number" min="1" max="8" ng-model="config.min_players" step="1"/>
 					</p>
 					<p>
 						<label for="max_players">Max players*</label>
 					</p>
 					<p>
-						<input required="required" type="number" min="1" max="8" ng-model="config.max_players" ng-pattern="[1-8]"/>
+						<input required type="number" min="1" max="8" ng-model="config.max_players" step="1"/>
 					</p>
 					<div class="default-button-wrapper">
-						<button class="default-button" type="submit" ng-click="submitConfig(config)">Submit config</button>
+						<button class="default-button" type="submit" ng-click="submitConfig(form.$valid, config)">Submit config</button>
 					</div>
 				</form>
 			</div>

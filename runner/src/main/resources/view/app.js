@@ -223,8 +223,10 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     return [bytes];
   }
 
-
-  async function submitConfig(config){
+  async function submitConfig(valid, config){
+    if(!valid){
+      return;
+    }
     await fetch('/services/init-config', 
     { 
       body: JSON.stringify(config), 
