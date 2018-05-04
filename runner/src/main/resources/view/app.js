@@ -26,6 +26,7 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
   $scope.exportZip = exportZip;
   $scope.reportItems = {};
   $scope.closeReportPopup = closeReportPopup;
+  $scope.submitConfig = submitConfig;
 
   $interval(checkSize, 1000);
 
@@ -171,7 +172,12 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     $scope.showExport = false;
   }
 
+  function closeConfigForm() {
+    $scope.showConfigForm = false;
+  }
+
   $scope.showExport = false;
+  $scope.showConfigForm = false;
   async function exportZip() {
     const data = await fetch('/services/export');
     if (data.status >= 400 && data.status < 500) {
@@ -217,6 +223,16 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     return [bytes];
   }
 
+
+  async function submitConfig(config){
+    await fetch('/services/init-config', 
+    { 
+      body: JSON.stringify(config), 
+      method: 'POST'
+    });
+    closeConfigForm();
+    exportZip();
+  }
 }
 
 angular.module('player').controller('PlayerCtrl', PlayerCtrl);
