@@ -137,10 +137,13 @@
 			border-color: white;
 		}
 
-		.default-button-wrapper {
+		.default-button-wrapper, .load-button-wrapper {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+		}
+
+		.load-button-wrapper {
 			height: 100px;
 		}
 
@@ -293,7 +296,7 @@
 						game-params="gameParams"></cg-player>
 		</div>
 
-		<div class="default-button-wrapper" ng-if="!gameLoaded">
+		<div class="default-button-wrapper load-button-wrapper" ng-if="!gameLoaded">
 			<button class="default-button" ng-click="loadGame()">Load game</button>
 		</div>
 
