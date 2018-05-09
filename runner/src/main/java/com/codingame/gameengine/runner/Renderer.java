@@ -21,10 +21,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -39,6 +37,7 @@ import org.apache.commons.io.FilenameUtils;
 
 import com.codingame.gameengine.runner.ConfigHelper.GameConfig;
 import com.codingame.gameengine.runner.ConfigHelper.QuestionConfig;
+import com.codingame.gameengine.runner.dto.ConfigResponseDto;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
@@ -467,7 +466,6 @@ class Renderer {
                     Handlers.path(new ResourceHandler(mrs).addWelcomeFiles("test.html"))
                         .addPrefixPath(
                             "/services/", new HttpHandler() {
-                                @SuppressWarnings("unchecked")
                                 @Override
                                 public void handleRequest(HttpServerExchange exchange) throws Exception {
                                     Path sourceFolderPath = new File(System.getProperty("user.dir")).toPath();
@@ -498,15 +496,10 @@ class Renderer {
                                             Properties config = new Properties();
 
                                             exchange.getRequestReceiver().receiveFullString((e, data) -> {
-                                                Map<String, Object> configResponse = new HashMap<>();
-                                                configResponse = (Map<String, Object>) new Gson().fromJson(data, configResponse.getClass());
-                                                configResponse.forEach((k, v) -> {
-                                                    //Response returns Double values for number fields in the form
-                                                    if(v instanceof Double) {
-                                                        v = ((Double) v).intValue();
-                                                    }
-                                                    config.put(k, v.toString());
-                                                });
+                                                ConfigResponseDto configResponseDto = new Gson().fromJson(data, ConfigResponseDto.class);
+                                                config.put("title", configResponseDto.title);
+                                                config.put("min_players", String.valueOf(configResponseDto.min_players));
+                                                config.put("max_players", String.valueOf(configResponseDto.max_players));
                                             });
 
                                             config.store(configOutput, null);
