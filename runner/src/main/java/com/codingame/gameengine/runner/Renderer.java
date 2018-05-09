@@ -511,7 +511,6 @@ class Renderer {
 
                                             config.store(configOutput, null);
                                             exchange.setStatusCode(StatusCodes.FOUND);
-                                            exchange.getResponseHeaders().put(Headers.LOCATION, "/");
                                             exchange.endExchange();
                                         } else if (exchange.getRelativePath().equals("/save-replay")) {
                                             Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
