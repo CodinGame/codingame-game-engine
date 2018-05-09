@@ -504,7 +504,6 @@ class Renderer {
 
                                             config.store(configOutput, null);
                                             exchange.setStatusCode(StatusCodes.FOUND);
-                                            exchange.endExchange();
                                         } else if (exchange.getRelativePath().equals("/save-replay")) {
                                             Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
                                             File demoFile = sourceFolderPath.resolve("src/main/resources/view/demo.js").toFile();
@@ -521,13 +520,12 @@ class Renderer {
                                             }
 
                                             exchange.setStatusCode(StatusCodes.OK);
-                                            exchange.endExchange();
                                         }
                                     } catch (MissingConfigException e) {
                                         sendException(exchange, e, StatusCodes.UNPROCESSABLE_ENTITY);
-                                        exchange.endExchange();
                                     } catch (Exception e) {
                                         sendException(exchange, e, StatusCodes.BAD_REQUEST);
+                                    } finally {
                                         exchange.endExchange();
                                     }
                                 }
