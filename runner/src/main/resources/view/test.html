@@ -228,13 +228,13 @@
 			<div class="report-popup">
 				<div ng-scrollbars class="report-items-wrapper">
 					<div ng-repeat="item in reportItems">
-						<span ng-class="['report-item', item.type]">[{{item.type}}]</span> {{item.message}}
+						<span class="report-item" ng-class="item.type">[<span ng-bind="item.type"></span>]</span> <span ng-bind="item.message"></span>
 						<span ng-if="item.link">
 							<a ng-href="{{item.link}}" target="_blank"> More info</a>
 						</span>
 						<ul ng-if="item.details" class="report-details-wrapper">
-							<li>{{item.details.name}}</li>
-							<li ng-repeat="(key, value) in item.details.params" class="report-details">{{key}}: {{value}}</li>
+							<li><span ng-bind="item.details.name"></span></li>
+							<li ng-repeat="(key, value) in item.details.params" class="report-details"><span ng-bind="key"></span>: <span ng-bind="value"></span></li>
 						</ul>
 					</div>
 				</div>
@@ -247,7 +247,7 @@
 		<div ng-show="showConfigForm" class="report-popup-wrapper">
 			<div class="form-popup">
 				<form id="form" name="form">
-					<p>{{formStatement}}</p>
+					<p><span ng-bind="formStatement"></span></p>
 					<p>
 						<label for="title">Title*</label>
 					</p>
