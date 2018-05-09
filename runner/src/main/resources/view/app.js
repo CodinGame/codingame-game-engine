@@ -193,7 +193,7 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
         try {
           parser.parse(jsonObj.stubs[stub], 0);
         } catch (e) {
-          jsonObj.reportItems.push({ "type": "WARNING", "message": stub, "details": { "name": e.name, "params": e.params } });
+          jsonObj.reportItems.push({ "type": "WARNING", "message": stub + " Error in stub.txt", "details": { "name": e.name, "params": e.params } });
         }
       }
 
