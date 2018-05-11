@@ -199,8 +199,7 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
 
       if (jsonObj.exportStatus === "SUCCESS") {
         jsonObj.reportItems.push({ "type": "SUCCESS", "message": "Export success." });
-        var url = window.URL.createObjectURL(new Blob(
-          _base64ToArrayBuffer(jsonObj.data)));
+        var url = window.URL.createObjectURL(base64ToBlob(jsonObj.data));
         var a = document.createElement('a');
         a.href = url;
         a.download = "export.zip";
@@ -213,14 +212,14 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     }
   }
 
-  function _base64ToArrayBuffer(base64) {
+  function base64ToBlob(base64) {
     var binary_string = window.atob(base64);
     var len = binary_string.length;
     var bytes = new Uint8Array(len);
     for (var i = 0; i < len; i++) {
       bytes[i] = binary_string.charCodeAt(i);
     }
-    return [bytes];
+    return new Blob([bytes]);
   }
 
   async function submitConfig(valid, config){
