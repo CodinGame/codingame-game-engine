@@ -2,6 +2,7 @@ import * as config from '../config.js';
 import {Drawer} from '../core/Drawer.js';
 import {ErrorLog} from '../core/ErrorLog.js';
 import {demo} from '../demo.js';
+import Parser from './lib/Parser.js';
 
 function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, gameManagerFactory, $localStorage) {
   'ngInject';
@@ -22,6 +23,10 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
   }).gameParams;
   $scope.loadGame = loadGame;
   $scope.selectReplay = selectReplay;
+  $scope.exportZip = exportZip;
+  $scope.reportItems = {};
+  $scope.closeReportPopup = closeReportPopup;
+  $scope.submitConfig = submitConfig;
 
   $interval(checkSize, 1000);
 
@@ -161,6 +166,83 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
     $scope.selectProgress = 'saving';
     const response = await fetch('/services/save-replay');
     $scope.selectProgress = 'complete';
+  }
+
+  function closeReportPopup() {
+    $scope.showExport = false;
+  }
+
+  function closeConfigForm() {
+    $scope.showConfigForm = false;
+  }
+
+  $scope.showExport = false;
+  $scope.showConfigForm = false;
+  async function exportZip() {
+    const data = await fetch('/services/export');
+    if (data.status === 422) {
+      const text = await data.text();
+      $scope.formStatement = text;
+      $scope.showConfigForm = true;
+    } else {
+      const exportResponseString = await data.text();
+      var exportResponse = JSON.parse(exportResponseString);
+
+      var stubParser = new Parser();
+      for (var stub in exportResponse.stubs) {
+        try {
+          stubParser.parse(exportResponse.stubs[stub], 0);
+        } catch (e) {
+          exportResponse.reportItems.push({
+            "type": "WARNING",
+            "message": stub + " Error in stub.txt",
+            "details": { "name": e.name, "params": e.params }
+          });
+        }
+      }
+
+      if (exportResponse.exportStatus === "SUCCESS") {
+        exportResponse.reportItems.push({
+          "type": "SUCCESS",
+          "message": "Export success."
+        });
+        var url = window.URL.createObjectURL(base64ToBlob(exportResponse.data));
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = "export.zip";
+        a.click();
+      } else {
+        exportResponse.reportItems.push({
+          "type": "FAIL",
+          "message": "Export fail."
+        });
+      }
+      $scope.reportItems = exportResponse.reportItems;
+      $scope.showExport = true;
+    }
+  }
+
+  function base64ToBlob(base64) {
+    var binary_string = window.atob(base64);
+    var len = binary_string.length;
+    var bytes = new Uint8Array(len);
+    for (var i = 0; i < len; i++) {
+      bytes[i] = binary_string.charCodeAt(i);
+    }
+    return new Blob([bytes]);
+  }
+
+  async function submitConfig(valid, config){
+    if(!valid){
+      return;
+    }
+    await fetch('/services/init-config', 
+    { 
+      body: JSON.stringify(config), 
+      method: 'POST'
+    });
+    closeConfigForm();
+    exportZip();
   }
 }
 

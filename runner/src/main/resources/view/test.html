@@ -122,7 +122,8 @@
 			color: gray;
 			cursor: auto;
 		}
-		.load-game-button {
+
+		.default-button {
 			border: 1px solid #41454a;
 			padding-left: 10px;
 			padding-right: 10px;
@@ -131,16 +132,91 @@
 			margin: 5px;
 		}
 
-		.load-game-button:hover {
+		.default-button:hover {
 			color: white;
 			border-color: white;
 		}
 
-		.player-button-wrapper {
+		.default-button-wrapper, .load-button-wrapper {
 			display: flex;
 			align-items: center;
 			justify-content: center;
+		}
+
+		.load-button-wrapper {
 			height: 100px;
+		}
+
+		.report-popup-wrapper {
+			z-index: 10;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			position: absolute;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.report-popup {
+			background-color: #20252a;
+			border: 1px solid #41454a;
+			padding: 20px;
+			width: 700px;
+			min-width: 400px;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.form-popup {
+			background-color: #20252a;
+			border: 1px solid #41454a;
+			padding: 20px;
+			max-width: 400px;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.report-details-wrapper {
+			list-style-type: none;
+			padding-left: 60px;
+			opacity: 0.7;
+		}
+
+		.report-details {
+			padding-left: 60px;
+		}
+
+		.report-items-wrapper {
+			max-height: 400px;
+			overflow-y: scroll;
+		}
+
+		.report-item.WARNING {
+			color: #F39C12;
+		}
+
+		.report-item.INFO {
+			color: #4183D7;
+		}
+
+		.report-item.ERROR,
+		.report-item.FAIL {
+			color: #F22613;
+		}
+
+		.report-item.SUCCESS {
+			color: #2ECC71;
+		}
+
+		#form {
+			justify-content: center;
+			align-items: center;
+		}
+
+		#form>p>input {
+			margin-bottom: 10px;
 		}
 	</style>
 </head>
@@ -148,8 +224,57 @@
 <body>
 	<div ng-app="player" ng-controller="PlayerCtrl">
 
+		<div ng-show="showExport" class="report-popup-wrapper">
+			<div class="report-popup">
+				<div ng-scrollbars class="report-items-wrapper">
+					<div ng-repeat="item in reportItems">
+						<span class="report-item" ng-class="item.type">[<span ng-bind="item.type"></span>]</span> <span ng-bind="item.message"></span>
+						<span ng-if="item.link">
+							<a ng-href="{{item.link}}" target="_blank"> More info</a>
+						</span>
+						<ul ng-if="item.details" class="report-details-wrapper">
+							<li><span ng-bind="item.details.name"></span></li>
+							<li ng-repeat="(key, value) in item.details.params" class="report-details"><span ng-bind="key"></span>: <span ng-bind="value"></span></li>
+						</ul>
+					</div>
+				</div>
+				<div class="default-button-wrapper">
+					<button class="default-button" ng-click="closeReportPopup()">Close</button>
+				</div>
+			</div>
+		</div>
+
+		<div ng-show="showConfigForm" class="report-popup-wrapper">
+			<div class="form-popup">
+				<form id="form" name="form">
+					<p><span ng-bind="formStatement"></span></p>
+					<p>
+						<label for="title">Title*</label>
+					</p>
+					<p>
+						<input required type="text" ng-model="config.title" />
+					</p>
+					<p>
+						<label for="min_players">Min players*</label>
+					</p>
+					<p>
+						<input required type="number" min="1" max="8" ng-model="config.min_players" step="1"/>
+					</p>
+					<p>
+						<label for="max_players">Max players*</label>
+					</p>
+					<p>
+						<input required type="number" min="1" max="8" ng-model="config.max_players" step="1"/>
+					</p>
+					<div class="default-button-wrapper">
+						<button class="default-button" type="submit" ng-click="submitConfig(form.$valid, config)">Submit config</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
 		<div class="header-bar">
-			<a class="header-bar-button" href="/export.html" target="_blank">Export project</a>
+			<button class="header-bar-button" ng-click="exportZip()">Export project</button>
 			<button ng-show="gameLoaded" ng-disabled="selectProgress !== 'inactive'" ng-click="selectReplay()" class="header-bar-button">
 				<span ng-if="selectProgress === 'inactive'">Choose this replay for intro</span>
 				<span ng-if="selectProgress === 'saving'">Saving...</span>
@@ -171,8 +296,8 @@
 						game-params="gameParams"></cg-player>
 		</div>
 
-		<div class="player-button-wrapper" ng-if="!gameLoaded">
-			<button class="load-game-button" ng-click="loadGame()">Load game</button>
+		<div class="default-button-wrapper load-button-wrapper" ng-if="!gameLoaded">
+			<button class="default-button" ng-click="loadGame()">Load game</button>
 		</div>
 
 		<div ng-if="gameLoaded">

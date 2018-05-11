@@ -1,7 +1,6 @@
 package com.codingame.gameengine.runner;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -11,7 +10,6 @@ import java.io.PrintWriter;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.ByteBuffer;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -21,9 +19,14 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -32,6 +35,9 @@ import java.util.zip.ZipOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
+import com.codingame.gameengine.runner.ConfigHelper.GameConfig;
+import com.codingame.gameengine.runner.ConfigHelper.QuestionConfig;
+import com.codingame.gameengine.runner.dto.ConfigResponseDto;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
@@ -55,6 +61,10 @@ import io.undertow.util.Headers;
 import io.undertow.util.StatusCodes;
 
 class Renderer {
+
+    private static final int MIN_PLAYERS = 1;
+    private static final int MAX_PLAYERS = 8;
+    private static final Pattern HTML_IMG_MARKER = Pattern.compile("<\\s*img [^\\>]*src\\s*=\\s*([\"\\'])(?<source>.*?)\\1");
 
     public class MultipleResourceSupplier implements ResourceSupplier {
 
@@ -292,25 +302,130 @@ class Renderer {
         return paths;
     }
 
-    private void checkConfig(Path sourceFolderPath) throws IOException {
-        if (!sourceFolderPath.resolve("config").toFile().isDirectory()) {
-            throw new RuntimeException("Missing config directory.");
+    private void checkConfig(Path sourceFolderPath, ExportReport exportReport) throws IOException, MissingConfigException {
+        ConfigHelper configHelper = new ConfigHelper();
+        GameConfig gameConfig = configHelper.findConfig(sourceFolderPath.resolve("config"));
+
+        for (String league : gameConfig.getQuestionsConfig().keySet()) {
+            QuestionConfig questionConfig = gameConfig.getQuestionsConfig().get(league);
+            String tag = league + (league.isEmpty() ? "" : ": ");
+
+            //Check config.ini
+            checkConfigIni(gameConfig, questionConfig, tag, exportReport);
+
+            //Check stub
+            checkStub(gameConfig, questionConfig, tag, exportReport);
+
+            //Check statement
+            checkStatement(gameConfig, questionConfig, tag, exportReport);
+
+            //Check Boss
+            checkBoss(gameConfig, questionConfig, tag, exportReport);
+
+            //Check League popups
+            if (gameConfig.isLeaguesDetected()) {
+                checkLeaguePopups(gameConfig, questionConfig, tag, exportReport);
+            }
         }
-        File configFile = sourceFolderPath.resolve("config/config.ini").toFile();
-        if (!sourceFolderPath.resolve("config/config.ini").toFile().isFile()) {
-            throw new RuntimeException("Missing config.ini file.");
+
+    }
+
+    private void checkLeaguePopups(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+        if (!questionConfig.getWelcomeLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
+            || questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()) {
+            exportReport.addItem(
+                ReportItemType.WARNING, tag + "Missing welcome_"
+                    + Constants.LANGUAGE_CODE[Constants.LANGUAGE_ID_ENGLISH - 1] + ".html file."
+            );
+        } else {
+            for (int languageId : questionConfig.getWelcomeLanguageMap().keySet()) {
+                //Avoid checking the same popup twice if duplicated
+                if (languageId != Constants.LANGUAGE_ID_ENGLISH
+                    && questionConfig.getWelcomeLanguageMap().get(languageId)
+                        .equals(questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH))) {
+                    continue;
+                }
+
+                //List of all images used in the welcome popup
+                Matcher imageMatcher = HTML_IMG_MARKER.matcher(questionConfig.getWelcomeLanguageMap().get(languageId));
+                Set<String> imagesName = new HashSet<>();
+
+                while (imageMatcher.find()) {
+                    imagesName.add(imageMatcher.group("source"));
+                }
+
+                //Substract all found images to present ones: elements left in the list do not exist in config
+                imagesName.removeAll(
+                    questionConfig.getWelcomeImagesList().stream().map(f -> f.getName()).collect(Collectors.toSet())
+                );
+
+                for (String imageName : imagesName) {
+                    exportReport.addItem(
+                        ReportItemType.WARNING, tag + "File " + imageName + " is used in welcome_"
+                            + Constants.LANGUAGE_CODE[languageId - 1] + ".html but is missing."
+                    );
+                }
+            }
         }
-        FileInputStream configInput = new FileInputStream(configFile);
-        Properties config = new Properties();
-        config.load(configInput);
-        if (!config.containsKey("title")) {
-            throw new RuntimeException("Missing title property in config.ini.");
+    }
+
+    private void checkBoss(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+        if (questionConfig.getAiCode() == null || questionConfig.getAiCode().isEmpty()) {
+            exportReport.addItem(ReportItemType.ERROR, tag + "Missing Boss.* file.");
         }
-        if (!config.containsKey("min_players")) {
-            throw new RuntimeException("Missing min_players property in config.ini.");
+    }
+
+    private void checkStatement(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+        if (!questionConfig.getStatementsLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
+            || questionConfig.getStatementsLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()) {
+            exportReport.addItem(ReportItemType.ERROR, tag + "Missing statement_en.html file. An English statement is mandatory.");
         }
-        if (!config.containsKey("max_players")) {
-            throw new RuntimeException("Missing max_players property in config.ini.");
+    }
+
+    private void checkStub(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+        if (questionConfig.getStubGenerator() == null || questionConfig.getStubGenerator().isEmpty()) {
+            exportReport.addItem(
+                ReportItemType.WARNING, tag + "Missing stub.txt file.",
+                "https://github.com/CodinGame/codingame-game-engine/blob/master/stubGeneratorSyntax.md"
+            );
+        } else {
+            exportReport.getStubs().put(tag, questionConfig.getStubGenerator());
+        }
+    }
+
+    private void checkConfigIni(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) throws MissingConfigException {
+        if (!questionConfig.isConfigDetected()) {
+            throw new MissingConfigException(tag + "Missing config.ini file");
+        } else if (gameConfig.getTitle() == null || gameConfig.getTitle().isEmpty()) {
+            throw new MissingConfigException(tag + "Missing title property in config.ini.");
+        } else if (questionConfig.getMinPlayers() == null) {
+            throw new MissingConfigException(tag + "Missing min_players property in config.ini.");
+        } else if (questionConfig.getMaxPlayers() == null) {
+            throw new MissingConfigException(tag + "Missing max_players property in config.ini.");
+        } else {
+            if (questionConfig.getMinPlayers() < MIN_PLAYERS) {
+                exportReport.addItem(
+                    ReportItemType.ERROR, tag + "Min players ("
+                        + questionConfig.getMinPlayers()
+                        + ") should be greater or equal to " + MIN_PLAYERS + "."
+                );
+            }
+            if (questionConfig.getMaxPlayers() < questionConfig.getMinPlayers()) {
+                exportReport.addItem(
+                    ReportItemType.ERROR, tag + "Max players ("
+                        + questionConfig.getMaxPlayers()
+                        + ") should be greater or equal to min players ("
+                        + questionConfig.getMinPlayers()
+                        + ")."
+                );
+            }
+            if (questionConfig.getMaxPlayers() > MAX_PLAYERS) {
+                exportReport.addItem(
+                    ReportItemType.ERROR, tag + "Max players ("
+                        + questionConfig.getMaxPlayers()
+                        + ") should be lower or equal to " + MAX_PLAYERS + "."
+                );
+            }
         }
     }
 
@@ -360,9 +475,14 @@ class Renderer {
 
                                             Path zipPath = tmpdir.resolve("source.zip");
 
-                                            checkConfig(sourceFolderPath);
-                                            byte[] data = Files.readAllBytes(exportSourceCode(sourceFolderPath, zipPath));
-                                            exchange.getResponseSender().send(ByteBuffer.wrap(data));
+                                            ExportReport exportReport = new ExportReport();
+                                            checkConfig(sourceFolderPath, exportReport);
+                                            if (exportReport.getExportStatus() == ExportStatus.SUCCESS) {
+                                                byte[] data = Files.readAllBytes(exportSourceCode(sourceFolderPath, zipPath));
+                                                exportReport.setData(Base64.getEncoder().encodeToString(data));
+                                            }
+                                            String jsonExportReport = new Gson().toJson(exportReport);
+                                            exchange.getResponseSender().send(jsonExportReport);
 
                                         } else if (exchange.getRelativePath().equals("/init-config")) {
                                             if (!sourceFolderPath.resolve("config").toFile().isDirectory()) {
@@ -375,16 +495,15 @@ class Renderer {
                                             FileOutputStream configOutput = new FileOutputStream(configFile);
                                             Properties config = new Properties();
 
-                                            exchange.getQueryParameters().forEach(
-                                                (k, v) -> {
-                                                    config.put(k, v.stream().collect(Collectors.joining(",")));
-                                                }
-                                            );
+                                            exchange.getRequestReceiver().receiveFullString((e, data) -> {
+                                                ConfigResponseDto configResponseDto = new Gson().fromJson(data, ConfigResponseDto.class);
+                                                config.put("title", configResponseDto.title);
+                                                config.put("min_players", String.valueOf(configResponseDto.min_players));
+                                                config.put("max_players", String.valueOf(configResponseDto.max_players));
+                                            });
 
                                             config.store(configOutput, null);
                                             exchange.setStatusCode(StatusCodes.FOUND);
-                                            exchange.getResponseHeaders().put(Headers.LOCATION, "/export.html");
-                                            exchange.endExchange();
                                         } else if (exchange.getRelativePath().equals("/save-replay")) {
                                             Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
                                             File demoFile = sourceFolderPath.resolve("src/main/resources/view/demo.js").toFile();
@@ -401,13 +520,20 @@ class Renderer {
                                             }
 
                                             exchange.setStatusCode(StatusCodes.OK);
-                                            exchange.endExchange();
                                         }
+                                    } catch (MissingConfigException e) {
+                                        sendException(exchange, e, StatusCodes.UNPROCESSABLE_ENTITY);
                                     } catch (Exception e) {
-                                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-                                        exchange.setStatusCode(StatusCodes.BAD_REQUEST);
-                                        exchange.getResponseSender().send(e.getMessage());
+                                        sendException(exchange, e, StatusCodes.BAD_REQUEST);
+                                    } finally {
+                                        exchange.endExchange();
                                     }
+                                }
+
+                                private void sendException(HttpServerExchange exchange, Exception e, int statusCode) {
+                                    exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                                    exchange.setStatusCode(statusCode);
+                                    exchange.getResponseSender().send(e.getMessage());
                                 }
                             }
                         )
