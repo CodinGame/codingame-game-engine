@@ -65,6 +65,7 @@ class Renderer {
     private static final int MIN_PLAYERS = 1;
     private static final int MAX_PLAYERS = 8;
     private static final Pattern HTML_IMG_MARKER = Pattern.compile("<\\s*img [^\\>]*src\\s*=\\s*([\"\\'])(?<source>.*?)\\1");
+    private static final Pattern GEN_STATEMENT_MARKER = Pattern.compile("statement_[a-zA-Z][a-zA-Z].html.tpl");
 
     public class MultipleResourceSupplier implements ResourceSupplier {
 
@@ -449,6 +450,12 @@ class Renderer {
 
         return zipPath;
     }
+    
+    private void generateSplittedStatements(Path sourceFolderPath, ExportReport exportReport) throws IOException {
+        Files.list(sourceFolderPath.resolve("config/"))
+            .filter(p -> GEN_STATEMENT_MARKER.matcher(FilenameUtils.getName(p.toString())).matches() && p.toFile().isFile())
+            .forEach(p -> StatementSplitter.generateSplittedStatement(sourceFolderPath, p.toFile(), exportReport));
+    }
 
     private void serveHTTP(List<Path> path) {
         System.out.println("http://localhost:" + port + "/test.html");
@@ -476,6 +483,7 @@ class Renderer {
                                             Path zipPath = tmpdir.resolve("source.zip");
 
                                             ExportReport exportReport = new ExportReport();
+                                            generateSplittedStatements(sourceFolderPath, exportReport);
                                             checkConfig(sourceFolderPath, exportReport);
                                             if (exportReport.getExportStatus() == ExportStatus.SUCCESS) {
                                                 byte[] data = Files.readAllBytes(exportSourceCode(sourceFolderPath, zipPath));
