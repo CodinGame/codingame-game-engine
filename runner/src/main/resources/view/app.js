@@ -42,7 +42,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
   function init () {
     drawerFactory.createDrawer(Drawer).then(drawer => {
       $scope.drawer = drawer
-      let data = fetchGame().then(data => {
+      fetchGame().then(data => {
         ctrl.data = data
         if (!demo && !config.demo) {
           loadGame()
@@ -164,7 +164,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
   $scope.selectProgress = 'inactive'
   async function selectReplay () {
     $scope.selectProgress = 'saving'
-    const response = await fetch('/services/save-replay')
+    await fetch('/services/save-replay')
     $scope.selectProgress = 'complete'
   }
 
