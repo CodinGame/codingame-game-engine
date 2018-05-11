@@ -193,19 +193,29 @@ function PlayerCtrl($scope, $timeout, $interval, $translate, drawerFactory, game
         try {
           stubParser.parse(exportResponse.stubs[stub], 0);
         } catch (e) {
-          exportResponse.reportItems.push({ "type": "WARNING", "message": stub + " Error in stub.txt", "details": { "name": e.name, "params": e.params } });
+          exportResponse.reportItems.push({
+            "type": "WARNING",
+            "message": stub + " Error in stub.txt",
+            "details": { "name": e.name, "params": e.params }
+          });
         }
       }
 
       if (exportResponse.exportStatus === "SUCCESS") {
-        exportResponse.reportItems.push({ "type": "SUCCESS", "message": "Export success." });
+        exportResponse.reportItems.push({
+          "type": "SUCCESS",
+          "message": "Export success."
+        });
         var url = window.URL.createObjectURL(base64ToBlob(exportResponse.data));
         var a = document.createElement('a');
         a.href = url;
         a.download = "export.zip";
         a.click();
       } else {
-        exportResponse.reportItems.push({ "type": "FAIL", "message": "Export fail." });
+        exportResponse.reportItems.push({
+          "type": "FAIL",
+          "message": "Export fail."
+        });
       }
       $scope.reportItems = exportResponse.reportItems;
       $scope.showExport = true;
