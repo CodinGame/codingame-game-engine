@@ -89,14 +89,14 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
     }
 
     while (startFrame <= frame) {
-      for (var i in ctrl.data.ids) {
-        const stdout = ctrl.data.outputs[i][startFrame]
+      for (var j in ctrl.data.ids) {
+        const stdout = ctrl.data.outputs[j][startFrame]
         if (stdout) {
-          $scope.agents[i].stdout = stdout
+          $scope.agents[j].stdout = stdout
         }
-        const stderr = ctrl.data.errors[i][startFrame]
+        const stderr = ctrl.data.errors[j][startFrame]
         if (stderr) {
-          $scope.agents[i].stderr = stderr
+          $scope.agents[j].stderr = stderr
         }
       }
       $scope.referee.stdout = $scope.referee.stdout || ctrl.data.outputs.referee[startFrame]
