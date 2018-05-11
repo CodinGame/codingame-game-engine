@@ -4,6 +4,8 @@ import {ErrorLog} from '../core/ErrorLog.js'
 import {demo} from '../demo.js'
 import Parser from './lib/Parser.js'
 
+/* global fetch, angular, Blob, $, XMLHttpRequest */
+
 function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gameManagerFactory, $localStorage) {
   'ngInject'
   const ctrl = this
@@ -149,7 +151,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
         let result = null
         try {
           const json = JSON.parse(this.responseText)
-          json.agents.forEach(agent => agent.color = Drawer.playerColors[agent.index])
+          json.agents.forEach(agent => { agent.color = Drawer.playerColors[agent.index] })
           result = json
         } catch (e) {
           console.error(e)
