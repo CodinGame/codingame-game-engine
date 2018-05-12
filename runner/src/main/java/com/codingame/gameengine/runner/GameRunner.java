@@ -2,15 +2,13 @@ package com.codingame.gameengine.runner;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.codingame.gameengine.runner.dto.GameScore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -227,11 +225,15 @@ public class GameRunner {
     }
 
     private String getJSONResult() {
+        addPlayerIds();
+
+        return new Gson().toJson(gameResult);
+    }
+
+    private void addPlayerIds() {
         for (int i = 0; i < players.size(); i++) {
             gameResult.ids.put(i, players.get(i).getAgentId());
         }
-
-        return new Gson().toJson(gameResult);
     }
 
     /**
@@ -443,11 +445,48 @@ public class GameRunner {
      *            the port on which to attempt to start the a server for the game's replay.
      */
     public void start(int port) {
+        simulateGame();
+
+        new Renderer(port).render(players.size(), getJSONResult());
+    }
+
+    /**
+     * Runs the game and returns gathered game results
+     *
+     * @return game result of the game
+     */
+    public GameResult getGameResult() {
+        simulateGame();
+        addPlayerIds();
+        return gameResult;
+    }
+
+    /**
+     * Runs the game and returns only game scores for players
+     *
+     * @return scores for all players
+     */
+    public GameScore getGameScore() {
+        return new GameScore(getGameResult().scores);
+    }
+
+    /**
+     * Simulates the game and gathers game results
+     */
+    private void simulateGame() {
         Properties conf = new Properties();
         initialize(conf);
         run();
+        destroyPlayers();
+    }
 
-        new Renderer(port).render(players.size(), getJSONResult());
+    /**
+     * Destroys all players
+     */
+    private void destroyPlayers() {
+        for (Agent player : players) {
+            player.destroy();
+        }
     }
 
     static class NextPlayerInfo {
