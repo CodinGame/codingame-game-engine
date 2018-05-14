@@ -65,7 +65,7 @@ class Renderer {
     private static final int MIN_PLAYERS = 1;
     private static final int MAX_PLAYERS = 8;
     private static final Pattern HTML_IMG_MARKER = Pattern.compile("<\\s*img [^\\>]*src\\s*=\\s*([\"\\'])(?<source>.*?)\\1");
-    private static final Pattern GEN_STATEMENT_MARKER = Pattern.compile("statement_[a-zA-Z][a-zA-Z].html.tpl");
+    private static final Pattern GEN_STATEMENT_MARKER = Pattern.compile("statement_[a-zA-Z]{2}\\.html\\.tpl");
 
     public class MultipleResourceSupplier implements ResourceSupplier {
 
