@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,6 +30,7 @@ public class GraphicEntityModule implements Module {
     //TODO: extra properties for Texts (text wrapping, alignement, ...)
 
     static int ENTITY_COUNT = 0;
+    private final GraphicEntitySerializer graphicEntitySerializer;
 
     private List<SpriteSheetLoader> newSpriteSheets;
     private List<Entity<?>> newEntities;
@@ -41,12 +41,12 @@ public class GraphicEntityModule implements Module {
     private WorldState currentWorldState;
 
     private GameManager<AbstractPlayer> gameManager;
-    @Inject private Serializer serializer;
     @Inject private Provider<SpriteSheetLoader> spriteSheetProvider;
 
     @Inject
     GraphicEntityModule(GameManager<AbstractPlayer> gameManager) {
         this.gameManager = gameManager;
+        graphicEntitySerializer = new GraphicEntitySerializer();
         world = new World();
         entities = new ArrayList<>();
         newEntities = new ArrayList<>();
@@ -170,11 +170,11 @@ public class GraphicEntityModule implements Module {
 
         autocommit();
 
-        newSpriteSheets.forEach(e -> dumpLoadSpriteSheet(e, commands));
+        newSpriteSheets.forEach(e -> graphicEntitySerializer.dumpLoadSpriteSheet(e, commands));
         newSpriteSheets.clear();
 
         newEntities.stream().forEach(e -> {
-            dumpNewEntity(e, commands);
+            graphicEntitySerializer.dumpNewEntity(e, commands);
         });
         newEntities.clear();
 
@@ -184,42 +184,13 @@ public class GraphicEntityModule implements Module {
                 .collect(Collectors.toList());
 
         for (WorldState next : orderedStates) {
-            dumpWorldStateDiff(currentWorldState, next, commands);
+            graphicEntitySerializer.dumpWorldStateDiff(currentWorldState, next, commands);
             currentWorldState.updateAllEntities(next);
         }
 
         worldStates.clear();
 
         gameManager.setViewData("entitymodule", commands);
-    }
-
-    private void dumpNewEntity(Entity<?> e, List<Object> commands) {
-        commands.add(serializer.serializeCreate(e));
-    }
-    
-    private void dumpLoadSpriteSheet(SpriteSheetLoader spriteSheet, List<Object> commands) {
-        commands.add(serializer.serializeLoadSpriteSheet(spriteSheet));
-    }
-
-    private void dumpWorldStateDiff(WorldState previous, WorldState next, List<Object> commands) {
-        next.getEntityStateMap()
-                .forEach((entity, state) -> {
-                    Optional<EntityState> prevState = Optional.ofNullable(previous.getEntityStateMap().get(entity));
-                    EntityState diff = new EntityState();
-                    state.forEach((key, value) -> {
-                        EntityState.Param prevValue = prevState
-                                .map(s -> s.get(key))
-                                .orElse(null);
-                        if (!value.equals(prevValue)) {
-                            diff.put(key, value);
-                        }
-                    });
-
-                    // Forced commits are sent even if they are empty
-                    if (next.isForce() || !diff.isEmpty()) {
-                        commands.add(serializer.serializeUpdate(entity, diff, next.getFrameTime()));
-                    }
-                });
     }
 
     private void autocommit() {
