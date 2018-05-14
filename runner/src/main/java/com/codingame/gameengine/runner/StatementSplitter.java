@@ -41,8 +41,9 @@ public class StatementSplitter {
         }
 
         for (String league : leagues) {
+            sourceFolderPath.resolve("config/" + league).toFile().mkdir();
             if (!sourceFolderPath.resolve("config/" + league).toFile().isDirectory()) {
-                sourceFolderPath.resolve("config/" + league).toFile().mkdir();
+                throw new RuntimeException("Unable to access or create config/" + league + " directory.");
             }
 
             writeStatement(sourceFolderPath, statementFile, lines, league, exportReport);
