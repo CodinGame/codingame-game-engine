@@ -85,20 +85,20 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
       startFrame--
     }
 
-    for (var i in ctrl.data.ids) {
+    for (let i in ctrl.data.ids) {
       $scope.agents[i].stdout = null
       $scope.referee = {}
     }
 
     while (startFrame <= frame) {
-      for (var j in ctrl.data.ids) {
-        const stdout = ctrl.data.outputs[j][startFrame]
+      for (let i in ctrl.data.ids) {
+        const stdout = ctrl.data.outputs[i][startFrame]
         if (stdout) {
-          $scope.agents[j].stdout = stdout
+          $scope.agents[i].stdout = stdout
         }
-        const stderr = ctrl.data.errors[j][startFrame]
+        const stderr = ctrl.data.errors[i][startFrame]
         if (stderr) {
-          $scope.agents[j].stderr = stderr
+          $scope.agents[i].stderr = stderr
         }
       }
       $scope.referee.stdout = $scope.referee.stdout || ctrl.data.outputs.referee[startFrame]
@@ -120,7 +120,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
     })
     for (let i = 0; i < frames.length; i++) {
       frames[i].gameSummary = data.summaries[i]
-      for (var pi in data.ids) {
+      for (let pi in data.ids) {
         frames[i].stderr = frames[i].stderr || data.errors[pi][i]
         frames[i].stdout = frames[i].stdout || data.outputs[pi][i]
       }
@@ -188,10 +188,10 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
       $scope.showConfigForm = true
     } else {
       const exportResponseString = await data.text()
-      var exportResponse = JSON.parse(exportResponseString)
+      let exportResponse = JSON.parse(exportResponseString)
 
-      var stubParser = new Parser()
-      for (var stub in exportResponse.stubs) {
+      let stubParser = new Parser()
+      for (let stub in exportResponse.stubs) {
         try {
           stubParser.parse(exportResponse.stubs[stub], 0)
         } catch (e) {
@@ -208,8 +208,8 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
           'type': 'SUCCESS',
           'message': 'Export success.'
         })
-        var url = window.URL.createObjectURL(base64ToBlob(exportResponse.data))
-        var a = document.createElement('a')
+        let url = window.URL.createObjectURL(base64ToBlob(exportResponse.data))
+        let a = document.createElement('a')
         a.href = url
         a.download = 'export.zip'
         a.click()
@@ -225,10 +225,10 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
   }
 
   function base64ToBlob (base64) {
-    var binaryString = window.atob(base64)
-    var len = binaryString.length
-    var bytes = new Uint8Array(len)
-    for (var i = 0; i < len; i++) {
+    let binaryString = window.atob(base64)
+    let len = binaryString.length
+    let bytes = new Uint8Array(len)
+    for (let i = 0; i < len; i++) {
       bytes[i] = binaryString.charCodeAt(i)
     }
     return new Blob([bytes])
