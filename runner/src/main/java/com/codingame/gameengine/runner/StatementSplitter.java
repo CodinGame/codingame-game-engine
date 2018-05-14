@@ -17,10 +17,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /***
- * Parse an HTML file and remove blocks between <!-- BEGIN keyword1 keyword2 --> and <!-- END -->
- * Must contain a block <!-- LEAGUES level1 level2 level3 level4 -->
- * 
- * The HTML file(s) must be named "statement_<language>.html.tpl" and placed in "config" directory
+ * Parse an HTML file and remove blocks between <code>&lt;!-- BEGIN keyword1 keyword2 --&gt;</code> and <code>&lt;!-- END --&gt;</code>
+ * Must contain a block <code>&lt;!-- LEAGUES level1 level2 level3 level4 --&gt;</code><br>
+ * <br>
+ * The HTML file(s) must be named "statement_&lt;language&gt;.html.tpl" and placed in "config" directory
  */
 
 public class StatementSplitter {
