@@ -129,7 +129,7 @@ public class GameRunner {
         }
     }
 
-    private void run() {
+    private void runAgents() {
         referee.execute();
 
         bootstrapPlayers();
@@ -447,7 +447,7 @@ public class GameRunner {
      *            the port on which to attempt to start the a server for the game's replay.
      */
     public void start(int port) {
-        simulateGame();
+        runGame();
 
         new Renderer(port).render(players.size(), getJSONResult());
     }
@@ -458,7 +458,7 @@ public class GameRunner {
      * @return game result of the game
      */
     public GameResult simulate() {
-        simulateGame();
+        runGame();
         addPlayerIds();
         return gameResult;
     }
@@ -466,10 +466,10 @@ public class GameRunner {
     /**
      * Simulates the game and gathers game results
      */
-    private void simulateGame() {
+    private void runGame() {
         Properties conf = new Properties();
         initialize(conf);
-        run();
+        runAgents();
         destroyPlayers();
     }
 
