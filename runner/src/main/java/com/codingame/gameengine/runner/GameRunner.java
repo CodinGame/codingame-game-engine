@@ -129,7 +129,7 @@ public class GameRunner {
         }
     }
 
-    private void run() {
+    private void runAgents() {
         referee.execute();
 
         bootstrapPlayers();
@@ -227,11 +227,15 @@ public class GameRunner {
     }
 
     private String getJSONResult() {
+        addPlayerIds();
+
+        return new Gson().toJson(gameResult);
+    }
+
+    private void addPlayerIds() {
         for (int i = 0; i < players.size(); i++) {
             gameResult.ids.put(i, players.get(i).getAgentId());
         }
-
-        return new Gson().toJson(gameResult);
     }
 
     /**
@@ -443,11 +447,39 @@ public class GameRunner {
      *            the port on which to attempt to start the a server for the game's replay.
      */
     public void start(int port) {
-        Properties conf = new Properties();
-        initialize(conf);
-        run();
+        runGame();
 
         new Renderer(port).render(players.size(), getJSONResult());
+    }
+
+    /**
+     * Runs the game without a server and returns computed game results
+     *
+     * @return game result of the game
+     */
+    public GameResult simulate() {
+        runGame();
+        addPlayerIds();
+        return gameResult;
+    }
+
+    /**
+     * Simulates the game and gathers game results
+     */
+    private void runGame() {
+        Properties conf = new Properties();
+        initialize(conf);
+        runAgents();
+        destroyPlayers();
+    }
+
+    /**
+     * Destroys all players
+     */
+    private void destroyPlayers() {
+        for (Agent player : players) {
+            player.destroy();
+        }
     }
 
     static class NextPlayerInfo {
