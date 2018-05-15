@@ -56,3 +56,57 @@ export const gameName = 'MyGame';
 This doesn't have any effect on user experience yet.
 
 
+### Statement
+
+Place a file named `statement_en.html` in the `config/` directory and it will be used for as the statement of your game.
+
+For a game with multiple leagues, you may place a file named `statement_en.html.tpl` in the `config/` directory and it will be used as a basis for the statement of each league when you click the export button.
+
+Within the `.tpl` file, you may place special comment blocks to indicate whether a block of html should be included for any specified league.
+
+#### Example
+
+This `statement_en.html.tpl`:
+```html
+<!-- LEAGUES level1 level2 level3 -->
+<div>
+  <p> Always included </p>
+  <!-- BEGIN level1 -->
+    <p> Included in first league </p>
+  <!-- END -->
+  <!-- BEGIN level2 -->
+    <p> Included in second league </p>
+  <!-- END -->
+  <!-- BEGIN level1 level2 -->
+    <p> Included both first and second league </p>
+  <!-- END -->
+</div>
+```
+
+Will result in these three statements for a three-league game:
+
+First league in `config/level1/statement_en.html`:
+```html
+<div>
+  <p> Always included </p>
+    <p> Included in first league </p>
+    <p> Included both first and second league </p>
+</div>
+```
+
+Second league in `config/level2/statement_en.html`:
+```html
+<div>
+  <p> Always included </p>
+    <p> Included in second league </p>
+    <p> Included both first and second league </p>
+</div>
+```
+
+Third league in `config/level3/statement_en.html`:
+```html
+<div>
+  <p> Always included </p>
+</div>
+```
+
