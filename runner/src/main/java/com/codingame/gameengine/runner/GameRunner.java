@@ -38,6 +38,7 @@ public class GameRunner {
     private final List<AsynchronousWriter> writers = new ArrayList<>();
     private final List<BlockingQueue<String>> queues = new ArrayList<>();
     private int lastPlayerId = 0;
+    private boolean gameEnded = false;
 
     private String[] avatars = new String[] { "16085713250612", "16085756802960", "16085734516701", "16085746254929",
             "16085763837151", "16085720641630", "16085846089817", "16085834521247" };
@@ -463,14 +464,22 @@ public class GameRunner {
         return gameResult;
     }
 
+    private void requireGameNotEnded() {
+        if (gameEnded) {
+            throw new RuntimeException("This game has ended");
+        }
+    }
+
     /**
      * Simulates the game and gathers game results
      */
     private void runGame() {
+        requireGameNotEnded();
         Properties conf = new Properties();
         initialize(conf);
         runAgents();
         destroyPlayers();
+        gameEnded = true;
     }
 
     /**
