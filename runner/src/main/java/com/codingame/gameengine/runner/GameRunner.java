@@ -2,13 +2,15 @@ package com.codingame.gameengine.runner;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.codingame.gameengine.runner.dto.GameScore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -451,23 +453,14 @@ public class GameRunner {
     }
 
     /**
-     * Runs the game and returns gathered game results
+     * Runs the game without a server and returns computed game results
      *
      * @return game result of the game
      */
-    public GameResult getGameResult() {
+    public GameResult simulate() {
         simulateGame();
         addPlayerIds();
         return gameResult;
-    }
-
-    /**
-     * Runs the game and returns only game scores for players
-     *
-     * @return scores for all players
-     */
-    public GameScore getGameScore() {
-        return new GameScore(getGameResult().scores);
     }
 
     /**
