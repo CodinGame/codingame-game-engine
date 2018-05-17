@@ -363,9 +363,9 @@ export class Drawer {
 
 
     for (let moduleName in this.modules) {
-      if (frame.hasOwnProperty(moduleName)) {
-        const module = this.modules[moduleName];
-        parsedFrame.data[moduleName] = module.handleFrameData(parsedFrame.frameInfo, frame[moduleName]);
+      const module = this.modules[moduleName];
+      if (typeof module.handleFrameData === 'function') {
+    	  parsedFrame.data[moduleName] = module.handleFrameData(parsedFrame.frameInfo, frame[moduleName]);  
       }
     }
 

@@ -37,7 +37,7 @@ public final class GameManager<T extends AbstractPlayer> {
 
     private static final int VIEW_DATA_SOFT_QUOTA = 512 * 1024;
     private static final int VIEW_DATA_HARD_QUOTA = 1024 * 1024;
-    
+
     private List<T> players;
     private int maxTurns = 400;
     private int turnMaxTime = 50;
@@ -115,11 +115,11 @@ public final class GameManager<T extends AbstractPlayer> {
 
         gameProperties = referee.init(gameProperties);
         registeredModules.forEach(Module::onGameInit);
-        swapInfoAndViewData();
         initDone = true;
 
         // Game Loop ----------------------------------------------------------
         for (turn = 0; turn < getMaxTurns() && !isGameEnd(); turn++) {
+            swapInfoAndViewData();
             log.info("Turn " + turn);
             newTurn = true;
             outputsRead = false; // Set as true after first getOutputs() to forbib sendInputs
@@ -132,8 +132,6 @@ public final class GameManager<T extends AbstractPlayer> {
                 player.resetOutputs();
                 player.setHasBeenExecuted(false);
             }
-
-            swapInfoAndViewData();
         }
 
         log.info("End");
@@ -142,7 +140,7 @@ public final class GameManager<T extends AbstractPlayer> {
         registeredModules.forEach(Module::onAfterOnEnd);
 
         // Send last frame ----------------------------------------------------
-
+        swapInfoAndViewData();
         newTurn = true;
 
         dumpView();
