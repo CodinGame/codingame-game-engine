@@ -324,11 +324,9 @@ export class Drawer {
   /** Mandatory */
   parseGlobalData(globalData) {
     for (let moduleName in this.modules) {
-      if (globalData.hasOwnProperty(moduleName)) {
-        const module = this.modules[moduleName];
-        if (typeof module.handleGlobalData === 'function') {
-          module.handleGlobalData(this.playerInfo, globalData[moduleName]);
-        }
+      const module = this.modules[moduleName];
+      if (typeof module.handleGlobalData === 'function') {
+        module.handleGlobalData(this.playerInfo, globalData[moduleName]);
       }
     }
   }
