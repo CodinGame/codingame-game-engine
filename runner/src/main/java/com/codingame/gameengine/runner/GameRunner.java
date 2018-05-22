@@ -3,7 +3,6 @@ package com.codingame.gameengine.runner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
@@ -22,7 +21,7 @@ import com.google.gson.Gson;
 /**
  * The class to use to run local games and display the replay in a webpage on a temporary local server.
  */
-public class GameRunner {
+abstract public class GameRunner {
 
     static final String INTERRUPT_THREAD = "05&08#1981";
     private static final Pattern COMMAND_HEADER_PATTERN = Pattern
@@ -32,10 +31,9 @@ public class GameRunner {
     GameResult gameResult = new GameResult();
 
     private Agent referee;
-    private final List<Agent> players;
+    protected final List<Agent> players;
     private final List<AsynchronousWriter> writers = new ArrayList<>();
     private final List<BlockingQueue<String>> queues = new ArrayList<>();
-    private int lastPlayerId = 0;
     private boolean gameEnded = false;
 
     private String[] avatars = new String[] { "16085713250612", "16085756802960", "16085734516701", "16085746254929",
@@ -119,14 +117,7 @@ public class GameRunner {
         Command initCommand = new Command(OutputCommand.INIT);
         initCommand.addLine(players.size());
 
-        // If the referee has input data (i.e. value for seed)
-        if (gameResult.refereeInput != null) {
-            try (Scanner scanner = new Scanner(gameResult.refereeInput)) {
-                while (scanner.hasNextLine()) {
-                    initCommand.addLine((scanner.nextLine()));
-                }
-            }
-        }
+        setCommandInput(initCommand);
 
         referee.sendInput(initCommand.toString());
         int round = 0;
@@ -205,6 +196,8 @@ public class GameRunner {
         }
 
     }
+    
+    abstract protected void setCommandInput(Command initCommand);
 
     private String getJSONResult() {
         addPlayerIds();
@@ -346,67 +339,6 @@ public class GameRunner {
             return OutputResult.TOOLONG;
         }
         return OutputResult.OK;
-    }
-
-    private void addAgent(Agent player, String nickname, String avatar) {
-        player.setAgentId(lastPlayerId++);
-        player.setNickname(nickname);
-        player.setAvatar(avatar);
-        players.add(player);
-    }
-
-    /**
-     * @deprecated Adds an AI to the next game to run.
-     *             <p>
-     * 
-     * @param playerClass
-     *            the Java class of an AI for your game.
-     */
-    public void addAgent(Class<?> playerClass) {
-        addAgent(new JavaPlayerAgent(playerClass.getName()), null, null);
-    }
-
-    /**
-     * Adds an AI to the next game to run.
-     * <p>
-     * The given command will be executed with <code>Runtime.getRuntime().exec()</code>.
-     * 
-     * @param commandLine
-     *            the system command line to run the AI.
-     */
-    public void addAgent(String commandLine) {
-        addAgent(new CommandLinePlayerAgent(commandLine), null, null);
-    }
-
-    /**
-     * @deprecated Adds an AI to the next game to run.
-     *             <p>
-     * 
-     * @param playerClass
-     *            the Java class of an AI for your game.
-     * @param nickname
-     *            the player's nickname
-     * @param avatarUrl
-     *            the url of the player's avatar
-     */
-    public void addAgent(Class<?> playerClass, String nickname, String avatarUrl) {
-        addAgent(new JavaPlayerAgent(playerClass.getName()), nickname, avatarUrl);
-    }
-
-    /**
-     * Adds an AI to the next game to run.
-     * <p>
-     * The given command will be executed with <code>Runtime.getRuntime().exec()</code>.
-     * 
-     * @param commandLine
-     *            the system command line to run the AI.
-     * @param nickname
-     *            the player's nickname
-     * @param avatarUrl
-     *            the url of the player's avatar
-     */
-    public void addAgent(String commandLine, String nickname, String avatarUrl) {
-        addAgent(new CommandLinePlayerAgent(commandLine), nickname, avatarUrl);
     }
 
     /**
