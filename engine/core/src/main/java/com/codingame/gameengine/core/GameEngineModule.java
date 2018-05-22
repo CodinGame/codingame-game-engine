@@ -2,6 +2,8 @@ package com.codingame.gameengine.core;
 
 import java.lang.reflect.Type;
 
+import javax.inject.Provider;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -41,13 +43,53 @@ class GameEngineModule extends AbstractModule {
         return abstractPlayer;
     }
 
+    @Provides
+    @Singleton
+    GameManager<AbstractPlayer> provideGameManager(Injector injector, Provider<SoloGameManager<AbstractPlayer>> soloProvider, Provider<MultiplayerGameManager<AbstractPlayer>> multiProvider) throws ClassNotFoundException {
+        if (isMulti()) {
+            return multiProvider.get();
+        } else if (isSolo()){
+            return soloProvider.get();
+        } else {
+            throw new RuntimeException("Unknown game mode");
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     @Provides
     @Singleton
-    GameManager<AbstractPlayer> provideGameManager(Injector injector) throws ClassNotFoundException {
-        Type type = Types.newParameterizedType(GameManager.class, getPlayerClass());
-        GameManager<AbstractPlayer> gameManager = (GameManager<AbstractPlayer>) injector.getInstance(Key.get(type));
-
-        return gameManager;
+    MultiplayerGameManager<AbstractPlayer> provideMultiplayerGameManager(Injector injector) throws ClassNotFoundException {
+        if(isMulti()) {
+            Type type = Types.newParameterizedType(MultiplayerGameManager.class, getPlayerClass());
+            MultiplayerGameManager<AbstractPlayer> gameManager = (MultiplayerGameManager<AbstractPlayer>) injector.getInstance(Key.get(type));
+            return gameManager;
+        } else if (isSolo()) {
+            throw new RuntimeException("Cannot use MultiplayerGameManager in a solo player game");
+        } else {
+            throw new RuntimeException("Unknown game mode");
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    @Provides
+    @Singleton
+    SoloGameManager<AbstractPlayer> provideSoloGameManager(Injector injector) throws ClassNotFoundException {
+        if(isSolo()) {
+            Type type = Types.newParameterizedType(SoloGameManager.class, getPlayerClass());
+            SoloGameManager<AbstractPlayer> gameManager = (SoloGameManager<AbstractPlayer>) injector.getInstance(Key.get(type));
+            return gameManager;
+        } else if (isMulti()) {
+            throw new RuntimeException("Cannot use SoloGameManager in a multiplayer game");
+        } else {
+            throw new RuntimeException("Unknown game mode");
+        }
+    }
+    
+    private boolean isMulti() {
+        return "multi".equals(System.getProperty("game.mode"));
+    }
+    
+    private boolean isSolo() {
+        return "solo".equals(System.getProperty("game.mode"));
     }
 }
