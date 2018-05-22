@@ -98,7 +98,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         prevViewData = null;
         currentViewData = new JsonObject();
 
-        gameProperties = referee.init(gameProperties);
+        referee.init();
         registeredModules.forEach(Module::onGameInit);
         initDone = true;
 

@@ -1,7 +1,5 @@
 package com.codingame.gameengine.core;
 
-import java.util.Properties;
-
 /**
  * The Referee is the brain of your game, it implements all the rules and the turn order.
  *
@@ -23,7 +21,7 @@ public abstract class AbstractReferee {
      *            a <code>Properties</code> containing input info for the referee.
      * @return a <code>Properties</code> containing game data that can be used as input for a later game.
      */
-    abstract public Properties init(Properties params);
+    abstract public void init();
 
     /**
      * Called on the computation of each turn of the game.
