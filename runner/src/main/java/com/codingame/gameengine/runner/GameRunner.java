@@ -1,7 +1,5 @@
 package com.codingame.gameengine.runner;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -50,28 +48,9 @@ public class GameRunner {
     /**
      * Create a new GameRunner with no referee input.
      */
-    public GameRunner() {
-        this(null);
-    }
-
-    /**
-     * Create a new GameRunner with no referee input.
-     * 
-     * @param properties
-     *            the values given to the game's referee on init.
-     */
-    public GameRunner(Properties properties) {
-        try {
-            referee = new RefereeAgent();
-            players = new ArrayList<Agent>();
-            if (properties != null) {
-                StringWriter sw = new StringWriter();
-                properties.store(sw, null);
-                gameResult.refereeInput = sw.toString();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot initialize game", e);
-        }
+    protected GameRunner() {
+        referee = new RefereeAgent();
+        players = new ArrayList<Agent>();
     }
 
     private void initialize(Properties conf) {
