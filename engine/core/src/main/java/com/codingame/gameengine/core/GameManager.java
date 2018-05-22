@@ -28,8 +28,7 @@ import com.google.inject.Singleton;
  * @param <T>
  *            Your implementation of AbstractPlayer
  */
-@Singleton
-public final class GameManager<T extends AbstractPlayer> {
+abstract public class GameManager<T extends AbstractPlayer> {
     @Inject private Provider<T> playerProvider;
     @Inject private Provider<AbstractReferee> refereeProvider;
     @Inject private Gson gson;
@@ -38,7 +37,7 @@ public final class GameManager<T extends AbstractPlayer> {
     private static final int VIEW_DATA_SOFT_QUOTA = 512 * 1024;
     private static final int VIEW_DATA_HARD_QUOTA = 1024 * 1024;
 
-    private List<T> players;
+    protected List<T> players;
     private int maxTurns = 400;
     private int turnMaxTime = 50;
     private int firstTurnMaxTime = 1000;
@@ -46,8 +45,7 @@ public final class GameManager<T extends AbstractPlayer> {
     private int frame = 0;
     private boolean gameEnd = false;
     private Scanner s;
-    private PrintStream out;
-    private Properties gameProperties;
+    protected PrintStream out;
     private AbstractReferee referee;
     private boolean newTurn;
 
@@ -95,20 +93,7 @@ public final class GameManager<T extends AbstractPlayer> {
             players.add(player);
         }
 
-        // create game properties
-        gameProperties = new Properties();
-        if (iCmd.lineCount > 0) {
-            for (int i = 0; i < (iCmd.lineCount - 1); i++) {
-                try {
-                    gameProperties.load(new StringReader(s.nextLine()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        if (!gameProperties.containsKey("seed")) {
-            gameProperties.setProperty("seed", String.valueOf(ThreadLocalRandom.current().nextInt()));
-        }
+        readGameProperties(iCmd, s);
 
         prevViewData = null;
         currentViewData = new JsonObject();
@@ -151,6 +136,8 @@ public final class GameManager<T extends AbstractPlayer> {
 
         s.close();
     }
+
+    abstract protected void readGameProperties(InputCommand iCmd, Scanner s);
 
     /**
      * Executes a player for a maximum of turnMaxTime milliseconds and store the output. Used by player.execute().
@@ -211,12 +198,7 @@ public final class GameManager<T extends AbstractPlayer> {
         currentTooltips = new ArrayList<>();
     }
 
-    private void dumpGameProperties() {
-        out.println(OutputCommand.UINPUT.format(gameProperties.size()));
-        for (Entry<Object, Object> t : gameProperties.entrySet()) {
-            out.println(t.getKey() + "=" + t.getValue());
-        }
-    }
+    protected void dumpGameProperties() {}
 
     private void dumpScores() {
         OutputData data = new OutputData(OutputCommand.SCORES);
@@ -262,7 +244,7 @@ public final class GameManager<T extends AbstractPlayer> {
         OutputData data = new OutputData(OutputCommand.INFOS);
         out.println(data);
 
-        if (newTurn && getPlayerCount() > 1 && prevGameSummary != null) {
+        if (newTurn && players.size() > 1 && prevGameSummary != null) {
             OutputData summary = new OutputData(OutputCommand.SUMMARY);
             summary.addAll(prevGameSummary);
             out.println(summary);
@@ -306,46 +288,6 @@ public final class GameManager<T extends AbstractPlayer> {
     //
     // Public methods used by Referee:
     //
-
-    /**
-     * Get initial number of players.
-     * 
-     * @return the number of players.
-     */
-    public int getPlayerCount() {
-        return players.size();
-    }
-
-    /**
-     * Get all the players.
-     * 
-     * @return the list of players.
-     */
-    public List<T> getPlayers() {
-        return players;
-    }
-
-    /**
-     * Get all the active players.
-     * 
-     * @return the list of active players.
-     */
-    public List<T> getActivePlayers() {
-        // TODO: could be optimized with a list of active players updated on player.deactivate().
-        return players.stream().filter(p -> p.isActive()).collect(Collectors.toList());
-    }
-
-    /**
-     * Get player with index i
-     * 
-     * @param i
-     *            Player index
-     * @return player with index i
-     * @throws IndexOutOfBoundsException
-     */
-    public T getPlayer(int i) throws IndexOutOfBoundsException {
-        return this.players.get(i);
-    }
 
     /**
      * Specifies the frameDuration in milliseconds. Default: 1000ms
