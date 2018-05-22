@@ -2,8 +2,11 @@ package com.codingame.gameengine.module.entities;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -157,7 +160,7 @@ class Serializer {
                 .collect(Collectors.joining(" "));
     }
 
-    public String serializeCreate(Entity<?> e) {
+    public String serializeCreateEntity(Entity<?> e) {
         return join(
                 commands.get("CREATE"),
                 types.get(e.getType()));
@@ -168,4 +171,26 @@ class Serializer {
                 spriteSheet.getWidth(), spriteSheet.getHeight(), spriteSheet.getOrigRow(), spriteSheet.getOrigCol(), spriteSheet.getImageCount(), spriteSheet.getImagesPerRow());
     }
 
+    public List<Object> serializeWorldStateDiff(WorldState previous, WorldState next) {
+        List<Object> newCommands = new ArrayList<>();
+        next.getEntityStateMap()
+                .forEach((entity, state) -> {
+                    Optional<EntityState> prevState = Optional.ofNullable(previous.getEntityStateMap().get(entity));
+                    EntityState diff = new EntityState();
+                    state.forEach((key, value) -> {
+                        EntityState.Param prevValue = prevState
+                                .map(s -> s.get(key))
+                                .orElse(null);
+                        if (!value.equals(prevValue)) {
+                            diff.put(key, value);
+                        }
+                    });
+
+                    // Forced commits are sent even if they are empty
+                    if (next.isForce() || !diff.isEmpty()) {
+                        newCommands.add(serializeUpdate(entity, diff, next.getFrameTime()));
+                    }
+                });
+        return newCommands;
+    }
 }

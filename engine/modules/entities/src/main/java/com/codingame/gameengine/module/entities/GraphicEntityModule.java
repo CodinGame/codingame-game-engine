@@ -30,7 +30,6 @@ public class GraphicEntityModule implements Module {
     //TODO: extra properties for Texts (text wrapping, alignement, ...)
 
     static int ENTITY_COUNT = 0;
-    private final GraphicEntitySerializer graphicEntitySerializer;
 
     private List<SpriteSheetLoader> newSpriteSheets;
     private List<Entity<?>> newEntities;
@@ -41,12 +40,12 @@ public class GraphicEntityModule implements Module {
     private WorldState currentWorldState;
 
     private GameManager<AbstractPlayer> gameManager;
+    @Inject private Serializer gameSerializer;
     @Inject private Provider<SpriteSheetLoader> spriteSheetProvider;
 
     @Inject
     GraphicEntityModule(GameManager<AbstractPlayer> gameManager) {
         this.gameManager = gameManager;
-        graphicEntitySerializer = new GraphicEntitySerializer();
         world = new World();
         entities = new ArrayList<>();
         newEntities = new ArrayList<>();
@@ -170,11 +169,12 @@ public class GraphicEntityModule implements Module {
 
         autocommit();
 
-        newSpriteSheets.forEach(e -> graphicEntitySerializer.dumpLoadSpriteSheet(e, commands));
+        newSpriteSheets.forEach(e ->
+                commands.add(gameSerializer.serializeLoadSpriteSheet(e)));
         newSpriteSheets.clear();
 
         newEntities.stream().forEach(e -> {
-            graphicEntitySerializer.dumpNewEntity(e, commands);
+            commands.add(gameSerializer.serializeCreateEntity(e));
         });
         newEntities.clear();
 
@@ -183,9 +183,10 @@ public class GraphicEntityModule implements Module {
                 .map(Entry::getValue)
                 .collect(Collectors.toList());
 
-        for (WorldState next : orderedStates) {
-            graphicEntitySerializer.dumpWorldStateDiff(currentWorldState, next, commands);
-            currentWorldState.updateAllEntities(next);
+        for (WorldState nextWorldState : orderedStates) {
+            List<Object> worldStateDiff = gameSerializer.serializeWorldStateDiff(currentWorldState, nextWorldState);
+            commands.addAll(worldStateDiff);
+            currentWorldState.updateAllEntities(nextWorldState);
         }
 
         worldStates.clear();
