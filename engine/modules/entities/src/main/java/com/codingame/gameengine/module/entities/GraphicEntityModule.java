@@ -184,7 +184,7 @@ public class GraphicEntityModule implements Module {
                 .collect(Collectors.toList());
 
         for (WorldState nextWorldState : orderedStates) {
-            List<Object> worldStateDiff = gameSerializer.serializeWorldStateDiff(currentWorldState, nextWorldState);
+            List<Object> worldStateDiff = nextWorldState.serializeDiffFromPrevWorldState(currentWorldState, gameSerializer);
             commands.addAll(worldStateDiff);
             currentWorldState.updateAllEntities(nextWorldState);
         }
