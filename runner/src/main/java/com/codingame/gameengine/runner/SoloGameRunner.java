@@ -10,6 +10,10 @@ import java.util.List;
 public class SoloGameRunner extends GameRunner {
     
     private List<String> testCaseContent;
+    
+    public SoloGameRunner() {
+        System.setProperty("game.mode", "solo");
+    }
 
     private List<String> getLines(File file) {
         List<String> lines = new ArrayList<>();
