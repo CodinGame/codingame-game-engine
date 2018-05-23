@@ -42,5 +42,17 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
         super.endGame();
         getPlayer().setScore(0);
     }
+    
+    public void winGame(String message) {
+        super.endGame();
+        super.addToGameSummary(formatSuccessMessage(message));
+        getPlayer().setScore(1);
+    }
+    
+    public void loseGame(String message) {
+        super.endGame();
+        super.addToGameSummary(formatErrorMessage(message));
+        getPlayer().setScore(0);
+    }
 
 }
