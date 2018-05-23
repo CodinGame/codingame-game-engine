@@ -167,7 +167,20 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
   async function selectReplay () {
     $scope.selectProgress = 'saving'
     await fetch('/services/save-replay')
-    $scope.selectProgress = 'complete'
+      .then(function (response) {
+        if (response.ok) {
+          $scope.selectProgress = 'complete'
+        }
+      })
+      .catch(function (error) {
+        $scope.reportItems = [
+          {
+            'type': 'ERROR',
+            'message': error
+          }
+        ]
+        $scope.showExport = true
+      })
   }
 
   function closeReportPopup () {
@@ -182,6 +195,25 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
   $scope.showConfigForm = false
   async function exportZip () {
     const data = await fetch('/services/export')
+      .then(function (response) {
+        if (response.ok) {
+          return response
+        } else {
+          return undefined
+        }
+      })
+      .catch(function (error) {
+        $scope.reportItems = [
+          {
+            'type': 'ERROR',
+            'message': error
+          }
+        ]
+        $scope.showExport = true
+      })
+    if (data === undefined) {
+      return
+    }
     if (data.status === 422) {
       const text = await data.text()
       $scope.formStatement = text
