@@ -237,7 +237,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         OutputData data = new OutputData(OutputCommand.INFOS);
         out.println(data);
 
-        if (newTurn && players.size() > 1 && prevGameSummary != null) {
+        if (newTurn && prevGameSummary != null) {
             OutputData summary = new OutputData(OutputCommand.SUMMARY);
             summary.addAll(prevGameSummary);
             out.println(summary);
