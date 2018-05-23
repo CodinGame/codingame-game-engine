@@ -218,11 +218,15 @@
 		#form>p>input {
 			margin-bottom: 10px;
 		}
+
+		[ng-cloak] {
+			display: none !important;
+		}
 	</style>
 </head>
 
 <body>
-	<div ng-app="player" ng-controller="PlayerCtrl">
+	<div ng-app="player" ng-controller="PlayerCtrl" ng-cloak>
 
 		<div ng-show="showExport" class="report-popup-wrapper">
 			<div class="report-popup">
