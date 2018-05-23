@@ -43,13 +43,14 @@ class GameEngineModule extends AbstractModule {
         return abstractPlayer;
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Provides
     @Singleton
-    GameManager<AbstractPlayer> provideGameManager(Injector injector, Provider<SoloGameManager<AbstractPlayer>> soloProvider, Provider<MultiplayerGameManager<AbstractPlayer>> multiProvider) throws ClassNotFoundException {
+    GameManager<AbstractPlayer> provideGameManager(Injector injector, Provider<SoloGameManager<AbstractSoloPlayer>> soloProvider, Provider<MultiplayerGameManager<AbstractMultiplayerPlayer>> multiProvider) throws ClassNotFoundException {
         if (isMulti()) {
-            return multiProvider.get();
+            return (GameManager) multiProvider.get();
         } else if (isSolo()){
-            return soloProvider.get();
+            return (GameManager) soloProvider.get();
         } else {
             throw new RuntimeException("Unknown game mode");
         }
@@ -58,10 +59,10 @@ class GameEngineModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Provides
     @Singleton
-    MultiplayerGameManager<AbstractPlayer> provideMultiplayerGameManager(Injector injector) throws ClassNotFoundException {
+    MultiplayerGameManager<AbstractMultiplayerPlayer> provideMultiplayerGameManager(Injector injector) throws ClassNotFoundException {
         if(isMulti()) {
             Type type = Types.newParameterizedType(MultiplayerGameManager.class, getPlayerClass());
-            MultiplayerGameManager<AbstractPlayer> gameManager = (MultiplayerGameManager<AbstractPlayer>) injector.getInstance(Key.get(type));
+            MultiplayerGameManager<AbstractMultiplayerPlayer> gameManager = (MultiplayerGameManager<AbstractMultiplayerPlayer>) injector.getInstance(Key.get(type));
             return gameManager;
         } else if (isSolo()) {
             throw new RuntimeException("Cannot use MultiplayerGameManager in a solo player game");
@@ -73,10 +74,10 @@ class GameEngineModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Provides
     @Singleton
-    SoloGameManager<AbstractPlayer> provideSoloGameManager(Injector injector) throws ClassNotFoundException {
+    SoloGameManager<AbstractSoloPlayer> provideSoloGameManager(Injector injector) throws ClassNotFoundException {
         if(isSolo()) {
             Type type = Types.newParameterizedType(SoloGameManager.class, getPlayerClass());
-            SoloGameManager<AbstractPlayer> gameManager = (SoloGameManager<AbstractPlayer>) injector.getInstance(Key.get(type));
+            SoloGameManager<AbstractSoloPlayer> gameManager = (SoloGameManager<AbstractSoloPlayer>) injector.getInstance(Key.get(type));
             return gameManager;
         } else if (isMulti()) {
             throw new RuntimeException("Cannot use SoloGameManager in a multiplayer game");

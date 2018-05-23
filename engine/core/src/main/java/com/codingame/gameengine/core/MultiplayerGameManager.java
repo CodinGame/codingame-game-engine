@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import com.google.inject.Singleton;
 
 @Singleton
-public final class MultiplayerGameManager<T extends AbstractPlayer> extends GameManager<T>{
+public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> extends GameManager<T>{
 
     private Properties gameProperties;
     private int seed;
