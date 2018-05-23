@@ -3,7 +3,9 @@ package com.codingame.gameengine.core;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.commons.logging.Log;
@@ -55,6 +57,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private JsonObject globalViewData = new JsonObject();
 
     private List<Module> registeredModules = new ArrayList<>();
+    
+    private Map<String, String> metadata = new HashMap<>();
 
     private boolean initDone = false;
     private boolean outputsRead = false;
@@ -126,6 +130,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
 
         dumpGameProperties();
         dumpScores();
+        
+        dumpMetadata();
 
         s.close();
     }
@@ -192,6 +198,12 @@ abstract public class GameManager<T extends AbstractPlayer> {
     }
 
     protected void dumpGameProperties() {}
+
+    private void dumpMetadata() {
+        OutputData data = new OutputData(OutputCommand.METADATA);
+        data.add(getMetadata());
+        out.println(data);
+    }
 
     private void dumpScores() {
         OutputData data = new OutputData(OutputCommand.SCORES);
@@ -269,6 +281,10 @@ abstract public class GameManager<T extends AbstractPlayer> {
             log.info(data);
         }
     }
+    
+    private String getMetadata() {
+        return gson.toJsonTree(metadata).getAsJsonObject().toString();
+    }
 
     void setOuputsRead(boolean outputsRead) {
         this.outputsRead = outputsRead;
@@ -281,6 +297,16 @@ abstract public class GameManager<T extends AbstractPlayer> {
     //
     // Public methods used by Referee:
     //
+    
+    /**
+     * Puts a new metadata that will be sent to the CodinGame IDE.
+     * 
+     * @param key the property to send
+     * @param value the property's value
+     */
+    public final void putMetadata(String key, String value) {
+        metadata.put(key, value);
+    }
 
     /**
      * Specifies the frameDuration in milliseconds. Default: 1000ms
