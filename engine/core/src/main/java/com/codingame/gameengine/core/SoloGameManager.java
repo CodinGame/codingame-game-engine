@@ -23,5 +23,14 @@ public class SoloGameManager<T extends AbstractPlayer> extends GameManager<T>{
     public List<String> getTestCase() {
         return testCase;
     }
+    
+    /**
+     * Get the player
+     * 
+     * @return player
+     */
+    public T getPlayer() {
+        return this.players.get(0);
+    }
 
 }
