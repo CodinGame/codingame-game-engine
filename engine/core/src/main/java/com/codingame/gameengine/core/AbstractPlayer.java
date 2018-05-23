@@ -10,7 +10,7 @@ import com.google.inject.Provider;
  * The representation of the a player's AI during the game's execution.
  *
  */
-public abstract class AbstractPlayer {
+abstract public class AbstractPlayer {
     @Inject Provider<GameManager<AbstractPlayer>> gameManagerProvider;
 
     /**
@@ -24,10 +24,9 @@ public abstract class AbstractPlayer {
         private static final long serialVersionUID = 42L;
     }
 
-    private int index;
+    protected int index;
     private List<String> inputs = new ArrayList<>();
     private List<String> outputs;
-    private boolean active = true;
     private boolean timeout;
     private int score;
     private boolean hasBeenExecuted;
@@ -43,15 +42,6 @@ public abstract class AbstractPlayer {
     }
 
     /**
-     * Returns an integer that will be converted into the player's real color by the viewer.
-     * 
-     * @return the player's color token.
-     */
-    public final int getColorToken() {
-        return -(this.index + 1);
-    }
-
-    /**
      * Returns a string that will be converted into the real avatar by the viewer, if it exists.
      * 
      * @return the player's avatar token.
@@ -61,20 +51,11 @@ public abstract class AbstractPlayer {
     }
 
     /**
-     * Returns true is the player is still active in the game (can be executed).
-     * 
-     * @return true is the player is active.
-     */
-    public final boolean isActive() {
-        return this.active;
-    }
-
-    /**
      * Get player index from 0 (included) to number of players (excluded).
      * 
      * @return the player index.
      */
-    public final int getIndex() {
+    int getIndex() {
         return this.index;
     }
 
@@ -83,7 +64,7 @@ public abstract class AbstractPlayer {
      * 
      * @return current player score
      */
-    public final int getScore() {
+    int getScore() {
         return this.score;
     }
 
@@ -92,28 +73,8 @@ public abstract class AbstractPlayer {
      * 
      * @param score
      */
-    public final void setScore(int score) {
+    void setScore(int score) {
         this.score = score;
-    }
-
-    /**
-     * Deactivate a player. The player can't play after this and is no longer in the list of active players.
-     */
-    public final void deactivate() {
-        this.deactivate(null);
-    }
-
-    /**
-     * Deactivate a player and adds a tooltip with the reason. The player can't play after this and is no longer in the list of active players.
-     * 
-     * @param reason
-     *            Message to display in the tooltip.
-     */
-    public final void deactivate(String reason) {
-        this.active = false;
-        if (reason != null) {
-            gameManagerProvider.get().addTooltip(new Tooltip(index, reason));
-        }
     }
 
     /**
