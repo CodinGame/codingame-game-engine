@@ -307,7 +307,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     /**
      * Set game end.
      */
-    public void endGame() {
+    protected void endGame() {
         this.gameEnd = true;
     }
 

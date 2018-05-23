@@ -98,4 +98,10 @@ public final class MultiplayerGameManager<T extends AbstractPlayer> extends Game
         return this.players.get(i);
     }
 
+    /**
+     * Set game end.
+     */
+    public void endGame() {
+        super.endGame();
+    }
 }

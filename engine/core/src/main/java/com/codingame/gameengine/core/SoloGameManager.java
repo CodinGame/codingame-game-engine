@@ -10,6 +10,7 @@ import com.google.inject.Singleton;
 public class SoloGameManager<T extends AbstractPlayer> extends GameManager<T>{
     
     private List<String> testCase = new ArrayList<>();
+    private boolean win;
 
     @Override
     protected void readGameProperties(InputCommand iCmd, Scanner s) {
@@ -31,6 +32,16 @@ public class SoloGameManager<T extends AbstractPlayer> extends GameManager<T>{
      */
     public T getPlayer() {
         return this.players.get(0);
+    }
+    
+    public void winGame() {
+        super.endGame();
+        win = true;
+    }
+    
+    public void loseGame() {
+        super.endGame();
+        win = false;
     }
 
 }
