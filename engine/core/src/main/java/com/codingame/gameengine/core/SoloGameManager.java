@@ -33,22 +33,38 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
         return this.players.get(0);
     }
     
+    /**
+     * Ends the game as a victory
+     */
     public void winGame() {
         super.endGame();
         getPlayer().setScore(1);
     }
     
+    /**
+     * Ends the game as a fail
+     */
     public void loseGame() {
         super.endGame();
         getPlayer().setScore(0);
     }
     
+    /**
+     * Ends the game as a victory with a green message.
+     * 
+     * @param message the message to display in green
+     */
     public void winGame(String message) {
         super.endGame();
         super.addToGameSummary(formatSuccessMessage(message));
         getPlayer().setScore(1);
     }
     
+    /**
+     * Ends the game as a fail with a red message
+     * 
+     * @param message the message to display in red
+     */
     public void loseGame(String message) {
         super.endGame();
         super.addToGameSummary(formatErrorMessage(message));
