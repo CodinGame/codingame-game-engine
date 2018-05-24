@@ -179,19 +179,19 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
             'message': error
           }
         ]
-        $scope.showExport = true
+        $scope.showExportPopup = true
       })
   }
 
   function closeReportPopup () {
-    $scope.showExport = false
+    $scope.showExportPopup = false
   }
 
   function closeConfigForm () {
     $scope.showConfigForm = false
   }
 
-  $scope.showExport = false
+  $scope.showExportPopup = false
   $scope.showConfigForm = false
   async function exportZip () {
     const data = await fetch('/services/export')
@@ -199,7 +199,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
         if (response.ok) {
           return response
         } else {
-          return undefined
+          throw new Error(response.statusText)
         }
       })
       .catch(function (error) {
@@ -209,11 +209,13 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
             'message': error
           }
         ]
-        $scope.showExport = true
+        $scope.showExportPopup = true
       })
-    if (data === undefined) {
+
+    if (!data) {
       return
     }
+
     if (data.status === 422) {
       const text = await data.text()
       $scope.formStatement = text
@@ -252,7 +254,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
         })
       }
       $scope.reportItems = exportResponse.reportItems
-      $scope.showExport = true
+      $scope.showExportPopup = true
     }
   }
 
