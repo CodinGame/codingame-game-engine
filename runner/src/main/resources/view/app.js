@@ -170,9 +170,12 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
       .then(function (response) {
         if (response.ok) {
           $scope.selectProgress = 'complete'
+        } else {
+          throw new Error(response.statusText)
         }
       })
       .catch(function (error) {
+        $scope.selectProgress = 'inactive'
         $scope.reportItems = [
           {
             'type': 'ERROR',
