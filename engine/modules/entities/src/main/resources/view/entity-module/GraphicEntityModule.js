@@ -9,6 +9,7 @@ export class GraphicEntityModule {
   constructor(assets) {
     this.entities = new Map();
     this.frames = [];
+    this.loadingAssets = 0;
 
     this.extrapolationMap = {};
 
@@ -39,7 +40,13 @@ export class GraphicEntityModule {
     for (const line of frameData) {
       if (line) {
         const command = CommandParser.parse(line, this.globalData, frameInfo);
-        command.apply(this.entities, number);
+        const loadPromise = command.apply(this.entities, number);
+        if (loadPromise) {
+          this.loadingAssets++;
+          loadPromise.then(() => {
+            this.loadingAssets--;
+          });
+        }
       }
     }
     this.extrapolate(number);
@@ -110,7 +117,15 @@ export class GraphicEntityModule {
     });
   }
 
+  stillLoading() {
+    return this.loadingAssets > 0;
+  }
+
   updateScene(previousData, currentData, progress) {
+    if (this.stillLoading()) {
+      return;
+    }
+
     this.entities.forEach(e => e.render(progress, currentData, this.globalData));
 
     // Flags are set by Entity when a zIndex changes, or a group has different children
