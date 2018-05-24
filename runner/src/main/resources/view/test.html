@@ -157,6 +157,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			background: rgba(0,0,0,.6);
 		}
 
 		.report-popup {
@@ -224,7 +225,7 @@
 <body>
 	<div ng-app="player" ng-controller="PlayerCtrl">
 
-		<div ng-show="showExport" class="report-popup-wrapper">
+		<div ng-show="showExportPopup" class="report-popup-wrapper">
 			<div class="report-popup">
 				<div ng-scrollbars class="report-items-wrapper">
 					<div ng-repeat="item in reportItems">
