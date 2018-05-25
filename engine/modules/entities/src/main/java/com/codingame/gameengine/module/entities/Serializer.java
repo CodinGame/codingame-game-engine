@@ -121,10 +121,11 @@ class Serializer {
 
     public String serializeEntitiesStateDiff(Entity<?> entity, EntityState diff, String frameInstant) {
         return join(
-                commands.get("UPDATE"),
-                entity.getId(),
-                frameInstant,
-                minifyDiff(diff));
+            commands.get("UPDATE"),
+            entity.getId(),
+            frameInstant,
+            minifyDiff(diff)
+        );
     }
 
     private String minifyParam(String key, EntityState.Param param) {
@@ -153,19 +154,23 @@ class Serializer {
 
     private String minifyDiff(EntityState diff) {
         return diff.entrySet().stream()
-                .map((entry) -> join(minifyKey(entry.getKey()), minifyParam(entry.getKey(), entry.getValue())))
-                .collect(Collectors.joining(" "));
+            .map((entry) -> join(minifyKey(entry.getKey()), minifyParam(entry.getKey(), entry.getValue())))
+            .collect(Collectors.joining(" "));
     }
 
     public String serializeCreateEntity(Entity<?> e) {
         return join(
-                commands.get("CREATE"),
-                types.get(e.getType()));
+            commands.get("CREATE"),
+            types.get(e.getType())
+        );
     }
 
     public Object serializeLoadSpriteSheet(SpriteSheetLoader spriteSheet) {
-        return join(commands.get("LOADSPRITESHEET"), spriteSheet.getName(), spriteSheet.getSourceImage(),
-                spriteSheet.getWidth(), spriteSheet.getHeight(), spriteSheet.getOrigRow(), spriteSheet.getOrigCol(), spriteSheet.getImageCount(), spriteSheet.getImagesPerRow());
+        return join(
+            commands.get("LOADSPRITESHEET"), spriteSheet.getName(), spriteSheet.getSourceImage(),
+            spriteSheet.getWidth(), spriteSheet.getHeight(), spriteSheet.getOrigRow(), spriteSheet.getOrigCol(), spriteSheet.getImageCount(),
+            spriteSheet.getImagesPerRow()
+        );
     }
 
 }

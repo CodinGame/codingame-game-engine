@@ -91,9 +91,10 @@ public class GraphicEntityModule implements Module {
     void loadSpriteSheet(SpriteSheetLoader spritesheet) {
         newSpriteSheets.add(spritesheet);
     }
-    
+
     /**
      * Create a spritesheet loader.
+     * 
      * @return a SpriteSheetLoader
      */
     public SpriteSheetLoader createSpriteSheetLoader() {
@@ -140,7 +141,7 @@ public class GraphicEntityModule implements Module {
         requireNonEmpty(entities);
 
         String actualT = Serializer.formatFrameTime(t);
-        
+
         WorldState state = worldStates.get(actualT);
         if (state == null) {
             state = new WorldState(actualT);
@@ -169,8 +170,7 @@ public class GraphicEntityModule implements Module {
 
         autocommit();
 
-        newSpriteSheets.forEach(e ->
-                commands.add(gameSerializer.serializeLoadSpriteSheet(e)));
+        newSpriteSheets.forEach(e -> commands.add(gameSerializer.serializeLoadSpriteSheet(e)));
         newSpriteSheets.clear();
 
         newEntities.stream().forEach(e -> {
@@ -179,17 +179,17 @@ public class GraphicEntityModule implements Module {
         newEntities.clear();
 
         List<WorldState> orderedStates = worldStates.entrySet().stream()
-                .sorted((e1, e2) -> e1.getValue().getFrameTime().compareTo(e2.getValue().getFrameTime()))
-                .map(Entry::getValue)
-                .collect(Collectors.toList());
+            .sorted((e1, e2) -> e1.getValue().getFrameTime().compareTo(e2.getValue().getFrameTime()))
+            .map(Entry::getValue)
+            .collect(Collectors.toList());
 
-        for (WorldState nextWorldState : orderedStates) { 
+        for (WorldState nextWorldState : orderedStates) {
             WorldState worldStateDiff = nextWorldState.diffFromOtherWorldState(currentWorldState);
             worldStateDiff.getEntityStateMap().forEach((entity, diff) -> {
                 String serializedStateDiff = gameSerializer.serializeEntitiesStateDiff(entity, diff, worldStateDiff.getFrameTime());
                 commands.add(serializedStateDiff);
             });
-            
+
             currentWorldState.updateAllEntities(nextWorldState);
         }
 
