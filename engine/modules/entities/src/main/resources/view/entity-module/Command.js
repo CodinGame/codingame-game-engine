@@ -86,7 +86,10 @@ export class LoadCommand {
   }
 
   apply() {
-    this.loader.load();
+    return new Promise((resolve)=>{
+      this.loader.load();
+      this.loader.on('complete', resolve);
+    });
   }
 }
 
