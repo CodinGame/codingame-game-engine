@@ -1,8 +1,8 @@
 import {PROPERTIES} from "./properties.js";
 import {EntityFactory} from './EntityFactory.js';
 import * as transitions from "../core/transitions.js";
-import { lerp } from '../core/utils.js';
-import { assets } from '../assets.js';
+import {lerp} from '../core/utils.js';
+import {assets} from '../assets.js';
 
 const PROPERTY_KEY_MAP = {
   r: 'rotation',
@@ -82,11 +82,14 @@ export class LoadCommand {
       };
     }
 
-    this.loader.add('data:text/json;charset=UTF-8,' + JSON.stringify(data));
+    this.loader.add('data:text/json;charset=UTF-8,' + JSON.stringify(data), {crossOrigin: true});
   }
 
   apply() {
-    this.loader.load();
+    return new Promise((resolve)=>{
+      this.loader.load();
+      this.loader.on('complete', resolve);
+    });
   }
 }
 
@@ -115,7 +118,7 @@ export class PropertiesCommand {
         value = opts.convert(value, globalData, frameInfo, this.t);
       }
       let method = PropertiesCommand.curves[args[idx + 2]];
-      
+
       this.params[key] = value;
       idx += 2;
 

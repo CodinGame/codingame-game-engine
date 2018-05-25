@@ -167,21 +167,58 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
   async function selectReplay () {
     $scope.selectProgress = 'saving'
     await fetch('/services/save-replay')
-    $scope.selectProgress = 'complete'
+      .then(function (response) {
+        if (response.ok) {
+          $scope.selectProgress = 'complete'
+        } else {
+          throw new Error(response.statusText)
+        }
+      })
+      .catch(function (error) {
+        $scope.selectProgress = 'inactive'
+        $scope.reportItems = [
+          {
+            'type': 'ERROR',
+            'message': error
+          }
+        ]
+        $scope.showExportPopup = true
+      })
   }
 
   function closeReportPopup () {
-    $scope.showExport = false
+    $scope.showExportPopup = false
   }
 
   function closeConfigForm () {
     $scope.showConfigForm = false
   }
 
-  $scope.showExport = false
+  $scope.showExportPopup = false
   $scope.showConfigForm = false
   async function exportZip () {
     const data = await fetch('/services/export')
+      .then(function (response) {
+        if (response.ok) {
+          return response
+        } else {
+          throw new Error(response.statusText)
+        }
+      })
+      .catch(function (error) {
+        $scope.reportItems = [
+          {
+            'type': 'ERROR',
+            'message': error
+          }
+        ]
+        $scope.showExportPopup = true
+      })
+
+    if (!data) {
+      return
+    }
+
     if (data.status === 422) {
       const text = await data.text()
       $scope.formStatement = text
@@ -220,7 +257,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
         })
       }
       $scope.reportItems = exportResponse.reportItems
-      $scope.showExport = true
+      $scope.showExportPopup = true
     }
   }
 

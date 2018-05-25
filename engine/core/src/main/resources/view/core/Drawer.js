@@ -324,11 +324,9 @@ export class Drawer {
   /** Mandatory */
   parseGlobalData(globalData) {
     for (let moduleName in this.modules) {
-      if (globalData.hasOwnProperty(moduleName)) {
-        const module = this.modules[moduleName];
-        if (typeof module.handleGlobalData === 'function') {
-          module.handleGlobalData(this.playerInfo, globalData[moduleName]);
-        }
+      const module = this.modules[moduleName];
+      if (typeof module.handleGlobalData === 'function') {
+        module.handleGlobalData(this.playerInfo, globalData[moduleName]);
       }
     }
   }
@@ -365,9 +363,9 @@ export class Drawer {
 
 
     for (let moduleName in this.modules) {
-      if (frame.hasOwnProperty(moduleName)) {
-        const module = this.modules[moduleName];
-        parsedFrame.data[moduleName] = module.handleFrameData(parsedFrame.frameInfo, frame[moduleName]);
+      const module = this.modules[moduleName];
+      if (typeof module.handleFrameData === 'function') {
+    	  parsedFrame.data[moduleName] = module.handleFrameData(parsedFrame.frameInfo, frame[moduleName]);  
       }
     }
 
