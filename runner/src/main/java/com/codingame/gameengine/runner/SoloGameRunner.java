@@ -1,11 +1,16 @@
 package com.codingame.gameengine.runner;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 public class SoloGameRunner extends GameRunner {
     
@@ -15,18 +20,17 @@ public class SoloGameRunner extends GameRunner {
         System.setProperty("game.mode", "solo");
     }
 
-    private List<String> getLines(File file) {
+    private List<String> getLinesFromTestCaseFile(File file) {
         List<String> lines = new ArrayList<>();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-
-            String content = null;
-            while ((content = bufferedReader.readLine()) != null) {
-                lines.add(content);
-            }
-            bufferedReader.close();
+            JsonObject testCaseJson = new JsonParser().parse(FileUtils.readFileToString(file, StandardCharsets.UTF_8)).getAsJsonObject();
+            lines.addAll(Arrays.asList(testCaseJson.get("testIn").getAsString().split("\\\\n")));
         } catch (IOException e) {
-            throw new RuntimeException("Cannot read file");
+            throw new RuntimeException("Cannot read file", e);
+        } catch (NullPointerException e) {
+            throw new RuntimeException("Cannot find \"testIn\" property");
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot parse file", e);
         }
         return lines;
     }
@@ -37,9 +41,7 @@ public class SoloGameRunner extends GameRunner {
     
     public void setTestCase(File testCaseFile) {
         if (testCaseFile != null && testCaseFile.isFile()) {
-            testCaseContent = getLines(testCaseFile);
-            //Removes title 
-            testCaseContent.remove(0);
+            testCaseContent = getLinesFromTestCaseFile(testCaseFile);
         } else {
             throw new RuntimeException("Given test case is not a file.");
         }
