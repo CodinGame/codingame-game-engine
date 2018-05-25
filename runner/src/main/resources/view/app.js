@@ -66,7 +66,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
 
     return playerLoadedPromise.then(playerApi => {
       playerApi.initReplay(ctrl.gameManager)
-      playerApi.initReplay(ctrl.gameManager)
     })
   }
 

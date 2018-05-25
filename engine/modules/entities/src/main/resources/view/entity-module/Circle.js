@@ -1,25 +1,25 @@
-import { Shape } from "./Shape.js";
+import { Shape } from './Shape.js'
 
 export class Circle extends Shape {
-  static defaultRadius() {
-    return 100;
+  static defaultRadius () {
+    return 100
   }
 
-  constructor() {
-    super();
-    this.defaultState.radius = Circle.defaultRadius();
+  constructor () {
+    super()
+    this.defaultState.radius = Circle.defaultRadius()
   }
 
-  initDisplay() {
-    super.initDisplay();
-    this.graphics.drawCircle(0, 0, this.defaultState.radius);
+  initDisplay () {
+    super.initDisplay()
+    this.graphics.drawCircle(0, 0, this.defaultState.radius)
     if (this.defaultState.fillColor !== null) {
-      this.graphics.endFill();
+      this.graphics.endFill()
     }
   }
 
-  updateDisplay(state, changed, globalData) {
-    super.updateDisplay(state, changed, globalData);
+  updateDisplay (state, changed, globalData) {
+    super.updateDisplay(state, changed, globalData)
 
     if (changed.radius ||
       changed.lineColor ||
@@ -27,16 +27,15 @@ export class Circle extends Shape {
       changed.fillColor ||
       changed.fillAlpha ||
       changed.lineAlpha) {
-
-      this.graphics.clear();
+      this.graphics.clear()
 
       if (state.fillColor !== null) {
-        this.graphics.beginFill(state.fillColor, state.fillAlpha);
+        this.graphics.beginFill(state.fillColor, state.fillAlpha)
       }
-      this.graphics.lineStyle(globalData.atLeastOnePixel(state.lineWidth), state.lineColor);
-      this.graphics.drawCircle(0, 0, state.radius * globalData.coeff);
+      this.graphics.lineStyle(globalData.atLeastOnePixel(state.lineWidth), state.lineColor)
+      this.graphics.drawCircle(0, 0, state.radius * globalData.coeff)
       if (state.fillColor !== null) {
-        this.graphics.endFill();
+        this.graphics.endFill()
       }
     }
   }
