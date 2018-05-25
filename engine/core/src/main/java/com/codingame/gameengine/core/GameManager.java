@@ -100,7 +100,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         initDone = true;
 
         // Game Loop ----------------------------------------------------------
-        for (turn = 0; turn < getMaxTurns() && !isGameEnd(); turn++) {
+        for (turn = 0; turn < getMaxTurns() && !isGameEnd() && !allPlayersInactive(); turn++) {
             swapInfoAndViewData();
             log.info("Turn " + turn);
             newTurn = true;
@@ -135,6 +135,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
 
         s.close();
     }
+
+    abstract protected boolean allPlayersInactive();
 
     abstract protected void readGameProperties(InputCommand iCmd, Scanner s);
 

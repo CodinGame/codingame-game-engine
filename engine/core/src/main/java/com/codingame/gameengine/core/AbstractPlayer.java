@@ -156,6 +156,10 @@ abstract public class AbstractPlayer {
     final void setTimeout(boolean timeout) {
         this.timeout = timeout;
     }
+    
+    final boolean hasTimedOut() {
+        return timeout;
+    }
 
     final boolean hasBeenExecuted() {
         return hasBeenExecuted;

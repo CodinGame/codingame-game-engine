@@ -71,4 +71,9 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
         getPlayer().setScore(0);
     }
 
+    @Override
+    protected boolean allPlayersInactive() {
+        return getPlayer().hasTimedOut();
+    }
+
 }

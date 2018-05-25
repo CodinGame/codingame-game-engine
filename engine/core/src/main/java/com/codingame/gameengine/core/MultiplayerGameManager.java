@@ -104,4 +104,9 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
     public void endGame() {
         super.endGame();
     }
+
+    @Override
+    protected boolean allPlayersInactive() {
+        return getActivePlayers().isEmpty();
+    }
 }
