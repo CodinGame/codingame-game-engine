@@ -2,8 +2,8 @@ package com.codingame.gameengine.module.entities;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -119,7 +119,7 @@ class Serializer {
         return escaped;
     }
 
-    public String serializeUpdate(Entity<?> entity, EntityState diff, String frameInstant) {
+    public String serializeEntitiesStateDiff(Entity<?> entity, EntityState diff, String frameInstant) {
         return join(
                 commands.get("UPDATE"),
                 entity.getId(),
@@ -157,7 +157,7 @@ class Serializer {
                 .collect(Collectors.joining(" "));
     }
 
-    public String serializeCreate(Entity<?> e) {
+    public String serializeCreateEntity(Entity<?> e) {
         return join(
                 commands.get("CREATE"),
                 types.get(e.getType()));

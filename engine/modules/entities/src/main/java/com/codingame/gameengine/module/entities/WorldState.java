@@ -3,6 +3,8 @@ package com.codingame.gameengine.module.entities;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 
 class WorldState {
     private Map<Entity<?>, EntityState> entityStateMap;
@@ -74,4 +76,24 @@ class WorldState {
     public void setForce(boolean force) {
         this.force = force;
     };
+
+    public WorldState diffFromOtherWorldState(WorldState previousWorldState) {
+//        List<Object> newCommands = new ArrayList<>();
+        
+        WorldState worldDiff = new WorldState(this.t);
+        
+        getEntityStateMap()
+                .forEach((entity, nextEntityState) -> {
+                    Optional<EntityState> prevEntityState = Optional.ofNullable(previousWorldState.getEntityStateMap().get(entity));
+                    EntityState entitiesDiff = nextEntityState.diffFromOtherState(prevEntityState);
+
+                    // Forced commits are sent even if they are empty
+                    if (isForce() || !entitiesDiff.isEmpty()) {
+//                        String serializedStateDiff = serializer.serializeEntitiesStateDiff(entity, entitiesDiff, getFrameTime());
+//                        newCommands.add(serializedStateDiff);
+                        worldDiff.getEntityStateMap().put(entity, entitiesDiff);
+                    }
+                });
+        return worldDiff;
+    }
 }
