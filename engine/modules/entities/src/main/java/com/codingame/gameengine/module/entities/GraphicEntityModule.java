@@ -183,9 +183,13 @@ public class GraphicEntityModule implements Module {
                 .map(Entry::getValue)
                 .collect(Collectors.toList());
 
-        for (WorldState nextWorldState : orderedStates) {
-            List<Object> worldStateDiff = nextWorldState.serializeDiffFromPrevWorldState(currentWorldState, gameSerializer);
-            commands.addAll(worldStateDiff);
+        for (WorldState nextWorldState : orderedStates) { 
+            WorldState worldStateDiff = nextWorldState.diffFromOtherWorldState(currentWorldState);
+            worldStateDiff.getEntityStateMap().forEach((entity, diff) -> {
+                String serializedStateDiff = gameSerializer.serializeEntitiesStateDiff(entity, diff, worldStateDiff.getFrameTime());
+                commands.add(serializedStateDiff);
+            });
+            
             currentWorldState.updateAllEntities(nextWorldState);
         }
 

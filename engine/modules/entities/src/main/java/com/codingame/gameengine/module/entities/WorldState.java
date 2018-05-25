@@ -1,9 +1,8 @@
 package com.codingame.gameengine.module.entities;
 
-import java.util.Map;
 import java.util.HashMap;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -78,8 +77,11 @@ class WorldState {
         this.force = force;
     };
 
-    public List<Object> serializeDiffFromPrevWorldState(WorldState previousWorldState, Serializer serializer) {
-        List<Object> newCommands = new ArrayList<>();
+    public WorldState diffFromOtherWorldState(WorldState previousWorldState) {
+//        List<Object> newCommands = new ArrayList<>();
+        
+        WorldState worldDiff = new WorldState(this.t);
+        
         getEntityStateMap()
                 .forEach((entity, nextEntityState) -> {
                     Optional<EntityState> prevEntityState = Optional.ofNullable(previousWorldState.getEntityStateMap().get(entity));
@@ -87,10 +89,11 @@ class WorldState {
 
                     // Forced commits are sent even if they are empty
                     if (isForce() || !entitiesDiff.isEmpty()) {
-                        String serializedStateDiff = serializer.serializeEntitiesStateDiff(entity, entitiesDiff, getFrameTime());
-                        newCommands.add(serializedStateDiff);
+//                        String serializedStateDiff = serializer.serializeEntitiesStateDiff(entity, entitiesDiff, getFrameTime());
+//                        newCommands.add(serializedStateDiff);
+                        worldDiff.getEntityStateMap().put(entity, entitiesDiff);
                     }
                 });
-        return newCommands;
+        return worldDiff;
     }
 }

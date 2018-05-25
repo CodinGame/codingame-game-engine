@@ -1,6 +1,5 @@
 package com.codingame.gameengine.module.entities;
 
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -72,9 +71,9 @@ class EntityState {
     }
 
     EntityState diffFromOtherState(Optional<EntityState> optionalPrevState) {
-        if(optionalPrevState.isPresent()) {
+        if (optionalPrevState.isPresent()) {
             return diffFromNonNullOtherState(optionalPrevState.get());
-        }else{
+        } else {
             return new EntityState(this);
         }
     }
