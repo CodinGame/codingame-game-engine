@@ -1,35 +1,32 @@
-import { Shape } from './Shape.js';
-import { lerp, unlerp, lerpColor } from '../core/utils.js';
+import { Shape } from './Shape.js'
 
 export default class Line extends Shape {
-
-  static defaultPosition() {
-    return 100;
+  static defaultPosition () {
+    return 100
   }
 
-  constructor() {
-    super();
-    this.defaultState.x2 = Line.defaultPosition();
-    this.defaultState.y2 = Line.defaultPosition();
+  constructor () {
+    super()
+    this.defaultState.x2 = Line.defaultPosition()
+    this.defaultState.y2 = Line.defaultPosition()
   }
 
-  initDisplay() {
-    super.initDisplay();
+  initDisplay () {
+    super.initDisplay()
   }
 
-  updateDisplay(state, changed, globalData) {
-    super.updateDisplay(state, changed, globalData);
+  updateDisplay (state, changed, globalData) {
+    super.updateDisplay(state, changed, globalData)
 
     if (changed.lineWidth ||
       changed.lineColor ||
       changed.lineAlpha ||
       changed.x2 ||
       changed.y2) {
-
-      this.graphics.clear();
-      this.graphics.lineStyle(globalData.atLeastOnePixel(state.lineWidth), state.lineColor, state.lineAlpha);
-      this.graphics.moveTo(0, 0);
-      this.graphics.lineTo(-this.container.x + state.x2 * globalData.coeff, -this.container.y + state.y2 * globalData.coeff);
+      this.graphics.clear()
+      this.graphics.lineStyle(globalData.atLeastOnePixel(state.lineWidth), state.lineColor, state.lineAlpha)
+      this.graphics.moveTo(0, 0)
+      this.graphics.lineTo(-this.container.x + state.x2 * globalData.coeff, -this.container.y + state.y2 * globalData.coeff)
     }
   }
 }
