@@ -707,6 +707,13 @@ export class Drawer {
     window.PIXI = Drawer.PIXI || window.PIXI
     this.oversampling = oversampling || 1
     this.canvas = $(canvas)
+    this.canvas.off('mousemove')
+    this.canvas.mousemove(() => {
+      if (this.currentFrame >= 0) {
+        this.changed = true
+      }
+    })
+
     if (colors) this.colors = this.parseColor(colors)
 
     if (location === 'ide') {
