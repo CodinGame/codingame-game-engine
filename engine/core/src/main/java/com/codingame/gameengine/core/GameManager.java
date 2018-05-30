@@ -129,9 +129,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
         dumpInfos();
 
         dumpGameProperties();
-        dumpScores();
-        
         dumpMetadata();
+        dumpScores();
 
         s.close();
     }
