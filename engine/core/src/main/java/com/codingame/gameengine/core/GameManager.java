@@ -251,7 +251,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         out.println(data);
 
         if (newTurn && prevGameSummary != null) {
-            OutputData summary = new OutputData(OutputCommand.SUMMARY);
+            OutputData summary = new OutputData(getGameSummaryOutputCommand());
             summary.addAll(prevGameSummary);
             out.println(summary);
         }
@@ -265,6 +265,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
             out.println(data);
         }
     }
+    
+    abstract protected OutputCommand getGameSummaryOutputCommand();
 
     private void dumpNextPlayerInfos(int nextPlayer, int expectedOutputLineCount, int timeout) {
         OutputData data = new OutputData(OutputCommand.NEXT_PLAYER_INFO);

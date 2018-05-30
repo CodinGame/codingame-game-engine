@@ -109,4 +109,9 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
     protected boolean allPlayersInactive() {
         return getActivePlayers().isEmpty();
     }
+
+    @Override
+    protected OutputCommand getGameSummaryOutputCommand() {
+        return OutputCommand.SUMMARY;
+    }
 }

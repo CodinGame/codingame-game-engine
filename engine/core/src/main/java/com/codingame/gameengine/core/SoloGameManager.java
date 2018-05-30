@@ -76,4 +76,8 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
         return getPlayer().hasTimedOut();
     }
 
+    @Override
+    protected OutputCommand getGameSummaryOutputCommand() {
+        return OutputCommand.INFOS;
+    }
 }
