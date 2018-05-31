@@ -506,8 +506,21 @@ class Renderer {
                                             exchange.getRequestReceiver().receiveFullString((e, data) -> {
                                                 ConfigResponseDto configResponseDto = new Gson().fromJson(data, ConfigResponseDto.class);
                                                 config.put("title", configResponseDto.title);
-                                                config.put("min_players", String.valueOf(configResponseDto.min_players));
-                                                config.put("max_players", String.valueOf(configResponseDto.max_players));
+                                                config.put("min_players", String.valueOf(configResponseDto.minPlayers));
+                                                config.put("max_players", String.valueOf(configResponseDto.maxPlayers));
+                                                config.put("type", configResponseDto.type);
+                                                if(configResponseDto.criteria != null) {
+                                                    config.put("criteria", configResponseDto.criteria);
+                                                }
+                                                if(configResponseDto.sortingOrder != null) {
+                                                    config.put("sorting_order", configResponseDto.sortingOrder);
+                                                }
+                                                if(configResponseDto.criteriaFr != null) {
+                                                    config.put("criteria_fr", configResponseDto.criteriaFr);
+                                                }
+                                                if(configResponseDto.criteriaEn != null) {
+                                                    config.put("criteria_en", configResponseDto.criteriaEn);
+                                                }
                                             });
 
                                             config.store(configOutput, null);
