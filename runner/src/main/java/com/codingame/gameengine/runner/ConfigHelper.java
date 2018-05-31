@@ -370,10 +370,32 @@ public class ConfigHelper {
                         String title = config.getProperty("title");
                         String minPlayers = config.getProperty("min_players");
                         String maxPlayers = config.getProperty("max_players");
+                        String criteria = config.getProperty("criteria");
+                        String criteriaEn = config.getProperty("criteria_en");
+                        String criteriaFr = config.getProperty("criteria_fr");
+                        String sortingOrder = config.getProperty("sorting_order");
+                        String questionType = config.getProperty("type");
 
                         questionConfig.setTitle(title);
                         questionConfig.setMinPlayers(minPlayers != null ? Integer.valueOf(minPlayers) : null);
                         questionConfig.setMaxPlayers(maxPlayers != null ? Integer.valueOf(maxPlayers) : null);
+                        questionConfig.setCriteria(criteria);
+                        questionConfig.setSortingOrder(sortingOrder);
+                        questionConfig.setQuestionType(questionType);
+
+                        if (sortingOrder != null && criteria != null) {
+                            if (criteriaEn != null) {
+                                questionConfig.getCriteriaLanguageMap().put(Constants.LANGUAGE_ID_ENGLISH, criteriaEn);
+                            } else {
+                                questionConfig.getCriteriaLanguageMap().put(Constants.LANGUAGE_ID_ENGLISH, criteria);
+                            }
+                            
+                            if (criteriaFr != null) {
+                                questionConfig.getCriteriaLanguageMap().put(Constants.LANGUAGE_ID_FRENCH, criteriaFr);
+                            } else {
+                                questionConfig.getCriteriaLanguageMap().put(Constants.LANGUAGE_ID_FRENCH, questionConfig.getCriteriaLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH));
+                            }
+                        }
                     }
                 } else if ("stub.txt".equals(fileName)) {
                     questionConfig.setStubGenerator(FileUtils.readFileToString(p.toFile(), StandardCharsets.UTF_8));
