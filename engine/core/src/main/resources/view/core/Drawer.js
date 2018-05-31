@@ -665,13 +665,22 @@ export class Drawer {
       return agentData
     })
     this.loading = true
-    loader.on('complete', function (loader) {
+
+    let completed = false
+    const onComplete = function () {
       drawer._initFrames(agents.length, frames)
       drawer.loading = false
       drawer.reinit(false)
-    })
+      completed = true
+    }
+
+    loader.on('complete', onComplete)
     loader.on('error', function (e) {
       console.warn(e)
+      // The loader won't complete now, let's just go ahead and see what happens
+      if (!completed) {
+        onComplete()
+      }
     })
     loader.load()
   }
