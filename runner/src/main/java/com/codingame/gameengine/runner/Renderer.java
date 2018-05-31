@@ -36,6 +36,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import com.codingame.gameengine.runner.ConfigHelper.GameConfig;
+import com.codingame.gameengine.runner.ConfigHelper.GameType;
 import com.codingame.gameengine.runner.ConfigHelper.QuestionConfig;
 import com.codingame.gameengine.runner.dto.ConfigResponseDto;
 import com.google.common.hash.HashCode;
@@ -63,7 +64,8 @@ import io.undertow.util.StatusCodes;
 class Renderer {
 
     private static final int MIN_PLAYERS = 1;
-    private static final int MAX_PLAYERS = 8;
+    private static final int MULTI_MAX_PLAYERS = 8;
+    private static final int SOLO_MAX_PLAYERS = 8;
     private static final Pattern HTML_IMG_MARKER = Pattern.compile("<\\s*img [^\\>]*src\\s*=\\s*([\"\\'])(?<source>.*?)\\1");
     private static final Pattern GEN_STATEMENT_MARKER = Pattern.compile("statement_[a-zA-Z]{2}\\.html\\.tpl");
 
@@ -404,29 +406,77 @@ class Renderer {
         } else if (questionConfig.getMaxPlayers() == null) {
             throw new MissingConfigException(tag + "Missing max_players property in config.ini.");
         } else {
-            if (questionConfig.getMinPlayers() < MIN_PLAYERS) {
-                exportReport.addItem(
-                    ReportItemType.ERROR, tag + "Min players ("
-                        + questionConfig.getMinPlayers()
-                        + ") should be greater or equal to " + MIN_PLAYERS + "."
-                );
+            checkQuestionsTypeValidity(gameConfig, questionConfig, tag, exportReport);
+            
+            checkPlayerNumber(questionConfig, tag, exportReport, gameConfig.getGameType() == GameType.MULTI ? MULTI_MAX_PLAYERS : SOLO_MAX_PLAYERS);
+        }
+    }
+    
+    private void checkQuestionsTypeValidity(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport)
+        throws MissingConfigException {
+        if (!questionConfig.isValidQuestionType()) {
+            throw new MissingConfigException(tag + "Your question type is not valid. Please choose one among MULTI, SOLO and OPTI.");
+        }
+
+        if (gameConfig.getGameType() == GameType.UNDEFINED) {
+            exportReport.addItem(ReportItemType.ERROR, "The game has both multiplayer and solo player questions. Please, choose either one.");
+        }
+
+        if (questionConfig.isOptiQuestion()) {
+            if (gameConfig.getGameType() != GameType.SOLO) {
+                exportReport.addItem(ReportItemType.ERROR, "An optimization game must be solo player.");
             }
-            if (questionConfig.getMaxPlayers() < questionConfig.getMinPlayers()) {
-                exportReport.addItem(
-                    ReportItemType.ERROR, tag + "Max players ("
-                        + questionConfig.getMaxPlayers()
-                        + ") should be greater or equal to min players ("
-                        + questionConfig.getMinPlayers()
-                        + ")."
-                );
+            if(questionConfig.getCriteria() == null) {
+                throw new MissingConfigException("An optimization game must have a criteria property in config.ini.");
             }
-            if (questionConfig.getMaxPlayers() > MAX_PLAYERS) {
-                exportReport.addItem(
-                    ReportItemType.ERROR, tag + "Max players ("
-                        + questionConfig.getMaxPlayers()
-                        + ") should be lower or equal to " + MAX_PLAYERS + "."
-                );
+            if(questionConfig.getSortingOrder() == null) {
+                throw new MissingConfigException("An optimization game must have a sorting_order property in config.ini.");
+            } else if (!"ASC".equalsIgnoreCase(questionConfig.getSortingOrder())
+                && !"DESC".equalsIgnoreCase(questionConfig.getSortingOrder())){
+                throw new MissingConfigException("The sorting order for an optimization game must be ASC (ascendant) or DESC (descendant)");
             }
+        }
+
+        switch (gameConfig.getGameType()) {
+        case MULTI:
+            if(!questionConfig.isMultiQuestion()) {
+                exportReport.addItem(ReportItemType.ERROR, "The game has several players but the type is not MULTI.");
+            }
+            break;
+        case SOLO:
+            if(!questionConfig.isSoloQuestion() && !questionConfig.isOptiQuestion()) {
+                exportReport.addItem(ReportItemType.ERROR, "The game has one player but the type is not SOLO or OPTI.");
+            }
+            break;
+        case UNDEFINED:
+        default:
+            break;
+        }
+    }
+
+    private void checkPlayerNumber(QuestionConfig questionConfig, String tag, ExportReport exportReport, int maxPlayers) {
+        if (questionConfig.getMinPlayers() < MIN_PLAYERS) {
+            exportReport.addItem(
+                ReportItemType.ERROR, tag + "Min players ("
+                    + questionConfig.getMinPlayers()
+                    + ") should be greater or equal to " + MIN_PLAYERS + "."
+            );
+        }
+        if (questionConfig.getMaxPlayers() < questionConfig.getMinPlayers()) {
+            exportReport.addItem(
+                ReportItemType.ERROR, tag + "Max players ("
+                    + questionConfig.getMaxPlayers()
+                    + ") should be greater or equal to min players ("
+                    + questionConfig.getMinPlayers()
+                    + ")."
+            );
+        }
+        if (questionConfig.getMaxPlayers() > maxPlayers) {
+            exportReport.addItem(
+                ReportItemType.ERROR, tag + "Max players ("
+                    + questionConfig.getMaxPlayers()
+                    + ") should be lower or equal to " + maxPlayers + "."
+            );
         }
     }
 
