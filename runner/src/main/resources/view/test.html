@@ -254,18 +254,20 @@
 					<p>
 						<input required type="text" ng-model="config.title" />
 					</p>
-					<p>
-						<label for="min_players">Min players*</label>
-					</p>
-					<p>
-						<input required type="number" min="1" max="8" ng-model="config.minPlayers" step="1"/>
-					</p>
-					<p>
-						<label for="max_players">Max players*</label>
-					</p>
-					<p>
-						<input required type="number" min="1" max="8" ng-model="config.maxPlayers" step="1"/>
-					</p>
+					<div ng-if="config.type != 'solo' && config.type != 'opti'">
+						<p>
+							<label for="min_players">Min players*</label>
+						</p>
+						<p>
+							<input required type="number" min="1" max="8" ng-model="config.minPlayers" step="1" />
+						</p>
+						<p>
+							<label for="max_players">Max players*</label>
+						</p>
+						<p>
+							<input required type="number" min="1" max="8" ng-model="config.maxPlayers" step="1" />
+						</p>
+					</div>
 					<p>
 						<label>
 							<input type="radio" ng-model="config.type" value="multi" ng-required="!config.type">
