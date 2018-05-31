@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.google.gson.Gson;
 
@@ -463,7 +464,7 @@ public class ConfigHelper {
             defaultConfig.configDetected = isPresentConfigIni(gameConfig, defaultConfig);
         }
 
-        
+        MutableInt soloQuestions = new MutableInt();
         questionsConfig.values().stream().forEach(c -> {
             // copy english statement, welcome, criteria to french if not translated
             String statementEn = c.getStatementsLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH);
@@ -486,7 +487,19 @@ public class ConfigHelper {
                 String titleEn = t.getTitle().get(Constants.LANGUAGE_ID_ENGLISH);
                 t.getTitle().putIfAbsent(Constants.LANGUAGE_ID_FRENCH, titleEn);
             }
+
+            if (c.maxPlayers != null && c.maxPlayers == 1) {
+                soloQuestions.increment();
+            }
         });
+
+        if (soloQuestions.intValue() == questionsConfig.size()) {
+            gameConfig.setGameType(GameType.SOLO);
+        } else if (soloQuestions.intValue() == 0) {
+            gameConfig.setGameType(GameType.MULTI);
+        } else {
+            gameConfig.setGameType(GameType.UNDEFINED);
+        }
 
         //Sort leagues alphabetically
         gameConfig.setQuestionConfigs(new TreeMap<>(questionsConfig));
