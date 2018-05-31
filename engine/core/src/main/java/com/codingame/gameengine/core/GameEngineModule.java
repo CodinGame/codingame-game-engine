@@ -46,23 +46,27 @@ class GameEngineModule extends AbstractModule {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Provides
     @Singleton
-    GameManager<AbstractPlayer> provideGameManager(Injector injector, Provider<SoloGameManager<AbstractSoloPlayer>> soloProvider, Provider<MultiplayerGameManager<AbstractMultiplayerPlayer>> multiProvider) throws ClassNotFoundException {
+    GameManager<AbstractPlayer> provideGameManager(
+        Injector injector, Provider<SoloGameManager<AbstractSoloPlayer>> soloProvider,
+        Provider<MultiplayerGameManager<AbstractMultiplayerPlayer>> multiProvider
+    ) throws ClassNotFoundException {
         if (isMulti()) {
             return (GameManager) multiProvider.get();
-        } else if (isSolo()){
+        } else if (isSolo()) {
             return (GameManager) soloProvider.get();
         } else {
             throw new RuntimeException("Unknown game mode");
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     @Provides
     @Singleton
     MultiplayerGameManager<AbstractMultiplayerPlayer> provideMultiplayerGameManager(Injector injector) throws ClassNotFoundException {
-        if(isMulti()) {
+        if (isMulti()) {
             Type type = Types.newParameterizedType(MultiplayerGameManager.class, getPlayerClass());
-            MultiplayerGameManager<AbstractMultiplayerPlayer> gameManager = (MultiplayerGameManager<AbstractMultiplayerPlayer>) injector.getInstance(Key.get(type));
+            MultiplayerGameManager<AbstractMultiplayerPlayer> gameManager = (MultiplayerGameManager<AbstractMultiplayerPlayer>) injector
+                .getInstance(Key.get(type));
             return gameManager;
         } else if (isSolo()) {
             throw new RuntimeException("Cannot use MultiplayerGameManager in a solo player game");
@@ -70,12 +74,12 @@ class GameEngineModule extends AbstractModule {
             throw new RuntimeException("Unknown game mode");
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     @Provides
     @Singleton
     SoloGameManager<AbstractSoloPlayer> provideSoloGameManager(Injector injector) throws ClassNotFoundException {
-        if(isSolo()) {
+        if (isSolo()) {
             Type type = Types.newParameterizedType(SoloGameManager.class, getPlayerClass());
             SoloGameManager<AbstractSoloPlayer> gameManager = (SoloGameManager<AbstractSoloPlayer>) injector.getInstance(Key.get(type));
             return gameManager;
@@ -85,11 +89,11 @@ class GameEngineModule extends AbstractModule {
             throw new RuntimeException("Unknown game mode");
         }
     }
-    
+
     private boolean isMulti() {
         return "multi".equals(System.getProperty("game.mode"));
     }
-    
+
     private boolean isSolo() {
         return "solo".equals(System.getProperty("game.mode"));
     }

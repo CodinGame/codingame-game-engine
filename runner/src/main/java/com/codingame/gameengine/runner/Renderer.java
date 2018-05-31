@@ -309,7 +309,7 @@ class Renderer {
     private void checkConfig(Path sourceFolderPath, ExportReport exportReport) throws IOException, MissingConfigException {
         ConfigHelper configHelper = new ConfigHelper();
         GameConfig gameConfig = configHelper.findConfig(sourceFolderPath.resolve("config"));
-        
+
         //Check unique opti question
         checkUniqueOpti(gameConfig, exportReport);
 
@@ -326,7 +326,7 @@ class Renderer {
             //Check statement
             checkStatement(gameConfig, questionConfig, tag, exportReport);
 
-            if(questionConfig.isMultiQuestion()) {
+            if (questionConfig.isMultiQuestion()) {
                 //Check Boss
                 checkBoss(gameConfig, questionConfig, tag, exportReport);
 
@@ -344,17 +344,17 @@ class Renderer {
 
     private void checkTestCases(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         for (TestCase testCase : questionConfig.getTestCases()) {
-            if(testCase.getTitle().get(Constants.LANGUAGE_ID_ENGLISH) == null) {
+            if (testCase.getTitle().get(Constants.LANGUAGE_ID_ENGLISH) == null) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have at least an English title.");
             }
-            if(testCase.getTestIn() == null || testCase.getTestIn().isEmpty()) {
+            if (testCase.getTestIn() == null || testCase.getTestIn().isEmpty()) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have a testIn property.");
             }
-            if(testCase.getIsTest() == null) {
+            if (testCase.getIsTest() == null) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have an isTest property.");
             } else if (testCase.getIsValidator() == null) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have an isValidator property.");
-            } else if(!(testCase.getIsTest() ^ testCase.getIsValidator())) {
+            } else if (!(testCase.getIsTest() ^ testCase.getIsValidator())) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must be either a test or a validator.");
             }
         }
@@ -363,7 +363,7 @@ class Renderer {
     private void checkUniqueOpti(GameConfig gameConfig, ExportReport exportReport) {
         boolean hasAnOptiQuestion = false;
         for (QuestionConfig questionConfig : gameConfig.getQuestionsConfig().values()) {
-            if(questionConfig.isOptiQuestion() && !hasAnOptiQuestion) {
+            if (questionConfig.isOptiQuestion() && !hasAnOptiQuestion) {
                 hasAnOptiQuestion = true;
             } else if (hasAnOptiQuestion) {
                 exportReport.addItem(ReportItemType.ERROR, "An optimization game must have only one question");
@@ -435,7 +435,8 @@ class Renderer {
         }
     }
 
-    private void checkConfigIni(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) throws MissingConfigException {
+    private void checkConfigIni(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport)
+        throws MissingConfigException {
         if (!questionConfig.isConfigDetected()) {
             throw new MissingConfigException(tag + "Missing config.ini file");
         } else if (gameConfig.getTitle() == null || gameConfig.getTitle().isEmpty()) {
@@ -446,11 +447,11 @@ class Renderer {
             throw new MissingConfigException(tag + "Missing max_players property in config.ini.");
         } else {
             checkQuestionsTypeValidity(gameConfig, questionConfig, tag, exportReport);
-            
+
             checkPlayerNumber(questionConfig, tag, exportReport, gameConfig.getGameType() == GameType.MULTI ? MULTI_MAX_PLAYERS : SOLO_MAX_PLAYERS);
         }
     }
-    
+
     private void checkQuestionsTypeValidity(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport)
         throws MissingConfigException {
         if (!questionConfig.isValidQuestionType()) {
@@ -465,25 +466,25 @@ class Renderer {
             if (gameConfig.getGameType() != GameType.SOLO) {
                 exportReport.addItem(ReportItemType.ERROR, "An optimization game must be solo player.");
             }
-            if(questionConfig.getCriteria() == null) {
+            if (questionConfig.getCriteria() == null) {
                 throw new MissingConfigException("An optimization game must have a criteria property in config.ini.");
             }
-            if(questionConfig.getSortingOrder() == null) {
+            if (questionConfig.getSortingOrder() == null) {
                 throw new MissingConfigException("An optimization game must have a sorting_order property in config.ini.");
             } else if (!"ASC".equalsIgnoreCase(questionConfig.getSortingOrder())
-                && !"DESC".equalsIgnoreCase(questionConfig.getSortingOrder())){
+                && !"DESC".equalsIgnoreCase(questionConfig.getSortingOrder())) {
                 throw new MissingConfigException("The sorting order for an optimization game must be ASC (ascendant) or DESC (descendant)");
             }
         }
 
         switch (gameConfig.getGameType()) {
         case MULTI:
-            if(!questionConfig.isMultiQuestion()) {
+            if (!questionConfig.isMultiQuestion()) {
                 exportReport.addItem(ReportItemType.ERROR, "The game has several players but the type is not MULTI.");
             }
             break;
         case SOLO:
-            if(!questionConfig.isSoloQuestion() && !questionConfig.isOptiQuestion()) {
+            if (!questionConfig.isSoloQuestion() && !questionConfig.isOptiQuestion()) {
                 exportReport.addItem(ReportItemType.ERROR, "The game has one player but the type is not SOLO or OPTI.");
             }
             break;
@@ -539,7 +540,7 @@ class Renderer {
 
         return zipPath;
     }
-    
+
     private void generateSplittedStatements(Path sourceFolderPath, ExportReport exportReport) throws IOException {
         Files.list(sourceFolderPath.resolve("config/"))
             .filter(p -> GEN_STATEMENT_MARKER.matcher(FilenameUtils.getName(p.toString())).matches() && p.toFile().isFile())
@@ -598,16 +599,16 @@ class Renderer {
                                                 config.put("min_players", String.valueOf(configResponseDto.minPlayers));
                                                 config.put("max_players", String.valueOf(configResponseDto.maxPlayers));
                                                 config.put("type", configResponseDto.type);
-                                                if(configResponseDto.criteria != null) {
+                                                if (configResponseDto.criteria != null) {
                                                     config.put("criteria", configResponseDto.criteria);
                                                 }
-                                                if(configResponseDto.sortingOrder != null) {
+                                                if (configResponseDto.sortingOrder != null) {
                                                     config.put("sorting_order", configResponseDto.sortingOrder);
                                                 }
-                                                if(configResponseDto.criteriaFr != null) {
+                                                if (configResponseDto.criteriaFr != null) {
                                                     config.put("criteria_fr", configResponseDto.criteriaFr);
                                                 }
-                                                if(configResponseDto.criteriaEn != null) {
+                                                if (configResponseDto.criteriaEn != null) {
                                                     config.put("criteria_en", configResponseDto.criteriaEn);
                                                 }
                                             });

@@ -5,7 +5,7 @@ public class MultiplayerGameRunner extends GameRunner {
     private int lastPlayerId = 0;
     private int seed;
     private boolean isSeedSet = false;
-    
+
     public MultiplayerGameRunner() {
         System.setProperty("game.mode", "multi");
     }

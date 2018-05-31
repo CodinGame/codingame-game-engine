@@ -25,7 +25,7 @@ abstract public class GameRunner {
 
     static final String INTERRUPT_THREAD = "05&08#1981";
     private static final Pattern COMMAND_HEADER_PATTERN = Pattern
-            .compile("\\[\\[(?<cmd>.+)\\] ?(?<lineCount>[0-9]+)\\]");
+        .compile("\\[\\[(?<cmd>.+)\\] ?(?<lineCount>[0-9]+)\\]");
 
     protected static Log log = LogFactory.getLog(GameRunner.class);
     GameResult gameResult = new GameResult();
@@ -37,7 +37,7 @@ abstract public class GameRunner {
     private boolean gameEnded = false;
 
     private String[] avatars = new String[] { "16085713250612", "16085756802960", "16085734516701", "16085746254929",
-            "16085763837151", "16085720641630", "16085846089817", "16085834521247" };
+        "16085763837151", "16085720641630", "16085846089817", "16085834521247" };
 
     private static enum OutputResult {
         OK, TIMEOUT, TOOLONG, TOOSHORT
@@ -75,7 +75,7 @@ abstract public class GameRunner {
             agent.index = i;
             agent.agentId = player.getAgentId();
             agent.avatar = player.getAvatar() != null ? player.getAvatar()
-                    : "https://static.codingame.com/servlet/fileservlet?id=" + avatars[i] + "&format=viewer_avatar";
+                : "https://static.codingame.com/servlet/fileservlet?id=" + avatars[i] + "&format=viewer_avatar";
             agent.name = player.getNickname() != null ? player.getNickname() : "Player " + i;
             gameResult.agents.add(agent);
         }
@@ -132,9 +132,12 @@ abstract public class GameRunner {
 
             if ((validTurn) && (!turnInfo.get(InputCommand.SCORES).isPresent())) {
                 NextPlayerInfo nextPlayerInfo = new NextPlayerInfo(
-                        turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null));
-                String nextPlayerOutput = getNextPlayerOutput(nextPlayerInfo,
-                        turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null));
+                    turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null)
+                );
+                String nextPlayerOutput = getNextPlayerOutput(
+                    nextPlayerInfo,
+                    turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null)
+                );
 
                 for (Agent a : players) {
                     gameResult.outputs.get(String.valueOf(a.getAgentId())).add(a.getAgentId() == nextPlayerInfo.nextPlayer ? nextPlayerOutput : null);
@@ -196,7 +199,7 @@ abstract public class GameRunner {
         }
 
     }
-    
+
     abstract protected void setCommandInput(Command initCommand);
 
     private String getJSONResult() {
@@ -265,7 +268,7 @@ abstract public class GameRunner {
             return "\n";
         }
         if ((playerOutput != null) && (playerOutput.length() > 0)
-                && (playerOutput.charAt(playerOutput.length() - 1) != '\n')) {
+            && (playerOutput.charAt(playerOutput.length() - 1) != '\n')) {
             return playerOutput + '\n';
         }
         return playerOutput;
@@ -307,8 +310,10 @@ abstract public class GameRunner {
                 throw new RuntimeException("Invalid Referee command line count: " + output);
             }
             if (checkOutput(output, nbLinesToRead) != OutputResult.OK) {
-                throw new RuntimeException("Error reading Referee command. Buffer capacity: " + output.length() + " / "
-                        + (round == 0 ? RefereeAgent.REFEREE_MAX_BUFFER_SIZE_EXTRA : RefereeAgent.REFEREE_MAX_BUFFER_SIZE));
+                throw new RuntimeException(
+                    "Error reading Referee command. Buffer capacity: " + output.length() + " / "
+                        + (round == 0 ? RefereeAgent.REFEREE_MAX_BUFFER_SIZE_EXTRA : RefereeAgent.REFEREE_MAX_BUFFER_SIZE)
+                );
             }
             return new Command(InputCommand.valueOf(command), output);
         } else {

@@ -37,13 +37,13 @@ public class ConfigHelper {
     enum GameType {
         SOLO, MULTI, UNDEFINED
     }
-    
+
     public static class GameConfig {
         private String title;
         private boolean leaguesDetected;
         private GameType gameType;
         private Map<String, QuestionConfig> questionsConfig = new HashMap<>();
-        
+
         public GameType getGameType() {
             return gameType;
         }
@@ -76,7 +76,7 @@ public class ConfigHelper {
             this.title = title;
         }
     }
-    
+
     class TestCase {
         private Map<Integer, String> title;
         private String testIn;
@@ -319,7 +319,7 @@ public class ConfigHelper {
         public void setLevel(int level) {
             this.level = level;
         }
-        
+
         public boolean isValidQuestionType() {
             return isSoloQuestion() || isMultiQuestion() || isOptiQuestion();
         }
@@ -377,7 +377,6 @@ public class ConfigHelper {
                 Matcher bossMatcher = BOSS_FILE_PATTERN.matcher(fileName);
                 Matcher welcomeImagesMatcher = WELCOME_IMG_PATTERN.matcher(fileName);
                 Matcher testCaseMatcher = TEST_FILE_PATTERN.matcher(fileName);
-                
 
                 if (p.toFile().isFile() && "config.ini".equals(fileName)) {
                     Properties config = new Properties();
@@ -406,11 +405,12 @@ public class ConfigHelper {
                             } else {
                                 questionConfig.getCriteriaLanguageMap().put(Constants.LANGUAGE_ID_ENGLISH, criteria);
                             }
-                            
+
                             if (criteriaFr != null) {
                                 questionConfig.getCriteriaLanguageMap().put(Constants.LANGUAGE_ID_FRENCH, criteriaFr);
                             } else {
-                                questionConfig.getCriteriaLanguageMap().put(Constants.LANGUAGE_ID_FRENCH, questionConfig.getCriteriaLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH));
+                                questionConfig.getCriteriaLanguageMap()
+                                    .put(Constants.LANGUAGE_ID_FRENCH, questionConfig.getCriteriaLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH));
                             }
                         }
                     }

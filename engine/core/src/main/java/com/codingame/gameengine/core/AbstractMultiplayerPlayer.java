@@ -1,6 +1,6 @@
 package com.codingame.gameengine.core;
 
-abstract public class AbstractMultiplayerPlayer extends AbstractPlayer{
+abstract public class AbstractMultiplayerPlayer extends AbstractPlayer {
 
     private boolean active = true;
 

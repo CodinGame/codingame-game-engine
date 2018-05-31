@@ -12,9 +12,9 @@ import com.google.inject.Key;
 import com.google.inject.util.Types;
 
 public class RefereeMain {
-    
+
     private static boolean inProduction = false;
-    
+
     public static boolean isInProduction() {
         return inProduction;
     }
@@ -40,12 +40,12 @@ public class RefereeMain {
 
     @SuppressWarnings("unchecked")
     public static void start(InputStream is, PrintStream out) {
-        
+
         Injector injector = Guice.createInjector(new GameEngineModule());
 
         Type type = Types.newParameterizedType(GameManager.class, AbstractPlayer.class);
-        GameManager<AbstractPlayer> gameManager = (GameManager<AbstractPlayer>) injector.getInstance(Key.get(type));       
-        
+        GameManager<AbstractPlayer> gameManager = (GameManager<AbstractPlayer>) injector.getInstance(Key.get(type));
+
         gameManager.start(is, out);
     }
 }

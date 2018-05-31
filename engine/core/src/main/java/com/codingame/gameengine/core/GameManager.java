@@ -57,7 +57,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private JsonObject globalViewData = new JsonObject();
 
     private List<Module> registeredModules = new ArrayList<>();
-    
+
     private Map<String, String> metadata = new HashMap<>();
 
     private boolean initDone = false;
@@ -198,7 +198,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
         currentTooltips = new ArrayList<>();
     }
 
-    protected void dumpGameProperties() {}
+    protected void dumpGameProperties() {
+    }
 
     private void dumpMetadata() {
         OutputData data = new OutputData(OutputCommand.METADATA);
@@ -265,7 +266,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
             out.println(data);
         }
     }
-    
+
     abstract protected OutputCommand getGameSummaryOutputCommand();
 
     private void dumpNextPlayerInfos(int nextPlayer, int expectedOutputLineCount, int timeout) {
@@ -284,7 +285,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
             log.info(data);
         }
     }
-    
+
     private String getMetadata() {
         return gson.toJsonTree(metadata).getAsJsonObject().toString();
     }
@@ -300,12 +301,14 @@ abstract public class GameManager<T extends AbstractPlayer> {
     //
     // Public methods used by Referee:
     //
-    
+
     /**
      * Puts a new metadata that will be sent to the CodinGame IDE.
      * 
-     * @param key the property to send
-     * @param value the property's value
+     * @param key
+     *            the property to send
+     * @param value
+     *            the property's value
      */
     public final void putMetadata(String key, String value) {
         metadata.put(key, value);

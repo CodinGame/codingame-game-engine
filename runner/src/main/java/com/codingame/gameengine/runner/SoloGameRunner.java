@@ -13,9 +13,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class SoloGameRunner extends GameRunner {
-    
+
     private List<String> testCaseContent;
-    
+
     public SoloGameRunner() {
         System.setProperty("game.mode", "solo");
     }
@@ -34,11 +34,11 @@ public class SoloGameRunner extends GameRunner {
         }
         return lines;
     }
-    
+
     public void setTestCase(String testCaseFileName) {
         setTestCase(new File(System.getProperty("user.dir")).toPath().resolve("config/" + testCaseFileName).toFile());
     }
-    
+
     public void setTestCase(File testCaseFile) {
         if (testCaseFile != null && testCaseFile.isFile()) {
             testCaseContent = getLinesFromTestCaseFile(testCaseFile);
@@ -46,9 +46,9 @@ public class SoloGameRunner extends GameRunner {
             throw new RuntimeException("Given test case is not a file.");
         }
     }
-    
+
     private void setAgent(Agent player, String nickname, String avatar) {
-        if(!players.isEmpty()) {
+        if (!players.isEmpty()) {
             players.clear();
         }
         player.setAgentId(0);
@@ -56,7 +56,7 @@ public class SoloGameRunner extends GameRunner {
         player.setAvatar(avatar);
         players.add(player);
     }
-    
+
     /**
      * @deprecated Sets an AI to the next game to run.
      *             <p>
@@ -110,7 +110,7 @@ public class SoloGameRunner extends GameRunner {
     public void setAgent(String commandLine, String nickname, String avatarUrl) {
         setAgent(new CommandLinePlayerAgent(commandLine), nickname, avatarUrl);
     }
-    
+
     @Override
     protected void setCommandInput(Command initCommand) {
         if (testCaseContent != null && !testCaseContent.isEmpty()) {

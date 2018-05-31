@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import com.google.inject.Singleton;
 
 @Singleton
-public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> extends GameManager<T>{
+public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> extends GameManager<T> {
 
     private Properties gameProperties;
     private int seed;
@@ -39,13 +39,13 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
     }
 
     @Override
-    protected void dumpGameProperties()  {
+    protected void dumpGameProperties() {
         out.println(OutputCommand.UINPUT.format(gameProperties.size()));
         for (Entry<Object, Object> t : gameProperties.entrySet()) {
             out.println(t.getKey() + "=" + t.getValue());
         }
     }
-    
+
     /**
      * Get initial number of players.
      * 

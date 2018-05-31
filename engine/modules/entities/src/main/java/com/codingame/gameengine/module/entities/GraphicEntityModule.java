@@ -92,9 +92,10 @@ public class GraphicEntityModule implements Module {
     void loadSpriteSheet(SpriteSheetLoader spritesheet) {
         newSpriteSheets.add(spritesheet);
     }
-    
+
     /**
      * Create a spritesheet loader.
+     * 
      * @return a SpriteSheetLoader
      */
     public SpriteSheetLoader createSpriteSheetLoader() {
@@ -141,7 +142,7 @@ public class GraphicEntityModule implements Module {
         requireNonEmpty(entities);
 
         String actualT = Serializer.formatFrameTime(t);
-        
+
         WorldState state = worldStates.get(actualT);
         if (state == null) {
             state = new WorldState(actualT);
@@ -179,9 +180,9 @@ public class GraphicEntityModule implements Module {
         newEntities.clear();
 
         List<WorldState> orderedStates = worldStates.entrySet().stream()
-                .sorted((e1, e2) -> e1.getValue().getFrameTime().compareTo(e2.getValue().getFrameTime()))
-                .map(Entry::getValue)
-                .collect(Collectors.toList());
+            .sorted((e1, e2) -> e1.getValue().getFrameTime().compareTo(e2.getValue().getFrameTime()))
+            .map(Entry::getValue)
+            .collect(Collectors.toList());
 
         for (WorldState next : orderedStates) {
             dumpWorldStateDiff(currentWorldState, next, commands);
@@ -196,30 +197,30 @@ public class GraphicEntityModule implements Module {
     private void dumpNewEntity(Entity<?> e, List<Object> commands) {
         commands.add(serializer.serializeCreate(e));
     }
-    
+
     private void dumpLoadSpriteSheet(SpriteSheetLoader spriteSheet, List<Object> commands) {
         commands.add(serializer.serializeLoadSpriteSheet(spriteSheet));
     }
 
     private void dumpWorldStateDiff(WorldState previous, WorldState next, List<Object> commands) {
         next.getEntityStateMap()
-                .forEach((entity, state) -> {
-                    Optional<EntityState> prevState = Optional.ofNullable(previous.getEntityStateMap().get(entity));
-                    EntityState diff = new EntityState();
-                    state.forEach((key, value) -> {
-                        EntityState.Param prevValue = prevState
-                                .map(s -> s.get(key))
-                                .orElse(null);
-                        if (!value.equals(prevValue)) {
-                            diff.put(key, value);
-                        }
-                    });
-
-                    // Forced commits are sent even if they are empty
-                    if (next.isForce() || !diff.isEmpty()) {
-                        commands.add(serializer.serializeUpdate(entity, diff, next.getFrameTime()));
+            .forEach((entity, state) -> {
+                Optional<EntityState> prevState = Optional.ofNullable(previous.getEntityStateMap().get(entity));
+                EntityState diff = new EntityState();
+                state.forEach((key, value) -> {
+                    EntityState.Param prevValue = prevState
+                        .map(s -> s.get(key))
+                        .orElse(null);
+                    if (!value.equals(prevValue)) {
+                        diff.put(key, value);
                     }
                 });
+
+                // Forced commits are sent even if they are empty
+                if (next.isForce() || !diff.isEmpty()) {
+                    commands.add(serializer.serializeUpdate(entity, diff, next.getFrameTime()));
+                }
+            });
     }
 
     private void autocommit() {

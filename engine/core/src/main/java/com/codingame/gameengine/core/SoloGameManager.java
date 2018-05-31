@@ -7,8 +7,8 @@ import java.util.Scanner;
 import com.google.inject.Singleton;
 
 @Singleton
-public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T>{
-    
+public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T> {
+
     private List<String> testCase = new ArrayList<>();
 
     @Override
@@ -23,7 +23,7 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
     public List<String> getTestCase() {
         return testCase;
     }
-    
+
     /**
      * Get the player
      * 
@@ -32,7 +32,7 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
     public T getPlayer() {
         return this.players.get(0);
     }
-    
+
     /**
      * Ends the game as a victory
      */
@@ -40,7 +40,7 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
         super.endGame();
         getPlayer().setScore(1);
     }
-    
+
     /**
      * Ends the game as a fail
      */
@@ -48,22 +48,24 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
         super.endGame();
         getPlayer().setScore(0);
     }
-    
+
     /**
      * Ends the game as a victory with a green message.
      * 
-     * @param message the message to display in green
+     * @param message
+     *            the message to display in green
      */
     public void winGame(String message) {
         super.endGame();
         super.addToGameSummary(formatSuccessMessage(message));
         getPlayer().setScore(1);
     }
-    
+
     /**
      * Ends the game as a fail with a red message
      * 
-     * @param message the message to display in red
+     * @param message
+     *            the message to display in red
      */
     public void loseGame(String message) {
         super.endGame();
