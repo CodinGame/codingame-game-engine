@@ -72,6 +72,62 @@ public class ConfigHelper {
         private String aiCodeExtension;
         private String stubGenerator;
         private Integer level;
+        private List<TestCase> testCases = new ArrayList<>();
+        private String criteria;
+        private Map<Integer, String> criteriaLanguageMap = new HashMap<Integer, String>();
+        private String sortingOrder;
+        private String questionType;
+
+        //Used to sort test cases by their filename number
+        private Map<Integer, TestCase> testCaseDtoMap = new TreeMap<>();
+
+        public Map<Integer, String> getCriteriaLanguageMap() {
+            return criteriaLanguageMap;
+        }
+
+        public void setCriteriaLanguageMap(Map<Integer, String> criteriaLanguageMap) {
+            this.criteriaLanguageMap = criteriaLanguageMap;
+        }
+
+        public String getQuestionType() {
+            return questionType;
+        }
+
+        public void setQuestionType(String questionType) {
+            this.questionType = questionType;
+        }
+
+        public String getCriteria() {
+            return criteria;
+        }
+
+        public void setCriteria(String criteria) {
+            this.criteria = criteria;
+        }
+
+        public String getSortingOrder() {
+            return sortingOrder;
+        }
+
+        public void setSortingOrder(String sortingOrder) {
+            this.sortingOrder = sortingOrder;
+        }
+
+        public Map<Integer, TestCase> getTestCaseDtoMap() {
+            return testCaseDtoMap;
+        }
+
+        public void setTestCaseDtoMap(Map<Integer, TestCase> testCaseDtoMap) {
+            this.testCaseDtoMap = testCaseDtoMap;
+        }
+
+        public void setTestCases(List<TestCase> testCases) {
+            this.testCases = testCases;
+        }
+
+        public List<TestCase> getTestCases() {
+            return testCases;
+        }
 
         public String getTitle() {
             return title;
@@ -195,6 +251,26 @@ public class ConfigHelper {
 
         public void setLevel(int level) {
             this.level = level;
+        }
+        
+        public boolean isValidQuestionType() {
+            return isSoloQuestion() || isMultiQuestion() || isOptiQuestion();
+        }
+
+        public boolean isSoloQuestion() {
+            return isTypeTQuestion("solo");
+        }
+
+        public boolean isMultiQuestion() {
+            return isTypeTQuestion("multi");
+        }
+
+        public boolean isOptiQuestion() {
+            return isTypeTQuestion("opti");
+        }
+
+        private boolean isTypeTQuestion(String type) {
+            return type.equalsIgnoreCase(questionType);
         }
     }
 
