@@ -38,6 +38,7 @@ import org.apache.commons.io.FilenameUtils;
 import com.codingame.gameengine.runner.ConfigHelper.GameConfig;
 import com.codingame.gameengine.runner.ConfigHelper.GameType;
 import com.codingame.gameengine.runner.ConfigHelper.QuestionConfig;
+import com.codingame.gameengine.runner.ConfigHelper.TestCase;
 import com.codingame.gameengine.runner.dto.ConfigResponseDto;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
@@ -325,15 +326,38 @@ class Renderer {
             //Check statement
             checkStatement(gameConfig, questionConfig, tag, exportReport);
 
-            //Check Boss
-            checkBoss(gameConfig, questionConfig, tag, exportReport);
+            if(questionConfig.isMultiQuestion()) {
+                //Check Boss
+                checkBoss(gameConfig, questionConfig, tag, exportReport);
 
-            //Check League popups
-            if (gameConfig.isLeaguesDetected()) {
-                checkLeaguePopups(gameConfig, questionConfig, tag, exportReport);
+                //Check League popups
+                if (gameConfig.isLeaguesDetected()) {
+                    checkLeaguePopups(gameConfig, questionConfig, tag, exportReport);
+                }
+            } else if (questionConfig.isSoloQuestion() || questionConfig.isOptiQuestion()) {
+                //Check test cases
+                checkTestCases(gameConfig, questionConfig, tag, exportReport);
             }
         }
 
+    }
+
+    private void checkTestCases(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+        for (TestCase testCase : questionConfig.getTestCases()) {
+            if(testCase.getTitle().get(Constants.LANGUAGE_ID_ENGLISH) == null) {
+                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have at least an English title.");
+            }
+            if(testCase.getTestIn() == null || testCase.getTestIn().isEmpty()) {
+                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have a testIn property.");
+            }
+            if(testCase.getIsTest() == null) {
+                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have an isTest property.");
+            } else if (testCase.getIsValidator() == null) {
+                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have an isValidator property.");
+            } else if(!(testCase.getIsTest() ^ testCase.getIsValidator())) {
+                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must be either a test or a validator.");
+            }
+        }
     }
 
     private void checkUniqueOpti(GameConfig gameConfig, ExportReport exportReport) {
