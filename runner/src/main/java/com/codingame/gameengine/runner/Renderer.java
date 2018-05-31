@@ -308,6 +308,9 @@ class Renderer {
     private void checkConfig(Path sourceFolderPath, ExportReport exportReport) throws IOException, MissingConfigException {
         ConfigHelper configHelper = new ConfigHelper();
         GameConfig gameConfig = configHelper.findConfig(sourceFolderPath.resolve("config"));
+        
+        //Check unique opti question
+        checkUniqueOpti(gameConfig, exportReport);
 
         for (String league : gameConfig.getQuestionsConfig().keySet()) {
             QuestionConfig questionConfig = gameConfig.getQuestionsConfig().get(league);
@@ -331,6 +334,18 @@ class Renderer {
             }
         }
 
+    }
+
+    private void checkUniqueOpti(GameConfig gameConfig, ExportReport exportReport) {
+        boolean hasAnOptiQuestion = false;
+        for (QuestionConfig questionConfig : gameConfig.getQuestionsConfig().values()) {
+            if(questionConfig.isOptiQuestion() && !hasAnOptiQuestion) {
+                hasAnOptiQuestion = true;
+            } else if (hasAnOptiQuestion) {
+                exportReport.addItem(ReportItemType.ERROR, "An optimization game must have only one question");
+                break;
+            }
+        }
     }
 
     private void checkLeaguePopups(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
