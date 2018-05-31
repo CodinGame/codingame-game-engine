@@ -1,11 +1,8 @@
 package com.codingame.gameengine.runner;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
@@ -24,24 +21,23 @@ import com.google.gson.Gson;
 /**
  * The class to use to run local games and display the replay in a webpage on a temporary local server.
  */
-public class GameRunner {
+abstract public class GameRunner {
 
     static final String INTERRUPT_THREAD = "05&08#1981";
     private static final Pattern COMMAND_HEADER_PATTERN = Pattern
-            .compile("\\[\\[(?<cmd>.+)\\] ?(?<lineCount>[0-9]+)\\]");
+        .compile("\\[\\[(?<cmd>.+)\\] ?(?<lineCount>[0-9]+)\\]");
 
     protected static Log log = LogFactory.getLog(GameRunner.class);
     GameResult gameResult = new GameResult();
 
     private Agent referee;
-    private final List<Agent> players;
+    protected final List<Agent> players;
     private final List<AsynchronousWriter> writers = new ArrayList<>();
     private final List<BlockingQueue<String>> queues = new ArrayList<>();
-    private int lastPlayerId = 0;
     private boolean gameEnded = false;
 
     private String[] avatars = new String[] { "16085713250612", "16085756802960", "16085734516701", "16085746254929",
-            "16085763837151", "16085720641630", "16085846089817", "16085834521247" };
+        "16085763837151", "16085720641630", "16085846089817", "16085834521247" };
 
     private static enum OutputResult {
         OK, TIMEOUT, TOOLONG, TOOSHORT
@@ -50,28 +46,9 @@ public class GameRunner {
     /**
      * Create a new GameRunner with no referee input.
      */
-    public GameRunner() {
-        this(null);
-    }
-
-    /**
-     * Create a new GameRunner with no referee input.
-     * 
-     * @param properties
-     *            the values given to the game's referee on init.
-     */
-    public GameRunner(Properties properties) {
-        try {
-            referee = new RefereeAgent();
-            players = new ArrayList<Agent>();
-            if (properties != null) {
-                StringWriter sw = new StringWriter();
-                properties.store(sw, null);
-                gameResult.refereeInput = sw.toString();
-            }
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot initialize game", e);
-        }
+    protected GameRunner() {
+        referee = new RefereeAgent();
+        players = new ArrayList<Agent>();
     }
 
     private void initialize(Properties conf) {
@@ -98,7 +75,7 @@ public class GameRunner {
             agent.index = i;
             agent.agentId = player.getAgentId();
             agent.avatar = player.getAvatar() != null ? player.getAvatar()
-                    : "https://static.codingame.com/servlet/fileservlet?id=" + avatars[i] + "&format=viewer_avatar";
+                : "https://static.codingame.com/servlet/fileservlet?id=" + avatars[i] + "&format=viewer_avatar";
             agent.name = player.getNickname() != null ? player.getNickname() : "Player " + i;
             gameResult.agents.add(agent);
         }
@@ -140,14 +117,7 @@ public class GameRunner {
         Command initCommand = new Command(OutputCommand.INIT);
         initCommand.addLine(players.size());
 
-        // If the referee has input data (i.e. value for seed)
-        if (gameResult.refereeInput != null) {
-            try (Scanner scanner = new Scanner(gameResult.refereeInput)) {
-                while (scanner.hasNextLine()) {
-                    initCommand.addLine((scanner.nextLine()));
-                }
-            }
-        }
+        buildInitCommand(initCommand);
 
         referee.sendInput(initCommand.toString());
         int round = 0;
@@ -162,9 +132,12 @@ public class GameRunner {
 
             if ((validTurn) && (!turnInfo.get(InputCommand.SCORES).isPresent())) {
                 NextPlayerInfo nextPlayerInfo = new NextPlayerInfo(
-                        turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null));
-                String nextPlayerOutput = getNextPlayerOutput(nextPlayerInfo,
-                        turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null));
+                    turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null)
+                );
+                String nextPlayerOutput = getNextPlayerOutput(
+                    nextPlayerInfo,
+                    turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null)
+                );
 
                 for (Agent a : players) {
                     gameResult.outputs.get(String.valueOf(a.getAgentId())).add(a.getAgentId() == nextPlayerInfo.nextPlayer ? nextPlayerOutput : null);
@@ -226,6 +199,8 @@ public class GameRunner {
         }
 
     }
+
+    abstract protected void buildInitCommand(Command initCommand);
 
     private String getJSONResult() {
         addPlayerIds();
@@ -293,7 +268,7 @@ public class GameRunner {
             return "\n";
         }
         if ((playerOutput != null) && (playerOutput.length() > 0)
-                && (playerOutput.charAt(playerOutput.length() - 1) != '\n')) {
+            && (playerOutput.charAt(playerOutput.length() - 1) != '\n')) {
             return playerOutput + '\n';
         }
         return playerOutput;
@@ -335,8 +310,10 @@ public class GameRunner {
                 throw new RuntimeException("Invalid Referee command line count: " + output);
             }
             if (checkOutput(output, nbLinesToRead) != OutputResult.OK) {
-                throw new RuntimeException("Error reading Referee command. Buffer capacity: " + output.length() + " / "
-                        + (round == 0 ? RefereeAgent.REFEREE_MAX_BUFFER_SIZE_EXTRA : RefereeAgent.REFEREE_MAX_BUFFER_SIZE));
+                throw new RuntimeException(
+                    "Error reading Referee command. Buffer capacity: " + output.length() + " / "
+                        + (round == 0 ? RefereeAgent.REFEREE_MAX_BUFFER_SIZE_EXTRA : RefereeAgent.REFEREE_MAX_BUFFER_SIZE)
+                );
             }
             return new Command(InputCommand.valueOf(command), output);
         } else {
@@ -367,67 +344,6 @@ public class GameRunner {
             return OutputResult.TOOLONG;
         }
         return OutputResult.OK;
-    }
-
-    private void addAgent(Agent player, String nickname, String avatar) {
-        player.setAgentId(lastPlayerId++);
-        player.setNickname(nickname);
-        player.setAvatar(avatar);
-        players.add(player);
-    }
-
-    /**
-     * @deprecated Adds an AI to the next game to run.
-     *             <p>
-     * 
-     * @param playerClass
-     *            the Java class of an AI for your game.
-     */
-    public void addAgent(Class<?> playerClass) {
-        addAgent(new JavaPlayerAgent(playerClass.getName()), null, null);
-    }
-
-    /**
-     * Adds an AI to the next game to run.
-     * <p>
-     * The given command will be executed with <code>Runtime.getRuntime().exec()</code>.
-     * 
-     * @param commandLine
-     *            the system command line to run the AI.
-     */
-    public void addAgent(String commandLine) {
-        addAgent(new CommandLinePlayerAgent(commandLine), null, null);
-    }
-
-    /**
-     * @deprecated Adds an AI to the next game to run.
-     *             <p>
-     * 
-     * @param playerClass
-     *            the Java class of an AI for your game.
-     * @param nickname
-     *            the player's nickname
-     * @param avatarUrl
-     *            the url of the player's avatar
-     */
-    public void addAgent(Class<?> playerClass, String nickname, String avatarUrl) {
-        addAgent(new JavaPlayerAgent(playerClass.getName()), nickname, avatarUrl);
-    }
-
-    /**
-     * Adds an AI to the next game to run.
-     * <p>
-     * The given command will be executed with <code>Runtime.getRuntime().exec()</code>.
-     * 
-     * @param commandLine
-     *            the system command line to run the AI.
-     * @param nickname
-     *            the player's nickname
-     * @param avatarUrl
-     *            the url of the player's avatar
-     */
-    public void addAgent(String commandLine, String nickname, String avatarUrl) {
-        addAgent(new CommandLinePlayerAgent(commandLine), nickname, avatarUrl);
     }
 
     /**

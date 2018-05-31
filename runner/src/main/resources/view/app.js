@@ -274,6 +274,10 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
     if (!valid) {
       return
     }
+    if (config.type !== 'multi') {
+      config.minPlayers = 1
+      config.maxPlayers = 1
+    }
     await fetch('/services/init-config',
       {
         body: JSON.stringify(config),

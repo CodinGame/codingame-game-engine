@@ -18,6 +18,9 @@ import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.mutable.MutableInt;
+
+import com.google.gson.Gson;
 
 /***
  * Mainly based on ContributionArchiveHelper.java
@@ -29,11 +32,25 @@ public class ConfigHelper {
     private static final Pattern WELCOME_IMG_PATTERN = Pattern.compile(".*\\.(png|jpe?g)");
     private static final Pattern BOSS_FILE_PATTERN = Pattern.compile("Boss\\.(?<extension>.*)");
     private static final Pattern LEVEL_DIR_PATTERN = Pattern.compile("level(?<level>\\d+)");
+    private static final Pattern TEST_FILE_PATTERN = Pattern.compile("test(?<num>\\d+)\\.json");
+
+    enum GameType {
+        SOLO, MULTI, UNDEFINED
+    }
 
     public static class GameConfig {
         private String title;
         private boolean leaguesDetected;
+        private GameType gameType;
         private Map<String, QuestionConfig> questionsConfig = new HashMap<>();
+
+        public GameType getGameType() {
+            return gameType;
+        }
+
+        public void setGameType(GameType gameType) {
+            this.gameType = gameType;
+        }
 
         public Map<String, QuestionConfig> getQuestionsConfig() {
             return questionsConfig;
@@ -60,6 +77,45 @@ public class ConfigHelper {
         }
     }
 
+    class TestCase {
+        private Map<Integer, String> title;
+        private String testIn;
+        private Boolean isTest;
+        private Boolean isValidator;
+
+        public Map<Integer, String> getTitle() {
+            return title;
+        }
+
+        public String getTestIn() {
+            return testIn;
+        }
+
+        public Boolean getIsTest() {
+            return isTest;
+        }
+
+        public Boolean getIsValidator() {
+            return isValidator;
+        }
+
+        public void setTitle(Map<Integer, String> title) {
+            this.title = title;
+        }
+
+        public void setTestIn(String testIn) {
+            this.testIn = testIn;
+        }
+
+        public void setIsTest(Boolean isTest) {
+            this.isTest = isTest;
+        }
+
+        public void setIsValidator(Boolean isValidator) {
+            this.isValidator = isValidator;
+        }
+    }
+
     public static class QuestionConfig {
         private String title;
         private boolean configDetected;
@@ -72,6 +128,62 @@ public class ConfigHelper {
         private String aiCodeExtension;
         private String stubGenerator;
         private Integer level;
+        private List<TestCase> testCases = new ArrayList<>();
+        private String criteria;
+        private Map<Integer, String> criteriaLanguageMap = new HashMap<Integer, String>();
+        private String sortingOrder;
+        private String questionType;
+
+        //Used to sort test cases by their filename number
+        private Map<Integer, TestCase> testCaseDtoMap = new TreeMap<>();
+
+        public Map<Integer, String> getCriteriaLanguageMap() {
+            return criteriaLanguageMap;
+        }
+
+        public void setCriteriaLanguageMap(Map<Integer, String> criteriaLanguageMap) {
+            this.criteriaLanguageMap = criteriaLanguageMap;
+        }
+
+        public String getQuestionType() {
+            return questionType;
+        }
+
+        public void setQuestionType(String questionType) {
+            this.questionType = questionType;
+        }
+
+        public String getCriteria() {
+            return criteria;
+        }
+
+        public void setCriteria(String criteria) {
+            this.criteria = criteria;
+        }
+
+        public String getSortingOrder() {
+            return sortingOrder;
+        }
+
+        public void setSortingOrder(String sortingOrder) {
+            this.sortingOrder = sortingOrder;
+        }
+
+        public Map<Integer, TestCase> getTestCaseDtoMap() {
+            return testCaseDtoMap;
+        }
+
+        public void setTestCaseDtoMap(Map<Integer, TestCase> testCaseDtoMap) {
+            this.testCaseDtoMap = testCaseDtoMap;
+        }
+
+        public void setTestCases(List<TestCase> testCases) {
+            this.testCases = testCases;
+        }
+
+        public List<TestCase> getTestCases() {
+            return testCases;
+        }
 
         public String getTitle() {
             return title;
@@ -168,14 +280,25 @@ public class ConfigHelper {
                 welcomeImagesList,
                 defaultConfig.welcomeImagesList
             );
+            this.testCaseDtoMap = firstNonNullOrEmptyMap(
+                testCaseDtoMap,
+                defaultConfig.testCaseDtoMap
+            );
+            this.criteriaLanguageMap = firstNonNullOrEmptyMap(
+                criteriaLanguageMap,
+                defaultConfig.criteriaLanguageMap
+            );
             this.minPlayers = ObjectUtils.firstNonNull(minPlayers, defaultConfig.minPlayers);
             this.maxPlayers = ObjectUtils.firstNonNull(maxPlayers, defaultConfig.maxPlayers);
             this.aiCode = ObjectUtils.firstNonNull(aiCode, defaultConfig.aiCode);
             this.aiCodeExtension = ObjectUtils.firstNonNull(aiCodeExtension, defaultConfig.aiCodeExtension);
             this.stubGenerator = ObjectUtils.firstNonNull(stubGenerator, defaultConfig.stubGenerator);
+            this.criteria = ObjectUtils.firstNonNull(criteria, defaultConfig.criteria);
+            this.sortingOrder = ObjectUtils.firstNonNull(sortingOrder, defaultConfig.sortingOrder);
+            this.questionType = ObjectUtils.firstNonNull(questionType, defaultConfig.questionType);
         }
 
-        private Map<Integer, String> firstNonNullOrEmptyMap(Map<Integer, String> first, Map<Integer, String> second) {
+        private <T, B> Map<T, B> firstNonNullOrEmptyMap(Map<T, B> first, Map<T, B> second) {
             if (first != null && !first.isEmpty()) {
                 return first;
             }
@@ -195,6 +318,26 @@ public class ConfigHelper {
 
         public void setLevel(int level) {
             this.level = level;
+        }
+
+        public boolean isValidQuestionType() {
+            return isSoloQuestion() || isMultiQuestion() || isOptiQuestion();
+        }
+
+        public boolean isSoloQuestion() {
+            return isTypeTQuestion("solo");
+        }
+
+        public boolean isMultiQuestion() {
+            return isTypeTQuestion("multi");
+        }
+
+        public boolean isOptiQuestion() {
+            return isTypeTQuestion("opti");
+        }
+
+        private boolean isTypeTQuestion(String type) {
+            return type.equalsIgnoreCase(questionType);
         }
     }
 
@@ -233,6 +376,7 @@ public class ConfigHelper {
                 Matcher welcomeMatcher = WELCOME_FILE_PATTERN.matcher(fileName);
                 Matcher bossMatcher = BOSS_FILE_PATTERN.matcher(fileName);
                 Matcher welcomeImagesMatcher = WELCOME_IMG_PATTERN.matcher(fileName);
+                Matcher testCaseMatcher = TEST_FILE_PATTERN.matcher(fileName);
 
                 if (p.toFile().isFile() && "config.ini".equals(fileName)) {
                     Properties config = new Properties();
@@ -242,10 +386,33 @@ public class ConfigHelper {
                         String title = config.getProperty("title");
                         String minPlayers = config.getProperty("min_players");
                         String maxPlayers = config.getProperty("max_players");
+                        String criteria = config.getProperty("criteria");
+                        String criteriaEn = config.getProperty("criteria_en");
+                        String criteriaFr = config.getProperty("criteria_fr");
+                        String sortingOrder = config.getProperty("sorting_order");
+                        String questionType = config.getProperty("type");
 
                         questionConfig.setTitle(title);
                         questionConfig.setMinPlayers(minPlayers != null ? Integer.valueOf(minPlayers) : null);
                         questionConfig.setMaxPlayers(maxPlayers != null ? Integer.valueOf(maxPlayers) : null);
+                        questionConfig.setCriteria(criteria);
+                        questionConfig.setSortingOrder(sortingOrder);
+                        questionConfig.setQuestionType(questionType);
+
+                        if (sortingOrder != null && criteria != null) {
+                            if (criteriaEn != null) {
+                                questionConfig.getCriteriaLanguageMap().put(Constants.LANGUAGE_ID_ENGLISH, criteriaEn);
+                            } else {
+                                questionConfig.getCriteriaLanguageMap().put(Constants.LANGUAGE_ID_ENGLISH, criteria);
+                            }
+
+                            if (criteriaFr != null) {
+                                questionConfig.getCriteriaLanguageMap().put(Constants.LANGUAGE_ID_FRENCH, criteriaFr);
+                            } else {
+                                questionConfig.getCriteriaLanguageMap()
+                                    .put(Constants.LANGUAGE_ID_FRENCH, questionConfig.getCriteriaLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH));
+                            }
+                        }
                     }
                 } else if ("stub.txt".equals(fileName)) {
                     questionConfig.setStubGenerator(FileUtils.readFileToString(p.toFile(), StandardCharsets.UTF_8));
@@ -276,6 +443,10 @@ public class ConfigHelper {
                     questionConfig.setAiCodeExtension(extension);
                 } else if (welcomeImagesMatcher.matches()) {
                     questionConfig.getWelcomeImagesList().add(p.toFile());
+                } else if (testCaseMatcher.matches()) {
+                    TestCase testCase = new Gson()
+                        .fromJson((FileUtils.readFileToString(p.toFile(), StandardCharsets.UTF_8)), TestCase.class);
+                    questionConfig.getTestCaseDtoMap().put(Integer.parseInt(testCaseMatcher.group("num")), testCase);
                 }
             } catch (IOException e) {
                 throw new RuntimeException("Cannot process to parse config directory", e);
@@ -304,14 +475,42 @@ public class ConfigHelper {
             defaultConfig.configDetected = isPresentConfigIni(gameConfig, defaultConfig);
         }
 
-        // copy english statement & welcome to french if not translated
+        MutableInt soloQuestions = new MutableInt();
         questionsConfig.values().stream().forEach(c -> {
+            // copy english statement, welcome, criteria to french if not translated
             String statementEn = c.getStatementsLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH);
             c.getStatementsLanguageMap().putIfAbsent(Constants.LANGUAGE_ID_FRENCH, statementEn);
+
             String welcomeEn = c.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH);
-            if (welcomeEn != null)
+            if (welcomeEn != null) {
                 c.getWelcomeLanguageMap().putIfAbsent(Constants.LANGUAGE_ID_FRENCH, welcomeEn);
+            }
+
+            String criteriaEn = c.getCriteriaLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH);
+            if (criteriaEn != null) {
+                c.getCriteriaLanguageMap().putIfAbsent(Constants.LANGUAGE_ID_FRENCH, criteriaEn);
+            }
+
+            // set test cases list from the sorted TreeMap
+            c.getTestCases().addAll(c.getTestCaseDtoMap().values());
+            // copy english test cases' titles to french if not translated
+            for (TestCase t : c.getTestCases()) {
+                String titleEn = t.getTitle().get(Constants.LANGUAGE_ID_ENGLISH);
+                t.getTitle().putIfAbsent(Constants.LANGUAGE_ID_FRENCH, titleEn);
+            }
+
+            if (c.maxPlayers != null && c.maxPlayers == 1) {
+                soloQuestions.increment();
+            }
         });
+
+        if (soloQuestions.intValue() == questionsConfig.size()) {
+            gameConfig.setGameType(GameType.SOLO);
+        } else if (soloQuestions.intValue() == 0) {
+            gameConfig.setGameType(GameType.MULTI);
+        } else {
+            gameConfig.setGameType(GameType.UNDEFINED);
+        }
 
         //Sort leagues alphabetically
         gameConfig.setQuestionConfigs(new TreeMap<>(questionsConfig));

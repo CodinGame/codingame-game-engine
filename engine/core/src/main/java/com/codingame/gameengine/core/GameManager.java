@@ -1,16 +1,12 @@
 package com.codingame.gameengine.core;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Properties;
+import java.util.Map;
 import java.util.Scanner;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,7 +15,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.Singleton;
 
 /**
  * The <code>GameManager</code> takes care of running each turn of the game and computing each visual frame of the replay. It provides many utility
@@ -28,8 +23,7 @@ import com.google.inject.Singleton;
  * @param <T>
  *            Your implementation of AbstractPlayer
  */
-@Singleton
-public final class GameManager<T extends AbstractPlayer> {
+abstract public class GameManager<T extends AbstractPlayer> {
     @Inject private Provider<T> playerProvider;
     @Inject private Provider<AbstractReferee> refereeProvider;
     @Inject private Gson gson;
@@ -38,7 +32,7 @@ public final class GameManager<T extends AbstractPlayer> {
     private static final int VIEW_DATA_SOFT_QUOTA = 512 * 1024;
     private static final int VIEW_DATA_HARD_QUOTA = 1024 * 1024;
 
-    private List<T> players;
+    protected List<T> players;
     private int maxTurns = 400;
     private int turnMaxTime = 50;
     private int firstTurnMaxTime = 1000;
@@ -46,8 +40,7 @@ public final class GameManager<T extends AbstractPlayer> {
     private int frame = 0;
     private boolean gameEnd = false;
     private Scanner s;
-    private PrintStream out;
-    private Properties gameProperties;
+    protected PrintStream out;
     private AbstractReferee referee;
     private boolean newTurn;
 
@@ -64,6 +57,8 @@ public final class GameManager<T extends AbstractPlayer> {
     private JsonObject globalViewData = new JsonObject();
 
     private List<Module> registeredModules = new ArrayList<>();
+
+    private Map<String, String> metadata = new HashMap<>();
 
     private boolean initDone = false;
     private boolean outputsRead = false;
@@ -95,30 +90,17 @@ public final class GameManager<T extends AbstractPlayer> {
             players.add(player);
         }
 
-        // create game properties
-        gameProperties = new Properties();
-        if (iCmd.lineCount > 0) {
-            for (int i = 0; i < (iCmd.lineCount - 1); i++) {
-                try {
-                    gameProperties.load(new StringReader(s.nextLine()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        if (!gameProperties.containsKey("seed")) {
-            gameProperties.setProperty("seed", String.valueOf(ThreadLocalRandom.current().nextInt()));
-        }
+        readGameProperties(iCmd, s);
 
         prevViewData = null;
         currentViewData = new JsonObject();
 
-        gameProperties = referee.init(gameProperties);
+        referee.init();
         registeredModules.forEach(Module::onGameInit);
         initDone = true;
 
         // Game Loop ----------------------------------------------------------
-        for (turn = 0; turn < getMaxTurns() && !isGameEnd(); turn++) {
+        for (turn = 0; turn < getMaxTurns() && !isGameEnd() && !allPlayersInactive(); turn++) {
             swapInfoAndViewData();
             log.info("Turn " + turn);
             newTurn = true;
@@ -147,10 +129,15 @@ public final class GameManager<T extends AbstractPlayer> {
         dumpInfos();
 
         dumpGameProperties();
+        dumpMetadata();
         dumpScores();
 
         s.close();
     }
+
+    abstract protected boolean allPlayersInactive();
+
+    abstract protected void readGameProperties(InputCommand iCmd, Scanner s);
 
     /**
      * Executes a player for a maximum of turnMaxTime milliseconds and store the output. Used by player.execute().
@@ -211,11 +198,13 @@ public final class GameManager<T extends AbstractPlayer> {
         currentTooltips = new ArrayList<>();
     }
 
-    private void dumpGameProperties() {
-        out.println(OutputCommand.UINPUT.format(gameProperties.size()));
-        for (Entry<Object, Object> t : gameProperties.entrySet()) {
-            out.println(t.getKey() + "=" + t.getValue());
-        }
+    protected void dumpGameProperties() {
+    }
+
+    private void dumpMetadata() {
+        OutputData data = new OutputData(OutputCommand.METADATA);
+        data.add(getMetadata());
+        out.println(data);
     }
 
     private void dumpScores() {
@@ -262,8 +251,8 @@ public final class GameManager<T extends AbstractPlayer> {
         OutputData data = new OutputData(OutputCommand.INFOS);
         out.println(data);
 
-        if (newTurn && getPlayerCount() > 1 && prevGameSummary != null) {
-            OutputData summary = new OutputData(OutputCommand.SUMMARY);
+        if (newTurn && prevGameSummary != null) {
+            OutputData summary = new OutputData(getGameSummaryOutputCommand());
             summary.addAll(prevGameSummary);
             out.println(summary);
         }
@@ -277,6 +266,8 @@ public final class GameManager<T extends AbstractPlayer> {
             out.println(data);
         }
     }
+
+    abstract protected OutputCommand getGameSummaryOutputCommand();
 
     private void dumpNextPlayerInfos(int nextPlayer, int expectedOutputLineCount, int timeout) {
         OutputData data = new OutputData(OutputCommand.NEXT_PLAYER_INFO);
@@ -295,6 +286,10 @@ public final class GameManager<T extends AbstractPlayer> {
         }
     }
 
+    private String getMetadata() {
+        return gson.toJsonTree(metadata).getAsJsonObject().toString();
+    }
+
     void setOuputsRead(boolean outputsRead) {
         this.outputsRead = outputsRead;
     }
@@ -308,43 +303,15 @@ public final class GameManager<T extends AbstractPlayer> {
     //
 
     /**
-     * Get initial number of players.
+     * Puts a new metadata that will be sent to the CodinGame IDE.
      * 
-     * @return the number of players.
+     * @param key
+     *            the property to send
+     * @param value
+     *            the property's value
      */
-    public int getPlayerCount() {
-        return players.size();
-    }
-
-    /**
-     * Get all the players.
-     * 
-     * @return the list of players.
-     */
-    public List<T> getPlayers() {
-        return players;
-    }
-
-    /**
-     * Get all the active players.
-     * 
-     * @return the list of active players.
-     */
-    public List<T> getActivePlayers() {
-        // TODO: could be optimized with a list of active players updated on player.deactivate().
-        return players.stream().filter(p -> p.isActive()).collect(Collectors.toList());
-    }
-
-    /**
-     * Get player with index i
-     * 
-     * @param i
-     *            Player index
-     * @return player with index i
-     * @throws IndexOutOfBoundsException
-     */
-    public T getPlayer(int i) throws IndexOutOfBoundsException {
-        return this.players.get(i);
+    public final void putMetadata(String key, String value) {
+        metadata.put(key, value);
     }
 
     /**
@@ -372,7 +339,7 @@ public final class GameManager<T extends AbstractPlayer> {
     /**
      * Set game end.
      */
-    public void endGame() {
+    protected void endGame() {
         this.gameEnd = true;
     }
 

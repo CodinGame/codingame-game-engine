@@ -36,7 +36,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import com.codingame.gameengine.runner.ConfigHelper.GameConfig;
+import com.codingame.gameengine.runner.ConfigHelper.GameType;
 import com.codingame.gameengine.runner.ConfigHelper.QuestionConfig;
+import com.codingame.gameengine.runner.ConfigHelper.TestCase;
 import com.codingame.gameengine.runner.dto.ConfigResponseDto;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
@@ -63,7 +65,8 @@ import io.undertow.util.StatusCodes;
 class Renderer {
 
     private static final int MIN_PLAYERS = 1;
-    private static final int MAX_PLAYERS = 8;
+    private static final int MULTI_MAX_PLAYERS = 8;
+    private static final int SOLO_MAX_PLAYERS = 8;
     private static final Pattern HTML_IMG_MARKER = Pattern.compile("<\\s*img [^\\>]*src\\s*=\\s*([\"\\'])(?<source>.*?)\\1");
     private static final Pattern GEN_STATEMENT_MARKER = Pattern.compile("statement_[a-zA-Z]{2}\\.html\\.tpl");
 
@@ -307,6 +310,9 @@ class Renderer {
         ConfigHelper configHelper = new ConfigHelper();
         GameConfig gameConfig = configHelper.findConfig(sourceFolderPath.resolve("config"));
 
+        //Check unique opti question
+        checkUniqueOpti(gameConfig, exportReport);
+
         for (String league : gameConfig.getQuestionsConfig().keySet()) {
             QuestionConfig questionConfig = gameConfig.getQuestionsConfig().get(league);
             String tag = league + (league.isEmpty() ? "" : ": ");
@@ -315,23 +321,58 @@ class Renderer {
             checkConfigIni(gameConfig, questionConfig, tag, exportReport);
 
             //Check stub
-            checkStub(gameConfig, questionConfig, tag, exportReport);
+            checkStub(questionConfig, tag, exportReport);
 
             //Check statement
-            checkStatement(gameConfig, questionConfig, tag, exportReport);
+            checkStatement(questionConfig, tag, exportReport);
 
-            //Check Boss
-            checkBoss(gameConfig, questionConfig, tag, exportReport);
+            if (questionConfig.isMultiQuestion()) {
+                //Check Boss
+                checkBoss(questionConfig, tag, exportReport);
 
-            //Check League popups
-            if (gameConfig.isLeaguesDetected()) {
-                checkLeaguePopups(gameConfig, questionConfig, tag, exportReport);
+                //Check League popups
+                if (gameConfig.isLeaguesDetected()) {
+                    checkLeaguePopups(questionConfig, tag, exportReport);
+                }
+            } else if (questionConfig.isSoloQuestion() || questionConfig.isOptiQuestion()) {
+                //Check test cases
+                checkTestCases(questionConfig, tag, exportReport);
             }
         }
 
     }
 
-    private void checkLeaguePopups(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+    private void checkTestCases(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+        for (TestCase testCase : questionConfig.getTestCases()) {
+            if (testCase.getTitle().get(Constants.LANGUAGE_ID_ENGLISH) == null) {
+                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have at least an English title.");
+            }
+            if (testCase.getTestIn() == null || testCase.getTestIn().isEmpty()) {
+                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have a testIn property.");
+            }
+            if (testCase.getIsTest() == null) {
+                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have an isTest property.");
+            } else if (testCase.getIsValidator() == null) {
+                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have an isValidator property.");
+            } else if (!(testCase.getIsTest() ^ testCase.getIsValidator())) {
+                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must be either a test or a validator.");
+            }
+        }
+    }
+
+    private void checkUniqueOpti(GameConfig gameConfig, ExportReport exportReport) {
+        boolean hasAnOptiQuestion = false;
+        for (QuestionConfig questionConfig : gameConfig.getQuestionsConfig().values()) {
+            if (questionConfig.isOptiQuestion() && !hasAnOptiQuestion) {
+                hasAnOptiQuestion = true;
+            } else if (hasAnOptiQuestion) {
+                exportReport.addItem(ReportItemType.ERROR, "An optimization game must have only one question");
+                break;
+            }
+        }
+    }
+
+    private void checkLeaguePopups(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         if (!questionConfig.getWelcomeLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
             || questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()) {
             exportReport.addItem(
@@ -370,20 +411,20 @@ class Renderer {
         }
     }
 
-    private void checkBoss(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+    private void checkBoss(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         if (questionConfig.getAiCode() == null || questionConfig.getAiCode().isEmpty()) {
             exportReport.addItem(ReportItemType.ERROR, tag + "Missing Boss.* file.");
         }
     }
 
-    private void checkStatement(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+    private void checkStatement(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         if (!questionConfig.getStatementsLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
             || questionConfig.getStatementsLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()) {
             exportReport.addItem(ReportItemType.ERROR, tag + "Missing statement_en.html file. An English statement is mandatory.");
         }
     }
 
-    private void checkStub(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+    private void checkStub(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         if (questionConfig.getStubGenerator() == null || questionConfig.getStubGenerator().isEmpty()) {
             exportReport.addItem(
                 ReportItemType.WARNING, tag + "Missing stub.txt file.",
@@ -394,7 +435,8 @@ class Renderer {
         }
     }
 
-    private void checkConfigIni(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) throws MissingConfigException {
+    private void checkConfigIni(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport)
+        throws MissingConfigException {
         if (!questionConfig.isConfigDetected()) {
             throw new MissingConfigException(tag + "Missing config.ini file");
         } else if (gameConfig.getTitle() == null || gameConfig.getTitle().isEmpty()) {
@@ -404,29 +446,77 @@ class Renderer {
         } else if (questionConfig.getMaxPlayers() == null) {
             throw new MissingConfigException(tag + "Missing max_players property in config.ini.");
         } else {
-            if (questionConfig.getMinPlayers() < MIN_PLAYERS) {
-                exportReport.addItem(
-                    ReportItemType.ERROR, tag + "Min players ("
-                        + questionConfig.getMinPlayers()
-                        + ") should be greater or equal to " + MIN_PLAYERS + "."
-                );
+            checkQuestionsTypeValidity(gameConfig, questionConfig, tag, exportReport);
+
+            checkPlayerNumber(questionConfig, tag, exportReport, gameConfig.getGameType() == GameType.MULTI ? MULTI_MAX_PLAYERS : SOLO_MAX_PLAYERS);
+        }
+    }
+
+    private void checkQuestionsTypeValidity(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport)
+        throws MissingConfigException {
+        if (!questionConfig.isValidQuestionType()) {
+            throw new MissingConfigException(tag + "Your question type is not valid. Please choose one among MULTI, SOLO and OPTI.");
+        }
+
+        if (gameConfig.getGameType() == GameType.UNDEFINED) {
+            exportReport.addItem(ReportItemType.ERROR, "The game has both multiplayer and solo player questions. Please, choose either one.");
+        }
+
+        if (questionConfig.isOptiQuestion()) {
+            if (gameConfig.getGameType() != GameType.SOLO) {
+                exportReport.addItem(ReportItemType.ERROR, "An optimization game must be solo player.");
             }
-            if (questionConfig.getMaxPlayers() < questionConfig.getMinPlayers()) {
-                exportReport.addItem(
-                    ReportItemType.ERROR, tag + "Max players ("
-                        + questionConfig.getMaxPlayers()
-                        + ") should be greater or equal to min players ("
-                        + questionConfig.getMinPlayers()
-                        + ")."
-                );
+            if (questionConfig.getCriteria() == null) {
+                throw new MissingConfigException("An optimization game must have a criteria property in config.ini.");
             }
-            if (questionConfig.getMaxPlayers() > MAX_PLAYERS) {
-                exportReport.addItem(
-                    ReportItemType.ERROR, tag + "Max players ("
-                        + questionConfig.getMaxPlayers()
-                        + ") should be lower or equal to " + MAX_PLAYERS + "."
-                );
+            if (questionConfig.getSortingOrder() == null) {
+                throw new MissingConfigException("An optimization game must have a sorting_order property in config.ini.");
+            } else if (!"ASC".equalsIgnoreCase(questionConfig.getSortingOrder())
+                && !"DESC".equalsIgnoreCase(questionConfig.getSortingOrder())) {
+                throw new MissingConfigException("The sorting order for an optimization game must be ASC (ascendant) or DESC (descendant)");
             }
+        }
+
+        switch (gameConfig.getGameType()) {
+        case MULTI:
+            if (!questionConfig.isMultiQuestion()) {
+                exportReport.addItem(ReportItemType.ERROR, "The game has several players but the type is not MULTI.");
+            }
+            break;
+        case SOLO:
+            if (!questionConfig.isSoloQuestion() && !questionConfig.isOptiQuestion()) {
+                exportReport.addItem(ReportItemType.ERROR, "The game has one player but the type is not SOLO or OPTI.");
+            }
+            break;
+        case UNDEFINED:
+        default:
+            break;
+        }
+    }
+
+    private void checkPlayerNumber(QuestionConfig questionConfig, String tag, ExportReport exportReport, int maxPlayers) {
+        if (questionConfig.getMinPlayers() < MIN_PLAYERS) {
+            exportReport.addItem(
+                ReportItemType.ERROR, tag + "Min players ("
+                    + questionConfig.getMinPlayers()
+                    + ") should be greater or equal to " + MIN_PLAYERS + "."
+            );
+        }
+        if (questionConfig.getMaxPlayers() < questionConfig.getMinPlayers()) {
+            exportReport.addItem(
+                ReportItemType.ERROR, tag + "Max players ("
+                    + questionConfig.getMaxPlayers()
+                    + ") should be greater or equal to min players ("
+                    + questionConfig.getMinPlayers()
+                    + ")."
+            );
+        }
+        if (questionConfig.getMaxPlayers() > maxPlayers) {
+            exportReport.addItem(
+                ReportItemType.ERROR, tag + "Max players ("
+                    + questionConfig.getMaxPlayers()
+                    + ") should be lower or equal to " + maxPlayers + "."
+            );
         }
     }
 
@@ -450,7 +540,7 @@ class Renderer {
 
         return zipPath;
     }
-    
+
     private void generateSplittedStatements(Path sourceFolderPath, ExportReport exportReport) throws IOException {
         Files.list(sourceFolderPath.resolve("config/"))
             .filter(p -> GEN_STATEMENT_MARKER.matcher(FilenameUtils.getName(p.toString())).matches() && p.toFile().isFile())
@@ -506,8 +596,21 @@ class Renderer {
                                             exchange.getRequestReceiver().receiveFullString((e, data) -> {
                                                 ConfigResponseDto configResponseDto = new Gson().fromJson(data, ConfigResponseDto.class);
                                                 config.put("title", configResponseDto.title);
-                                                config.put("min_players", String.valueOf(configResponseDto.min_players));
-                                                config.put("max_players", String.valueOf(configResponseDto.max_players));
+                                                config.put("min_players", String.valueOf(configResponseDto.minPlayers));
+                                                config.put("max_players", String.valueOf(configResponseDto.maxPlayers));
+                                                config.put("type", configResponseDto.type);
+                                                if (configResponseDto.criteria != null) {
+                                                    config.put("criteria", configResponseDto.criteria);
+                                                }
+                                                if (configResponseDto.sortingOrder != null) {
+                                                    config.put("sorting_order", configResponseDto.sortingOrder);
+                                                }
+                                                if (configResponseDto.criteriaFr != null) {
+                                                    config.put("criteria_fr", configResponseDto.criteriaFr);
+                                                }
+                                                if (configResponseDto.criteriaEn != null) {
+                                                    config.put("criteria_en", configResponseDto.criteriaEn);
+                                                }
                                             });
 
                                             config.store(configOutput, null);

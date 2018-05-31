@@ -259,18 +259,75 @@
 					<p>
 						<input required type="text" ng-model="config.title" />
 					</p>
+					<div ng-if="config.type != 'solo' && config.type != 'opti'">
+						<p>
+							<label for="min_players">Min players*</label>
+						</p>
+						<p>
+							<input required type="number" min="1" max="8" ng-model="config.minPlayers" step="1" />
+						</p>
+						<p>
+							<label for="max_players">Max players*</label>
+						</p>
+						<p>
+							<input required type="number" min="1" max="8" ng-model="config.maxPlayers" step="1" />
+						</p>
+					</div>
 					<p>
-						<label for="min_players">Min players*</label>
+						<label>
+							<input type="radio" ng-model="config.type" value="multi" ng-required="!config.type">
+							Multiplayer Game
+						</label>
 					</p>
 					<p>
-						<input required type="number" min="1" max="8" ng-model="config.min_players" step="1"/>
+						<label>
+							<input type="radio" ng-model="config.type" value="solo" ng-required="!config.type">
+							Solo Game
+						</label>
 					</p>
 					<p>
-						<label for="max_players">Max players*</label>
+						<label>
+							<input type="radio" ng-model="config.type" value="opti" ng-required="!config.type">
+							Solo Game with Optimization
+						</label>
 					</p>
-					<p>
-						<input required type="number" min="1" max="8" ng-model="config.max_players" step="1"/>
-					</p>
+					<div ng-if="config.type == 'opti'">
+						<p>
+							<label for="criteria">Criteria*</label>
+						</p>
+						<p>
+							<input required type="text" ng-model="config.criteria" />
+						</p>
+						<p>
+							<label for="sorting_order">Sorting order*</label>
+						</p>
+						<p>
+							<select required ng-model="config.sortingOrder">
+								<option value="asc">Ascendant</option>
+								<option value="desc">Descendant</option>
+							</select>
+						</p>
+						<p>
+							<label>
+								<input type="checkbox" ng-model="configForm.translate" value="true">
+								Translate criteria
+							</label>
+						</p>
+						<div ng-if="configForm.translate">
+								<p>
+									<label for="criteria">English criteria</label>
+								</p>
+								<p>
+									<input required type="text" ng-model="config.criteriaEn" />
+								</p>
+								<p>
+									<label for="criteria">French criteria</label>
+								</p>
+								<p>
+									<input required type="text" ng-model="config.criteriaFr" />
+								</p>
+						</div>
+					</div>
 					<div class="default-button-wrapper">
 						<button class="default-button" type="submit" ng-click="submitConfig(form.$valid, config)">Submit config</button>
 					</div>
