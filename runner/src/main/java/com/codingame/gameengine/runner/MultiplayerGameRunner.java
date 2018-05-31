@@ -77,7 +77,7 @@ public class MultiplayerGameRunner extends GameRunner {
     }
 
     @Override
-    protected void setCommandInput(Command initCommand) {
+    protected void buildInitCommand(Command initCommand) {
         if (isSeedSet) {
             initCommand.addLine("seed=" + seed);
         }

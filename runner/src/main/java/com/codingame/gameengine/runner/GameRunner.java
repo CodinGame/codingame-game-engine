@@ -117,7 +117,7 @@ abstract public class GameRunner {
         Command initCommand = new Command(OutputCommand.INIT);
         initCommand.addLine(players.size());
 
-        setCommandInput(initCommand);
+        buildInitCommand(initCommand);
 
         referee.sendInput(initCommand.toString());
         int round = 0;
@@ -200,7 +200,7 @@ abstract public class GameRunner {
 
     }
 
-    abstract protected void setCommandInput(Command initCommand);
+    abstract protected void buildInitCommand(Command initCommand);
 
     private String getJSONResult() {
         addPlayerIds();

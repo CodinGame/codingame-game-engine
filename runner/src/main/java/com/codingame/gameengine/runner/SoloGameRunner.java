@@ -112,7 +112,7 @@ public class SoloGameRunner extends GameRunner {
     }
 
     @Override
-    protected void setCommandInput(Command initCommand) {
+    protected void buildInitCommand(Command initCommand) {
         if (testCaseContent != null && !testCaseContent.isEmpty()) {
             for (String line : testCaseContent) {
                 initCommand.addLine(line);
