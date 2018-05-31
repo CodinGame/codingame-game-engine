@@ -30,10 +30,23 @@ public class ConfigHelper {
     private static final Pattern BOSS_FILE_PATTERN = Pattern.compile("Boss\\.(?<extension>.*)");
     private static final Pattern LEVEL_DIR_PATTERN = Pattern.compile("level(?<level>\\d+)");
 
+    enum GameType {
+        SOLO, MULTI, UNDEFINED
+    }
+    
     public static class GameConfig {
         private String title;
         private boolean leaguesDetected;
+        private GameType gameType;
         private Map<String, QuestionConfig> questionsConfig = new HashMap<>();
+        
+        public GameType getGameType() {
+            return gameType;
+        }
+
+        public void setGameType(GameType gameType) {
+            this.gameType = gameType;
+        }
 
         public Map<String, QuestionConfig> getQuestionsConfig() {
             return questionsConfig;
