@@ -72,6 +72,45 @@ public class ConfigHelper {
             this.title = title;
         }
     }
+    
+    class TestCase {
+        private Map<Integer, String> title;
+        private String testIn;
+        private Boolean isTest;
+        private Boolean isValidator;
+
+        public Map<Integer, String> getTitle() {
+            return title;
+        }
+
+        public String getTestIn() {
+            return testIn;
+        }
+
+        public Boolean getIsTest() {
+            return isTest;
+        }
+
+        public Boolean getIsValidator() {
+            return isValidator;
+        }
+
+        public void setTitle(Map<Integer, String> title) {
+            this.title = title;
+        }
+
+        public void setTestIn(String testIn) {
+            this.testIn = testIn;
+        }
+
+        public void setIsTest(Boolean isTest) {
+            this.isTest = isTest;
+        }
+
+        public void setIsValidator(Boolean isValidator) {
+            this.isValidator = isValidator;
+        }
+    }
 
     public static class QuestionConfig {
         private String title;
