@@ -19,6 +19,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 
+import com.google.gson.Gson;
+
 /***
  * Mainly based on ContributionArchiveHelper.java
  */
@@ -29,6 +31,7 @@ public class ConfigHelper {
     private static final Pattern WELCOME_IMG_PATTERN = Pattern.compile(".*\\.(png|jpe?g)");
     private static final Pattern BOSS_FILE_PATTERN = Pattern.compile("Boss\\.(?<extension>.*)");
     private static final Pattern LEVEL_DIR_PATTERN = Pattern.compile("level(?<level>\\d+)");
+    private static final Pattern TEST_FILE_PATTERN = Pattern.compile("test(?<num>\\d+)\\.json");
 
     enum GameType {
         SOLO, MULTI, UNDEFINED
@@ -361,6 +364,8 @@ public class ConfigHelper {
                 Matcher welcomeMatcher = WELCOME_FILE_PATTERN.matcher(fileName);
                 Matcher bossMatcher = BOSS_FILE_PATTERN.matcher(fileName);
                 Matcher welcomeImagesMatcher = WELCOME_IMG_PATTERN.matcher(fileName);
+                Matcher testCaseMatcher = TEST_FILE_PATTERN.matcher(fileName);
+                
 
                 if (p.toFile().isFile() && "config.ini".equals(fileName)) {
                     Properties config = new Properties();
@@ -426,6 +431,10 @@ public class ConfigHelper {
                     questionConfig.setAiCodeExtension(extension);
                 } else if (welcomeImagesMatcher.matches()) {
                     questionConfig.getWelcomeImagesList().add(p.toFile());
+                } else if (testCaseMatcher.matches()) {
+                    TestCase testCase = new Gson()
+                        .fromJson((FileUtils.readFileToString(p.toFile(), StandardCharsets.UTF_8)), TestCase.class);
+                    questionConfig.getTestCaseDtoMap().put(Integer.parseInt(testCaseMatcher.group("num")), testCase);
                 }
             } catch (IOException e) {
                 throw new RuntimeException("Cannot process to parse config directory", e);
