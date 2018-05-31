@@ -321,28 +321,28 @@ class Renderer {
             checkConfigIni(gameConfig, questionConfig, tag, exportReport);
 
             //Check stub
-            checkStub(gameConfig, questionConfig, tag, exportReport);
+            checkStub(questionConfig, tag, exportReport);
 
             //Check statement
-            checkStatement(gameConfig, questionConfig, tag, exportReport);
+            checkStatement(questionConfig, tag, exportReport);
 
             if (questionConfig.isMultiQuestion()) {
                 //Check Boss
-                checkBoss(gameConfig, questionConfig, tag, exportReport);
+                checkBoss(questionConfig, tag, exportReport);
 
                 //Check League popups
                 if (gameConfig.isLeaguesDetected()) {
-                    checkLeaguePopups(gameConfig, questionConfig, tag, exportReport);
+                    checkLeaguePopups(questionConfig, tag, exportReport);
                 }
             } else if (questionConfig.isSoloQuestion() || questionConfig.isOptiQuestion()) {
                 //Check test cases
-                checkTestCases(gameConfig, questionConfig, tag, exportReport);
+                checkTestCases(questionConfig, tag, exportReport);
             }
         }
 
     }
 
-    private void checkTestCases(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+    private void checkTestCases(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         for (TestCase testCase : questionConfig.getTestCases()) {
             if (testCase.getTitle().get(Constants.LANGUAGE_ID_ENGLISH) == null) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have at least an English title.");
@@ -372,7 +372,7 @@ class Renderer {
         }
     }
 
-    private void checkLeaguePopups(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+    private void checkLeaguePopups(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         if (!questionConfig.getWelcomeLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
             || questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()) {
             exportReport.addItem(
@@ -411,20 +411,20 @@ class Renderer {
         }
     }
 
-    private void checkBoss(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+    private void checkBoss(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         if (questionConfig.getAiCode() == null || questionConfig.getAiCode().isEmpty()) {
             exportReport.addItem(ReportItemType.ERROR, tag + "Missing Boss.* file.");
         }
     }
 
-    private void checkStatement(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+    private void checkStatement(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         if (!questionConfig.getStatementsLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
             || questionConfig.getStatementsLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()) {
             exportReport.addItem(ReportItemType.ERROR, tag + "Missing statement_en.html file. An English statement is mandatory.");
         }
     }
 
-    private void checkStub(GameConfig gameConfig, QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+    private void checkStub(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         if (questionConfig.getStubGenerator() == null || questionConfig.getStubGenerator().isEmpty()) {
             exportReport.addItem(
                 ReportItemType.WARNING, tag + "Missing stub.txt file.",
