@@ -463,13 +463,29 @@ public class ConfigHelper {
             defaultConfig.configDetected = isPresentConfigIni(gameConfig, defaultConfig);
         }
 
-        // copy english statement & welcome to french if not translated
+        
         questionsConfig.values().stream().forEach(c -> {
+            // copy english statement, welcome, criteria to french if not translated
             String statementEn = c.getStatementsLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH);
             c.getStatementsLanguageMap().putIfAbsent(Constants.LANGUAGE_ID_FRENCH, statementEn);
+
             String welcomeEn = c.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH);
-            if (welcomeEn != null)
+            if (welcomeEn != null) {
                 c.getWelcomeLanguageMap().putIfAbsent(Constants.LANGUAGE_ID_FRENCH, welcomeEn);
+            }
+
+            String criteriaEn = c.getCriteriaLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH);
+            if (criteriaEn != null) {
+                c.getCriteriaLanguageMap().putIfAbsent(Constants.LANGUAGE_ID_FRENCH, criteriaEn);
+            }
+
+            // set test cases list from the sorted TreeMap
+            c.getTestCases().addAll(c.getTestCaseDtoMap().values());
+            // copy english test cases' titles to french if not translated
+            for (TestCase t : c.getTestCases()) {
+                String titleEn = t.getTitle().get(Constants.LANGUAGE_ID_ENGLISH);
+                t.getTitle().putIfAbsent(Constants.LANGUAGE_ID_FRENCH, titleEn);
+            }
         });
 
         //Sort leagues alphabetically
