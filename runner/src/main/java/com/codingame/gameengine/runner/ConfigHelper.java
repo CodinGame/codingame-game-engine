@@ -280,14 +280,25 @@ public class ConfigHelper {
                 welcomeImagesList,
                 defaultConfig.welcomeImagesList
             );
+            this.testCaseDtoMap = firstNonNullOrEmptyMap(
+                testCaseDtoMap,
+                defaultConfig.testCaseDtoMap
+            );
+            this.criteriaLanguageMap = firstNonNullOrEmptyMap(
+                criteriaLanguageMap,
+                defaultConfig.criteriaLanguageMap
+            );
             this.minPlayers = ObjectUtils.firstNonNull(minPlayers, defaultConfig.minPlayers);
             this.maxPlayers = ObjectUtils.firstNonNull(maxPlayers, defaultConfig.maxPlayers);
             this.aiCode = ObjectUtils.firstNonNull(aiCode, defaultConfig.aiCode);
             this.aiCodeExtension = ObjectUtils.firstNonNull(aiCodeExtension, defaultConfig.aiCodeExtension);
             this.stubGenerator = ObjectUtils.firstNonNull(stubGenerator, defaultConfig.stubGenerator);
+            this.criteria = ObjectUtils.firstNonNull(criteria, defaultConfig.criteria);
+            this.sortingOrder = ObjectUtils.firstNonNull(sortingOrder, defaultConfig.sortingOrder);
+            this.questionType = ObjectUtils.firstNonNull(questionType, defaultConfig.questionType);
         }
 
-        private Map<Integer, String> firstNonNullOrEmptyMap(Map<Integer, String> first, Map<Integer, String> second) {
+        private <T, B> Map<T, B> firstNonNullOrEmptyMap(Map<T, B> first, Map<T, B> second) {
             if (first != null && !first.isEmpty()) {
                 return first;
             }
