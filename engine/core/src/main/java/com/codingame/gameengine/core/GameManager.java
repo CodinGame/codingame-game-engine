@@ -358,7 +358,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * @param maxTurns
      *            the number of turns for a game.
      * @throws IllegalArgumentException
-     *             if maxTurns <= 0
+     *             if maxTurns &le; 0
      */
     public void setMaxTurns(int maxTurns) throws IllegalArgumentException {
         if (maxTurns <= 0) {
@@ -382,7 +382,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * @param turnMaxTime
      *            Duration in milliseconds.
      * @throws IllegalArgumentException
-     *             if turnMaxTime <= 0
+     *             if turnMaxTime &le; 0
      */
     public void setTurnMaxTime(int turnMaxTime) throws IllegalArgumentException {
         if (turnMaxTime <= 0) {
