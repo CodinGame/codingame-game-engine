@@ -37,7 +37,7 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
             try {
                 seed = Long.parseLong(gameParameters.getProperty("seed"));
             } catch (NumberFormatException e) {
-                throw new RuntimeException("The seed must be an instance of Long.");
+                log.warn("The seed property is not a number, it is reserved by the CodinGame platform to run arena games.");
             }
         }
     }
