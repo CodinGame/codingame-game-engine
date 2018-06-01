@@ -356,10 +356,9 @@ class Renderer {
             }
             if (testCase.getIsTest() == null) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have an isTest property.");
-            } else if (testCase.getIsValidator() == null) {
+            }
+            if (testCase.getIsValidator() == null) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have an isValidator property.");
-            } else if (!(testCase.getIsTest() ^ testCase.getIsValidator())) {
-                exportReport.addItem(ReportItemType.ERROR, tag + "A test case must be either a test or a validator.");
             }
         }
     }

@@ -12,6 +12,9 @@ import org.apache.commons.io.FileUtils;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * The class to use to run local games and display the replay in a webpage on a temporary local server.
+ */
 public class SoloGameRunner extends GameRunner {
 
     private List<String> testCaseContent;

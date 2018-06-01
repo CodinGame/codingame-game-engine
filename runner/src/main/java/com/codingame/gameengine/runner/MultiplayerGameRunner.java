@@ -1,18 +1,39 @@
 package com.codingame.gameengine.runner;
 
+import java.util.Properties;
+
+/**
+ * The class to use to run local games and display the replay in a webpage on a temporary local server.
+ */
 public class MultiplayerGameRunner extends GameRunner {
 
     private int lastPlayerId = 0;
-    private int seed;
-    private boolean isSeedSet = false;
+    private Long seed;
+    private Properties gameParameters;
 
     public MultiplayerGameRunner() {
         System.setProperty("game.mode", "multi");
     }
 
-    public void setSeed(int seed) {
+    /**
+     * <p>
+     * The seed is used to generated parameters such as width and height.<br>
+     * If a seed is present in the given input, the input value should override the generated values.<br>
+     * The seed will be sent to the Game Manager.
+     * </p>
+     */
+    public void setSeed(Long seed) {
         this.seed = seed;
-        isSeedSet = true;
+    }
+
+    /**
+     * <p>
+     * The game parameters are used to pass additional information to the Game Manager.
+     * </p>
+     * @param gameParameters the parameters to send
+     */
+    public void setGameParameters(Properties gameParameters) {
+        this.gameParameters = gameParameters;
     }
 
     private void addAgent(Agent player, String nickname, String avatar) {
@@ -77,9 +98,14 @@ public class MultiplayerGameRunner extends GameRunner {
     }
 
     @Override
-    protected void buildInitCommand(Command initCommand) {
-        if (isSeedSet) {
+    protected void setCommandInput(Command initCommand) {
+        if (seed != null) {
             initCommand.addLine("seed=" + seed);
+        }
+        if (gameParameters != null) {
+            for (Object key : gameParameters.keySet()) {
+                initCommand.addLine(key + "=" + gameParameters.getProperty(key.toString()));
+            }
         }
     }
 }

@@ -14,34 +14,38 @@ import com.google.inject.Singleton;
 @Singleton
 public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> extends GameManager<T> {
 
-    private Properties gameProperties;
-    private int seed;
+    private Properties gameParameters;
+    private Long seed;
 
     @Override
     protected void readGameProperties(InputCommand iCmd, Scanner s) {
         // create game properties
-        gameProperties = new Properties();
+        gameParameters = new Properties();
         if (iCmd.lineCount > 0) {
             for (int i = 0; i < (iCmd.lineCount - 1); i++) {
                 try {
-                    gameProperties.load(new StringReader(s.nextLine()));
+                    gameParameters.load(new StringReader(s.nextLine()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
-        if (!gameProperties.containsKey("seed")) {
-            seed = ThreadLocalRandom.current().nextInt();
-            gameProperties.setProperty("seed", String.valueOf(seed));
+        if (!gameParameters.containsKey("seed")) {
+            seed = ThreadLocalRandom.current().nextLong();
+            gameParameters.setProperty("seed", String.valueOf(seed));
         } else {
-            seed = Integer.parseInt(gameProperties.getProperty("seed"));
+            try {
+                seed = Long.parseLong(gameParameters.getProperty("seed"));
+            } catch (NumberFormatException e) {
+                log.warn("The seed property is not a number, it is reserved by the CodinGame platform to run arena games.");
+            }
         }
     }
 
     @Override
     protected void dumpGameProperties() {
-        out.println(OutputCommand.UINPUT.format(gameProperties.size()));
-        for (Entry<Object, Object> t : gameProperties.entrySet()) {
+        out.println(OutputCommand.UINPUT.format(gameParameters.size()));
+        for (Entry<Object, Object> t : gameParameters.entrySet()) {
             out.println(t.getKey() + "=" + t.getValue());
         }
     }
@@ -61,10 +65,20 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
      * If a seed is present in the given input, the input value should override the generated values.
      * </p>
      * 
-     * @return an <code>int</code> containing a given or generated seed
+     * @return an <code>Long</code> containing a given or generated seed.
      */
-    public int getSeed() {
+    public Long getSeed() {
         return seed;
+    }
+    
+    /**
+     * <p>
+     * The game parameters are used to get additional information from the Game Runner.
+     * </p>
+     * @return a <code>Properties</code> containing the given parameters.
+     */
+    public Properties getGameParameters() {
+        return gameParameters;
     }
 
     /**
