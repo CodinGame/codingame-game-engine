@@ -315,7 +315,6 @@ public class GraphicEntityModule implements Module {
 
     @Override
     public final void onAfterOnEnd() {
-        sendFrameData();
     }
 
 }
