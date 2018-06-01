@@ -34,7 +34,11 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
             seed = ThreadLocalRandom.current().nextLong();
             gameParameters.setProperty("seed", String.valueOf(seed));
         } else {
-            seed = Long.parseLong(gameParameters.getProperty("seed"));
+            try {
+                seed = Long.parseLong(gameParameters.getProperty("seed"));
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("The seed must be an instance of Long.");
+            }
         }
     }
 
