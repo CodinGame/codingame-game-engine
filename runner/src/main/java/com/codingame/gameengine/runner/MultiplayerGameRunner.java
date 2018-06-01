@@ -8,7 +8,7 @@ import java.util.Properties;
 public class MultiplayerGameRunner extends GameRunner {
 
     private int lastPlayerId = 0;
-    private Integer seed;
+    private Long seed;
     private Properties gameParameters;
 
     public MultiplayerGameRunner() {
@@ -22,7 +22,7 @@ public class MultiplayerGameRunner extends GameRunner {
      * The seed will be sent to the Game Manager.
      * </p>
      */
-    public void setSeed(int seed) {
+    public void setSeed(Long seed) {
         this.seed = seed;
     }
 

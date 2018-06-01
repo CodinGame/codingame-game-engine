@@ -15,7 +15,7 @@ import com.google.inject.Singleton;
 public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> extends GameManager<T> {
 
     private Properties gameParameters;
-    private int seed;
+    private Long seed;
 
     @Override
     protected void readGameProperties(InputCommand iCmd, Scanner s) {
@@ -31,10 +31,10 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
             }
         }
         if (!gameParameters.containsKey("seed")) {
-            seed = ThreadLocalRandom.current().nextInt();
+            seed = ThreadLocalRandom.current().nextLong();
             gameParameters.setProperty("seed", String.valueOf(seed));
         } else {
-            seed = Integer.parseInt(gameParameters.getProperty("seed"));
+            seed = Long.parseLong(gameParameters.getProperty("seed"));
         }
     }
 
@@ -61,9 +61,9 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
      * If a seed is present in the given input, the input value should override the generated values.
      * </p>
      * 
-     * @return an <code>int</code> containing a given or generated seed.
+     * @return an <code>Long</code> containing a given or generated seed.
      */
-    public int getSeed() {
+    public Long getSeed() {
         return seed;
     }
     
