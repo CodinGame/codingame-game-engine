@@ -73,7 +73,7 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
     
     /**
      * <p>
-     * The game parameters are used to get additional informations from the Game Runner.
+     * The game parameters are used to get additional information from the Game Runner.
      * </p>
      * @return a <code>Properties</code> containing the given parameters.
      */

@@ -28,7 +28,7 @@ public class MultiplayerGameRunner extends GameRunner {
 
     /**
      * <p>
-     * The game parameters are used to pass additional informations to the Game Manager.
+     * The game parameters are used to pass additional information to the Game Manager.
      * </p>
      * @param gameParameters the parameters to send
      */
