@@ -18,10 +18,7 @@ import com.codingame.gameengine.runner.dto.GameResult;
 import com.codingame.gameengine.runner.dto.Tooltip;
 import com.google.gson.Gson;
 
-/**
- * The class to use to run local games and display the replay in a webpage on a temporary local server.
- */
-abstract public class GameRunner {
+abstract class GameRunner {
 
     static final String INTERRUPT_THREAD = "05&08#1981";
     private static final Pattern COMMAND_HEADER_PATTERN = Pattern
@@ -43,9 +40,6 @@ abstract public class GameRunner {
         OK, TIMEOUT, TOOLONG, TOOSHORT
     };
 
-    /**
-     * Create a new GameRunner with no referee input.
-     */
     protected GameRunner() {
         referee = new RefereeAgent();
         players = new ArrayList<Agent>();
