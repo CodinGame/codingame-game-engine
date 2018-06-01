@@ -1,39 +1,39 @@
-import { Circle } from "./Circle.js";
-import Line from "./Line.js";
-import { Rectangle } from "./Rectangle.js";
-import { Sprite } from "./Sprite.js";
-import { Text } from "./Text.js";
-import { Group } from "./Group.js";
-import { SpriteAnimation } from "./SpriteAnimation.js";
+import { Circle } from './Circle.js'
+import Line from './Line.js'
+import { Rectangle } from './Rectangle.js'
+import { Sprite } from './Sprite.js'
+import { Text } from './Text.js'
+import { Group } from './Group.js'
+import { SpriteAnimation } from './SpriteAnimation.js'
 
 export class EntityFactory {
-  static create(type) {
-    var entity;
+  static create (type) {
+    var entity
     switch (type) {
       case 'C':
-        entity = new Circle();
-        break;
+        entity = new Circle()
+        break
       case 'R':
-        entity = new Rectangle();
-        break;
+        entity = new Rectangle()
+        break
       case 'L':
-        entity = new Line();
-        break;
+        entity = new Line()
+        break
       case 'S':
-        entity = new Sprite();
-        break;
+        entity = new Sprite()
+        break
       case 'T':
-        entity = new Text();
-        break;
+        entity = new Text()
+        break
       case 'G':
-        entity = new Group();
-        break;
+        entity = new Group()
+        break
       case 'A':
-        entity = new SpriteAnimation();
-        break;
+        entity = new SpriteAnimation()
+        break
       default:
-        throw "Exception: entity type not found: " + type;
+        throw new Error('Exception: entity type not found: ' + type)
     }
-    return entity;
+    return entity
   }
 }

@@ -13,7 +13,7 @@ Include the dependency below in the pom.xml of your project.
 <dependency>
   <groupId>com.codingame.gameengine</groupId>
   <artifactId>runner</artifactId>
-  <version>1.25</version>
+  <version>1.35</version>
 </dependency>
 ```
 Or a more recent version.
@@ -39,14 +39,15 @@ gameRunner.addJavaPlayer(Player.class);
 gameRunner.start();
     
 ```
+⚠ _This method will prevent the agent from printing to stdout from any other class than Player. It has been deprecated for this reason._
 
 ### Using external python programs as players:
 ```java
 GameRunner gameRunner = new GameRunner();
 
-gameRunner.addCommandLinePlayer("python3 /home/user/player1.py");
-gameRunner.addCommandLinePlayer("python3 /home/user/player2.py");
-gameRunner.addCommandLinePlayer("python3 /home/user/player3.py");
+gameRunner.addAgent("python3 /home/user/player1.py");
+gameRunner.addAgent("python3 /home/user/player2.py");
+gameRunner.addAgent("python3 /home/user/player3.py");
 
 gameRunner.start();
 ```
