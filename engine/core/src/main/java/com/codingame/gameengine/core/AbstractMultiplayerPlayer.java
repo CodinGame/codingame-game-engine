@@ -1,5 +1,8 @@
 package com.codingame.gameengine.core;
 
+/**
+ * The representation of a player's AI during the game's execution.
+ */
 abstract public class AbstractMultiplayerPlayer extends AbstractPlayer {
 
     private boolean active = true;

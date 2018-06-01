@@ -10,8 +10,10 @@ public class Tooltip {
 
     /**
      * Creates a tooltip which will appear on the replay of the current game. The tooltip will have the same color as one of the players.
-     * <p></p>
+     * <p>
      * The message to display is typically no longer than 30 characters.
+     * </p>
+     * 
      * @param player
      *            the index of the player the tooltip information is about.
      * @param message

@@ -6,6 +6,13 @@ import java.util.Scanner;
 
 import com.google.inject.Singleton;
 
+/**
+ * The <code>AbstractMultiplayerPlayer</code> takes care of running each turn of a multiplayer game and computing each visual frame of the replay. It
+ * provides many utility methods that handle instances of your implementation of AbstractMultiplayerPlayer.
+ *
+ * @param <T>
+ *            Your implementation of AbstractMultiplayerPlayer
+ */
 @Singleton
 public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T> {
 
@@ -20,6 +27,14 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
         }
     }
 
+    /**
+     * Returns the current testcase the game got at initialization.
+     * <p>
+     * You can set it with the <code>SoloGameRunner</code>.
+     * </p>
+     * 
+     * @return The testcase for this game.
+     */
     public List<String> getTestCase() {
         return testCase;
     }

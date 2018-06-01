@@ -357,10 +357,10 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * 
      * @param maxTurns
      *            the number of turns for a game.
-     * @throws IllegalStateException
      * @throws IllegalArgumentException
+     *             if maxTurns <= 0
      */
-    public void setMaxTurns(int maxTurns) throws IllegalStateException, IllegalArgumentException {
+    public void setMaxTurns(int maxTurns) throws IllegalArgumentException {
         if (maxTurns <= 0) {
             throw new IllegalArgumentException("Invalid maximum number of turns");
         }
@@ -382,9 +382,10 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * @param turnMaxTime
      *            Duration in milliseconds.
      * @throws IllegalArgumentException
+     *             if turnMaxTime <= 0
      */
     public void setTurnMaxTime(int turnMaxTime) throws IllegalArgumentException {
-        if (maxTurns <= 0) {
+        if (turnMaxTime <= 0) {
             throw new IllegalArgumentException("Invalid turn max time");
         }
         this.turnMaxTime = turnMaxTime;
@@ -471,10 +472,11 @@ abstract public class GameManager<T extends AbstractPlayer> {
     /**
      * Register a module to the gameManager. After this, the gameManager will call the module callbacks automatically.
      * 
-     * @param m
+     * @param module
+     *            the module to register
      */
-    public void registerModule(Module m) {
-        registeredModules.add(m);
+    public void registerModule(Module module) {
+        registeredModules.add(module);
     }
 
     /**

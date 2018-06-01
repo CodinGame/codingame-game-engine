@@ -10,16 +10,6 @@ public abstract class AbstractReferee {
      * <p>
      * Called on startup, this method exists to create the initial state of the game, according to the given input.
      * </p>
-     * <p>
-     * Typically, <code>params</code> contains at least a seed. <br>
-     * The seed is used to generated other parameters such as width and height, then those parameters are placed in the return <code>Properties</code>
-     * with the seed. <br>
-     * If those parameters are present in the given input, the input values should override the generated values.
-     * </p>
-     * 
-     * @param params
-     *            a <code>Properties</code> containing input info for the referee.
-     * @return a <code>Properties</code> containing game data that can be used as input for a later game.
      */
     abstract public void init();
 
