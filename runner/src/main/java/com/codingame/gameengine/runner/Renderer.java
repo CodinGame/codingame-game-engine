@@ -343,6 +343,10 @@ class Renderer {
     }
 
     private void checkTestCases(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
+        if(questionConfig.getTestCases().isEmpty()) {
+            exportReport.addItem(ReportItemType.ERROR, "A solo game must have at least one test case.");
+        }
+        
         for (TestCase testCase : questionConfig.getTestCases()) {
             if (testCase.getTitle().get(Constants.LANGUAGE_ID_ENGLISH) == null) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have at least an English title.");
