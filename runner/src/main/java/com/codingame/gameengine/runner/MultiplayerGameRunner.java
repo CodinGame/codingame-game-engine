@@ -11,6 +11,9 @@ public class MultiplayerGameRunner extends GameRunner {
     private Long seed;
     private Properties gameParameters;
 
+    /**
+     * Once this runner is instantiated, the system property game.mode is set to "multi"
+     */
     public MultiplayerGameRunner() {
         System.setProperty("game.mode", "multi");
     }
@@ -19,8 +22,15 @@ public class MultiplayerGameRunner extends GameRunner {
      * <p>
      * The seed is used to generated parameters such as width and height.<br>
      * If a seed is present in the given input, the input value should override the generated values.<br>
-     * The seed will be sent to the Game Manager.
+     * The seed will be sent to the GameManager.<br>
      * </p>
+     * <p>
+     * Typically, the seed is used to generated other parameters such as width and height, then those parameters are placed back in the
+     * <code>Properties</code>. <br>
+     * If those parameters are present in the given input, the input values should override the generated values.
+     * </p>
+     * 
+     * @param seed
      */
     public void setSeed(Long seed) {
         this.seed = seed;
@@ -30,7 +40,9 @@ public class MultiplayerGameRunner extends GameRunner {
      * <p>
      * The game parameters are used to pass additional information to the Game Manager.
      * </p>
-     * @param gameParameters the parameters to send
+     * 
+     * @param gameParameters
+     *            the parameters to send
      */
     public void setGameParameters(Properties gameParameters) {
         this.gameParameters = gameParameters;
@@ -98,7 +110,7 @@ public class MultiplayerGameRunner extends GameRunner {
     }
 
     @Override
-    protected void setCommandInput(Command initCommand) {
+    protected void buildInitCommand(Command initCommand) {
         if (seed != null) {
             initCommand.addLine("seed=" + seed);
         }

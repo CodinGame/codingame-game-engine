@@ -11,6 +11,13 @@ import java.util.stream.Collectors;
 
 import com.google.inject.Singleton;
 
+/**
+ * The <code>AbstractMultiplayerPlayer</code> takes care of running each turn of a multiplayer game and computing each visual frame of the replay. It
+ * provides many utility methods that handle instances of your implementation of AbstractMultiplayerPlayer.
+ *
+ * @param <T>
+ *            Your implementation of AbstractMultiplayerPlayer
+ */
 @Singleton
 public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> extends GameManager<T> {
 
@@ -70,11 +77,12 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
     public Long getSeed() {
         return seed;
     }
-    
+
     /**
      * <p>
      * The game parameters are used to get additional information from the Game Runner.
      * </p>
+     * 
      * @return a <code>Properties</code> containing the given parameters.
      */
     public Properties getGameParameters() {
@@ -107,6 +115,7 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
      *            Player index
      * @return player with index i
      * @throws IndexOutOfBoundsException
+     *             if there is no player at that index
      */
     public T getPlayer(int i) throws IndexOutOfBoundsException {
         return this.players.get(i);

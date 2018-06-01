@@ -7,7 +7,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 /**
- * The representation of the a player's AI during the game's execution.
+ * The representation of the/a player's AI during the game's execution.
  *
  */
 abstract public class AbstractPlayer {
@@ -72,6 +72,7 @@ abstract public class AbstractPlayer {
      * Set current score. This is used to rank the players at the end of the game.
      * 
      * @param score
+     *            The player's final score.
      */
     void setScore(int score) {
         this.score = score;
@@ -107,6 +108,7 @@ abstract public class AbstractPlayer {
      * 
      * @return a list of output lines
      * @throws TimeoutException
+     *             if the player's AI crashes or stops responding
      */
     public final List<String> getOutputs() throws TimeoutException {
         this.gameManagerProvider.get().setOuputsRead(true);
