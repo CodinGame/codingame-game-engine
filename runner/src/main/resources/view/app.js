@@ -198,7 +198,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
   async function exportZip () {
     const data = await fetch('/services/export')
       .then(function (response) {
-        if (response.ok) {
+        if (response.ok || response.status === 422) {
           return response
         } else {
           throw new Error(response.statusText)
