@@ -369,7 +369,7 @@ class Renderer {
             if (questionConfig.isOptiQuestion() && !hasAnOptiQuestion) {
                 hasAnOptiQuestion = true;
             } else if (hasAnOptiQuestion) {
-                exportReport.addItem(ReportItemType.ERROR, "An optimization game must have only one question");
+                exportReport.addItem(ReportItemType.ERROR, "An optimization game must have only one question.");
                 break;
             }
         }
