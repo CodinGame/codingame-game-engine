@@ -650,7 +650,7 @@ export class Drawer {
     this.playerInfo = agents.map(function (agent, index) {
       var agentData = {
         name: agent.name || 'Anonymous',
-        color: drawer.parseColor(agent.color),
+        color: agent.color ? drawer.parseColor(agent.color) : '#ffffff',
         number: index,
         index: agent.index,
         type: agent.type,
