@@ -257,6 +257,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
       }
       $scope.reportItems = exportResponse.reportItems
       $scope.showExportPopup = true
+      $scope.$apply()
     }
   }
 
