@@ -36,7 +36,7 @@ public class StatementSplitter {
         List<String> leagues = getLeagues(lines);
 
         if (leagues.isEmpty()) {
-            exportReport.addItem(ReportItemType.WARNING, statementFile.getName() + ": Statement splitter did not found leagues");
+            exportReport.addItem(ReportItemType.WARNING, statementFile.getName() + ": Statement splitter did not find leagues.");
             return;
         }
 
@@ -88,12 +88,12 @@ public class StatementSplitter {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("Could not generate statement file", e);
+            throw new RuntimeException("Cannot generate statement file.", e);
         } finally {
             try {
                 writer.close();
             } catch (IOException e) {
-                throw new RuntimeException("Could not close statement file", e);
+                throw new RuntimeException("Cannot close statement file.", e);
             }
         }
     }
