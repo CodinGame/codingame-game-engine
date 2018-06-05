@@ -13,7 +13,7 @@ Include the dependency below in the pom.xml of your project.
 <dependency>
 	<groupId>com.codingame.gameengine</groupId>
 	<artifactId>module-entities</artifactId>
-	<version>1.25</version>
+	<version>2.2</version>
 </dependency>
 ```
 Or a more recent version.

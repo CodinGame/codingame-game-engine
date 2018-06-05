@@ -9,7 +9,7 @@ Include the dependency below in the pom.xml of your project.
 <dependency>
   <groupId>com.codingame.gameengine</groupId>
   <artifactId>core</artifactId>
-  <version>1.25</version>
+  <version>2.2</version>
 </dependency>
 ```
 Or a more recent version.
@@ -19,10 +19,12 @@ Or a more recent version.
 ## The Game Manager
 
 Your project should include the class `Player` and the class `Referee`.
-Your `Referee` class may then inject (using Guice) a singleton of `GameManager` parametized by your `Player` class.
+Your `Referee` class may then inject (using Guice) a singleton of `SoloGameManager` or `MultiplayerGameManager` (corresponding to the type of game you want to create) parameterized by your `Player` class.
+Your `Player` class should extend from `AbstractSoloPlayer` or `AbstractMultiplayerPlayer`.
 
+Example for a **Multiplayer** game:
 ```java
-class Player extends AbstractPlayer {
+class Player extends AbstractMultiplayerPlayer {
     @Override
     public int getExpectedOutputLines() {
         return 1;
@@ -30,10 +32,9 @@ class Player extends AbstractPlayer {
 }
 
 public class Referee extends AbstractReferee {
-    @Inject private GameManager<MyPlayer> gameManager;
+    @Inject private MultiplayerGameManager<Player> gameManager;
     @Override
-    public Properties init(int playerCount, Properties params) {
-        return params;
+    public void init() {
     }
 
     @Override
@@ -45,6 +46,32 @@ public class Referee extends AbstractReferee {
     }
 }
 ```
+
+Example for a **Solo** game:
+```java
+class Player extends AbstractSoloPlayer {
+    @Override
+    public int getExpectedOutputLines() {
+        return 1;
+    }
+}
+
+public class Referee extends AbstractReferee {
+    @Inject private SoloGameManager<Player> gameManager;
+    @Override
+    public void init() {
+    }
+
+    @Override
+    public void gameTurn(int turn) {
+    }
+
+    @Override
+    public void onEnd() {
+    }
+}
+```
+
 The Game Manager's API will thus work with your `Player` class, which you may modify at leisure.
 
 # Documentation
