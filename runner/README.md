@@ -75,7 +75,6 @@ gameRunner.setTestCase("test1.json"); // You must set a test case to run your ga
 gameRunner.setAgent(Player.class);
 gameRunner.start();
 ```
-⚠ _This method will prevent the agent from printing to stdout from any other class than Player. It has been deprecated for this reason._
 
 ---
 ### Test case file
