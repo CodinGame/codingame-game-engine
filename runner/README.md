@@ -4,7 +4,7 @@ The Game Runner lets you run your game locally during developement. It comes wit
 
 You can create your own AI for your game and use the Game Runner to connect it to your game's implementation.
 
-You can also fiddle with your game's initialization input, such as the seed for random values.
+You can also fiddle with your game's initialization input, such as the seed for random values (for **Multiplayer** games) or a test case file (for **Solo** games, the content of such files is detailed below).
 
 # Usage
 
@@ -13,12 +13,12 @@ Include the dependency below in the pom.xml of your project.
 <dependency>
   <groupId>com.codingame.gameengine</groupId>
   <artifactId>runner</artifactId>
-  <version>1.35</version>
+  <version>2.2</version>
 </dependency>
 ```
 Or a more recent version.
 
-Instantiate a `GameRunner` to launch a game with the `start()` method. This will create a temporary directory and start a server to serve the files of that directory. You need not stop the previous server to launch a new game.
+Instantiate a `MultiplayerGameRunner` or a `SoloGameRunner` to launch a game with the `start()` method. This will create a temporary directory and start a server to serve the files of that directory. You need not stop the previous server to launch a new game.
 
 By default, you can access the game viewer for testing at [http://localhost:8888/test.html](http://localhost:8888/test.html). You may change the configuration of the game viewer by editing the `config.js` file.
 
@@ -29,13 +29,13 @@ Warning ⚠ To use the game viewer locally, your browser must support ES6 JavaSc
 
 In order to run a game, you must have prepared a `Referee` and a `Player`. The game will surely fail to finish if they are not properly implemented. See [Game Manager](../engine/core/) for details.
 
-## Running a game
+## Running a **Multiplayer** game
 
 ### Using the same java class for each player:
 ```java
-GameRunner gameRunner = new GameRunner();
-gameRunner.addJavaPlayer(Player.class);
-gameRunner.addJavaPlayer(Player.class);
+MultiplayerGameRunner gameRunner = new MultiplayerGameRunner();
+gameRunner.addAgent(Player.class);
+gameRunner.addAgent(Player.class);
 gameRunner.start();
     
 ```
@@ -43,7 +43,7 @@ gameRunner.start();
 
 ### Using external python programs as players:
 ```java
-GameRunner gameRunner = new GameRunner();
+MultiplayerGameRunner gameRunner = new MultiplayerGameRunner();
 
 gameRunner.addAgent("python3 /home/user/player1.py");
 gameRunner.addAgent("python3 /home/user/player2.py");
@@ -52,18 +52,56 @@ gameRunner.addAgent("python3 /home/user/player3.py");
 gameRunner.start();
 ```
 
-### Using external python programs as players:
+### Using a custom seed:
 ```java
 // I want to debug the strange case of this particuliar seed: 53295539
 
 Properties refereeInput = new Properties();
 refereeInput.put("seed", "53295539");
 
-GameRunner gameRunner = new GameRunner(refereeInput);
-gameRunner.addJavaPlayer(Player1.class);
-gameRunner.addJavaPlayer(Player2.class);
+MultiplayerGameRunner gameRunner = new MultiplayerGameRunner();
+gameRunner.setGameParameters(refereeInput);
+gameRunner.addAgent(Player1.class);
+gameRunner.addAgent(Player2.class);
 gameRunner.start();
 ```
+
+## Running a **Solo** game
+
+### Using a java class and a test case with its filename:
+```java
+SoloGameRunner gameRunner = new SoloGameRunner();
+gameRunner.setTestCase("test1.json"); // You must set a test case to run your game.
+gameRunner.setAgent(Player.class);
+gameRunner.start();
+```
+⚠ _This method will prevent the agent from printing to stdout from any other class than Player. It has been deprecated for this reason._
+
+---
+### Test case file
+
+You will need to create test case files to run your **Solo** game. If you are creating a **Multiplayer** game, you can skip this section.
+
+Your test cases must be named `test<number>.json` and placed in the `config` directory. Their `<number>` determine the order they will be listed in the CodinGame IDE. Here is an example:
+
+`test1.json`
+```json
+{
+	"title": {
+		"2": "One path",
+		"1": "Un seul chemin"
+	},
+	"testIn": ".o...\\n.ooo.\\n...o.",
+	"isTest": "true",
+	"isValidator": "false"
+}
+```
+- **title:**
+    - **2:** English title, this parameter is mandatory.
+    - **1:** French title, optional.
+- **testIn:** The content of your test case. It can contain multiple lines separated with `\\n`.
+- **isTest:** If true, this test will be visible and used as a regular test case.
+- **isValidator:** If true, this test will be use to validate the player's code. You can use this to avoid hardcoded solutions.
 
 ### Activating game logs
 
