@@ -670,7 +670,7 @@ class Renderer {
             Matcher bindExceptionMatcher = Pattern.compile("java.net.BindException.*").matcher(e.getMessage());
             if (bindExceptionMatcher.matches()) {
                 log.warn(
-                    "Address already in use, your game was successfully bound to the address. If you are running a different game, please restart the server"
+                    "Run successful but port already in use. If you are running a different game, please restart the server."
                 );
                 return;
             }
