@@ -661,15 +661,21 @@ class Renderer {
         try {
             server.start();
         } catch (RuntimeException e) {
-            if (e.getMessage() != null) {
-                Matcher bindExceptionMatcher = Pattern.compile("java.net.BindException.*").matcher(e.getMessage());
-                if (bindExceptionMatcher.matches()) {
-                    log.warn(
-                        "Address already in use, your game was successfully bound to the address. If you are running a different game, please restart the server"
-                    );
-                }
+            checkAddressAlreadyBound(e);
+        }
+    }
+
+    private void checkAddressAlreadyBound(RuntimeException e) {
+        if (e.getMessage() != null) {
+            Matcher bindExceptionMatcher = Pattern.compile("java.net.BindException.*").matcher(e.getMessage());
+            if (bindExceptionMatcher.matches()) {
+                log.warn(
+                    "Address already in use, your game was successfully bound to the address. If you are running a different game, please restart the server"
+                );
+                return;
             }
         }
+        throw e;
     }
 
     public void render(int playerCount, String jsonResult) {
