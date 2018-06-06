@@ -244,7 +244,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
           'type': 'SUCCESS',
           'message': 'Export success.'
         })
-        let url = window.URL.createObjectURL(base64ToBlob(exportResponse.data))
+        let url = exportResponse.dataUrl
         let a = document.createElement('a')
         a.href = url
         a.download = 'export.zip'
@@ -259,16 +259,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
       $scope.showExportPopup = true
       $scope.$apply()
     }
-  }
-
-  function base64ToBlob (base64) {
-    let binaryString = window.atob(base64)
-    let len = binaryString.length
-    let bytes = new Uint8Array(len)
-    for (let i = 0; i < len; i++) {
-      bytes[i] = binaryString.charCodeAt(i)
-    }
-    return new Blob([bytes])
   }
 
   async function submitConfig (valid, config) {
