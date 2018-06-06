@@ -37,7 +37,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.runner.ConfigHelper.GameConfig;
 import com.codingame.gameengine.runner.ConfigHelper.GameType;
 import com.codingame.gameengine.runner.ConfigHelper.QuestionConfig;
@@ -348,10 +347,10 @@ class Renderer {
     }
 
     private void checkTestCases(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
-        if(questionConfig.getTestCases().isEmpty()) {
+        if (questionConfig.getTestCases().isEmpty()) {
             exportReport.addItem(ReportItemType.ERROR, "A solo game must have at least one test case.");
         }
-        
+
         for (TestCase testCase : questionConfig.getTestCases()) {
             if (testCase.getTitle().get(Constants.LANGUAGE_ID_ENGLISH) == null) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have at least an English title.");
@@ -662,9 +661,13 @@ class Renderer {
         try {
             server.start();
         } catch (RuntimeException e) {
-            Matcher bindExceptionMatcher = Pattern.compile("java.net.BindException.*").matcher(e.getMessage() != null ? e.getMessage() : "");
-            if (bindExceptionMatcher.matches()) {
-                log.warn("Address already in use, your game was successfully bound to the address. If you are running a different game, please restart the server");
+            if (e.getMessage() != null) {
+                Matcher bindExceptionMatcher = Pattern.compile("java.net.BindException.*").matcher(e.getMessage());
+                if (bindExceptionMatcher.matches()) {
+                    log.warn(
+                        "Address already in use, your game was successfully bound to the address. If you are running a different game, please restart the server"
+                    );
+                }
             }
         }
     }
