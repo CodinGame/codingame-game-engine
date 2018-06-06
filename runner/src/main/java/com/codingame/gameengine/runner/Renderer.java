@@ -34,6 +34,8 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.codingame.gameengine.runner.ConfigHelper.GameConfig;
 import com.codingame.gameengine.runner.ConfigHelper.GameType;
@@ -69,6 +71,8 @@ class Renderer {
     private static final int SOLO_MAX_PLAYERS = 8;
     private static final Pattern HTML_IMG_MARKER = Pattern.compile("<\\s*img [^\\>]*src\\s*=\\s*([\"\\'])(?<source>.*?)\\1");
     private static final Pattern GEN_STATEMENT_MARKER = Pattern.compile("statement_[a-zA-Z]{2}\\.html\\.tpl");
+
+    protected static Log log = LogFactory.getLog(Renderer.class);
 
     public class MultipleResourceSupplier implements ResourceSupplier {
 
@@ -343,10 +347,10 @@ class Renderer {
     }
 
     private void checkTestCases(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
-        if(questionConfig.getTestCases().isEmpty()) {
+        if (questionConfig.getTestCases().isEmpty()) {
             exportReport.addItem(ReportItemType.ERROR, "A solo game must have at least one test case.");
         }
-        
+
         for (TestCase testCase : questionConfig.getTestCases()) {
             if (testCase.getTitle().get(Constants.LANGUAGE_ID_ENGLISH) == null) {
                 exportReport.addItem(ReportItemType.ERROR, tag + "A test case must have at least an English title.");
@@ -654,7 +658,24 @@ class Renderer {
                 )
             )
             .build();
-        server.start();
+        try {
+            server.start();
+        } catch (RuntimeException e) {
+            checkAddressAlreadyBound(e);
+        }
+    }
+
+    private void checkAddressAlreadyBound(RuntimeException e) {
+        if (e.getMessage() != null) {
+            Matcher bindExceptionMatcher = Pattern.compile("java.net.BindException.*").matcher(e.getMessage());
+            if (bindExceptionMatcher.matches()) {
+                log.warn(
+                    "Run successful but port already in use. If you are running a different game, please restart the server."
+                );
+                return;
+            }
+        }
+        throw e;
     }
 
     public void render(int playerCount, String jsonResult) {
