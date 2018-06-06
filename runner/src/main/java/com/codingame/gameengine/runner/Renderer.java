@@ -34,7 +34,10 @@ import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
+import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.runner.ConfigHelper.GameConfig;
 import com.codingame.gameengine.runner.ConfigHelper.GameType;
 import com.codingame.gameengine.runner.ConfigHelper.QuestionConfig;
@@ -69,6 +72,8 @@ class Renderer {
     private static final int SOLO_MAX_PLAYERS = 8;
     private static final Pattern HTML_IMG_MARKER = Pattern.compile("<\\s*img [^\\>]*src\\s*=\\s*([\"\\'])(?<source>.*?)\\1");
     private static final Pattern GEN_STATEMENT_MARKER = Pattern.compile("statement_[a-zA-Z]{2}\\.html\\.tpl");
+
+    protected static Log log = LogFactory.getLog(Renderer.class);
 
     public class MultipleResourceSupplier implements ResourceSupplier {
 
@@ -654,7 +659,14 @@ class Renderer {
                 )
             )
             .build();
-        server.start();
+        try {
+            server.start();
+        } catch (RuntimeException e) {
+            Matcher bindExceptionMatcher = Pattern.compile("java.net.BindException.*").matcher(e.getMessage() != null ? e.getMessage() : "");
+            if (bindExceptionMatcher.matches()) {
+                log.warn("Address already in use, your game was successfully bound to the address. If you are running a different game, please restart the server");
+            }
+        }
     }
 
     public void render(int playerCount, String jsonResult) {
