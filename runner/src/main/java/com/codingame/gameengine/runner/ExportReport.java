@@ -12,7 +12,7 @@ enum ExportStatus {
 public class ExportReport {
     private List<ReportItem> reportItems = new ArrayList<>();
     private ExportStatus exportStatus = ExportStatus.SUCCESS;
-    private String data;
+    private String dataUrl;
     private Map<String, String> stubs = new HashMap<>();
 
     public List<ReportItem> getReportItems() {
@@ -42,12 +42,12 @@ public class ExportReport {
         }
     }
 
-    public String getData() {
-        return data;
+    public String getDataUrl() {
+        return dataUrl;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDataUrl(String dataUrl) {
+        this.dataUrl = dataUrl;
     }
 
     public Map<String, String> getStubs() {

@@ -19,7 +19,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -583,12 +582,12 @@ class Renderer {
                                             generateSplittedStatements(sourceFolderPath, exportReport);
                                             checkConfig(sourceFolderPath, exportReport);
                                             if (exportReport.getExportStatus() == ExportStatus.SUCCESS) {
-                                                byte[] data = Files.readAllBytes(exportSourceCode(sourceFolderPath, zipPath));
-                                                exportReport.setData(Base64.getEncoder().encodeToString(data));
+                                                exportSourceCode(sourceFolderPath, zipPath);
+                                                exportReport.setDataUrl(zipPath.getFileName().toString());
                                             }
+
                                             String jsonExportReport = new Gson().toJson(exportReport);
                                             exchange.getResponseSender().send(jsonExportReport);
-
                                         } else if (exchange.getRelativePath().equals("/init-config")) {
                                             if (!sourceFolderPath.resolve("config").toFile().isDirectory()) {
                                                 sourceFolderPath.resolve("config").toFile().mkdir();
