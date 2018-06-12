@@ -418,7 +418,7 @@ export class Drawer {
     for (let moduleName in this.modules) {
       const module = this.modules[moduleName]
       if (parsedFrame.data.hasOwnProperty(moduleName)) {
-        module.updateScene(parsedFrame.previous.data[moduleName], parsedFrame.data[moduleName], progress)
+        module.updateScene(parsedFrame.previous.data[moduleName], parsedFrame.data[moduleName], progress, speed)
       }
     }
   }
