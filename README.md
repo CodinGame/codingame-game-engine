@@ -110,3 +110,11 @@ Third league in `config/level3/statement_en.html`:
 </div>
 ```
 
+
+## Welcome popup
+
+Welcome popups can be used in **Multiplayer** games with multiple leagues. They will be displayed when a player is promoted to the next league.
+
+Place a file named `welcome_en.html` in every `config/level<number>` directory you want the popup to be used in.
+
+You can display images using `<img src="your_image.jpg"/>`. The image files must be located in the same directory.
