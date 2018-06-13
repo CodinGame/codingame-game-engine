@@ -334,7 +334,7 @@ class Renderer {
                 checkBoss(questionConfig, tag, exportReport);
 
                 //Check League popups
-                if (gameConfig.isLeaguesDetected()) {
+                if (gameConfig.isLeaguesDetected() && !"level1".equals(league)) {
                     checkLeaguePopups(questionConfig, tag, exportReport);
                 }
             } else if (questionConfig.isSoloQuestion() || questionConfig.isOptiQuestion()) {
