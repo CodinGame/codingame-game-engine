@@ -80,6 +80,17 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
 
     /**
      * <p>
+     * Set a custom seed.
+     * </p>
+     * 
+     * @param the seed.
+     */
+    public void setSeed(Long seed) {
+        this.seed = seed;
+    }
+
+    /**
+     * <p>
      * The game parameters are used to get additional information from the Game Runner.
      * </p>
      * 
