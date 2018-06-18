@@ -18,6 +18,7 @@ export class GraphicEntityModule {
       mustResetTree: true,
       mustResort: true,
       maskUpdates: {},
+      updatedBuffers: [],
       players: [],
       instanceCount: 0,
       atLeastOnePixel: function (width) {
@@ -147,6 +148,9 @@ export class GraphicEntityModule {
         entity.container.mask = this.entities.get(maskId).graphics
       }
     }
+    for (let entity of this.globalData.updatedBuffers) {
+      entity.postUpdate()
+    }
     this.globalData.maskUpdates = {}
   }
 
@@ -154,7 +158,7 @@ export class GraphicEntityModule {
     // Groups
     this.entities.forEach(e => {
       if (e instanceof Group) {
-        this.sortChildren(e.graphics)
+        this.sortChildren(e.childrenContainer)
       }
     })
     // Parent
@@ -167,9 +171,9 @@ export class GraphicEntityModule {
     // Groups
     this.entities.forEach(e => {
       if (e instanceof Group) {
-        e.graphics.removeChildren()
+        e.childrenContainer.removeChildren()
         e.currentState.children.forEach(id => {
-          e.graphics.addChild(this.entities.get(id).container)
+          e.childrenContainer.addChild(this.entities.get(id).container)
         })
       }
     })

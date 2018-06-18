@@ -1,6 +1,6 @@
-import {unlerp} from '../core/utils.js'
-import {PROPERTIES} from './properties.js'
-import {ErrorLog} from '../core/ErrorLog.js'
+import { unlerp } from '../core/utils.js'
+import { PROPERTIES } from './properties.js'
+import { ErrorLog } from '../core/ErrorLog.js'
 
 /* global PIXI */
 
@@ -100,6 +100,9 @@ export class Entity {
         this.container.visible = this.container._visible
         if (changed.children) {
           globalData.mustResetTree = true
+          if (typeof this.postUpdate === 'function') {
+            globalData.updatedBuffers.push(this)
+          }
         }
         if (changed.zIndex) {
           globalData.mustResort = true
