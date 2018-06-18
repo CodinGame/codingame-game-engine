@@ -77,6 +77,7 @@ class Serializer {
         types.put(Type.RECTANGLE, "R");
         types.put(Type.CIRCLE, "C");
         types.put(Type.GROUP, "G");
+        types.put(Type.BUFFERED_GROUP, "B");
         types.put(Type.LINE, "L");
         types.put(Type.SPRITE, "S");
         types.put(Type.TEXT, "T");

@@ -279,6 +279,24 @@ public class GraphicEntityModule implements Module {
         return e;
 
     }
+    
+    /**
+     * Creates a new BufferedGroup entity, its graphical counterpart will be created on the frame currently being computed.
+     * <p>
+     * A BufferedGroup acts like a group but uses its own rendering system to avoid rounding errors when its children are scaled up or down.
+     * 
+     * @param entities
+     *            0 or more entities to immediately add to this group.
+     * 
+     * @return the entity. Modify its properties to animate the graphical counterpart.
+     */
+    public BufferedGroup createBufferedGroup(Entity<?>... entities) {
+        BufferedGroup e = new BufferedGroup();
+        newEntity(e);
+        e.add(entities);
+        return e;
+
+    }
 
     /**
      * Creates a new Sprite animation, its graphical counterpart will be created on the frame currently being computed.
