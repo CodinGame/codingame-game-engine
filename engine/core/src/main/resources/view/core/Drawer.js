@@ -111,7 +111,11 @@ export class Drawer {
   }
 
   getOptions () {
-    return config.options || []
+    // Return an array of copies
+    if (config.options) {
+      return config.options.map(v => ({...v}))
+    }
+    return []
   }
 
   setDebug (v) {
