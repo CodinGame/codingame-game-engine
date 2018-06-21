@@ -27,7 +27,7 @@ public class SoloGameRunner extends GameRunner {
         List<String> lines = new ArrayList<>();
         try {
             JsonObject testCaseJson = new JsonParser().parse(FileUtils.readFileToString(file, StandardCharsets.UTF_8)).getAsJsonObject();
-            lines.addAll(Arrays.asList(testCaseJson.get("testIn").getAsString().split("\\\\n")));
+            lines.addAll(Arrays.asList(testCaseJson.get("testIn").getAsString().split("\\n")));
         } catch (IOException e) {
             throw new RuntimeException("Cannot read file", e);
         } catch (NullPointerException e) {
