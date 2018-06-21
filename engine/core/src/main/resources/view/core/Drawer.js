@@ -2,8 +2,9 @@ import {assets} from '../assets.js'
 import * as config from '../config.js'
 import {unlerp, fitAspectRatio} from './utils.js'
 import {WIDTH, HEIGHT, BASE_FRAME_DURATION} from './constants.js'
-import {ErrorLog} from '../core/ErrorLog.js'
+import {ErrorLog} from './ErrorLog.js'
 import {demo} from '../demo.js'
+import {setRenderer} from './rendering.js'
 
 /* global PIXI requestAnimationFrame $ */
 
@@ -756,6 +757,7 @@ export class Drawer {
       this.container = new PIXI.Container()
       var resources = this.getResources()
       this.renderer = this.createRenderer(this.initWidth, this.initHeight, canvas)
+      setRenderer(this.renderer)
       var loader = new PIXI.loaders.Loader(resources.baseUrl)
       for (key in resources.images) {
         loader.add(key, resources.images[key], {crossOrigin: true})

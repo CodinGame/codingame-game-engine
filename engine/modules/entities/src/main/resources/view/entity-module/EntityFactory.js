@@ -4,10 +4,11 @@ import { Rectangle } from './Rectangle.js'
 import { Sprite } from './Sprite.js'
 import { Text } from './Text.js'
 import { Group } from './Group.js'
+import { BufferedGroup } from './BufferedGroup.js'
 import { SpriteAnimation } from './SpriteAnimation.js'
 
 export class EntityFactory {
-  static create (type) {
+  static create(type) {
     var entity
     switch (type) {
       case 'C':
@@ -27,6 +28,9 @@ export class EntityFactory {
         break
       case 'G':
         entity = new Group()
+        break
+      case 'B':
+        entity = new BufferedGroup()
         break
       case 'A':
         entity = new SpriteAnimation()
