@@ -1,5 +1,5 @@
 import { Group } from './Group.js'
-import { shared } from '../core/shared.js'
+import { getRenderer } from '../core/rendering.js'
 import { WIDTH, HEIGHT } from '../core/constants.js'
 
 /* global PIXI */
@@ -14,11 +14,10 @@ export class BufferedGroup extends Group {
 
   updateDisplay (state, changed, globalData) {
     super.updateDisplay(state, changed, globalData)
-    shared.renderer.render(this.buffer, this.gameTexture)
   }
 
   postUpdate () {
-    shared.renderer.render(this.buffer, this.gameTexture)
+    getRenderer().render(this.buffer, this.gameTexture)
   }
 
   get childrenContainer () {
