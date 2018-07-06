@@ -99,7 +99,7 @@
 			min-height: 115px;
 		}
 
-		.log {
+		.uinput, .log {
 			display: flex;
 			resize: vertical;
 			overflow: auto;
@@ -390,10 +390,10 @@
 				</div>
 			</div>
 
-			<div>
+			<div class="uinput">
 				<fieldset>
 					<legend>Game properties</legend>
-					<textarea id="uinput" readonly></textarea>
+					<textarea id="uinput" ng-model="uinput" readonly></textarea>
 				</fieldset>
 			</div>
 

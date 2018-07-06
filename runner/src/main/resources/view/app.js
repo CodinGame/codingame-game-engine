@@ -58,6 +58,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
       return
     }
     $scope.gameLoaded = true
+    $scope.uinput = ctrl.data.uinput
     ctrl.gameInfo = convertFrameFormat(ctrl.data)
     $scope.agents = {...ctrl.data.agents}
 
