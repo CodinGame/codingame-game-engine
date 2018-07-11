@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-class CommandLinePlayerAgent extends Agent {
+public class CommandLinePlayerAgent extends Agent {
 
     private OutputStream processStdin;
     private InputStream processStdout;
