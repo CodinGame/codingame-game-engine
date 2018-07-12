@@ -93,7 +93,7 @@ public class StatementSplitter {
                         writer.write(
                             "\n<div style=\"color: #7cc576;\n" +
                                 "      background-color: rgba(124, 197, 118,.1);\n" +
-                                "      padding: 2px; display:inline-block;\">\n"
+                                "      padding: 2px; display:inline;\">\n"
                         );
                     }
                 } else if (END_MARKER.matcher(line).matches()) {
