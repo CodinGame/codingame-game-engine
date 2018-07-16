@@ -37,7 +37,12 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
                 }
             }
         }
-        seed = ThreadLocalRandom.current().nextLong();
+
+        try {
+            seed = Long.parseLong(gameParameters.getProperty("randomSeed"));
+        } catch (NumberFormatException e) {
+            seed = ThreadLocalRandom.current().nextLong();
+        }
         if (gameParameters.containsKey("seed")) {
             try {
                 seed = Long.parseLong(gameParameters.getProperty("seed"));
@@ -55,7 +60,7 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
         for (Entry<Object, Object> t : gameParameters.entrySet()) {
             out.println(t.getKey() + "=" + t.getValue());
             log.info(t.getKey() + "=" + t.getValue());
-            
+
         }
     }
 
