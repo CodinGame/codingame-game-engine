@@ -1,3 +1,4 @@
+
 package com.codingame.gameengine.core;
 
 import java.io.InputStream;
@@ -7,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,6 +33,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
 
     private static final int VIEW_DATA_SOFT_QUOTA = 512 * 1024;
     private static final int VIEW_DATA_HARD_QUOTA = 1024 * 1024;
+    private static final int GAME_SUMMARY_HARD_QUOTA = 512 * 1024;
 
     protected List<T> players;
     private int maxTurns = 400;
@@ -466,7 +469,19 @@ abstract public class GameManager<T extends AbstractPlayer> {
      *            summary line to add to the current summary.
      */
     public void addToGameSummary(String summary) {
-        this.currentGameSummary.add(summary);
+        int total = this.currentGameSummary.stream()
+            .collect(
+                Collectors.reducing(
+                    0,
+                    s -> s.length(),
+                    (a, b) -> a + b
+                )
+            );
+        if (total < GAME_SUMMARY_HARD_QUOTA) {
+            this.currentGameSummary.add(summary);   
+        } else {
+            log.warn("Warning: the game summary is full. Please try to send less data.");   
+        }
     }
 
     /**
