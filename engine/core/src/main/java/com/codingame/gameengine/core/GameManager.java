@@ -470,13 +470,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
      */
     public void addToGameSummary(String summary) {
         int total = this.currentGameSummary.stream()
-            .collect(
-                Collectors.reducing(
-                    0,
-                    s -> s.length(),
-                    (a, b) -> a + b
-                )
-            );
+            .mapToInt(String::length)
+            .sum();
         if (total < GAME_SUMMARY_HARD_QUOTA) {
             this.currentGameSummary.add(summary);   
         } else {
