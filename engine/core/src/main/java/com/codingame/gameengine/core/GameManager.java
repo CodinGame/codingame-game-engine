@@ -1,4 +1,3 @@
-
 package com.codingame.gameengine.core;
 
 import java.io.InputStream;
@@ -8,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -473,9 +471,9 @@ abstract public class GameManager<T extends AbstractPlayer> {
             .mapToInt(String::length)
             .sum();
         if (total < GAME_SUMMARY_HARD_QUOTA) {
-            this.currentGameSummary.add(summary);   
+            this.currentGameSummary.add(summary);
         } else {
-            log.warn("Warning: the game summary is full. Please try to send less data.");   
+            log.warn("Warning: the game summary is full. Please try to send less data.");
         }
     }
 
