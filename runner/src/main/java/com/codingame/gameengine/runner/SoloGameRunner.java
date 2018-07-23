@@ -61,8 +61,7 @@ public class SoloGameRunner extends GameRunner {
     }
 
     /**
-     * @deprecated Sets an AI to the next game to run.
-     *             <p>
+     * Sets an AI to the next game to run.
      * 
      * @param playerClass
      *            the Java class of an AI for your game.
@@ -84,8 +83,7 @@ public class SoloGameRunner extends GameRunner {
     }
 
     /**
-     * @deprecated Sets an AI to the next game to run.
-     *             <p>
+     * Sets an AI to the next game to run.
      * 
      * @param playerClass
      *            the Java class of an AI for your game.
