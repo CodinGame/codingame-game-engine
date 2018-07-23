@@ -195,6 +195,7 @@ export class Drawer {
           scope.logo = new PIXI.Container()
           scope.logo.baseScale = 1
           scene.addChild(scope.logo)
+          scope.missingLogo = true
         }
       }
 
@@ -297,7 +298,7 @@ export class Drawer {
       scope.logo.scale.x = scope.logo.scale.y = (3 - animProgress * 2) * scope.logo.baseScale
     }
 
-    if (scope.demotime > 1.5 && scope.demotime <= 2.2) {
+    if (!scope.missingLogo && scope.demotime > 1.5 && scope.demotime <= 2.2) {
       var amplitude = Math.max(0, 1 - (scope.demotime - 1.5) / 0.7) * 15
 
       scope.demo.x = (Math.random() * 2 - 1) * amplitude
