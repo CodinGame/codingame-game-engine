@@ -200,11 +200,13 @@ export class Drawer {
       }
 
       var darkness = new PIXI.Graphics()
-      darkness.beginFill(0, this.demo.overlayAlpha || 0)
-      darkness.drawRect(0, 0, Drawer.WIDTH + 20, Drawer.HEIGHT + 20)
-      darkness.endFill()
-      darkness.x -= 10
-      darkness.y -= 10
+      if (!scope.missingLogo) {
+        darkness.beginFill(0, this.demo.overlayAlpha || 0)
+        darkness.drawRect(0, 0, Drawer.WIDTH + 20, Drawer.HEIGHT + 20)
+        darkness.endFill()
+        darkness.x -= 10
+        darkness.y -= 10
+      }
 
       var demoContainer = new PIXI.Container()
 
