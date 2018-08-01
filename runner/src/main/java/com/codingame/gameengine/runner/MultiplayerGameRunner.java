@@ -56,7 +56,7 @@ public class MultiplayerGameRunner extends GameRunner {
     }
 
     /**
-     * Adds an AI to the next game to run.
+     * Adds an AI to the next game to run. You must keep any standard output for the game inside the given class.
      * 
      * @param playerClass
      *            the Java class of an AI for your game.
