@@ -4,14 +4,12 @@ import {unlerp, fitAspectRatio} from './utils.js'
 import {WIDTH, HEIGHT, BASE_FRAME_DURATION} from './constants.js'
 import {ErrorLog} from './ErrorLog.js'
 import {demo} from '../demo.js'
-import {setRenderer} from './rendering.js'
+import {setRenderer, destroyFlagged, flagForDestructionOnReinit} from './rendering.js'
 
 /* global PIXI requestAnimationFrame $ */
 
 export class Drawer {
   constructor () {
-    this.toDestroy = []
-
     if (demo) {
       const frames = demo.views
       const agents = demo.agents
@@ -84,11 +82,7 @@ export class Drawer {
   }
 
   destroyScene (scope) {
-    for (var i = 0, l = this.toDestroy.length; i < l; ++i) {
-      var texture = this.toDestroy[i]
-      texture.destroy(true)
-    }
-    this.toDestroy = []
+    destroyFlagged()
   }
 
   /** Mandatory */
@@ -749,7 +743,6 @@ export class Drawer {
     this.endCallback = endCallback || this.endCallback
 
     if (!this.alreadyLoaded) {
-      this.toDestroy = []
       this.alreadyLoaded = true
       // Initialisation
       this.question = null
@@ -849,7 +842,7 @@ export class Drawer {
    */
   generateTexture (graphics) {
     var tex = graphics.generateTexture()
-    this.toDestroy.push(tex)
+    flagForDestructionOnReinit(tex)
     return tex
   }
 
@@ -880,7 +873,7 @@ export class Drawer {
     } else if (align === 'center') {
       textEl.anchor.x = 0.5
     }
-    this.toDestroy.push(textEl)
+    flagForDestructionOnReinit(textEl)
     return textEl
   }
   isReady () {

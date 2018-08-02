@@ -1,5 +1,5 @@
 import { Group } from './Group.js'
-import { getRenderer } from '../core/rendering.js'
+import { getRenderer, flagForDestructionOnReinit } from '../core/rendering.js'
 import { WIDTH, HEIGHT } from '../core/constants.js'
 
 /* global PIXI */
@@ -8,6 +8,7 @@ export class BufferedGroup extends Group {
   initDisplay () {
     super.initDisplay()
     this.gameTexture = PIXI.RenderTexture.create(WIDTH, HEIGHT)
+    flagForDestructionOnReinit(this.gameTexture)
     this.graphics = new PIXI.Sprite(this.gameTexture)
     this.buffer = new PIXI.Container()
   }
