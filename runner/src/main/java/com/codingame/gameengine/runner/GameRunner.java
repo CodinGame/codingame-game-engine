@@ -30,8 +30,8 @@ abstract class GameRunner {
 
     protected static Log log = LogFactory.getLog(GameRunner.class);
     GameResult gameResult = new GameResult();
-    private ByteArrayOutputStream userStdout;
-    private ByteArrayOutputStream userStderr;
+    private ByteArrayOutputStream refereeStdout;
+    private ByteArrayOutputStream refereeStderr;
 
     private Agent referee;
     protected final List<Agent> players;
@@ -49,8 +49,8 @@ abstract class GameRunner {
     protected GameRunner() {
         referee = new RefereeAgent();
         players = new ArrayList<Agent>();
-        userStdout = new ByteArrayOutputStream();
-        userStderr = new ByteArrayOutputStream();
+        refereeStdout = new ByteArrayOutputStream();
+        refereeStderr = new ByteArrayOutputStream();
     }
 
     private void initialize(Properties conf) {
@@ -128,8 +128,8 @@ abstract class GameRunner {
             boolean validTurn = turnInfo.isComplete();
 
             if (validTurn) {
-                gameResult.outputs.get("referee").add(userStdout.toString());
-                userStdout.reset();
+                gameResult.outputs.get("referee").add(refereeStdout.toString());
+                refereeStdout.reset();
                 gameResult.summaries.add(turnInfo.get(InputCommand.SUMMARY).orElse(null));
             }
 
@@ -234,8 +234,8 @@ abstract class GameRunner {
      */
     private void readError(Agent agent) {
         if (agent == referee) {
-            gameResult.errors.get("referee").add(userStderr.toString());
-            userStderr.reset();
+            gameResult.errors.get("referee").add(refereeStderr.toString());
+            refereeStderr.reset();
         } else {
             for (Agent a : players) {
                 gameResult.errors.get(String.valueOf(a.getAgentId())).add(a == agent ? agent.readError() : null);
@@ -399,7 +399,7 @@ abstract class GameRunner {
             @Override
             public void write(int b) throws IOException {
                 out.write(b);
-                userStdout.write(b);
+                refereeStdout.write(b);
             }
         }));
         PrintStream err = System.err;
@@ -407,7 +407,7 @@ abstract class GameRunner {
             @Override
             public void write(int b) throws IOException {
                 err.write(b);
-                userStderr.write(b);
+                refereeStderr.write(b);
             }       
         }));
         requireGameNotEnded();

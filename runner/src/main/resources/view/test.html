@@ -4,236 +4,22 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<script type="text/javascript" src="lib/player.js"></script>
+	<link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600,700,800,900" rel="stylesheet" type="text/css">
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
 	<link href="http://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" type="text/css">
 
 	<script src="app.js" type="module"></script>
-
-	<style>
-		.viewer-wrapper {
-			width: 800px;
-			min-width: 470px;
-			resize: horizontal;
-			overflow: auto;
-			padding: 10px;
-			border: 1px solid #41454a;
-			margin: auto;
-		}
-
-		body {
-			background-color: #20252a;
-			color: white;
-			font-family: 'Open Sans', Lato, sans-serif!important;
-			font-weight: 400;
-			overflow: auto;
-		}
-
-		a {
-			color: white !important;
-		}
-
-		.controls {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			height: 50px;
-		}
-
-		.buttons {
-			display: flex;
-		}
-
-		.position {
-			display: flex;
-			flex: 1;
-		}
-
-		#container {
-			position: relative;
-			height: 0;
-			padding-bottom: 56.25%;
-		}
-
-		#positionRange {
-			flex: 1;
-			margin: 0 10px;
-		}
-
-		#player-canvas {
-			position: absolute;
-			margin: 0;
-			padding: 0;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%
-		}
-
-		fieldset {
-			flex: 1;
-			border: 1px solid #41454a;
-			margin-top: 10px;
-			padding: 10px;
-		}
-
-		textarea {
-			background-color: #252e38;
-			color: white;
-			width: 100%;
-			height: calc(100% - 20px);
-			resize: none;
-		}
-
-		.full-screen {
-			margin-left: 10px;
-		}
-
-		.speed {
-			margin-left: 10px;
-		}
-
-		.output-player, .output-referee {
-			display: flex;
-			resize: vertical;
-			overflow: auto;
-			min-height: 115px;
-		}
-
-		.uinput, .log {
-			display: flex;
-			resize: vertical;
-			overflow: auto;
-		}
-
-		.header-bar {
-			border: 1px solid #41454a;
-			padding: 10px;
-			margin-bottom: 10px;
-		}
-
-		.header-bar-button {
-			margin-right: 30px;
-			display: inline-block;
-			color: white;
-			font-weight: 600;
-			cursor: pointer;
-		}
-		.header-bar-button:disabled {
-			color: gray;
-			cursor: auto;
-		}
-
-		.default-button {
-			border: 1px solid #41454a;
-			padding-left: 10px;
-			padding-right: 10px;
-			padding-top: 5px;
-			padding-bottom: 5px;
-			margin: 5px;
-		}
-
-		.default-button:hover {
-			color: white;
-			border-color: white;
-		}
-
-		.default-button-wrapper, .load-button-wrapper {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		.load-button-wrapper {
-			height: 100px;
-		}
-
-		.report-popup-wrapper {
-			z-index: 10;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			position: absolute;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			background: rgba(0,0,0,.6);
-		}
-
-		.report-popup {
-			background-color: #20252a;
-			border: 1px solid #41454a;
-			padding: 20px;
-			width: 700px;
-			min-width: 400px;
-			position: relative;
-			overflow: hidden;
-		}
-
-		.form-popup {
-			background-color: #20252a;
-			border: 1px solid #41454a;
-			padding: 20px;
-			max-width: 400px;
-			position: relative;
-			overflow: hidden;
-		}
-
-		.report-details-wrapper {
-			list-style-type: none;
-			padding-left: 60px;
-			opacity: 0.7;
-		}
-
-		.report-details {
-			padding-left: 60px;
-		}
-
-		.report-items-wrapper {
-			max-height: 400px;
-			overflow-y: scroll;
-		}
-
-		.report-item.WARNING {
-			color: #F39C12;
-		}
-
-		.report-item.INFO {
-			color: #4183D7;
-		}
-
-		.report-item.ERROR,
-		.report-item.FAIL {
-			color: #F22613;
-		}
-
-		.report-item.SUCCESS {
-			color: #2ECC71;
-		}
-
-		#form {
-			justify-content: center;
-			align-items: center;
-		}
-
-		#form>p>input {
-			margin-bottom: 10px;
-		}
-
-		[ng-cloak] {
-			display: none !important;
-		}
-	</style>
+	<link rel="stylesheet" type="text/css" href="test.css">
 </head>
 
 <body>
-	<div ng-app="player" ng-controller="PlayerCtrl" ng-cloak>
+	<div ng-app="player" class="player" ng-controller="PlayerCtrl" ng-cloak>
 
 		<div ng-show="showExportPopup" class="report-popup-wrapper">
 			<div class="report-popup">
-				<div ng-scrollbars class="report-items-wrapper">
+				<div class="report-items-wrapper">
 					<div ng-repeat="item in reportItems">
-						<span class="report-item" ng-class="item.type">[<span ng-bind="item.type"></span>]</span> <span ng-bind="item.message"></span>
+						<span class="report-item" ng-class="item.type">[<span ng-bind="item.type"></span>]</span> <span class="item-message" ng-bind="item.message"></span>
 						<span ng-if="item.link">
 							<a ng-href="{{item.link}}" target="_blank"> More info</a>
 						</span>
@@ -243,15 +29,35 @@
 						</ul>
 					</div>
 				</div>
-				<div class="default-button-wrapper">
-					<button class="default-button" ng-click="closeReportPopup()">Close</button>
+				<div class="close-button-wrapper">
+					<button class="close-button" ng-click="closeReportPopup()">Close</button>
+				</div>
+			</div>
+		</div>
+
+		<div ng-show="showViewReplayPopup" class="report-popup-wrapper">
+			<div class="viewer-popup">	
+				<cg-player
+					ng-if="replayDrawer"
+					on-player-ready="playerLoaded($playerApi)"
+					drawer="replayDrawer"
+					show-console="false"
+					show-rankings="false"
+					show-small-rankings="false"
+					async-rendering="true"
+					shareable="false"
+					show-replay-prompt="false"
+					game-params="gameParams">
+				</cg-player>			
+				<div class="close-button-wrapper">
+					<button class="close-button" ng-click="closeViewReplayPopup()">Close</button>
 				</div>
 			</div>
 		</div>
 
 		<div ng-show="showConfigForm" class="report-popup-wrapper">
 			<div class="form-popup">
-				<form id="form" name="form">
+				<form id="config-form" name="form">
 					<p><span ng-bind="formStatement"></span></p>
 					<p>
 						<label for="title">Title*</label>
@@ -328,24 +134,17 @@
 								</p>
 						</div>
 					</div>
-					<div class="default-button-wrapper">
-						<button class="default-button" type="submit" ng-click="submitConfig(form.$valid, config)">Submit config</button>
+					<div class="close-button-wrapper">
+						<button class="close-button" type="submit" ng-click="submitConfig(form.$valid, config)">Submit config</button>
 					</div>
 				</form>
 			</div>
 		</div>
 
-		<div class="header-bar">
-			<button class="header-bar-button" ng-click="exportZip()">Export project</button>
-			<button ng-show="gameLoaded" ng-disabled="selectProgress !== 'inactive'" ng-click="selectReplay()" class="header-bar-button">
-				<span ng-if="selectProgress === 'inactive'">Choose this replay for intro</span>
-				<span ng-if="selectProgress === 'saving'">Saving...</span>
-				<span ng-if="selectProgress === 'complete'">Replay saved!</span>
-			</button>
-		</div>
-
-		<div class="viewer-wrapper" ng-click="loadGame()">
-			<cg-player
+		<div class="main-wrapper">
+			<div class="left-wrapper">
+				<div class="viewer-wrapper">
+					<cg-player
 						ng-if="drawer"
 						on-player-ready="playerLoaded($playerApi)"
 						drawer="drawer"
@@ -355,54 +154,95 @@
 						async-rendering="true"
 						shareable="false"
 						show-replay-prompt="false"
-						game-params="gameParams"></cg-player>
-		</div>
-
-		<div class="default-button-wrapper load-button-wrapper" ng-if="!gameLoaded">
-			<button class="default-button" ng-click="loadGame()">Load game</button>
-		</div>
-
-		<div ng-if="gameLoaded">
-			<div class="output">
-				<div id="output-players">
-					<div ng-show="agent.stdout || agent.stderr" ng-repeat="(index, agent) in agents" class="output-player">
-						<fieldset ng-style="{color: agent.color}">
-							<legend>Player {{agent.index}} Standard Output</legend>
-							<textarea ng-model="agent.stdout" readonly></textarea>
-						</fieldset>
-						<fieldset ng-style="{color: agent.color}">
-							<legend>Player {{agent.index}} Standard Error</legend>
-							<textarea ng-model="agent.stderr" readonly></textarea>
-						</fieldset>
+						game-params="gameParams">
+					</cg-player>
+				</div>
+				
+				<div class="game-outputs">
+					<div class="game-outputs-up">
+						<div class="game-outputs-up-log">
+							<div class="output-frame">
+								<div class="game-outputs-title">Game errors</div>
+								<textarea id="console" class="outputs" ng-model="errors" readonly></textarea>
+							</div>
+						</div>
+						<div class="game-outputs-up-uinput">
+							<div class="output-frame">
+								<div class="game-outputs-title">Game properties</div>
+								<textarea id="console" class="outputs" ng-model="uinput" readonly></textarea>
+							</div>
+						</div>
+						<div class="game-outputs-up-buttons-wrapper">
+							<button class="game-button main-button" ng-click="exportZip()">
+								Export Project
+							</button>
+							<button class="game-button secondary-button" 
+								ng-disabled="selectProgress !== 'inactive'" 
+								ng-click="selectReplay()">
+								<span ng-if="selectProgress === 'inactive'">Set intro replay</span>
+								<span ng-if="selectProgress === 'saving'">Saving...</span>
+								<span ng-if="selectProgress === 'complete'">Intro replay saved!</span>
+							</button>
+							<button class="game-button secondary-button" ng-disabled="!isReplayAvailable()" ng-click="viewReplay()"> 
+								View intro replay
+							</button>
+						</div>
 					</div>
 
+					<div class="game-outputs-down">
+						<div class="game-outputs-down-referee">
+							<div class="game-outputs-title">Referee</div>
+							<div class="console-output-frame">
+								<div class="console-output-wrapper">
+									<div class="console-output-stdout">
+										<div class="game-outputs-down-referee-title">Standard Output</div>
+										<div class="console-outputs pre-wrap" ng-bind="referee.stdout"></div>
+									</div>
+									<hr class="outputs-seperator"> 
+									<div class="console-output-stderr">
+										<div class="game-outputs-down-referee-title">Standard Error</div>
+										<div class="console-outputs pre-wrap" ng-bind="referee.stderr"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="game-outputs-down-summary">
+							<div class="output-frame">
+								<div class="game-outputs-title">Game Summary</div>
+								<textarea id="console" class="outputs" ng-model="summary" readonly></textarea>
+							</div>
+						</div>
+					</div>
 				</div>
+			</div>
 
-				<div class="output-referee">
-					<fieldset>
-						<legend>Referee Output</legend>
-						<textarea id="console" ng-model="referee.stdout" readonly></textarea>
-					</fieldset>
-					<fieldset>
-						<legend>Summary</legend>
-						<textarea id="console" ng-model="summary" readonly></textarea>
-					</fieldset>
+			<aside class="players-outputs-wrapper">
+				<div id="output-players" class="players-outputs-frame" ng-class="{'less-or-equal-than-two-players': lessOrEqualThanTwoPlayers()}">
+					<div ng-repeat="(index, agent) in agents" class="players-outputs-player" >
+						
+						<div class="players-outputs-player-header" ng-style="{'border-color': agent.color}">
+							<svg class="players-outputs-player-header-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.031 16" ng-style="{'fill': agent.color}">
+								<path id="User_16" d="M903.019,44H889a1,1,0,0,1-1-1c0-2.708,2.514-4.882,5.541-5.673a5,5,0,1,1,4.919,0c2.955,0.769,5.436,2.848,5.535,5.454A1,1,0,0,1,903.019,44ZM896,30a3,3,0,1,0,3,3A3,3,0,0,0,896,30Zm0,9c-2.461,0-5.349,1.214-5.862,3h11.723C901.348,40.213,898.46,39,896,39Z" transform="translate(-888 -28)"/>
+							</svg>
+							<div class="players-outputs-player-header-title" >Player {{agent.index}}</div>
+						</div>
+						<div class="console-output-frame">
+							<div class="console-output-wrapper">
+								<div class="console-output-stdout">
+									<div class="players-outputs-player-console-title" ng-style="{color: agent.color}">Standard Output</div>
+									<pre class="console-outputs" ng-bind="agent.stdout"></pre>
+								</div>
+								<hr class="outputs-seperator"> 
+								<div class="console-output-stderr">
+									<div class="players-outputs-player-console-title" ng-style="{'color': agent.color}">Standard Error</div>
+									<pre class="console-outputs" ng-bind="agent.stderr"></pre>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>
-
-			<div class="uinput">
-				<fieldset>
-					<legend>Game properties</legend>
-					<textarea id="uinput" ng-model="uinput" readonly></textarea>
-				</fieldset>
-			</div>
-
-			<div class="log">
-				<fieldset>
-					<legend>Error Log</legend>
-					<textarea id="errors" ng-model="errors" readonly></textarea>
-				</fieldset>
-			</div>
+			</aside>
 		</div>
 
 	</div>
