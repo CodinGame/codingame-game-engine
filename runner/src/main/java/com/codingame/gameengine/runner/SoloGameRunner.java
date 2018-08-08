@@ -39,10 +39,12 @@ public class SoloGameRunner extends GameRunner {
     }
 
     /**
-     * Sets a test case file which <b>testIn</b> value will be sent to the Game Manager as a test case input.
+     * Sets a test case file by file path which <b>testIn</b> value will be sent to the Game Manager as a test case input.
+     * <p>
+     * The file path must be relative considering the root directory is <b>config</b>.
      * 
      * @param testCaseFileName
-     *            the test case file name
+     *            the test case file path
      */
     public void setTestCase(String testCaseFileName) {
         setTestCase(new File(System.getProperty("user.dir")).toPath().resolve("config/" + testCaseFileName).toFile());
@@ -58,7 +60,8 @@ public class SoloGameRunner extends GameRunner {
         if (testCaseFile != null && testCaseFile.isFile()) {
             setTestCaseInput(getLinesFromTestCaseFile(testCaseFile));
         } else {
-            throw new RuntimeException("Given test case is not a file.");
+            throw new RuntimeException("Given test case is not a file" +
+                (testCaseFile != null ? " " + testCaseFile.getAbsolutePath(): "."));
         }
     }
     
