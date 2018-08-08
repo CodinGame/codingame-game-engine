@@ -38,10 +38,22 @@ public class SoloGameRunner extends GameRunner {
         return lines;
     }
 
+    /**
+     * Sets a test case file which <b>testIn</b> value will be sent to the Game Manager as a test case input.
+     * 
+     * @param testCaseFileName
+     *            the test case file name
+     */
     public void setTestCase(String testCaseFileName) {
         setTestCase(new File(System.getProperty("user.dir")).toPath().resolve("config/" + testCaseFileName).toFile());
     }
 
+    /**
+     * Sets a test case file which <b>testIn</b> value will be sent to the Game Manager as a test case input.
+     * 
+     * @param testCaseFile
+     *            the test case file
+     */
     public void setTestCase(File testCaseFile) {
         if (testCaseFile != null && testCaseFile.isFile()) {
             setTestCaseInput(getLinesFromTestCaseFile(testCaseFile));
@@ -50,6 +62,12 @@ public class SoloGameRunner extends GameRunner {
         }
     }
     
+    /**
+     * Sets a list of <code>String</code> as a test case input that will be sent to the Game Manager.
+     * 
+     * @param testCaseInput
+     *            the list of <code>String</code> of the test case input
+     */
     public void setTestCaseInput(List<String> testCaseInput) {
         this.testCaseInput = testCaseInput;
     }
