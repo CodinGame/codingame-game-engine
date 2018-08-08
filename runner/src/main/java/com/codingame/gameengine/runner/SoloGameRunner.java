@@ -71,6 +71,18 @@ public class SoloGameRunner extends GameRunner {
     public void setTestCaseInput(List<String> testCaseInput) {
         this.testCaseInput = testCaseInput;
     }
+    
+    /**
+     * Sets a <code>String</code> as a test case input that will be sent to the Game Manager.
+     * <p>
+     * The input will be split in several lines by <b>&#92;n</b>.
+     * 
+     * @param testCaseInput
+     *            the <code>String</code> of the test case input
+     */
+    public void setTestCaseInput(String testCaseInput) {
+        setTestCaseInput(Arrays.asList(testCaseInput.split("\\n")));
+    }
 
     private void setAgent(Agent player, String nickname, String avatar) {
         if (!players.isEmpty()) {
