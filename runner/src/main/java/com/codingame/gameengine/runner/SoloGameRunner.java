@@ -60,7 +60,8 @@ public class SoloGameRunner extends GameRunner {
         if (testCaseFile != null && testCaseFile.isFile()) {
             setTestCaseInput(getLinesFromTestCaseFile(testCaseFile));
         } else {
-            throw new RuntimeException("Given test case is not a file.");
+            throw new RuntimeException("Given test case is not a file" +
+                (testCaseFile != null ? " " + testCaseFile.getAbsolutePath(): "."));
         }
     }
     
