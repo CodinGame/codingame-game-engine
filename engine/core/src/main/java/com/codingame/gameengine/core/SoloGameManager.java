@@ -35,7 +35,7 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
      * 
      * @return The testcase for this game.
      */
-    public List<String> getTestCase() {
+    public List<String> getTestCaseInput() {
         return testCase;
     }
 

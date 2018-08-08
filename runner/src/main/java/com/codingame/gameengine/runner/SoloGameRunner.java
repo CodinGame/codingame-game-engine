@@ -17,7 +17,7 @@ import com.google.gson.JsonParser;
  */
 public class SoloGameRunner extends GameRunner {
 
-    private List<String> testCaseContent;
+    private List<String> testCaseInput;
 
     public SoloGameRunner() {
         System.setProperty("game.mode", "solo");
@@ -44,10 +44,14 @@ public class SoloGameRunner extends GameRunner {
 
     public void setTestCase(File testCaseFile) {
         if (testCaseFile != null && testCaseFile.isFile()) {
-            testCaseContent = getLinesFromTestCaseFile(testCaseFile);
+            setTestCaseInput(getLinesFromTestCaseFile(testCaseFile));
         } else {
             throw new RuntimeException("Given test case is not a file.");
         }
+    }
+    
+    public void setTestCaseInput(List<String> testCaseInput) {
+        this.testCaseInput = testCaseInput;
     }
 
     private void setAgent(Agent player, String nickname, String avatar) {
@@ -114,8 +118,8 @@ public class SoloGameRunner extends GameRunner {
 
     @Override
     protected void buildInitCommand(Command initCommand) {
-        if (testCaseContent != null && !testCaseContent.isEmpty()) {
-            for (String line : testCaseContent) {
+        if (testCaseInput != null && !testCaseInput.isEmpty()) {
+            for (String line : testCaseInput) {
                 initCommand.addLine(line);
             }
         } else {
