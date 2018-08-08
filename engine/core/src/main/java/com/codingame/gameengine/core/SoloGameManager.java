@@ -28,14 +28,14 @@ public class SoloGameManager<T extends AbstractSoloPlayer> extends GameManager<T
     }
 
     /**
-     * Returns the current testcase the game got at initialization.
+     * Returns the current test case the game got at initialization.
      * <p>
      * You can set it with the <code>SoloGameRunner</code>.
      * </p>
      * 
-     * @return The testcase for this game.
+     * @return The test case for this game.
      */
-    public List<String> getTestCase() {
+    public List<String> getTestCaseInput() {
         return testCase;
     }
 

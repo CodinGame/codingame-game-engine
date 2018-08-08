@@ -17,7 +17,7 @@ import com.google.gson.JsonParser;
  */
 public class SoloGameRunner extends GameRunner {
 
-    private List<String> testCaseContent;
+    private List<String> testCaseInput;
 
     public SoloGameRunner() {
         System.setProperty("game.mode", "solo");
@@ -38,16 +38,53 @@ public class SoloGameRunner extends GameRunner {
         return lines;
     }
 
+    /**
+     * Sets a test case file by file path which <b>testIn</b> value will be sent to the Game Manager as a test case input.
+     * <p>
+     * The file path must be relative considering the root directory is <b>config</b>.
+     * 
+     * @param testCaseFileName
+     *            the test case file path
+     */
     public void setTestCase(String testCaseFileName) {
         setTestCase(new File(System.getProperty("user.dir")).toPath().resolve("config/" + testCaseFileName).toFile());
     }
 
+    /**
+     * Sets a test case file which <b>testIn</b> value will be sent to the Game Manager as a test case input.
+     * 
+     * @param testCaseFile
+     *            the test case file
+     */
     public void setTestCase(File testCaseFile) {
         if (testCaseFile != null && testCaseFile.isFile()) {
-            testCaseContent = getLinesFromTestCaseFile(testCaseFile);
+            setTestCaseInput(getLinesFromTestCaseFile(testCaseFile));
         } else {
-            throw new RuntimeException("Given test case is not a file.");
+            throw new RuntimeException("Given test case is not a file" +
+                (testCaseFile != null ? " " + testCaseFile.getAbsolutePath(): "."));
         }
+    }
+    
+    /**
+     * Sets a list of <code>String</code> as a test case input that will be sent to the Game Manager.
+     * 
+     * @param testCaseInput
+     *            the list of <code>String</code> of the test case input
+     */
+    public void setTestCaseInput(List<String> testCaseInput) {
+        this.testCaseInput = testCaseInput;
+    }
+    
+    /**
+     * Sets a <code>String</code> as a test case input that will be sent to the Game Manager.
+     * <p>
+     * The input will be split in several lines by <b>&#92;n</b>.
+     * 
+     * @param testCaseInput
+     *            the <code>String</code> of the test case input
+     */
+    public void setTestCaseInput(String testCaseInput) {
+        setTestCaseInput(Arrays.asList(testCaseInput.split("\\n")));
     }
 
     private void setAgent(Agent player, String nickname, String avatar) {
@@ -114,8 +151,8 @@ public class SoloGameRunner extends GameRunner {
 
     @Override
     protected void buildInitCommand(Command initCommand) {
-        if (testCaseContent != null && !testCaseContent.isEmpty()) {
-            for (String line : testCaseContent) {
+        if (testCaseInput != null && !testCaseInput.isEmpty()) {
+            for (String line : testCaseInput) {
                 initCommand.addLine(line);
             }
         } else {
