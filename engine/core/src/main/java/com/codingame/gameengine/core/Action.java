@@ -68,7 +68,7 @@ public class Action {
     }
 
     private String keyword;
-    private Map<String, Class<?>> parameters = new HashMap<>();
+    private Map<String, Class<?>> parameters;
     private boolean allowMessage;
     private Pattern pattern;
     private Matcher matcher;
