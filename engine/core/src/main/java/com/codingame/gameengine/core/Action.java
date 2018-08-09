@@ -108,7 +108,7 @@ public class Action {
             if (ACCEPTED_CLASSES_REGEXES.keySet().stream().noneMatch(cls -> parameterClass.equals(cls))) {
                 throw new RuntimeException(
                     "Parameter \"" + parameter + "\" of action \"" + keyword + "\" does not have a valid type. It must be one among "
-                        + ACCEPTED_CLASSES_REGEXES.keySet().stream().map(cls -> cls.getName()).collect(Collectors.joining(", "))
+                        + ACCEPTED_CLASSES_REGEXES.keySet().stream().map(Class::getName).collect(Collectors.joining(", "))
                 );
             }
         }
