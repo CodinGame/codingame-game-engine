@@ -10,6 +10,17 @@ import java.util.stream.Collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * An <code>Action</code> parses players outputs. 
+ * An action must be either <b>matched</b> (if it is the only possible action) or <b>handled</b> by an <code>ActionManager</b>.
+ * <p>
+ * It features:
+ * <ul>
+ *  <li>The keyword of the action</li>
+ *  <li>(Optional) A set of parameters</li>
+ *  <li>(Optional) Allowing players to send messages</li>
+ * </ul>
+ */
 public class Action {
     private final static Map<Class<?>, String> ACCEPTED_CLASSES_REGEXES = new HashMap<>();
     private final static Map<Class<?>, Function<String, ?>> ACCEPTED_CLASSES_CALLBACKS = new HashMap<>();
@@ -116,8 +127,14 @@ public class Action {
         return Pattern.compile(patternString + "\\s*$");
     }
 
-    public boolean matches(String command) {
-        matcher = pattern.matcher(command);
+    /**
+     * Checks if the action matches the given instruction and has legal parameters.
+     * 
+     * @param instruction the <code>String</code> to match
+     * @return <b>true</b> if the action is correctly matched.
+     */
+    public boolean matches(String instruction) {
+        matcher = pattern.matcher(instruction);
         if (matcher.matches()) {
             for (String parameter : parameters.keySet()) {
                 if (get(parameter) == null) {
@@ -129,6 +146,12 @@ public class Action {
         return false;
     }
 
+    /**
+     * Get the value of the given parameter.
+     * 
+     * @param parameter the name of the parameter
+     * @return the value of the parameter as <code>Object</code> that can be safely casted. 
+     */
     public Object get(String parameter) {
         if ("message".equalsIgnoreCase(parameter)) {
             return getMessage();
@@ -144,6 +167,10 @@ public class Action {
         return ACCEPTED_CLASSES_CALLBACKS.get(parameterClass).apply(matcher.group(parameter));
     }
 
+    /**
+     * Get the message the player added to their instruction. As the message is not mandatory, this value can be <code>null</code>.
+     * @return the message in the instruction. <code>null</code> if it does not exist.
+     */
     public String getMessage() {
         checkMatched();
 
@@ -163,6 +190,9 @@ public class Action {
         }
     }
 
+    /**
+     * @return the action keyword.
+     */
     public String getKeyword() {
         return keyword;
     }
