@@ -68,7 +68,7 @@ public class Action {
 
     private String keyword;
     private Map<String, Class<?>> parameters = new HashMap<>();
-    private boolean message;
+    private boolean allowMessage;
     private Pattern pattern;
     private Matcher matcher;
 
@@ -76,7 +76,7 @@ public class Action {
         super();
         this.keyword = keyword;
         this.parameters = parameters;
-        this.message = message;
+        this.allowMessage = message;
 
         checkParameters();
         pattern = createPattern();
@@ -96,9 +96,9 @@ public class Action {
 
     private void checkParameters() {
         for (String parameter : parameters.keySet()) {
-            if (message && "message".equalsIgnoreCase(parameter)) {
+            if (allowMessage && "message".equalsIgnoreCase(parameter)) {
                 throw new RuntimeException(
-                    "Ambiguous parameter \"message\": you already request an action with a message. Please rename your parameter."
+                    "Ambiguous parameter \"message\": you already allow an action with a message. Please rename your parameter."
                 );
             }
             
@@ -120,7 +120,7 @@ public class Action {
 
             patternString += " (?<" + parameterName + ">" + ACCEPTED_CLASSES_REGEXES.get(parameterClass) + ")";
         }
-        if (message) {
+        if (allowMessage) {
             patternString += "(\\s+(?<message>.+))?";
         }
 
@@ -183,7 +183,7 @@ public class Action {
     public String getMessage() {
         checkMatched();
 
-        if (!message) {
+        if (!allowMessage) {
             throw new RuntimeException("This action does not handle messages");
         }
 
