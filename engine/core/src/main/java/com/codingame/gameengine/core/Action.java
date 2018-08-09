@@ -2,6 +2,7 @@ package com.codingame.gameengine.core;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -144,15 +145,7 @@ public class Action {
      */
     public boolean matches(String instruction) {
         matcher = pattern.matcher(instruction);
-        if (matcher.matches()) {
-            for (String parameter : parameters.keySet()) {
-                if (get(parameter) == null) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        return false;
+        return matcher.matches() && parameters.keySet().stream().map(p -> get(p)).noneMatch(Objects::isNull);
     }
 
     /**
