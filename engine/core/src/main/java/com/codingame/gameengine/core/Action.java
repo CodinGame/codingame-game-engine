@@ -55,15 +55,15 @@ public class Action {
         ACCEPTED_CLASSES_CALLBACKS.put(Character.class, s -> s.charAt(0));
     }
 
-    private String actionName;
+    private String keyword;
     private Map<String, Class<?>> parameters = new HashMap<>();
     private boolean message;
     private Pattern pattern;
     private Matcher matcher;
 
-    public Action(String actionName, Map<String, Class<?>> parameters, boolean message) {
+    public Action(String keyword, Map<String, Class<?>> parameters, boolean message) {
         super();
-        this.actionName = actionName;
+        this.keyword = keyword;
         this.parameters = parameters;
         this.message = message;
 
@@ -71,16 +71,16 @@ public class Action {
         pattern = createPattern();
     }
 
-    public Action(String actionName, Map<String, Class<?>> parameters) {
-        this(actionName, parameters, false);
+    public Action(String keyword, Map<String, Class<?>> parameters) {
+        this(keyword, parameters, false);
     }
 
-    public Action(String actionName) {
-        this(actionName, false);
+    public Action(String keyword) {
+        this(keyword, false);
     }
 
-    public Action(String actionName, boolean message) {
-        this(actionName, new HashMap<>(), message);
+    public Action(String keyword, boolean message) {
+        this(keyword, new HashMap<>(), message);
     }
 
     private void checkParameters() {
@@ -95,7 +95,7 @@ public class Action {
 
             if (ACCEPTED_CLASSES_REGEXES.keySet().stream().noneMatch(cls -> parameterClass.equals(cls))) {
                 throw new RuntimeException(
-                    "Parameter \"" + parameter + "\" of action \"" + actionName + "\" does not have a valid type. It must be one among "
+                    "Parameter \"" + parameter + "\" of action \"" + keyword + "\" does not have a valid type. It must be one among "
                         + ACCEPTED_CLASSES_REGEXES.keySet().stream().map(cls -> cls.getName()).collect(Collectors.joining(", "))
                 );
             }
@@ -103,7 +103,7 @@ public class Action {
     }
 
     private Pattern createPattern() {
-        String patternString = "^\\s*" + actionName;
+        String patternString = "^\\s*" + keyword;
         for (String parameterName : parameters.keySet()) {
             Class<?> parameterClass = parameters.get(parameterName);
 
@@ -161,5 +161,9 @@ public class Action {
         if (!matcher.matches()) {
             throw new RuntimeException("This action does not match the given String.");
         }
+    }
+
+    public String getKeyword() {
+        return keyword;
     }
 }
