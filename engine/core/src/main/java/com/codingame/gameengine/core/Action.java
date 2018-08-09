@@ -127,6 +127,15 @@ public class Action {
         return Pattern.compile(patternString + "\\s*$");
     }
 
+    private void checkMatched() {
+        if (matcher == null) {
+            throw new RuntimeException("This action has not been handled by ActionManager nor matched.");
+        }
+        if (!matcher.matches()) {
+            throw new RuntimeException("This action does not match the given String.");
+        }
+    }
+
     /**
      * Checks if the action matches the given instruction and has legal parameters.
      * 
@@ -179,15 +188,6 @@ public class Action {
         }
 
         return matcher.group("message");
-    }
-
-    private void checkMatched() {
-        if (matcher == null) {
-            throw new RuntimeException("This action has not been handled by ActionManager nor matched.");
-        }
-        if (!matcher.matches()) {
-            throw new RuntimeException("This action does not match the given String.");
-        }
     }
 
     /**
