@@ -30,8 +30,8 @@ public class Action {
     static {
         ACCEPTED_CLASSES_REGEXES.put(Integer.class, "-?\\d+");
         ACCEPTED_CLASSES_REGEXES.put(Long.class, "-?\\d+");
-        ACCEPTED_CLASSES_REGEXES.put(Float.class, "-?\\d+\\.\\d+");
-        ACCEPTED_CLASSES_REGEXES.put(Double.class, "-?\\d+\\.\\d+");
+        ACCEPTED_CLASSES_REGEXES.put(Float.class, "-?\\d*\\.\\d+");
+        ACCEPTED_CLASSES_REGEXES.put(Double.class, "-?\\d*\\.\\d+");
         ACCEPTED_CLASSES_REGEXES.put(String.class, ".+");
         ACCEPTED_CLASSES_REGEXES.put(Character.class, ".");
 
