@@ -119,7 +119,7 @@ public class Action {
         for (String parameterName : parameters.keySet()) {
             Class<?> parameterClass = parameters.get(parameterName);
 
-            patternString += " (?<" + parameterName + ">" + ACCEPTED_CLASSES_REGEXES.get(parameterClass) + ")";
+            patternString += "\\s(?<" + parameterName + ">" + ACCEPTED_CLASSES_REGEXES.get(parameterClass) + ")";
         }
         if (allowMessage) {
             patternString += "(\\s+(?<message>.+))?";
@@ -143,7 +143,7 @@ public class Action {
      * @param instruction the <code>String</code> to match
      * @return <b>true</b> if the action is correctly matched.
      */
-    public boolean matches(String instruction) {
+    boolean matches(String instruction) {
         matcher = pattern.matcher(instruction);
         return matcher.matches() && parameters.keySet().stream().map(p -> get(p)).noneMatch(Objects::isNull);
     }
