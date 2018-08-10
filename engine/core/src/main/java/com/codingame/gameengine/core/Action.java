@@ -125,7 +125,7 @@ public class Action {
             patternString += "(\\s+(?<message>.+))?";
         }
 
-        return Pattern.compile(patternString + "\\s*$");
+        return Pattern.compile(patternString + "\\s*$", Pattern.CASE_INSENSITIVE);
     }
 
     private void checkMatched() {
