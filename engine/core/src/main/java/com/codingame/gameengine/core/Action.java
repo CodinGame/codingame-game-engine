@@ -174,11 +174,11 @@ public class Action {
      * @return the message in the instruction. <code>null</code> if it does not exist.
      */
     public String getMessage() {
-        checkMatched();
-
         if (!allowMessage) {
             throw new RuntimeException("This action does not handle messages");
         }
+        
+        checkMatched();
 
         return matcher.group("message");
     }
