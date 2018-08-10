@@ -15,10 +15,10 @@ public class Action {
     }
 
     /**
-     * Get the value of the given parameter.
+     * Get the value of the parameter at the given index.
      * 
      * @param parameter
-     *            the name of the parameter
+     *            the index of the parameter.
      * @return the value of the parameter as <code>Object</code> that can be safely casted.
      */
     public Object get(int index) {
@@ -30,9 +30,9 @@ public class Action {
     }
 
     /**
-     * Get the message the player added to their instruction. As the message is not mandatory, this value can be <code>null</code>.
+     * Get the message the player added to their instruction.
      * 
-     * @return the message in the instruction. <code>null</code> if it does not exist.
+     * @return the message in the instruction.
      */
     public String getMessage() {
         return message;
