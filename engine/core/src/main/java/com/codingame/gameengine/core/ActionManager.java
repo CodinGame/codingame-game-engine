@@ -46,7 +46,7 @@ public class ActionManager {
         }
 
         try {
-            return actionDescriptors.stream().map(a -> a.matches(command)).filter(Objects::nonNull).findFirst().get();
+            return actionDescriptors.stream().map(a -> a.parseInstruction(command)).filter(Objects::nonNull).findFirst().get();
         } catch (NoSuchElementException e) {
             throw new IllegalActionException(command, actionDescriptors);
         }

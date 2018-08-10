@@ -103,7 +103,7 @@ public class ActionDescriptor {
      *            the <code>String</code> to match
      * @return <b>true</b> if the action is correctly matched.
      */
-    Action matches(String instruction) {
+    Action parseInstruction(String instruction) {
         List<Object> parameters = new ArrayList<>();
         String message = "";
         
