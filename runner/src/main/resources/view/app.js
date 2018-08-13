@@ -274,7 +274,10 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
         let a = document.createElement('a')
         a.href = url
         a.download = 'export.zip'
+        document.body.appendChild(a);
         a.click()
+        document.body.removeChild(a);
+
       } else {
         exportResponse.reportItems.push({
           'type': 'FAIL',
