@@ -1,5 +1,9 @@
 package com.codingame.gameengine.runner;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -26,6 +30,8 @@ abstract class GameRunner {
 
     protected static Log log = LogFactory.getLog(GameRunner.class);
     GameResult gameResult = new GameResult();
+    private ByteArrayOutputStream refereeStdout;
+    private ByteArrayOutputStream refereeStderr;
 
     private Agent referee;
     protected final List<Agent> players;
@@ -43,6 +49,8 @@ abstract class GameRunner {
     protected GameRunner() {
         referee = new RefereeAgent();
         players = new ArrayList<Agent>();
+        refereeStdout = new ByteArrayOutputStream();
+        refereeStderr = new ByteArrayOutputStream();
     }
 
     private void initialize(Properties conf) {
@@ -120,7 +128,8 @@ abstract class GameRunner {
             boolean validTurn = turnInfo.isComplete();
 
             if (validTurn) {
-                gameResult.outputs.get("referee").add(turnInfo.get(InputCommand.INFOS).orElse(null));
+                gameResult.outputs.get("referee").add(refereeStdout.toString());
+                refereeStdout.reset();
                 gameResult.summaries.add(turnInfo.get(InputCommand.SUMMARY).orElse(null));
             }
 
@@ -212,12 +221,12 @@ abstract class GameRunner {
      * Read all output from standard error stream
      */
     private void readInitFrameErrors() {
-        gameResult.errors.get("referee").add(referee.readError());
         for (int i = 0; i < players.size(); i++) {
             Agent player = players.get(i);
             String id = String.valueOf(i);
             gameResult.errors.get(id).add(player.readError());
         }
+        readError(referee);
     }
 
     /**
@@ -225,7 +234,8 @@ abstract class GameRunner {
      */
     private void readError(Agent agent) {
         if (agent == referee) {
-            gameResult.errors.get("referee").add(referee.readError());
+            gameResult.errors.get("referee").add(refereeStderr.toString());
+            refereeStderr.reset();
         } else {
             for (Agent a : players) {
                 gameResult.errors.get(String.valueOf(a.getAgentId())).add(a == agent ? agent.readError() : null);
@@ -384,12 +394,30 @@ abstract class GameRunner {
      * Simulates the game and gathers game results
      */
     private void runGame() {
+        PrintStream out = System.out;
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                out.write(b);
+                refereeStdout.write(b);
+            }
+        }));
+        PrintStream err = System.err;
+        System.setErr(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                err.write(b);
+                refereeStderr.write(b);
+            }       
+        }));
         requireGameNotEnded();
         Properties conf = new Properties();
         initialize(conf);
         runAgents();
         destroyPlayers();
         gameEnded = true;
+        System.setOut(out);
+        System.setErr(err);
     }
 
     /**

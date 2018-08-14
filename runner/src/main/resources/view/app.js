@@ -1,7 +1,7 @@
 import * as config from '../config.js'
 import {Drawer} from '../core/Drawer.js'
 import {ErrorLog} from '../core/ErrorLog.js'
-import {demo} from '../demo.js'
+import {demo as defaultDemo} from '../demo.js'
 import Parser from './lib/Parser.js'
 
 /* global fetch, angular, Blob, $, XMLHttpRequest */
@@ -25,10 +25,14 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
   }).gameParams
   $scope.loadGame = loadGame
   $scope.selectReplay = selectReplay
+  $scope.viewReplay = viewReplay
   $scope.exportZip = exportZip
   $scope.reportItems = {}
   $scope.closeReportPopup = closeReportPopup
+  $scope.closeViewReplayPopup = closeViewReplayPopup
   $scope.submitConfig = submitConfig
+  $scope.lessOrEqualThanTwoPlayers = lessOrEqualThanTwoPlayers
+  $scope.isReplayAvailable = isReplayAvailable
 
   $interval(checkSize, 1000)
 
@@ -46,9 +50,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
       $scope.drawer = drawer
       fetchGame().then(data => {
         ctrl.data = data
-        if (!demo && !config.demo) {
-          loadGame()
-        }
+        loadGame()
       })
     })
   }
@@ -87,6 +89,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
 
     for (let i in ctrl.data.ids) {
       $scope.agents[i].stdout = null
+      $scope.agents[i].stderr = null
       $scope.referee = {}
     }
 
@@ -98,10 +101,11 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
         }
         const stderr = ctrl.data.errors[i][startFrame]
         if (stderr) {
-          $scope.agents[i].stderr = stderr
+          $scope.agents[i].stderr
         }
       }
       $scope.referee.stdout = $scope.referee.stdout || ctrl.data.outputs.referee[startFrame]
+      $scope.referee.stderr = $scope.referee.stderr || ctrl.data.errors.referee[startFrame]
       $scope.summary = convertNameTokens(ctrl.data.summaries[startFrame])
       startFrame++
     }
@@ -169,6 +173,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
     await fetch('/services/save-replay')
       .then(function (response) {
         if (response.ok) {
+          setIntroReplay()
           $scope.selectProgress = 'complete'
         } else {
           throw new Error(response.statusText)
@@ -186,6 +191,25 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
       })
   }
 
+  function setIntroReplay () {
+    ctrl.introReplayData = ctrl.data
+  }
+
+  function viewReplay () {
+    drawerFactory.createDrawer(Drawer, ctrl.introReplayData).then(drawer => {
+      $scope.replayDrawer = drawer
+    })
+    $scope.showViewReplayPopup = true
+  }
+
+  function closeViewReplayPopup () {
+    $scope.showViewReplayPopup = false
+  }
+
+  function isReplayAvailable () {
+    return ctrl.introReplayData || defaultDemo || config.demo
+  }
+
   function closeReportPopup () {
     $scope.showExportPopup = false
   }
@@ -196,6 +220,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
 
   $scope.showExportPopup = false
   $scope.showConfigForm = false
+  $scope.showViewReplayPopup = false
   async function exportZip () {
     const data = await fetch('/services/export')
       .then(function (response) {
@@ -249,7 +274,10 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
         let a = document.createElement('a')
         a.href = url
         a.download = 'export.zip'
+        document.body.appendChild(a);
         a.click()
+        document.body.removeChild(a);
+
       } else {
         exportResponse.reportItems.push({
           'type': 'FAIL',
@@ -277,6 +305,10 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
       })
     closeConfigForm()
     exportZip()
+  }
+
+  function lessOrEqualThanTwoPlayers () {
+    return $scope.agents && Object.keys($scope.agents).length <= 2
   }
 }
 

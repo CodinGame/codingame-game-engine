@@ -3,13 +3,17 @@ import * as config from '../config.js'
 import {unlerp, fitAspectRatio} from './utils.js'
 import {WIDTH, HEIGHT, BASE_FRAME_DURATION} from './constants.js'
 import {ErrorLog} from './ErrorLog.js'
-import {demo} from '../demo.js'
+import {demo as defaultDemo} from '../demo.js'
 import {setRenderer, destroyFlagged, flagForDestructionOnReinit} from './rendering.js'
 
 /* global PIXI requestAnimationFrame $ */
 
 export class Drawer {
-  constructor () {
+  constructor (customDemo) {
+    this.toDestroy = []
+
+    let demo = customDemo || defaultDemo
+
     if (demo) {
       const frames = demo.views
       const agents = demo.agents
@@ -184,7 +188,7 @@ export class Drawer {
         } catch (error) {
           ErrorLog.push({
             cause: error,
-            message: 'Missing "logo.png" to complete demo.'
+            message: 'Missing "logo.png" to complete replay.'
           })
           scope.logo = new PIXI.Container()
           scope.logo.baseScale = 1
