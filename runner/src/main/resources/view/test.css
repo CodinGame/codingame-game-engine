@@ -52,17 +52,43 @@ button {
 }
 
 .main-wrapper {
-    display: flex;
+    position: relative;
     height: 100%;
     overflow-x: auto; 
 }
 
+.resize-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    cursor: ew-resize;
+    z-index: 1;
+    left: 50%;
+}
+
+.right-bloc {
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+}
+
+.left-bloc {
+    position: absolute;    
+    right: 50%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+}
 /* Shared classes between the two sides of the page */
 
 .output-frame {
     flex: 1;
     display: flex;
     flex-direction: column;
+    max-width: 100%;
 }
 
 .console-output-frame {
@@ -93,15 +119,15 @@ button {
 }
 
 .outputs {
-    width: 100%;
     height: calc(100% - 20px);
-    padding: 15px;
+    padding: 10px 15px;
     background-color: #29323c;
     border: solid 1px #363e48;
     overflow: auto;
     white-space: pre-wrap;
     font-size: 13px;
     font-weight: normal;
+    word-break: break-word;
 }
 
 .players-outputs-player-console-title, .game-outputs-title, .game-outputs-down-referee-title, .players-outputs-player-header-title {
@@ -109,23 +135,44 @@ button {
     font-weight: 600;
 }
 
+.nickname {
+    color: white;
+    padding: 0px 1px 1px 1px;
+    font-weight: 400;
+}
+
+.consoleError {
+    color: red;
+}
+.consoleError.clickable {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.consoleSuccess {
+    color: green;
+}
+
 /* Left side */
 
 .left-wrapper {
-    flex: 1;
     display: flex;
     flex-direction: column;
+    max-width: 100%;
     margin: 10px 0px 10px 10px;
+}
+
+.viewer-container {
+    width: 100%;
+    background-color: #252e38; 
 }
 
 .viewer-wrapper {
     padding: 20px 20px 0px;
-    min-width: 400px;
+    min-width: 500px;
     width: 100%;
     max-width: 945px;
     background-color: #252e38;
-    resize: horizontal;
-    overflow: auto;
     margin: auto;
 }
 
@@ -141,6 +188,7 @@ button {
 .game-outputs-up {  
     display: flex;
     flex: 1 0 auto;
+    max-height: 50%;
 }
 
 .game-outputs-down {
@@ -187,10 +235,8 @@ button {
 /* Right side */
 
 .players-outputs-wrapper {
-    flex-basis: 55%;
     margin: 10px;
     padding: 20px;
-    min-width: 500px;
     background-color: #252e38;
     display: flex;
 }
@@ -222,6 +268,7 @@ button {
     display: flex;
     flex-direction: column;
     margin: 10px;
+    min-width: 200px;
     flex: 1;
     flex-basis: calc(50% - 20px);
     overflow: hidden;
