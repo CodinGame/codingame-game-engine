@@ -101,7 +101,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $translate, drawerFactory, gam
         }
         const stderr = ctrl.data.errors[i][startFrame]
         if (stderr) {
-          $scope.agents[i].stderr
+          $scope.agents[i].stderr = stderr
         }
       }
       $scope.referee.stdout = $scope.referee.stdout || ctrl.data.outputs.referee[startFrame]
