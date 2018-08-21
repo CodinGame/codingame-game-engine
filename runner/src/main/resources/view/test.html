@@ -7,7 +7,6 @@
 	<link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600,700,800,900" rel="stylesheet" type="text/css">
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
 	<link href="http://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" type="text/css">
-
 	<script src="app.js" type="module"></script>
 	<link rel="stylesheet" type="text/css" href="test.css">
 </head>
@@ -141,21 +140,23 @@
 			</div>
 		</div>
 
-		<div class="main-wrapper">
-			<div class="left-wrapper">
-				<div class="viewer-wrapper">
-					<cg-player
-						ng-if="drawer"
-						on-player-ready="playerLoaded($playerApi)"
-						drawer="drawer"
-						show-console="false"
-						show-rankings="false"
-						show-small-rankings="false"
-						async-rendering="true"
-						shareable="false"
-						show-replay-prompt="false"
-						game-params="gameParams">
-					</cg-player>
+		<div class="main-wrapper" ng-style="{'user-select': userSelect}">
+			<div class="left-wrapper left-bloc">
+				<div class="viewer-container">
+					<div class="viewer-wrapper">
+						<cg-player
+							ng-if="drawer"
+							on-player-ready="playerLoaded($playerApi)"
+							drawer="drawer"
+							show-console="false"
+							show-rankings="false"
+							show-small-rankings="false"
+							async-rendering="true"
+							shareable="false"
+							show-replay-prompt="false"
+							game-params="gameParams">
+						</cg-player>
+					</div>
 				</div>
 				
 				<div class="game-outputs">
@@ -163,13 +164,13 @@
 						<div class="game-outputs-up-log">
 							<div class="output-frame">
 								<div class="game-outputs-title">Game errors</div>
-								<textarea id="console" class="outputs" ng-model="errors" readonly></textarea>
+								<div id="console" class="outputs" ng-bind="errors" readonly></div>
 							</div>
 						</div>
 						<div class="game-outputs-up-uinput">
 							<div class="output-frame">
 								<div class="game-outputs-title">Game properties</div>
-								<textarea id="console" class="outputs" ng-model="uinput" readonly></textarea>
+								<div id="console" class="outputs" ng-bind="uinput[0]" readonly></div>
 							</div>
 						</div>
 						<div class="game-outputs-up-buttons-wrapper">
@@ -210,14 +211,16 @@
 						<div class="game-outputs-down-summary">
 							<div class="output-frame">
 								<div class="game-outputs-title">Game Summary</div>
-								<textarea id="console" class="outputs" ng-model="summary" readonly></textarea>
+								<div id="console" class="outputs" ng-bind-html="summary | formatConsole:agents" readonly></div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<aside class="players-outputs-wrapper">
+			<div class="resize-handle" resize-handle data-enabled="layoutEnabled"></div>
+
+			<div class="players-outputs-wrapper right-bloc">
 				<div id="output-players" class="players-outputs-frame" ng-class="{'less-or-equal-than-two-players': lessOrEqualThanTwoPlayers()}">
 					<div ng-repeat="(index, agent) in agents" class="players-outputs-player" >
 						
@@ -225,7 +228,7 @@
 							<svg class="players-outputs-player-header-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.031 16" ng-style="{'fill': agent.color}">
 								<path id="User_16" d="M903.019,44H889a1,1,0,0,1-1-1c0-2.708,2.514-4.882,5.541-5.673a5,5,0,1,1,4.919,0c2.955,0.769,5.436,2.848,5.535,5.454A1,1,0,0,1,903.019,44ZM896,30a3,3,0,1,0,3,3A3,3,0,0,0,896,30Zm0,9c-2.461,0-5.349,1.214-5.862,3h11.723C901.348,40.213,898.46,39,896,39Z" transform="translate(-888 -28)"/>
 							</svg>
-							<div class="players-outputs-player-header-title" >Player {{agent.index}}</div>
+							<div class="players-outputs-player-header-title" >{{agent.name}}</div>
 						</div>
 						<div class="console-output-frame">
 							<div class="console-output-wrapper">
@@ -242,7 +245,7 @@
 						</div>
 					</div>
 				</div>
-			</aside>
+			</div>
 		</div>
 
 	</div>
