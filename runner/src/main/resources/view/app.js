@@ -411,10 +411,10 @@ angular.module('player')
         const agenti = parseInt(p1)
         if (agents[agenti]) {
           return $('<span>')
-          .addClass('nickname')
-          .css('background-color', agents[agenti].color)
-          .text(agents[agenti].name)
-          .prop('outerHTML')
+            .addClass('nickname')
+            .css('background-color', agents[agenti].color)
+            .text(agents[agenti].name)
+            .prop('outerHTML')
         } else {
           return match
         }
