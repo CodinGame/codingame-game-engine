@@ -408,10 +408,13 @@ angular.module('player')
 
     if (agents) {
       input = input.replace(/\$([0-7])/mig, function (match, p1) {
-        var agenti = parseInt(p1)
+        const agenti = parseInt(p1)
         if (agents[agenti]) {
-          var css = ('background-color:' + agents[agenti].color)
-          return '<span style="' + css + '" class="nickname">' + angular.element('<div/>').text(agents[agenti].name).html() + '</span>'
+          return $('<span>')
+          .addClass('nickname')
+          .css('background-color', agents[agenti].color)
+          .text(agents[agenti].name)
+          .prop('outerHTML')
         } else {
           return match
         }
