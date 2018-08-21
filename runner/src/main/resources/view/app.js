@@ -368,7 +368,8 @@ angular.module('player')
         updatePosition()
       }
 
-      el.on('mousedown', () => {
+      el.on('mousedown', (event) => {
+        event.preventDefault();
         scope.userSelect = 'none'
         el.parent().on('mousemove', mouseMoveHandler)
       })
