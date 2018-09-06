@@ -563,7 +563,7 @@ class Renderer {
         }
 
         Undertow server = Undertow.builder()
-            .addHttpListener(port, "localhost")
+            .addHttpListener(port, "0.0.0.0")
             .setHandler(
                 new DisableCacheHandler(
                     Handlers.path(new ResourceHandler(mrs).addWelcomeFiles("test.html"))

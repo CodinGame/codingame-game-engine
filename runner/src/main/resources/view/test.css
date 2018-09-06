@@ -439,3 +439,16 @@ button {
 [ng-cloak] {
     display: none !important;
 }
+
+.module-load-error-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  z-index: 100;
+  padding: 20px;
+  color: black;
+  
+}

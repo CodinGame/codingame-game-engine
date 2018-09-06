@@ -5,7 +5,7 @@ import {WIDTH, HEIGHT, BASE_FRAME_DURATION} from './constants.js'
 import {ErrorLog} from './ErrorLog.js'
 import {demo as defaultDemo} from '../demo.js'
 import {setRenderer, destroyFlagged, flagForDestructionOnReinit} from './rendering.js'
-
+import {ModuleError} from './ModuleError.js'
 /* global PIXI requestAnimationFrame $ */
 
 export class Drawer {
@@ -69,11 +69,19 @@ export class Drawer {
   getDefaultOverSampling () {
     return config.defaultOverSampling || 2
   }
+  handleModuleError (name, error) {
+    ErrorLog.push(new ModuleError(name, error))
+    console.error(error)
+  }
 
   instantiateModules () {
     this.modules = {}
     for (const Module of config.modules) {
-      this.modules[Module.name] = new Module(assets)
+      try {
+        this.modules[Module.name] = new Module(assets)
+      } catch (error) {
+        this.handleModuleError(Module.name, error)
+      }
     }
   }
 
@@ -424,7 +432,11 @@ export class Drawer {
     for (let moduleName in this.modules) {
       const module = this.modules[moduleName]
       if (parsedFrame.data.hasOwnProperty(moduleName)) {
-        module.updateScene(parsedFrame.previous.data[moduleName], parsedFrame.data[moduleName], progress, speed)
+        try {
+          module.updateScene(parsedFrame.previous.data[moduleName], parsedFrame.data[moduleName], progress, speed)
+        } catch (error) {
+          this.handleModuleError(moduleName, error)
+        }
       }
     }
   }
@@ -486,7 +498,15 @@ export class Drawer {
     for (let moduleName in this.modules) {
       const module = this.modules[moduleName]
       if (typeof module.animateScene === 'function') {
-        module.animateScene(step)
+        try {
+          module.animateScene(step)
+        } catch (e) {
+          this.handleModuleError(moduleName, e)
+          ErrorLog.push({
+            message: `< module ${moduleName} disabled >`
+          })
+          module.animateScene = null
+        }
       }
     }
     return true

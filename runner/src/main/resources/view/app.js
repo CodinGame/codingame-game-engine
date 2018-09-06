@@ -4,7 +4,7 @@ import {ErrorLog} from '../core/ErrorLog.js'
 import {demo as defaultDemo} from '../demo.js'
 import Parser from './lib/Parser.js'
 
-/* global fetch, angular, Blob, $, XMLHttpRequest */
+/* global fetch, angular, $, XMLHttpRequest */
 
 function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameManagerFactory, $localStorage) {
   'ngInject'
@@ -39,6 +39,9 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
   $scope.errors = ''
   ErrorLog.listen(function (error) {
     $scope.errors += error.message + '\n'
+    if (error.cause) {
+      $scope.errors += error.cause + '\n'
+    }
   })
 
   init()
@@ -109,18 +112,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
       $scope.summary = ctrl.data.summaries[startFrame]
       startFrame++
     }
-  }
-
-  function convertNameTokensAndAddColors (str) {
-    if (!str) {
-      return null
-    }
-    for (let i in ctrl.data.ids) {
-      const regexpr = new RegExp('\\$' + i, 'g')
-      const agentNameInColor = ctrl.data.agents[i].name.fontcolor(ctrl.data.agents[i].color)
-      str.replace(regexpr.source, agentNameInColor)
-    }
-    return str
   }
 
   function convertFrameFormat (data) {
@@ -282,10 +273,9 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
         let a = document.createElement('a')
         a.href = url
         a.download = 'export.zip'
-        document.body.appendChild(a);
+        document.body.appendChild(a)
         a.click()
-        document.body.removeChild(a);
-
+        document.body.removeChild(a)
       } else {
         exportResponse.reportItems.push({
           'type': 'FAIL',
@@ -321,105 +311,103 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
 }
 
 angular.module('player')
-.controller('PlayerCtrl', PlayerCtrl)
-.directive('resizeHandle', function ($localStorage) {
-  'ngInject'
+  .controller('PlayerCtrl', PlayerCtrl)
+  .directive('resizeHandle', function ($localStorage) {
+    'ngInject'
 
-  return {
-    restrict: 'A',
-    link: function (scope, el, attrs) {
-      var enabled = true
-      var rightBloc = el.parent().find('.right-bloc')
-      var leftBloc = el.parent().find('.left-bloc')
-      var minLeft = 510
-      var minRight = 0
-      var config = $localStorage.$default({
-        ideSplitPosition: '50%'
-      })
-      var position = config.ideSplitPosition
+    return {
+      restrict: 'A',
+      link: function (scope, el, attrs) {
+        var rightBloc = el.parent().find('.right-bloc')
+        var leftBloc = el.parent().find('.left-bloc')
+        var minLeft = 510
+        var config = $localStorage.$default({
+          ideSplitPosition: '50%'
+        })
+        var position = config.ideSplitPosition
 
-      var getPosition = function () {
-        return position
-      }
+        var getPosition = function () {
+          return position
+        }
 
-      var getRightCss = function () {
+        var getRightCss = function () {
         // Same formula in test.css (.right-bloc)
-        return 'calc(100% - ' + getPosition() + ')'
-      }
+          return 'calc(100% - ' + getPosition() + ')'
+        }
 
-      var getLeftCss = function () {
-        // Same formula in test.css (.left-bloc)      
-        return getPosition()
-      }
+        var getLeftCss = function () {
+        // Same formula in test.css (.left-bloc)
+          return getPosition()
+        }
 
-      var updatePosition = function () {
-        leftBloc.css('right', getRightCss())
-        rightBloc.css('left', getLeftCss())
-        updateHandle()
-      } 
+        var updatePosition = function () {
+          leftBloc.css('right', getRightCss())
+          rightBloc.css('left', getLeftCss())
+          updateHandle()
+        }
 
-      var updateHandle = function () {
-        el.css('left', getLeftCss())
-      }
+        var updateHandle = function () {
+          el.css('left', getLeftCss())
+        }
 
-      function mouseMoveHandler() {
-        position = Math.max(minLeft, event.clientX) + 'px'
-        config.ideSplitPosition = position
+        function mouseMoveHandler (event) {
+          position = Math.max(minLeft, event.clientX) + 'px'
+          config.ideSplitPosition = position
+          updatePosition()
+        }
+
+        el.on('mousedown', (event) => {
+          event.preventDefault()
+          scope.userSelect = 'none'
+          el.parent().on('mousemove', mouseMoveHandler)
+        })
+
+        el.parent().on('mouseup', (event) => {
+          el.parent().off('mousemove', mouseMoveHandler)
+          scope.userSelect = 'auto'
+        })
+
+        angular.element(window).resize(updatePosition)
+        scope.$on('$destroy', function () {
+          angular.element(window).off('resize', updateHandle)
+        })
+
         updatePosition()
       }
-
-      el.on('mousedown', (event) => {
-        event.preventDefault();
-        scope.userSelect = 'none'
-        el.parent().on('mousemove', mouseMoveHandler)
-      })
-
-      el.parent().on('mouseup', (event) => {
-        el.parent().off('mousemove', mouseMoveHandler)
-        scope.userSelect = 'auto'
-      })
-
-      angular.element(window).resize(updatePosition)
-      scope.$on('$destroy', function () {
-        angular.element(window).off('resize', updateHandle)
-      })
-
-      updatePosition()
     }
-  }
-})
-.filter('formatConsole', function ($sce) {
-  'ngInject'
+  })
+  .filter('formatConsole', function ($sce) {
+    'ngInject'
 
-  return function (input, agents) {
-    if (!input) {
-      return null
-    }
-    input = angular.element('<div/>').text(input).html()
+    return function (input, agents) {
+      if (!input) {
+        return null
+      }
+      input = angular.element('<div/>').text(input).html()
 
-    input = input.replace(/\xa4RED\xa4/g, '<span class="consoleError">')
-      .replace(/\xa4GREEN\xa4/g, '<span class="consoleSuccess">')
-      .replace(/\xa7RED\xa7/g, '</span>')
-      .replace(/\xa7GREEN\xa7/g, '</span>')
+      input = input.replace(/\xa4RED\xa4/g, '<span class="consoleError">')
+        .replace(/\xa4GREEN\xa4/g, '<span class="consoleSuccess">')
+        .replace(/\xa7RED\xa7/g, '</span>')
+        .replace(/\xa7GREEN\xa7/g, '</span>')
 
-    input = input.replace(/[\u0000-\u0009\u000b-\u000c\u000e-\u001F]/g, function (c) {
-      return '\\' + c.charCodeAt(0)
-    })
-
-    if (agents) {
-      input = input.replace(/\$([0-7])/mig, function (match, p1) {
-        const agenti = parseInt(p1)
-        if (agents[agenti]) {
-          return $('<span>')
-            .addClass('nickname')
-            .css('background-color', agents[agenti].color)
-            .text(agents[agenti].name)
-            .prop('outerHTML')
-        } else {
-          return match
-        }
+      input = input.replace(/[\u0000-\u0009\u000b-\u000c\u000e-\u001F]/g, function (c) {
+        return '\\' + c.charCodeAt(0)
       })
+
+      if (agents) {
+        input = input.replace(/\$([0-7])/mig, function (match, p1) {
+          const agenti = parseInt(p1)
+          if (agents[agenti]) {
+            return $('<span>')
+              .addClass('nickname')
+              .css('background-color', agents[agenti].color)
+              .text(agents[agenti].name)
+              .prop('outerHTML')
+          } else {
+            return match
+          }
+        })
+      }
+      return $sce.trustAsHtml(input)
     }
-    return $sce.trustAsHtml(input)
-  }
-})
+  })
