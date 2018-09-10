@@ -19,7 +19,7 @@ public abstract class Entity<T extends Entity<?>> {
     private double scaleX = 1, scaleY = 1;
     private boolean visible = true;
     private double rotation, alpha = 1;
-    Group parent;
+    ContainerBasedEntity parent;
     Mask mask;
 
     static enum Type {
