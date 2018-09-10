@@ -173,7 +173,9 @@ export class GraphicEntityModule {
       if (e instanceof Group) {
         e.childrenContainer.removeChildren()
         e.currentState.children.forEach(id => {
-          e.childrenContainer.addChild(this.entities.get(id).container)
+          const child = this.entities.get(id)
+          e.childrenContainer.addChild(child.container)
+          child.parent = e
         })
       }
     })
