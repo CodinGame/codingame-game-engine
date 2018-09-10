@@ -110,9 +110,18 @@ export class Entity {
         if (changed.mask) {
           globalData.maskUpdates[this.id] = state.mask
         }
+        if (Object.keys(changed).length !== 0 && this.parent) {
+          this.parent.notifyChange()
+        }
       }
     } else {
       Object.assign(this.currentState, this.defaultState)
+    }
+  }
+
+  notifyChange () {
+    if (this.parent) {
+      this.parent.notifyChange()
     }
   }
 

@@ -11,6 +11,7 @@ export class BufferedGroup extends Group {
     flagForDestructionOnReinit(this.gameTexture)
     this.graphics = new PIXI.Sprite(this.gameTexture)
     this.buffer = new PIXI.Container()
+    this.needsRender = true
   }
 
   updateDisplay (state, changed, globalData) {
@@ -18,10 +19,20 @@ export class BufferedGroup extends Group {
   }
 
   postUpdate () {
-    getRenderer().render(this.buffer, this.gameTexture)
+    if (this.needsRender) {
+      getRenderer().render(this.buffer, this.gameTexture)
+      this.needsRender = false
+    }
   }
 
   get childrenContainer () {
     return this.buffer
+  }
+
+  notifyChange () {
+    this.needsRender = true
+    if (this.parent) {
+      this.parent.notifyChange()
+    }
   }
 }
