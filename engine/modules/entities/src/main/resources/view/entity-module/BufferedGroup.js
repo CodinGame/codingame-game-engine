@@ -1,10 +1,10 @@
-import { Group } from './Group.js'
 import { getRenderer, flagForDestructionOnReinit } from '../core/rendering.js'
 import { WIDTH, HEIGHT } from '../core/constants.js'
+import { ContainerBasedEntity } from './ContainerBasedEntity.js'
 
 /* global PIXI */
 
-export class BufferedGroup extends Group {
+export class BufferedGroup extends ContainerBasedEntity {
   initDisplay () {
     super.initDisplay()
     this.gameTexture = PIXI.RenderTexture.create(WIDTH, HEIGHT)
@@ -12,10 +12,6 @@ export class BufferedGroup extends Group {
     this.graphics = new PIXI.Sprite(this.gameTexture)
     this.buffer = new PIXI.Container()
     this.needsRender = true
-  }
-
-  updateDisplay (state, changed, globalData) {
-    super.updateDisplay(state, changed, globalData)
   }
 
   postUpdate () {

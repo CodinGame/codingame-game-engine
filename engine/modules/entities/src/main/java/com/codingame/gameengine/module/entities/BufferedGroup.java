@@ -7,7 +7,7 @@ package com.codingame.gameengine.module.entities;
  * This reduces artifacts caused by rounding errors at the cost of lower performance.
  * </p>
  */
-public class BufferedGroup extends Group {
+public class BufferedGroup extends ContainerBasedEntity<BufferedGroup> {
     @Override
     Entity.Type getType() {
         return Entity.Type.BUFFERED_GROUP;
