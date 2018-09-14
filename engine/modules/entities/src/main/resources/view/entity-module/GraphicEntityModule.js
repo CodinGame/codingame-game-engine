@@ -1,7 +1,7 @@
 import { CommandParser } from './CommandParser.js'
 import { fitAspectRatio } from '../core/utils.js'
 import { WIDTH, HEIGHT } from '../core/constants.js'
-import { Group } from './Group.js'
+import { ContainerBasedEntity } from './ContainerBasedEntity.js'
 
 export const api = {}
 
@@ -157,7 +157,7 @@ export class GraphicEntityModule {
   resortTree () {
     // Groups
     this.entities.forEach(e => {
-      if (e instanceof Group) {
+      if (e instanceof ContainerBasedEntity) {
         this.sortChildren(e.childrenContainer)
       }
     })
@@ -170,7 +170,7 @@ export class GraphicEntityModule {
 
     // Groups
     this.entities.forEach(e => {
-      if (e instanceof Group) {
+      if (e instanceof ContainerBasedEntity) {
         e.childrenContainer.removeChildren()
         e.currentState.children.forEach(id => {
           const child = this.entities.get(id)
