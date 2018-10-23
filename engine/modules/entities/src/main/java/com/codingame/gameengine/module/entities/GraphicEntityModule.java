@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -107,9 +108,7 @@ public class GraphicEntityModule implements Module {
      * <p>
      * Only the most recent commits are kept for a given t.
      * </p>
-     * <p>
-     * If an entity hasn't changed since its previous commit, its commit is ignored.
-     * </p>
+     * 
      * 
      * @param t
      *            The instant of the frame 0 &ge; t &ge; 1.
@@ -118,7 +117,7 @@ public class GraphicEntityModule implements Module {
      * 
      */
     public void commitWorldState(double t) {
-        commitEntityState(t, entities.toArray(new Entity[entities.size()]));
+        commitState(t, true, entities.toArray(new Entity[entities.size()]));
     }
 
     /**
@@ -126,7 +125,6 @@ public class GraphicEntityModule implements Module {
      * <p>
      * Only the most recent commit is kept for a given t.
      * <p>
-     * If the entity hasn't changed since its previous commit, the commit is ignored.
      * 
      * @param t
      *            The instant of the frame 0 &ge; t &ge; 1.
@@ -137,6 +135,10 @@ public class GraphicEntityModule implements Module {
      * 
      */
     public void commitEntityState(double t, Entity<?>... entities) {
+        commitState(t, false, entities);
+    }
+
+    private void commitState(double t, boolean commitAll, Entity<?>... entities) {
         requireValidFrameInstant(t);
         requireNonEmpty(entities);
 
@@ -148,9 +150,15 @@ public class GraphicEntityModule implements Module {
             worldStates.put(actualT, state);
         }
 
-        final WorldState finalState = state;
-        Stream.of(entities).forEach(entity -> finalState.flushEntityState(entity));
+        if (commitAll) {
+            state.markAsWorldCommit();
+        }
+        flushAllEntityStates(entities, state);
 
+    }
+
+    private void flushAllEntityStates(Entity<?>[] entities, WorldState state) {
+        Stream.of(entities).forEach(entity -> state.flushEntityState(entity));
     }
 
     private void requireNonEmpty(Object[] items) {
@@ -166,16 +174,13 @@ public class GraphicEntityModule implements Module {
     }
 
     private void sendFrameData() {
-        List<Object> commands = new ArrayList<>();
 
         autocommit();
 
-        newSpriteSheets.forEach(e -> commands.add(gameSerializer.serializeLoadSpriteSheet(e)));
+        Optional<String> load = gameSerializer.serializeLoadSpriteSheets(newSpriteSheets);
         newSpriteSheets.clear();
 
-        newEntities.stream().forEach(e -> {
-            commands.add(gameSerializer.serializeCreateEntity(e));
-        });
+        Optional<String> create = gameSerializer.serializeCreateEntities(newEntities);
         newEntities.clear();
 
         List<WorldState> orderedStates = worldStates.entrySet().stream()
@@ -183,23 +188,34 @@ public class GraphicEntityModule implements Module {
             .map(Entry::getValue)
             .collect(Collectors.toList());
 
-        for (WorldState nextWorldState : orderedStates) {
-            WorldState worldStateDiff = nextWorldState.diffFromOtherWorldState(currentWorldState);
-            worldStateDiff.getEntityStateMap().forEach((entity, diff) -> {
-                String serializedStateDiff = gameSerializer.serializeEntitiesStateDiff(entity, diff, worldStateDiff.getFrameTime());
-                commands.add(serializedStateDiff);
-            });
+        List<String> worldCommitsBuilder = new ArrayList<>();
+        List<WorldState> updateBuilder = new ArrayList<>();
 
+        for (WorldState nextWorldState : orderedStates) {
+            if (nextWorldState.isWorldCommit()) {
+                worldCommitsBuilder.add(nextWorldState.getFrameTime());
+            }
+            WorldState worldStateDiff = nextWorldState.diffFromOtherWorldState(currentWorldState);
+            updateBuilder.add(worldStateDiff);
             currentWorldState.updateAllEntities(nextWorldState);
         }
 
-        worldStates.clear();
+        Optional<String> worldCommits = gameSerializer.serializeWorldStateUpdates(worldCommitsBuilder);
 
-        gameManager.setViewData("entitymodule", commands);
+        Optional<String> update = gameSerializer.serializeWorldDiff(updateBuilder);
+
+        worldStates.clear();
+        gameManager.setViewData(
+            "entitymodule",
+            Stream.of(load, create, update, worldCommits)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.joining("\n"))
+        );
     }
 
     private void autocommit() {
-        WorldState state = worldStates.computeIfAbsent("1", (key) -> new WorldState("1", true));
+        WorldState state = worldStates.computeIfAbsent("1", (key) -> new WorldState("1"));
         state.flushMissingEntities(entities);
     }
 
@@ -279,7 +295,7 @@ public class GraphicEntityModule implements Module {
         return e;
 
     }
-    
+
     /**
      * Creates a new BufferedGroup entity, its graphical counterpart will be created on the frame currently being computed.
      * <p>

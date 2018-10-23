@@ -34,20 +34,22 @@ export class Entity {
     if (!this.states[frame]) {
       this.states[frame] = []
     }
-
-    let state = Object.assign({
-      t: t,
-      curve: params.curve
-    }, params.values)
+    let state = Entity.createState(t, params.values, params.curve)
 
     const collision = this.states[frame].find(v => v.t === t)
+    if (collision && Object.keys(state.curve).length === 0) {
+      state.curve = collision.curve
+    }
     if (collision) {
-      ErrorLog.push(new Error('Different updates for same t ' + t))
+      if (!isStateEmpty(state) && !isStateEmpty(collision)) {
+        ErrorLog.push(new Error('Different updates for same t ' + t))
+      }
       Object.assign(collision, state)
     } else {
       this.states[frame].push(state)
     }
   }
+
   set (t, params, frame) {
     this.addState(t, params, frame)
   }
@@ -143,4 +145,16 @@ export class Entity {
     this.container.rotation = state.rotation
     this.container._visible = state.visible
   }
+
+  static createState (time = 1, values = {}, curve = {}) {
+    return {
+      t: time,
+      ...values,
+      curve: curve
+    }
+  }
+}
+
+function isStateEmpty (state) {
+  return Object.keys(state).length === Object.keys(Entity.createState()).length
 }

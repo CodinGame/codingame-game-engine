@@ -2,6 +2,7 @@ import { CommandParser } from './CommandParser.js'
 import { fitAspectRatio } from '../core/utils.js'
 import { WIDTH, HEIGHT } from '../core/constants.js'
 import { ContainerBasedEntity } from './ContainerBasedEntity.js'
+import { Entity } from './Entity.js'
 
 export const api = {}
 
@@ -38,18 +39,21 @@ export class GraphicEntityModule {
 
   handleFrameData (frameInfo, frameData) {
     const number = frameInfo.number
-    for (const line of frameData) {
-      if (line) {
-        const command = CommandParser.parse(line, this.globalData, frameInfo)
-        const loadPromise = command.apply(this.entities, number)
-        if (loadPromise) {
-          this.loadingAssets++
-          loadPromise.then(() => {
-            this.loadingAssets--
-          })
-        }
+    if (frameData) {
+      const commands = CommandParser.parse(frameData, this.globalData, frameInfo)
+      if (commands) {
+        commands.forEach(command => {
+          const loadPromise = command.apply(this.entities, number)
+          if (loadPromise) {
+            this.loadingAssets++
+            loadPromise.then(() => {
+              this.loadingAssets--
+            })
+          }
+        })
       }
     }
+
     this.extrapolate(number)
 
     const parsedFrame = {...frameInfo}
@@ -94,7 +98,7 @@ export class GraphicEntityModule {
 
         if (!subStates.length || this.lastElementOf(subStates).t !== 1) {
           // Create a subState at t=1
-          subStates.push({ ...currentState, t: 1 })
+          subStates.push(Entity.createState(1, currentState))
         }
       })
   }
