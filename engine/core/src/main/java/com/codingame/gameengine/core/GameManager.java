@@ -240,7 +240,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         if (totalViewDataBytesSent > VIEW_DATA_HARD_QUOTA) {
             throw new RuntimeException("The amount of data sent to the viewer is too big!");
         } else if (totalViewDataBytesSent > VIEW_DATA_SOFT_QUOTA) {
-            log.warn("Warning: the amount of data sent to the viewer is too big. Please try to optimize your code to send less data.");
+            log.warn("Warning: the amount of data sent to the viewer is too big.\nPlease try to optimize your code to send less data (try replacing some commitEntityStates by a commitWorldState).");
         }
 
         log.info(viewData);

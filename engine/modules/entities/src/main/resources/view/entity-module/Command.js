@@ -25,7 +25,7 @@ const PROPERTY_KEY_MAP = {
   ff: 'fontFamily',
   s: 'fontSize',
   T: 'text',
-  C: 'children',
+  ch: 'children',
   sx: 'scaleX',
   sy: 'scaleY',
   ax: 'anchorX',
@@ -51,6 +51,18 @@ export class CreateCommand {
     let entity = EntityFactory.create(this.type)
     entity.id = this.id
     entities.set(this.id, entity)
+  }
+}
+
+export class CreateCommands {
+  constructor (args, globalData) {
+    this.commands = []
+    this.id = ++globalData.instanceCount
+    this.type = args[0]
+  }
+
+  apply (entities, frameNumber) {
+    this.commands.forEach(command => command.apply(entities, frameNumber))
   }
 }
 
@@ -133,5 +145,18 @@ export class PropertiesCommand {
   apply (entities, frameNumber) {
     let entity = entities.get(this.id)
     entity.addState(this.t, {values: this.params, curve: this.curve}, frameNumber)
+  }
+}
+export class WorldCommitCommand {
+  constructor (args, globalData) {
+    this.times = args.map(v => +v)
+  }
+
+  apply (entities, frameNumber) {
+    entities.forEach(entity => {
+      this.times.forEach(time => {
+        entity.addState(time, {values: {}, curve: {}}, frameNumber)
+      })
+    })
   }
 }

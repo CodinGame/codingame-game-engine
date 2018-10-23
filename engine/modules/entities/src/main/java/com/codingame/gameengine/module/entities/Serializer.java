@@ -3,7 +3,11 @@ package com.codingame.gameengine.module.entities;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.Set;
 import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -12,8 +16,7 @@ import com.google.inject.Singleton;
 
 @Singleton
 class Serializer {
-
-    Map<String, String> commands, keys;
+    public Map<String, String> commands, keys, separators;
     Map<Entity.Type, String> types;
     Map<Curve, String> curves;
     private static DecimalFormat decimalFormat;
@@ -46,7 +49,7 @@ class Serializer {
         keys.put("fontFamily", "ff");
         keys.put("fontSize", "s");
         keys.put("text", "T");
-        keys.put("children", "C");
+        keys.put("children", "ch");
         keys.put("scaleX", "sx");
         keys.put("scaleY", "sy");
         keys.put("anchorX", "ax");
@@ -65,6 +68,13 @@ class Serializer {
         commands.put("CREATE", "C");
         commands.put("UPDATE", "U");
         commands.put("LOADSPRITESHEET", "L");
+        commands.put("WORLDUPDATE", "W");
+
+        separators = new HashMap<>();
+        separators.put("COMMAND", ";");
+        separators.put("COMMAND_ARGUMENT", " ");
+        separators.put("ARGUMENT_DETAILS", ",");
+        separators.put("COMMAND_TYPE", "\n");
 
         curves = new HashMap<>();
         curves.put(Curve.NONE, "_");
@@ -89,6 +99,9 @@ class Serializer {
         if (commands.values().stream().distinct().count() != commands.values().size()) {
             throw new RuntimeException("Duplicate commands");
         }
+        if (separators.values().stream().distinct().count() != separators.values().size()) {
+            throw new RuntimeException("Duplicate separators");
+        }
         if (types.values().stream().distinct().count() != types.values().size()) {
             throw new RuntimeException("Duplicate types");
         }
@@ -97,6 +110,14 @@ class Serializer {
         }
         if (keys.values().stream().anyMatch(character -> curves.containsValue(character))) {
             throw new RuntimeException("Same string used for a curve and a property");
+        }
+        if (separators.values().stream().anyMatch(
+            character -> curves.containsValue(character) ||
+                keys.containsValue(character) ||
+                types.containsValue(character) ||
+                commands.containsValue(character)
+        )) {
+            throw new RuntimeException("String already used as separator");
         }
 
     }
@@ -120,11 +141,16 @@ class Serializer {
         return escaped;
     }
 
-    public String serializeEntitiesStateDiff(Entity<?> entity, EntityState diff, String frameInstant) {
-        return join(
-            commands.get("UPDATE"),
+    private String serializeEntitiesStateDiff(Entity<?> entity, EntityState diff, String frameInstant) {
+        String meta = join(
             entity.getId(),
-            frameInstant,
+            frameInstant
+        );
+        if (diff.isEmpty()) {
+            return meta;
+        }
+        return join(
+            meta,
             minifyDiff(diff)
         );
     }
@@ -156,22 +182,94 @@ class Serializer {
     private String minifyDiff(EntityState diff) {
         return diff.entrySet().stream()
             .map((entry) -> join(minifyKey(entry.getKey()), minifyParam(entry.getKey(), entry.getValue())))
-            .collect(Collectors.joining(" "));
+            .collect(Collectors.joining(separators.get("COMMAND_ARGUMENT")));
     }
 
-    public String serializeCreateEntity(Entity<?> e) {
+    private String serializeCreateEntity(Entity<?> e) {
         return join(
-            commands.get("CREATE"),
             types.get(e.getType())
         );
     }
 
-    public Object serializeLoadSpriteSheet(SpriteSheetLoader spriteSheet) {
+    public Optional<String> serializeCreateEntities(List<Entity<?>> entities) {
+        if (entities.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(
+                commands.get("CREATE") + entities.stream()
+                    .map(e -> serializeCreateEntity(e))
+                    .collect(Collectors.joining(separators.get("COMMAND")))
+            );
+        }
+    }
+
+    private String serializeLoadSpriteSheet(SpriteSheetLoader spriteSheet) {
         return join(
-            commands.get("LOADSPRITESHEET"), spriteSheet.getName(), spriteSheet.getSourceImage(),
+            spriteSheet.getName(), spriteSheet.getSourceImage(),
             spriteSheet.getWidth(), spriteSheet.getHeight(), spriteSheet.getOrigRow(), spriteSheet.getOrigCol(), spriteSheet.getImageCount(),
             spriteSheet.getImagesPerRow()
         );
+    }
+
+    public Optional<String> serializeLoadSpriteSheets(List<SpriteSheetLoader> spriteSheets) {
+        if (spriteSheets.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(
+                commands.get("LOADSPRITESHEET") + spriteSheets.stream()
+                    .map(e -> serializeLoadSpriteSheet(e))
+                    .collect(Collectors.joining(separators.get("COMMAND")))
+            );
+        }
+    }
+
+    public Optional<String> serializeWorldStateUpdates(List<String> worldUpdates) {
+        if (worldUpdates.isEmpty()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(
+                commands.get("WORLDUPDATE") +
+                    worldUpdates.stream()
+                        .collect(Collectors.joining(separators.get("COMMAND_ARGUMENT")))
+            );
+        }
+    }
+
+    public Optional<String> serializeWorldDiff(List<WorldState> diffs) {
+        if (diffs.isEmpty()) {
+            return Optional.empty();
+        } else {
+            List<String> serialized = diffs.stream()
+                .map(worldDiff -> {
+                    Optional<String> result;
+                    Set<Entry<Entity<?>, EntityState>> diff = worldDiff.getEntityStateMap().entrySet();
+                    if (diff.isEmpty()) {
+                        result = Optional.empty();
+                    } else {
+                        result = Optional.of(
+                            diff
+                                .stream()
+                                .map(e -> {
+                                    return serializeEntitiesStateDiff(e.getKey(), e.getValue(), worldDiff.getFrameTime());
+                                })
+                                .collect(Collectors.joining(separators.get("COMMAND")))
+                        );
+                    }
+                    return result;
+                })
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
+            if (serialized.isEmpty()) {
+                return Optional.empty();
+            } else {
+                return Optional.of(
+                    commands.get("UPDATE") + serialized
+                        .stream()
+                        .collect(Collectors.joining(separators.get("COMMAND")))
+                );
+            }
+        }
     }
 
 }

@@ -12,7 +12,10 @@ const colorOpts = {
 
 const stringOpts = {
   type: String,
-  lerpMethod: noLerp
+  lerpMethod: noLerp,
+  convert (value) {
+    return unescape(value)
+  }
 }
 
 const angleOpts = {
@@ -76,8 +79,8 @@ export const PROPERTIES = {
   text: {
     ...stringOpts,
     convert (value, globalData) {
+      value = unescape(value)
       const regexp = /\$(\d)/g
-
       let match = regexp.exec(value)
       let res = ''
       let prevIdx = 0
@@ -97,5 +100,16 @@ export const PROPERTIES = {
     convert (value) {
       return value ? value.split(',').map(id => +id) : []
     }
+  }
+}
+
+function unescape (text) {
+  // replace \' by '
+  const unescaped = text.split("\\'").join("'")
+
+  if (unescaped.includes(' ')) {
+    return unescaped.slice(1, unescaped.length - 1)
+  } else {
+    return unescaped
   }
 }
