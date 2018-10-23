@@ -29,9 +29,10 @@ abstract public class GameManager<T extends AbstractPlayer> {
     @Inject private Gson gson;
     protected static Log log = LogFactory.getLog(GameManager.class);
 
-    private static final int VIEW_DATA_SOFT_QUOTA = 512 * 1024;
-    private static final int VIEW_DATA_HARD_QUOTA = 1024 * 1024;
-    private static final int GAME_SUMMARY_HARD_QUOTA = 512 * 1024;
+    private static final int VIEW_DATA_TOTAL_SOFT_QUOTA = 512 * 1024;
+    private static final int VIEW_DATA_TOTAL_HARD_QUOTA = 1024 * 1024;
+    private static final int GAME_SUMMARY_TOTAL_HARD_QUOTA = 512 * 1024;
+    private static final int GAME_SUMMARY_PER_TURN_HARD_QUOTA = 800;
     private static final int GAME_TURN_SOFT_QUOTA = 200;
 
     protected List<T> players;
@@ -65,6 +66,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private boolean initDone = false;
     private boolean outputsRead = false;
     private int totalViewDataBytesSent = 0;
+    private int totalGameSummaryBytes = 0;
 
     /**
      * GameManager main loop.
@@ -237,9 +239,9 @@ abstract public class GameManager<T extends AbstractPlayer> {
         String viewData = data.toString();
 
         totalViewDataBytesSent += viewData.length();
-        if (totalViewDataBytesSent > VIEW_DATA_HARD_QUOTA) {
+        if (totalViewDataBytesSent > VIEW_DATA_TOTAL_HARD_QUOTA) {
             throw new RuntimeException("The amount of data sent to the viewer is too big!");
-        } else if (totalViewDataBytesSent > VIEW_DATA_SOFT_QUOTA) {
+        } else if (totalViewDataBytesSent > VIEW_DATA_TOTAL_SOFT_QUOTA) {
             log.warn("Warning: the amount of data sent to the viewer is too big.\nPlease try to optimize your code to send less data (try replacing some commitEntityStates by a commitWorldState).");
         }
 
@@ -365,7 +367,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     public void setMaxTurns(int maxTurns) throws IllegalArgumentException {
         if (maxTurns <= 0) {
             throw new IllegalArgumentException("Invalid maximum number of turns");
-        }else if (maxTurns > GAME_TURN_SOFT_QUOTA) {
+        } else if (maxTurns > GAME_TURN_SOFT_QUOTA) {
             log.warn("The maximum number of turns is very high, please try to stay under 200 turns.");
         }
         this.maxTurns = maxTurns;
@@ -473,8 +475,10 @@ abstract public class GameManager<T extends AbstractPlayer> {
         int total = this.currentGameSummary.stream()
             .mapToInt(String::length)
             .sum();
-        if (total < GAME_SUMMARY_HARD_QUOTA) {
+
+        if (total < GAME_SUMMARY_PER_TURN_HARD_QUOTA && total + totalGameSummaryBytes < GAME_SUMMARY_TOTAL_HARD_QUOTA) {
             this.currentGameSummary.add(summary);
+            totalGameSummaryBytes += total;
         } else {
             log.warn("Warning: the game summary is full. Please try to send less data.");
         }
