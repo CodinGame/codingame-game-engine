@@ -68,13 +68,12 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
      * @return this animation.
      */
     public SpriteAnimation reset() {
-        set("restarted", RESTART_INDEX, null);
-        RESTART_INDEX++;
+        set("restarted", RESTART_INDEX++, null);
         return this;
     }
 
     /**
-     * Calls setStarted(true);
+     * Calls setPlaying(true);
      * 
      * @return this animation.
      */
@@ -83,7 +82,7 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
     }
 
     /**
-     * Calls setStarted(false);
+     * Calls setPlaying(false);
      * 
      * @return this animation.
      */
