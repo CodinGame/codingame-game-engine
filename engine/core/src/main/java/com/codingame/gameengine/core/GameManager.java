@@ -68,6 +68,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private int totalViewDataBytesSent = 0;
     private int totalGameSummaryBytes = 0;
 
+    private boolean viewWarning, summaryWarning;
+    
     /**
      * GameManager main loop.
      * 
@@ -241,8 +243,9 @@ abstract public class GameManager<T extends AbstractPlayer> {
         totalViewDataBytesSent += viewData.length();
         if (totalViewDataBytesSent > VIEW_DATA_TOTAL_HARD_QUOTA) {
             throw new RuntimeException("The amount of data sent to the viewer is too big!");
-        } else if (totalViewDataBytesSent > VIEW_DATA_TOTAL_SOFT_QUOTA) {
+        } else if (totalViewDataBytesSent > VIEW_DATA_TOTAL_SOFT_QUOTA && !viewWarning) {
             log.warn("Warning: the amount of data sent to the viewer is too big.\nPlease try to optimize your code to send less data (try replacing some commitEntityStates by a commitWorldState).");
+            viewWarning = true;
         }
 
         log.info(viewData);
@@ -479,8 +482,9 @@ abstract public class GameManager<T extends AbstractPlayer> {
         if (total < GAME_SUMMARY_PER_TURN_HARD_QUOTA && total + totalGameSummaryBytes < GAME_SUMMARY_TOTAL_HARD_QUOTA) {
             this.currentGameSummary.add(summary);
             totalGameSummaryBytes += total;
-        } else {
+        } else if (!summaryWarning) {
             log.warn("Warning: the game summary is full. Please try to send less data.");
+            summaryWarning = true;
         }
     }
 
