@@ -2,8 +2,6 @@ import { CommandParser } from './CommandParser.js'
 import { fitAspectRatio } from '../core/utils.js'
 import { WIDTH, HEIGHT } from '../core/constants.js'
 import { ContainerBasedEntity } from './ContainerBasedEntity.js'
-import { Entity } from './Entity.js'
-
 export const api = {}
 
 export class GraphicEntityModule {
@@ -43,7 +41,7 @@ export class GraphicEntityModule {
       const commands = CommandParser.parse(frameData, this.globalData, frameInfo)
       if (commands) {
         commands.forEach(command => {
-          const loadPromise = command.apply(this.entities, number)
+          const loadPromise = command.apply(this.entities, number, frameInfo)
           if (loadPromise) {
             this.loadingAssets++
             loadPromise.then(() => {
@@ -54,11 +52,12 @@ export class GraphicEntityModule {
       }
     }
 
-    this.extrapolate(number)
-
     const parsedFrame = {...frameInfo}
 
     parsedFrame.previous = this.frames[this.frames.length - 1] || parsedFrame
+
+    this.extrapolate(number, parsedFrame)
+
     if (parsedFrame !== parsedFrame.previous) {
       parsedFrame.previous.next = parsedFrame
     }
@@ -72,7 +71,7 @@ export class GraphicEntityModule {
     return arr[arr.length - 1]
   }
 
-  extrapolate (frameNumber) {
+  extrapolate (frameNumber, frameInfo) {
     this
       .entities.forEach(entity => {
         // Create empty substate array if none
@@ -90,15 +89,25 @@ export class GraphicEntityModule {
         // Sort on t to begin extrapolation
         subStates.sort((a, b) => a.t - b.t)
 
+        if (!subStates.length || this.lastElementOf(subStates).t !== 1) {
+          console.log()
+          // Create a subState at t=1
+          entity.addState(1, {}, frameNumber, frameInfo)
+        }
+        let prevState = currentState
+        const previousFrameNumber = frameInfo.previous.number
+        // If the entity had a state in the previous frame get the last one of them
+        if (entity.states[previousFrameNumber] && previousFrameNumber !== frameNumber) {
+          prevState = entity.states[previousFrameNumber][entity.states[previousFrameNumber].length - 1]
+        }
         for (const state of subStates) {
           // Extrapolate through existing substates, updating the extrapolationMap in the process (currentState)
           Object.assign(currentState, state)
           Object.assign(state, currentState)
-        }
-
-        if (!subStates.length || this.lastElementOf(subStates).t !== 1) {
-          // Create a subState at t=1
-          subStates.push(Entity.createState(1, currentState))
+          if (typeof entity.computeAnimationProgressTime === 'function') {
+            entity.computeAnimationProgressTime(prevState, state)
+          }
+          prevState = state
         }
       })
   }

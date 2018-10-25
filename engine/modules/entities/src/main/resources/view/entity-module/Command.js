@@ -34,7 +34,8 @@ const PROPERTY_KEY_MAP = {
   z: 'zIndex',
   b: 'blendMode',
   I: 'images',
-  p: 'started',
+  rs: 'restarted',
+  p: 'playing',
   l: 'loop',
   d: 'duration',
   bw: 'baseWidth',
@@ -61,8 +62,8 @@ export class CreateCommands {
     this.type = args[0]
   }
 
-  apply (entities, frameNumber) {
-    this.commands.forEach(command => command.apply(entities, frameNumber))
+  apply (entities, frameNumber, frameInfo) {
+    this.commands.forEach(command => command.apply(entities, frameNumber, frameInfo))
   }
 }
 
@@ -142,9 +143,9 @@ export class PropertiesCommand {
     }
   }
 
-  apply (entities, frameNumber) {
+  apply (entities, frameNumber, frameInfo) {
     let entity = entities.get(this.id)
-    entity.addState(this.t, {values: this.params, curve: this.curve}, frameNumber)
+    entity.addState(this.t, {values: this.params, curve: this.curve}, frameNumber, frameInfo)
   }
 }
 export class WorldCommitCommand {
@@ -152,10 +153,10 @@ export class WorldCommitCommand {
     this.times = args.map(v => +v)
   }
 
-  apply (entities, frameNumber) {
+  apply (entities, frameNumber, frameInfo) {
     entities.forEach(entity => {
       this.times.forEach(time => {
-        entity.addState(time, {values: {}, curve: {}}, frameNumber)
+        entity.addState(time, {values: {}, curve: {}}, frameNumber, frameInfo)
       })
     })
   }

@@ -13,12 +13,12 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
 
     @Inject GraphicEntityModule entityModule;
 
-    private int START_INDEX = 0;
+    private int RESTART_INDEX = 0;
 
     private String[] images = new String[] {};
 
     private boolean loop;
-    private boolean started;
+    private boolean playing = true;
     private int duration = 1000;
 
     SpriteAnimation() {
@@ -37,47 +37,40 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
     }
 
     /**
-     * Returns whether the animation is flagged to have the graphical counterpart start animating if it hasn't yet.
+     * Returns whether the animation is flagged to have the graphical counterpart play the animation or to pause it.
      * <p>
-     * Default is false.
+     * Default is true.
      * </p>
      * 
-     * @return true if the animation has been started.
+     * @return true if the animation is playing.
      * 
      */
-    public boolean isStarted() {
-        return started;
+    public boolean isPlaying() {
+        return playing;
     }
 
     /**
-     * Begins or restarts the animation, it will always begin at the first image.
-     * <p>
-     * Setting this to false will stop the animation, but it may not be resumed without restarting.
-     * </p>
+     * Plays or pause the animation
      * 
      * @param started
-     *            true to begin or restart animation, false to stop animation
+     *            true to play animation, false to pause animation
      * @return this animation.
      */
-    public SpriteAnimation setStarted(boolean started) {
-        this.started = started;
-
-        if (started) {
-            set("started", START_INDEX, null);
-        } else {
-            set("started", "", null);
-        }
+    public SpriteAnimation setPlaying(boolean playing) {
+        this.playing = playing;
+        set("playing", playing, null);
         return this;
     }
 
     /**
-     * Calls setStarted(true) and forces the animation to play from the start;
+     * Reset the progress of the animation
      * 
      * @return this animation.
      */
     public SpriteAnimation reset() {
-        START_INDEX++;
-        return setStarted(true);
+        set("restarted", RESTART_INDEX, null);
+        RESTART_INDEX++;
+        return this;
     }
 
     /**
@@ -85,8 +78,8 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
      * 
      * @return this animation.
      */
-    public SpriteAnimation start() {
-        return setStarted(true);
+    public SpriteAnimation play() {
+        return setPlaying(true);
     }
 
     /**
@@ -94,8 +87,8 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
      * 
      * @return this animation.
      */
-    public SpriteAnimation stop() {
-        return setStarted(false);
+    public SpriteAnimation pause() {
+        return setPlaying(false);
     }
 
     /**

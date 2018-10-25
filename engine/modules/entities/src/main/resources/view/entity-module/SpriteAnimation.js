@@ -12,7 +12,9 @@ export class SpriteAnimation extends TextureBasedEntity {
       images: '',
       loop: false,
       duration: 1000,
-      started: null
+      playing: true,
+      animationProgressTime: 0,
+      date: 0
     })
   }
 
@@ -21,16 +23,21 @@ export class SpriteAnimation extends TextureBasedEntity {
     this.graphics = new PIXI.Sprite(PIXI.Texture.EMPTY)
   }
 
+  addState (t, params, frame, frameInfo) {
+    super.addState(t, params, frame)
+    const toModify = this.states[frame].find(v => v.t === t)
+    const date = frameInfo.date + frameInfo.frameDuration * t
+    toModify.date = date
+  }
+
   updateDisplay (state, changed, globalData, frame, progress) {
     super.updateDisplay(state, changed, globalData)
 
-    if (state.images && state.started) {
+    if (state.images) {
       const duration = state.duration
-      const date = frame.date + progress * frame.frameDuration
-      const startDate = state.started.date
       const images = state.images.split(',')
 
-      const animationProgress = (state.loop ? unlerpUnclamped : unlerp)(startDate, startDate + duration, date)
+      const animationProgress = (state.loop ? unlerpUnclamped : unlerp)(0, duration, state.animationProgressTime)
       if (animationProgress >= 0) {
         const animationIndex = Math.floor(images.length * animationProgress)
         const image = state.loop ? images[animationIndex % images.length] : (images[animationIndex] || images[images.length - 1])
@@ -42,6 +49,17 @@ export class SpriteAnimation extends TextureBasedEntity {
       }
     } else {
       this.graphics.texture = PIXI.Texture.EMPTY
+    }
+  }
+
+  computeAnimationProgressTime (prevState, currState) {
+    if (currState.restarted && currState.restarted.date === currState.date) {
+      currState.animationProgressTime = 0
+    } else {
+      currState.animationProgressTime = prevState.animationProgressTime
+      if (prevState.playing) {
+        currState.animationProgressTime += currState.date - prevState.date
+      }
     }
   }
 }
