@@ -58,7 +58,8 @@ class Serializer {
         keys.put("zIndex", "z");
         keys.put("blendMode", "b");
         keys.put("images", "I");
-        keys.put("started", "p");
+        keys.put("restarted", "rs");
+        keys.put("playing", "p");
         keys.put("loop", "l");
         keys.put("duration", "d");
         keys.put("baseWidth", "bw");

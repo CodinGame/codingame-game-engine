@@ -8,7 +8,7 @@ import { BufferedGroup } from './BufferedGroup.js'
 import { SpriteAnimation } from './SpriteAnimation.js'
 
 export class EntityFactory {
-  static create(type) {
+  static create (type) {
     var entity
     switch (type) {
       case 'C':

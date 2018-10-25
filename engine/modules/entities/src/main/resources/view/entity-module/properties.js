@@ -1,6 +1,7 @@
 import {lerp, lerpColor, lerpAngle} from '../core/utils.js'
 
 const noLerp = (a, b, u) => u < 1 ? a : b
+const timeLerp = (a, b, u) => b < a ? b : lerp(a, b, u)
 
 const colorOpts = {
   type: Number,
@@ -37,6 +38,10 @@ const boolOpts = {
   },
   lerpMethod: noLerp
 }
+const timeOpts = {
+  type: Number,
+  lerpMethod: timeLerp
+}
 
 export const PROPERTIES = {
   default: {
@@ -53,12 +58,14 @@ export const PROPERTIES = {
   strokeColor: colorOpts,
   tint: colorOpts,
 
+  animationProgressTime: timeOpts,
+
   mask: constOpts,
   baseWidth: constOpts,
   baseHeight: constOpts,
   image: stringOpts,
   images: stringOpts,
-  started: {
+  restarted: {
     type: String,
     convert (value, globalData, frameInfo, t) {
       if (value) {
@@ -70,7 +77,7 @@ export const PROPERTIES = {
     },
     lerpMethod: noLerp
   },
-
+  playing: boolOpts,
   duration: constOpts,
   blendMode: constOpts,
 
