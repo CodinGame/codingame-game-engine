@@ -48,7 +48,7 @@ export class CreateCommand {
     this.type = args[0]
   }
 
-  apply (entities, frameNumber) {
+  apply (entities) {
     let entity = EntityFactory.create(this.type)
     entity.id = this.id
     entities.set(this.id, entity)
@@ -62,8 +62,8 @@ export class CreateCommands {
     this.type = args[0]
   }
 
-  apply (entities, frameNumber, frameInfo) {
-    this.commands.forEach(command => command.apply(entities, frameNumber, frameInfo))
+  apply (entities, frameInfo) {
+    this.commands.forEach(command => command.apply(entities, frameInfo.number, frameInfo))
   }
 }
 
@@ -143,9 +143,9 @@ export class PropertiesCommand {
     }
   }
 
-  apply (entities, frameNumber, frameInfo) {
+  apply (entities, frameInfo) {
     let entity = entities.get(this.id)
-    entity.addState(this.t, {values: this.params, curve: this.curve}, frameNumber, frameInfo)
+    entity.addState(this.t, {values: this.params, curve: this.curve}, frameInfo.number, frameInfo)
   }
 }
 export class WorldCommitCommand {
@@ -153,10 +153,10 @@ export class WorldCommitCommand {
     this.times = args.map(v => +v)
   }
 
-  apply (entities, frameNumber, frameInfo) {
+  apply (entities, frameInfo) {
     entities.forEach(entity => {
       this.times.forEach(time => {
-        entity.addState(time, {values: {}, curve: {}}, frameNumber, frameInfo)
+        entity.addState(time, {values: {}, curve: {}}, frameInfo.number, frameInfo)
       })
     })
   }

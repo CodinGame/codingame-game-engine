@@ -36,12 +36,11 @@ export class GraphicEntityModule {
   }
 
   handleFrameData (frameInfo, frameData) {
-    const number = frameInfo.number
     if (frameData) {
       const commands = CommandParser.parse(frameData, this.globalData, frameInfo)
       if (commands) {
         commands.forEach(command => {
-          const loadPromise = command.apply(this.entities, number, frameInfo)
+          const loadPromise = command.apply(this.entities, frameInfo)
           if (loadPromise) {
             this.loadingAssets++
             loadPromise.then(() => {
