@@ -13,6 +13,7 @@ export class SpriteAnimation extends TextureBasedEntity {
       loop: false,
       duration: 1000,
       playing: true,
+      restarted: null,
       animationProgressTime: 0,
       date: 0
     })
