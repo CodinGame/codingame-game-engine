@@ -56,7 +56,7 @@ export class GraphicEntityModule {
 
     parsedFrame.previous = this.frames[this.frames.length - 1] || parsedFrame
 
-    this.extrapolate(number, parsedFrame)
+    this.extrapolate(parsedFrame)
 
     if (parsedFrame !== parsedFrame.previous) {
       parsedFrame.previous.next = parsedFrame
@@ -71,7 +71,9 @@ export class GraphicEntityModule {
     return arr[arr.length - 1]
   }
 
-  extrapolate (frameNumber, frameInfo) {
+  extrapolate (frameInfo) {
+    const frameNumber = frameInfo.number
+    const previousFrameNumber = frameInfo.previous.number
     this
       .entities.forEach(entity => {
         // Create empty substate array if none
@@ -90,12 +92,10 @@ export class GraphicEntityModule {
         subStates.sort((a, b) => a.t - b.t)
 
         if (!subStates.length || this.lastElementOf(subStates).t !== 1) {
-          console.log()
           // Create a subState at t=1
           entity.addState(1, {}, frameNumber, frameInfo)
         }
         let prevState = currentState
-        const previousFrameNumber = frameInfo.previous.number
         // If the entity had a state in the previous frame get the last one of them
         if (entity.states[previousFrameNumber] && previousFrameNumber !== frameNumber) {
           prevState = entity.states[previousFrameNumber][entity.states[previousFrameNumber].length - 1]
