@@ -216,6 +216,7 @@ public class GraphicEntityModule implements Module {
 
     private void autocommit() {
         WorldState state = worldStates.computeIfAbsent("1", (key) -> new WorldState("1"));
+        state.markAsWorldCommit();
         state.flushMissingEntities(entities);
     }
 
