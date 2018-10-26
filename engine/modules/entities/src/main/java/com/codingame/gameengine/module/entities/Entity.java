@@ -17,7 +17,7 @@ public abstract class Entity<T extends Entity<?>> {
 
     private int x, y, zIndex;
     private double scaleX = 1, scaleY = 1;
-    private boolean visible = true;
+    private boolean visible = false;
     private double rotation, alpha = 1;
     ContainerBasedEntity parent;
     Mask mask;
@@ -29,7 +29,7 @@ public abstract class Entity<T extends Entity<?>> {
     Entity() {
         id = ++GraphicEntityModule.ENTITY_COUNT;
         state = new EntityState();
-
+        this.setVisible(true);
     }
 
     @SuppressWarnings("unchecked")
