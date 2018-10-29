@@ -200,7 +200,7 @@ public class GraphicEntityModule implements Module {
             currentWorldState.updateAllEntities(nextWorldState);
         }
 
-        Optional<String> worldCommits = gameSerializer.serializeWorldStateUpdates(worldCommitsBuilder);
+        Optional<String> worldCommits = gameSerializer.serializeWorldCommits(worldCommitsBuilder);
 
         Optional<String> update = gameSerializer.serializeWorldDiff(updateBuilder);
 
