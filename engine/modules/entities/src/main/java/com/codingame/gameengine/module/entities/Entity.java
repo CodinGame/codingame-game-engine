@@ -29,7 +29,12 @@ public abstract class Entity<T extends Entity<?>> {
     Entity() {
         id = ++GraphicEntityModule.ENTITY_COUNT;
         state = new EntityState();
-        this.setVisible(true);
+        
+        // World commits made before the creation of an entity should not affect that entity.
+        // This is why we set `visible` to false by default and immediately setVisible(true),
+        // this way the first commit of this entity will turn it into something visible.
+        // All other properties have no impact while the entity is invisible so it is effectively non-existant until it's first commit.
+        setVisible(true);
     }
 
     @SuppressWarnings("unchecked")
