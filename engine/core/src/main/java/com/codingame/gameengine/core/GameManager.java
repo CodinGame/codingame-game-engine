@@ -503,7 +503,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         if (this.totalTurnTime > GAME_DURATION_HARD_QUOTA) {
             throw new RuntimeException("Total game duration too long");
         } else if (this.totalTurnTime > GAME_DURATION_SOFT_QUOTA) {
-            log.warn("Warning: please keep the total duration of your total game turns under 25s");
+            log.warn("Warning: too many turns and/or too much time allocated to players per turn");
         }
     }
 
