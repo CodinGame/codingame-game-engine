@@ -13,7 +13,7 @@ export class Entity {
       scaleY: 1,
       zIndex: 0,
       alpha: 1,
-      visible: true,
+      visible: false,
       rotation: 0,
       mask: -1
     }
