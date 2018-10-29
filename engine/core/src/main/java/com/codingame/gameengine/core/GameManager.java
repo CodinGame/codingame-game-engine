@@ -34,6 +34,10 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private static final int GAME_SUMMARY_TOTAL_HARD_QUOTA = 512 * 1024;
     private static final int GAME_SUMMARY_PER_TURN_HARD_QUOTA = 800;
     private static final int GAME_TURN_SOFT_QUOTA = 200;
+    private static final int GAME_DURATION_HARD_QUOTA = 30_000;
+    private static final int GAME_DURATION_SOFT_QUOTA = 25_000;
+    private static final int MAX_TURN_TIME = GAME_DURATION_SOFT_QUOTA;
+    private static final int MIN_TURN_TIME = 50;
 
     protected List<T> players;
     private int maxTurns = 200;
@@ -67,6 +71,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private boolean outputsRead = false;
     private int totalViewDataBytesSent = 0;
     private int totalGameSummaryBytes = 0;
+    private int totalTurnTime = 0;
 
     private boolean viewWarning, summaryWarning;
     
@@ -167,6 +172,9 @@ abstract public class GameManager<T extends AbstractPlayer> {
         dumpView();
         dumpInfos();
         dumpNextPlayerInput(player.getInputs().toArray(new String[0]));
+        if (player.getExpectedOutputLines() > 0) {
+            this.addTurnTime();
+        }
         dumpNextPlayerInfos(player.getIndex(), player.getExpectedOutputLines(), player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime);
 
         // READ PLAYER OUTPUTS
@@ -394,8 +402,10 @@ abstract public class GameManager<T extends AbstractPlayer> {
      *             if turnMaxTime &le; 0
      */
     public void setTurnMaxTime(int turnMaxTime) throws IllegalArgumentException {
-        if (turnMaxTime <= 0) {
-            throw new IllegalArgumentException("Invalid turn max time");
+        if (turnMaxTime <= MIN_TURN_TIME) {
+            throw new IllegalArgumentException("Invalid turn max time : stay above 50ms");
+        } else if (turnMaxTime > MAX_TURN_TIME) {
+            throw new IllegalArgumentException("Invalid turn max time : stay under 25s");
         }
         this.turnMaxTime = turnMaxTime;
     }
@@ -485,6 +495,15 @@ abstract public class GameManager<T extends AbstractPlayer> {
         } else if (!summaryWarning) {
             log.warn("Warning: the game summary is full. Please try to send less data.");
             summaryWarning = true;
+        }
+    }
+
+    private void addTurnTime() {
+        this.totalTurnTime += this.turnMaxTime;
+        if (this.totalTurnTime > GAME_DURATION_HARD_QUOTA) {
+            throw new RuntimeException("Total game duration too long");
+        } else if (this.totalTurnTime > GAME_DURATION_SOFT_QUOTA) {
+            log.warn("Warning: please keep the total duration of your total game turns under 25s");
         }
     }
 
