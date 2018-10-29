@@ -52,7 +52,7 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
     /**
      * Plays or pause the animation
      * 
-     * @param started
+     * @param playing
      *            true to play animation, false to pause animation
      * @return this animation.
      */
