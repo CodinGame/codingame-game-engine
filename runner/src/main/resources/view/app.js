@@ -62,6 +62,11 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
     if ($scope.gameLoaded || !ctrl.data) {
       return
     }
+    if (ctrl.data.failCause) {
+      $scope.errors = ctrl.data.failCause
+      return;
+    }
+    
     $scope.gameLoaded = true
     $scope.uinput = ctrl.data.uinput
     ctrl.gameInfo = convertFrameFormat(ctrl.data)

@@ -87,7 +87,6 @@ public class JavaPlayerAgent extends Agent {
 
     @Override
     public void destroy() {
-        // Does nothing
         if (javaRunnerThread != null) {
             javaRunnerThread.setStopping(true);
             javaRunnerThread.interrupt();

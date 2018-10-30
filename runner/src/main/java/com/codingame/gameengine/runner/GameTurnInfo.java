@@ -26,6 +26,10 @@ class GameTurnInfo {
     boolean isEndTurn() {
         return isCompleteEndTurn();
     }
+    
+    boolean refereeHasFailed() {
+        return received.containsKey(InputCommand.FAIL);
+    }
 
     private boolean isCompleteEndTurn() {
         return received.containsKey(InputCommand.SCORES)

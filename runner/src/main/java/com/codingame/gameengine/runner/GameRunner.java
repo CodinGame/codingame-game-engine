@@ -127,6 +127,8 @@ abstract class GameRunner {
             GameTurnInfo turnInfo = readGameInfo(round);
             boolean validTurn = turnInfo.isComplete();
 
+            gameResult.failCause = turnInfo.get(InputCommand.FAIL).orElse(null);
+
             if (validTurn) {
                 gameResult.outputs.get("referee").add(refereeStdout.toString());
                 refereeStdout.reset();
@@ -283,7 +285,7 @@ abstract class GameRunner {
 
         referee.sendInput(new Command(OutputCommand.GET_GAME_INFO).toString());
 
-        while (!turnInfo.isComplete()) {
+        while (!turnInfo.isComplete() && !turnInfo.refereeHasFailed()) {
             Command command = readCommand(referee, round);
             if (command == null) {
                 return turnInfo;
@@ -294,34 +296,39 @@ abstract class GameRunner {
     }
 
     private Command readCommand(Agent agent, int round) {
-        String output = agent.getOutput(1, 150_000);
-        if (output != null) {
-            output = output.replace('\r', '\n');
-        }
-        if (checkOutput(output, 1) != OutputResult.OK) {
-            throw new RuntimeException("Invalid Referee command: " + output);
-        }
-
-        Matcher m = COMMAND_HEADER_PATTERN.matcher(output.trim());
-        if (m.matches()) {
-            String command = m.group("cmd");
-            int nbLinesToRead = Integer.parseInt(m.group("lineCount"));
-
-            if (nbLinesToRead >= 0) {
-                output = agent.getOutput(nbLinesToRead, 150_000, round == 0);
+        try {
+            String output = agent.getOutput(1, 150_000);
+            if (output != null) {
                 output = output.replace('\r', '\n');
+            }
+            if (checkOutput(output, 1) != OutputResult.OK) {
+                throw new RuntimeException("Invalid Referee command: " + output);
+            }
+
+            Matcher m = COMMAND_HEADER_PATTERN.matcher(output.trim());
+            if (m.matches()) {
+                String command = m.group("cmd");
+                int nbLinesToRead = Integer.parseInt(m.group("lineCount"));
+
+                if (nbLinesToRead >= 0) {
+                    output = agent.getOutput(nbLinesToRead, 150_000, round == 0);
+                    output = output.replace('\r', '\n');
+                } else {
+                    throw new RuntimeException("Invalid Referee command line count: " + output);
+                }
+                if (checkOutput(output, nbLinesToRead) != OutputResult.OK) {
+                    throw new RuntimeException(
+                        "Error reading Referee command. Buffer capacity: " + output.length() + " / "
+                            + (round == 0 ? RefereeAgent.REFEREE_MAX_BUFFER_SIZE_EXTRA : RefereeAgent.REFEREE_MAX_BUFFER_SIZE)
+                    );
+                }
+                return new Command(InputCommand.valueOf(command), output);
             } else {
-                throw new RuntimeException("Invalid Referee command line count: " + output);
+                throw new RuntimeException("Invalid referee command: " + output);
             }
-            if (checkOutput(output, nbLinesToRead) != OutputResult.OK) {
-                throw new RuntimeException(
-                    "Error reading Referee command. Buffer capacity: " + output.length() + " / "
-                        + (round == 0 ? RefereeAgent.REFEREE_MAX_BUFFER_SIZE_EXTRA : RefereeAgent.REFEREE_MAX_BUFFER_SIZE)
-                );
-            }
-            return new Command(InputCommand.valueOf(command), output);
-        } else {
-            throw new RuntimeException("Invalid referee command: " + output);
+        } catch (RuntimeException err) {
+            err.printStackTrace();
+            return new Command(InputCommand.FAIL, err.toString());
         }
     }
 
@@ -408,12 +415,15 @@ abstract class GameRunner {
             public void write(int b) throws IOException {
                 err.write(b);
                 refereeStderr.write(b);
-            }       
+            }
         }));
         requireGameNotEnded();
         Properties conf = new Properties();
         initialize(conf);
+        
         runAgents();
+        
+        referee.destroy();
         destroyPlayers();
         gameEnded = true;
         System.setOut(out);

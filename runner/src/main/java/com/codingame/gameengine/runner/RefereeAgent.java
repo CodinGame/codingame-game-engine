@@ -22,6 +22,8 @@ class RefereeAgent extends Agent {
     private OutputStream processStdin = null;
     private InputStream processStdout = null;
     private InputStream processStderr = null;
+    
+    private Thread thread;
 
     public RefereeAgent() {
         super();
@@ -34,6 +36,14 @@ class RefereeAgent extends Agent {
             throw new RuntimeException("Cannot initialize Referee Agent");
         }
     }
+    
+    @Override
+    public void destroy() {
+        if (thread != null) {
+            thread.interrupt();
+        }
+    }
+
 
     @Override
     protected OutputStream getInputStream() {
@@ -53,13 +63,12 @@ class RefereeAgent extends Agent {
     @Override
     protected void runInputOutput() throws Exception {
 
-        Thread t = new Thread() {
+        thread = new Thread() {
             public void run() {
                 RefereeMain.start(agentStdin, new PrintStream(agentStdout));
             }
         };
-
-        t.start();
+        thread.start();
     }
 
     @Override
