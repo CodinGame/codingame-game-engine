@@ -224,13 +224,13 @@ class Serializer {
         }
     }
 
-    public Optional<String> serializeWorldStateUpdates(List<String> worldUpdates) {
-        if (worldUpdates.isEmpty()) {
+    public Optional<String> serializeWorldCommits(List<String> worldCommits) {
+        if (worldCommits.isEmpty()) {
             return Optional.empty();
         } else {
             return Optional.of(
                 commands.get("WORLDUPDATE") +
-                    worldUpdates.stream()
+                worldCommits.stream()
                         .collect(Collectors.joining(separators.get("COMMAND_ARGUMENT")))
             );
         }
