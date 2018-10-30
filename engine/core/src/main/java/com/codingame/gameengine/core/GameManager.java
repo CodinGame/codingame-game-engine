@@ -2,6 +2,8 @@ package com.codingame.gameengine.core;
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -74,7 +76,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private int totalTurnTime = 0;
 
     private boolean viewWarning, summaryWarning;
-    
+
     /**
      * GameManager main loop.
      * 
@@ -85,65 +87,72 @@ abstract public class GameManager<T extends AbstractPlayer> {
      */
     void start(InputStream is, PrintStream out) {
         s = new Scanner(is);
-        this.out = out;
-        this.referee = refereeProvider.get();
+        try {
+            this.out = out;
+            this.referee = refereeProvider.get();
 
-        // Init ---------------------------------------------------------------
-        log.info("Init");
-        InputCommand iCmd = InputCommand.parse(s.nextLine());
-        int playerCount = s.nextInt();
-        s.nextLine();
-        players = new ArrayList<T>(playerCount);
+            // Init ---------------------------------------------------------------
+            log.info("Init");
+            InputCommand iCmd = InputCommand.parse(s.nextLine());
+            int playerCount = s.nextInt();
+            s.nextLine();
+            players = new ArrayList<T>(playerCount);
 
-        for (int i = 0; i < playerCount; i++) {
-            T player = playerProvider.get();
-            player.setIndex(i);
-            players.add(player);
-        }
-
-        readGameProperties(iCmd, s);
-
-        prevViewData = null;
-        currentViewData = new JsonObject();
-
-        referee.init();
-        registeredModules.forEach(Module::onGameInit);
-        initDone = true;
-
-        // Game Loop ----------------------------------------------------------
-        for (turn = 0; turn < getMaxTurns() && !isGameEnd() && !allPlayersInactive(); turn++) {
-            swapInfoAndViewData();
-            log.info("Turn " + turn);
-            newTurn = true;
-            outputsRead = false; // Set as true after first getOutputs() to forbib sendInputs
-
-            referee.gameTurn(turn);
-            registeredModules.forEach(Module::onAfterGameTurn);
-
-            // reset players' outputs
-            for (AbstractPlayer player : players) {
-                player.resetOutputs();
-                player.setHasBeenExecuted(false);
+            for (int i = 0; i < playerCount; i++) {
+                T player = playerProvider.get();
+                player.setIndex(i);
+                players.add(player);
             }
+
+            readGameProperties(iCmd, s);
+
+            prevViewData = null;
+            currentViewData = new JsonObject();
+
+            referee.init();
+            registeredModules.forEach(Module::onGameInit);
+            initDone = true;
+
+            // Game Loop ----------------------------------------------------------
+            for (turn = 0; turn < getMaxTurns() && !isGameEnd() && !allPlayersInactive(); turn++) {
+                swapInfoAndViewData();
+                log.info("Turn " + turn);
+                newTurn = true;
+                outputsRead = false; // Set as true after first getOutputs() to forbib sendInputs
+
+                referee.gameTurn(turn);
+                registeredModules.forEach(Module::onAfterGameTurn);
+
+                // reset players' outputs
+                for (AbstractPlayer player : players) {
+                    player.resetOutputs();
+                    player.setHasBeenExecuted(false);
+                }
+            }
+
+            log.info("End");
+
+            referee.onEnd();
+            registeredModules.forEach(Module::onAfterOnEnd);
+
+            // Send last frame ----------------------------------------------------
+            swapInfoAndViewData();
+            newTurn = true;
+
+            dumpView();
+            dumpInfos();
+
+            dumpGameProperties();
+            dumpMetadata();
+            dumpScores();
+
+            s.close();
+
+        } catch (RuntimeException e) {
+            dumpFail(e);
+            s.close();
+            throw e;
         }
-
-        log.info("End");
-
-        referee.onEnd();
-        registeredModules.forEach(Module::onAfterOnEnd);
-
-        // Send last frame ----------------------------------------------------
-        swapInfoAndViewData();
-        newTurn = true;
-
-        dumpView();
-        dumpInfos();
-
-        dumpGameProperties();
-        dumpMetadata();
-        dumpScores();
-
-        s.close();
     }
 
     abstract protected boolean allPlayersInactive();
@@ -228,6 +237,16 @@ abstract public class GameManager<T extends AbstractPlayer> {
             playerScores.add(player.getIndex() + " " + player.getScore());
         }
         data.addAll(playerScores);
+        out.println(data);
+    }
+
+    private void dumpFail(RuntimeException e) {
+        OutputData data = new OutputData(OutputCommand.FAIL);
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+
+        data.add(sw.toString());
         out.println(data);
     }
 
