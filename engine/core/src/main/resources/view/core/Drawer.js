@@ -319,7 +319,11 @@ export class Drawer {
 
     if (scope.updateTime >= updateInterval) {
       scope.updateTime -= updateInterval
-      this.progress = unlerp(0, frameInterval, scope.frameTime)
+      if (this.currentFrame === 0) {
+        this.progress = 1
+      } else {
+        this.progress = unlerp(0, frameInterval, scope.frameTime)
+      }
       this.updateScene(this.scope, this.question, this.frames, this.currentFrame, this.progress, 1, this.reasons[this.currentFrame], true)
     }
 
