@@ -139,6 +139,9 @@ class Renderer {
                     String entryTail = name.substring(sourceFolder.length());
 
                     File f = new File(targetFolder + File.separator + entryTail);
+                    if (!f.toPath().normalize().startsWith(targetFolder)) {
+                        throw new IOException("Zip entry contained path traversal");
+                    }
                     if (entry.isDirectory()) {
                         f.mkdir();
                     } else {
