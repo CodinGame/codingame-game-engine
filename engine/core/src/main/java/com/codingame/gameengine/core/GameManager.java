@@ -421,7 +421,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
      *             if turnMaxTime &le; 0
      */
     public void setTurnMaxTime(int turnMaxTime) throws IllegalArgumentException {
-        if (turnMaxTime <= MIN_TURN_TIME) {
+        if (turnMaxTime < MIN_TURN_TIME) {
             throw new IllegalArgumentException("Invalid turn max time : stay above 50ms");
         } else if (turnMaxTime > MAX_TURN_TIME) {
             throw new IllegalArgumentException("Invalid turn max time : stay under 25s");
