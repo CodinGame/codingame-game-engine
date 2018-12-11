@@ -223,7 +223,6 @@ export class Drawer {
         this.updateScene(this.scope, this.question, this.frames, this.currentFrame, this.progress, 1, this.reasons[this.currentFrame], true)
         /** **************************************************************************************************************************************** */
       } catch (error) {
-        console.error('Cannot load demo, you might want to reset the demo')
         ErrorLog.push({
           cause: error,
           message: 'Cannot load demo, you might want to reset the demo'
