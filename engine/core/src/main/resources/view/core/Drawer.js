@@ -215,14 +215,20 @@ export class Drawer {
       }
 
       var demoContainer = new PIXI.Container()
-
-      this.initDefaultFrames(this.demo.playerCount, this.demo.frames, this.demo.agents)
-      /** **************************************************************************************************************************************** */
-      this.preconstructScene(this.scope, container, this.initWidth, this.initHeight)
-      this.initScene(this.scope, demoContainer, this.frames, true)
-      this.updateScene(this.scope, this.question, this.frames, this.currentFrame, this.progress, 1, this.reasons[this.currentFrame], true)
-      /** **************************************************************************************************************************************** */
-
+      try {
+        this.initDefaultFrames(this.demo.playerCount, this.demo.frames, this.demo.agents)
+        /** **************************************************************************************************************************************** */
+        this.preconstructScene(this.scope, container, this.initWidth, this.initHeight)
+        this.initScene(this.scope, demoContainer, this.frames, true)
+        this.updateScene(this.scope, this.question, this.frames, this.currentFrame, this.progress, 1, this.reasons[this.currentFrame], true)
+        /** **************************************************************************************************************************************** */
+      } catch (error) {
+        console.error('Cannot load demo, you might want to reset the demo')
+        ErrorLog.push({
+          cause: error,
+          message: 'Cannot load demo, you might want to reset the demo'
+        })
+      }
       scope.demo = demoContainer
       scope.demotime = 0
 
