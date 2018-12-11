@@ -53,7 +53,8 @@
 					shareable="false"
 					show-replay-prompt="false"
 					game-params="gameParams">
-				</cg-player>			
+				</cg-player>
+				<div id="console" class="outputs-demo" ng-bind="errors" ng-if="errors"></div>
 				<div class="close-button-wrapper">
 					<button class="close-button" ng-click="closeViewReplayPopup()">Close</button>
 				</div>

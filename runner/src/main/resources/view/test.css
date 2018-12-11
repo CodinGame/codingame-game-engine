@@ -129,7 +129,18 @@ button {
     font-weight: normal;
     word-break: break-word;
 }
-
+.outputs-demo {
+    height: calc(100% - 20px);
+    padding: 10px 15px;
+    background-color: #29323c;
+    border: solid 1px #363e48;
+    overflow: auto;
+    white-space: pre-wrap;
+    font-size: 13px;
+    font-weight: normal;
+    word-break: break-word;
+    color: white;
+}
 .players-outputs-player-console-title, .game-outputs-title, .game-outputs-down-referee-title, .players-outputs-player-header-title {
     font-size: 13px;
     font-weight: 600;
