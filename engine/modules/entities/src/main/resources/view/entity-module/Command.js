@@ -24,6 +24,7 @@ const PROPERTY_KEY_MAP = {
   sc: 'strokeColor',
   ff: 'fontFamily',
   s: 'fontSize',
+  fw: 'fontWeight',
   T: 'text',
   ch: 'children',
   sx: 'scaleX',

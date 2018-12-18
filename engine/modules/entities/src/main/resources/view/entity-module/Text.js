@@ -11,7 +11,8 @@ export class Text extends TextureBasedEntity {
       strokeThickness: 0,
       fillColor: 0,
       fontSize: 26,
-      fontFamily: 'Lato'
+      fontFamily: 'Lato',
+      fontWeight: 'normal'
     })
   }
 
@@ -33,5 +34,6 @@ export class Text extends TextureBasedEntity {
     this.graphics.style.fill = state.fillColor
     this.graphics.style.fontSize = state.fontSize || 1
     this.graphics.style.fontFamily = state.fontFamily
+    this.graphics.style.fontWeight = state.fontWeight
   }
 }

@@ -48,6 +48,7 @@ class Serializer {
         keys.put("strokeColor", "sc");
         keys.put("fontFamily", "ff");
         keys.put("fontSize", "s");
+        keys.put("fontWeight", "fw");
         keys.put("text", "T");
         keys.put("children", "ch");
         keys.put("scaleX", "sx");
