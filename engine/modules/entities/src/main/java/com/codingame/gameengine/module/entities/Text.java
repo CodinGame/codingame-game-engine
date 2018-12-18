@@ -80,6 +80,33 @@ public class Text extends TextBasedEntity<Text> {
     }
 
     /**
+     * Returns the name of the font of this <code>Text</code> in px.
+     * <p>
+     * Default is "Lato".
+     * 
+     * @return the size of the font of this <code>Text</code>.
+     */
+    public String getFontFamily() {
+        return fontFamily;
+    }
+
+    /**
+     * Sets the name of the font of this <code>Text</code>.
+     * <p>
+     * Only fonts available to the browser can be displayed.
+     * 
+     * 
+     * @param fontFamily
+     *            the size for the font of this <code>Text</code>.
+     * @return this <code>Text</code>.
+     */
+    public Text setFontFamily(String fontFamily) {
+        this.fontFamily = fontFamily;
+        set("fontFamily", fontFamily, null);
+        return this;
+    }
+
+    /**
      * Returs the thickness of the stroke of this <code>Text</code> in pixels.
      * 
      * @return the thickness of the stroke of this <code>Text</code>

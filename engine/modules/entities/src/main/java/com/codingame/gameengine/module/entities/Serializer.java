@@ -93,6 +93,7 @@ class Serializer {
         types.put(Type.LINE, "L");
         types.put(Type.SPRITE, "S");
         types.put(Type.TEXT, "T");
+        types.put(Type.BITMAPTEXT, "BT");
         types.put(Type.SPRITEANIMATION, "A");
 
         if (keys.values().stream().distinct().count() != keys.values().size()) {

@@ -278,6 +278,18 @@ public class GraphicEntityModule implements Module {
         return e;
 
     }
+    
+    /**
+     * Creates a new Text entity, its graphical counterpart will be created on the frame currently being computed.
+     * 
+     * @return the entity. Modify its properties to animate the graphical counterpart.
+     */
+    public BitmapText createBitmapText() {
+        BitmapText e = new BitmapText();
+        newEntity(e);
+        return e;
+
+    }
 
     /**
      * Creates a new Group entity, its graphical counterpart will be created on the frame currently being computed.

@@ -23,7 +23,7 @@ public abstract class Entity<T extends Entity<?>> {
     Mask mask;
 
     static enum Type {
-        CIRCLE, LINE, RECTANGLE, SPRITE, TEXT, GROUP, BUFFERED_GROUP, SPRITEANIMATION
+        CIRCLE, LINE, RECTANGLE, SPRITE, TEXT, BITMAPTEXT, GROUP, BUFFERED_GROUP, SPRITEANIMATION
     }
 
     Entity() {

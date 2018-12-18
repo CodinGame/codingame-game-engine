@@ -193,9 +193,11 @@ class Renderer {
                 jsonAssets.addProperty("baseUrl", assetsPath);
             }
             JsonObject images = new JsonObject();
+            JsonArray fonts = new JsonArray();
             JsonArray sprites = new JsonArray();
             jsonAssets.add("images", images);
             jsonAssets.add("sprites", sprites);
+            jsonAssets.add("fonts", fonts);
 
             Path origAssetsPath = tmpdir.resolve("assets");
             try {
@@ -226,6 +228,19 @@ class Renderer {
                                 try (FileWriter writer = new FileWriter(jsonToWriteTo)) {
                                     Gson gson = new GsonBuilder().create();
                                     gson.toJson(jsonObject, writer);
+                                }
+                            } else if (isFont(f)) {
+                                if (assetsNeedHashing) {
+                                    String newName = hashAsset(f);
+                                    fonts.add(newName);
+                                    Files.copy(
+                                        f, tmpdir.resolve("hashed_assets").resolve(newName),
+                                        StandardCopyOption.REPLACE_EXISTING
+                                    );
+                                } else {
+                                    fonts.add(
+                                        tmpdir.relativize(f).toString().replace("\\", "/")
+                                    );
                                 }
                             } else {
                                 if (assetsNeedHashing) {
@@ -261,7 +276,9 @@ class Renderer {
     private static boolean isSpriteJson(Path f) {
         return "json".equals(FilenameUtils.getExtension(f.toString()));
     }
-
+    private static boolean isFont(Path f) {
+        return "fnt".equals(FilenameUtils.getExtension(f.toString()));
+    }
     public static List<Path> generateView(String jsonResult, String assetsPath) {
         List<Path> paths;
 

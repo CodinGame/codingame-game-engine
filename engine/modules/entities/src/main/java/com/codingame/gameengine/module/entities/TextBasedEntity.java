@@ -5,7 +5,6 @@ import java.util.Objects;
 public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends TextureBasedEntity<T> {
     protected String text = "";
     protected int fontSize = 26;
-    protected String fontFamily = "Lato";
     
     /**
      * Returns the string this <code>Text</code> displays.
@@ -73,33 +72,4 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
         set("fontSize", fontSize, curve);
         return self();
     }
-
-    /**
-     * Returns the name of the font of this <code>Text</code> in px.
-     * <p>
-     * Default is "Lato".
-     * 
-     * @return the size of the font of this <code>Text</code>.
-     */
-    public String getFontFamily() {
-        return fontFamily;
-    }
-
-    /**
-     * Sets the name of the font of this <code>Text</code>.
-     * <p>
-     * Only fonts available to the browser can be displayed.
-     * 
-     * 
-     * @param fontFamily
-     *            the size for the font sof this <code>Text</code>.
-     * @return this <code>Text</code>.
-     */
-    public T setFontFamily(String fontFamily) {
-        this.fontFamily = fontFamily;
-        set("fontFamily", fontFamily, null);
-        return self();
-    }
-
-
 }
