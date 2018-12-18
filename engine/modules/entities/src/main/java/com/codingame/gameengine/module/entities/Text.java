@@ -8,14 +8,14 @@ import java.util.Objects;
 public class Text extends TextureBasedEntity<Text> {
 
     /**
-     * The list of supported font weight.
+     * The list of supported font weights.
      * 
      */
     public static enum FontWeight {
         NORMAL, BOLD, BOLDER, LIGHTER;
 
         public String toString() {
-            return super.toString().toLowerCase();
+            return name().toLowerCase();
         }
     }
 
