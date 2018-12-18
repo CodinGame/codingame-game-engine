@@ -102,6 +102,7 @@ export const PROPERTIES = {
     }
   },
   fontFamily: stringOpts,
+  fontWeight: stringOpts,
   children: {
     ...stringOpts,
     convert (value) {
