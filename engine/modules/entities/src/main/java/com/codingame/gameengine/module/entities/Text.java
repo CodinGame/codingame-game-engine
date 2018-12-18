@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Represents a label on screen.
  */
-public class Text extends TextureBasedEntity<Text> {
+public class Text extends TextBasedEntity<Text> {
 
     /**
      * The list of supported font weights.
@@ -36,32 +36,6 @@ public class Text extends TextureBasedEntity<Text> {
         return Entity.Type.TEXT;
     }
 
-    /**
-     * Returns the string this <code>Text</code> displays.
-     * <p>
-     * Default is "" (empty string).
-     * 
-     * @return the string of this <code>Text</code>.
-     */
-    public String getText() {
-        return text;
-    }
-
-    /**
-     * Sets the string for this <code>Text</code> to display.
-     * 
-     * @param text
-     *            the string for this <code>Text</code> to display.
-     * @return this <code>Text</code>.
-     * @exception NullPointerException
-     *                if text is null.
-     */
-    public Text setText(String text) {
-        Objects.requireNonNull(text);
-        this.text = text;
-        set("text", text, null);
-        return this;
-    }
 
     /**
      * Returns the color of the stroke of this <code>Text</code> as an RGB integer.
@@ -213,71 +187,4 @@ public class Text extends TextureBasedEntity<Text> {
         set("fillColor", fillColor, curve);
         return this;
     }
-
-    /**
-     * Returns the size of the font of this <code>Text</code> in px.
-     * <p>
-     * Default is 26.
-     * 
-     * @return the size of the font of this <code>Text</code>.
-     */
-    public int getFontSize() {
-        return fontSize;
-    }
-
-    /**
-     * Sets the size of the font of this <code>Text</code> in px.
-     * 
-     * 
-     * @param fontSize
-     *            the size for the font sof this <code>Text</code>.
-     * @return this <code>Text</code>.
-     */
-    public Text setFontSize(int fontSize) {
-        return setFontSize(fontSize, null);
-    }
-
-    /**
-     * Sets the size of the font of this <code>Text</code> in px.
-     * 
-     * 
-     * @param fontSize
-     *            the size for the font sof this <code>Text</code>.
-     * @param curve
-     *            the transition to animate between values of this property.
-     * @return this <code>Text</code>.
-     */
-    public Text setFontSize(int fontSize, Curve curve) {
-        this.fontSize = fontSize;
-        set("fontSize", fontSize, curve);
-        return this;
-    }
-
-    /**
-     * Returns the name of the font of this <code>Text</code> in px.
-     * <p>
-     * Default is "Lato".
-     * 
-     * @return the size of the font of this <code>Text</code>.
-     */
-    public String getFontFamily() {
-        return fontFamily;
-    }
-
-    /**
-     * Sets the name of the font of this <code>Text</code>.
-     * <p>
-     * Only fonts available to the browser can be displayed.
-     * 
-     * 
-     * @param fontFamily
-     *            the size for the font sof this <code>Text</code>.
-     * @return this <code>Text</code>.
-     */
-    public Text setFontFamily(String fontFamily) {
-        this.fontFamily = fontFamily;
-        set("fontFamily", fontFamily, null);
-        return this;
-    }
-
 }
