@@ -7,12 +7,25 @@ import java.util.Objects;
  */
 public class Text extends TextureBasedEntity<Text> {
 
+    /**
+     * The list of supported font weight.
+     * 
+     */
+    public static enum FontWeight {
+        NORMAL, BOLD, BOLDER, LIGHTER;
+
+        public String toString() {
+            return super.toString().toLowerCase();
+        }
+    }
+
     private String text = "";
     private int strokeColor = 0;
     private double strokeThickness = 0;
     private int fillColor = 0;
     private int fontSize = 26;
     private String fontFamily = "Lato";
+    private FontWeight fontWeight = FontWeight.NORMAL;
 
     Text() {
         super();
@@ -131,6 +144,29 @@ public class Text extends TextureBasedEntity<Text> {
         this.strokeThickness = strokeThickness;
         set("strokeThickness", strokeThickness, curve);
         return this;
+    }
+    /**
+     * Sets the weight of the font of this <code>Text</code>.
+     * 
+     * @param style
+     *            the FontWeight of the <code>Text</code>.
+     * @return this <code>Text</code>.
+     */
+    public Text setFontWeight(FontWeight weight) {
+        this.fontWeight = weight;
+        set("fontWeight", weight.toString());
+        return this;
+    }
+
+    /**
+     * Returns the weight of the font of this <code>Text</code>.
+     * <p>
+     * Default is NORMAL.
+     * 
+     * @return the weight of the font of this <code>Text</code>.
+     */
+    public FontWeight getFontWeight() {
+        return this.fontWeight;
     }
 
     /**
