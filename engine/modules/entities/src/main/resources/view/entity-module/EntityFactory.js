@@ -3,6 +3,7 @@ import Line from './Line.js'
 import { Rectangle } from './Rectangle.js'
 import { Sprite } from './Sprite.js'
 import { Text } from './Text.js'
+import { BitmapText } from './BitmapText.js'
 import { Group } from './Group.js'
 import { BufferedGroup } from './BufferedGroup.js'
 import { SpriteAnimation } from './SpriteAnimation.js'
@@ -25,6 +26,9 @@ export class EntityFactory {
         break
       case 'T':
         entity = new Text()
+        break
+      case 'BT':
+        entity = new BitmapText()
         break
       case 'G':
         entity = new Group()
