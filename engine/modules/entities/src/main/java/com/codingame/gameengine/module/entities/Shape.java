@@ -7,7 +7,7 @@ package com.codingame.gameengine.module.entities;
  * @param <T>
  *            a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of a Shape.
  */
-public abstract class Shape<T extends Entity<?>> extends Entity<T> implements Mask {
+public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntity<T> implements Mask {
 
     private int lineColor = 0x0, lineWidth = 0, fillColor = 0xffffff;
     private double fillAlpha = 1, lineAlpha = 1;

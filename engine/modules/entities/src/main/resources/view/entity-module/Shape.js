@@ -25,7 +25,8 @@ export class Shape extends Entity {
       lineWidth: Shape.defaultLineWidth(),
       lineColor: Shape.defaultLineColor(),
       fillAlpha: Shape.defaultFillAlpha(),
-      lineAlpha: Shape.defaultLineAlpha()
+      lineAlpha: Shape.defaultLineAlpha(),
+      blendMode: PIXI.BLEND_MODES.NORMAL
     })
   }
 
@@ -40,5 +41,6 @@ export class Shape extends Entity {
 
   updateDisplay (state, changed, globalData) {
     super.updateDisplay(state, changed, globalData)
+    this.graphics.blendMode = state.blendMode
   }
 }
