@@ -35,7 +35,6 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private static final int VIEW_DATA_TOTAL_HARD_QUOTA = 1024 * 1024;
     private static final int GAME_SUMMARY_TOTAL_HARD_QUOTA = 512 * 1024;
     private static final int GAME_SUMMARY_PER_TURN_HARD_QUOTA = 800;
-    private static final int GAME_TURN_SOFT_QUOTA = 200;
     private static final int GAME_DURATION_HARD_QUOTA = 30_000;
     private static final int GAME_DURATION_SOFT_QUOTA = 25_000;
     private static final int MAX_TURN_TIME = GAME_DURATION_SOFT_QUOTA;
@@ -397,8 +396,6 @@ abstract public class GameManager<T extends AbstractPlayer> {
     public void setMaxTurns(int maxTurns) throws IllegalArgumentException {
         if (maxTurns <= 0) {
             throw new IllegalArgumentException("Invalid maximum number of turns");
-        } else if (maxTurns > GAME_TURN_SOFT_QUOTA) {
-            log.warn("The maximum number of turns is very high, please try to stay under 200 turns.");
         }
         this.maxTurns = maxTurns;
     }
