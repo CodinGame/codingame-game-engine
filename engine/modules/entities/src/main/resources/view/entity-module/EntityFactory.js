@@ -27,7 +27,7 @@ export class EntityFactory {
       case 'T':
         entity = new Text()
         break
-      case 'BT':
+      case 'X':
         entity = new BitmapText()
         break
       case 'G':
