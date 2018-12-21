@@ -7,11 +7,11 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
     protected int fontSize = 26;
     
     /**
-     * Returns the string this <code>Text</code> displays.
+     * Returns the string this <code>TextBasedEntity</code> displays.
      * <p>
      * Default is "" (empty string).
      * 
-     * @return the string of this <code>Text</code>.
+     * @return the string of this <code>TextBasedEntity</code>.
      */
     public String getText() {
         return text;
@@ -19,10 +19,10 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
     
 
     /**
-     * Sets the string for this <code>Text</code> to display.
+     * Sets the string for this <code>TextBasedEntity</code> to display.
      * 
      * @param text
-     *            the string for this <code>Text</code> to display.
+     *            the string for this <code>TextBasedEntity</code> to display.
      * @return this <code>Text</code>.
      * @exception NullPointerException
      *                if text is null.
@@ -35,22 +35,22 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
     }
     
     /**
-     * Returns the size of the font of this <code>Text</code> in px.
+     * Returns the size of the font of this <code>TextBasedEntity</code> in px.
      * <p>
      * Default is 26.
      * 
-     * @return the size of the font of this <code>Text</code>.
+     * @return the size of the font of this <code>TextBasedEntity</code>.
      */
     public int getFontSize() {
         return fontSize;
     }
 
     /**
-     * Sets the size of the font of this <code>Text</code> in px.
+     * Sets the size of the font of this <code>TextBasedEntity</code> in px.
      * 
      * 
      * @param fontSize
-     *            the size for the font sof this <code>Text</code>.
+     *            the size for the font of this <code>TextBasedEntity</code>.
      * @return this <code>Text</code>.
      */
     public T setFontSize(int fontSize) {
@@ -58,11 +58,11 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
     }
 
     /**
-     * Sets the size of the font of this <code>Text</code> in px.
+     * Sets the size of the font of this <code>TextBasedEntity</code> in px.
      * 
      * 
      * @param fontSize
-     *            the size for the font sof this <code>Text</code>.
+     *            the size for the font of this <code>TextBasedEntity</code>.
      * @param curve
      *            the transition to animate between values of this property.
      * @return this <code>Text</code>.
