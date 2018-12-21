@@ -5,7 +5,7 @@ package com.codingame.gameengine.module.entities;
  */
 public class BitmapText extends TextBasedEntity<BitmapText> {
 
-    private String fontFamily = "";
+    private String font;
     
     @Override
     Type getType() {
@@ -13,28 +13,28 @@ public class BitmapText extends TextBasedEntity<BitmapText> {
     }
 
     /**
-     * Returns the name of the font of this <code>Text</code> in px.
+     * Returns the name of the font of this <code>BitmapText</code> in px.
      * <p>
-     * Default is an empty string.
+     * Default is null.
      * 
-     * @return the size of the font of this <code>Text</code>.
+     * @return the size of the font of this <code>BitmapText</code>.
      */
-    public String getFontFamily() {
-        return fontFamily;
+    public String getFont() {
+        return font;
     }
 
     /**
-     * Sets the name of the font of this <code>Text</code>.
+     * Sets the name of the font of this <code>BitmapText</code>.
      * <p>
      * Only fonts available to the browser can be displayed.
      * 
      * 
      * @param fontFamily
-     *            the size for the font of this <code>Text</code>.
-     * @return this <code>Text</code>.
+     *            the size for the font of this <code>BitmapText</code>.
+     * @return this <code>BitmapText</code>.
      */
-    public BitmapText setFontFamily(String fontFamily) {
-        this.fontFamily = fontFamily;
+    public BitmapText setFont(String fontFamily) {
+        this.font = fontFamily;
         set("fontFamily", fontFamily, null);
         return this;
     }
