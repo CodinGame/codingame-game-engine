@@ -17,20 +17,20 @@ export class BitmapText extends Entity {
       blendMode: PIXI.BLEND_MODES.NORMAL,
       tint: 0xFFFFFF
     })
+    this.missingFonts = {}
   }
 
   initDisplay () {
     super.initDisplay()
     this.graphics = new PIXI.Container()
-    this.missingFonts = {}
   }
 
   updateDisplay (state, changed, globalData) {
     super.updateDisplay(state, changed, globalData)
     if (state.fontFamily !== null) {
-      try {
+      if (PIXI.extras.BitmapText.fonts[state.fontFamily]) {
         if (this.graphics.children.length === 0) {
-          this.displayed = new PIXI.BitmapText(state.text || this.defaultState.text, {
+          this.displayed = new PIXI.BitmapText(state.text, {
             font: {size: state.fontSize || 1, name: state.fontFamily}
           })
           this.graphics.addChild(this.displayed)
@@ -40,12 +40,15 @@ export class BitmapText extends Entity {
         this.displayed.anchor.set(state.anchorX, state.anchorY)
         this.displayed.blendMode = state.blendMode
         this.displayed.tint = state.tint
-      } catch (error) {
+      } else {
         if (!this.missingFonts[state.fontFamily]) {
           this.missingFonts[state.fontFamily] = true
-          ErrorLog.push(new MissingBitmapFontError(state.fontFamily, error))
+          ErrorLog.push(new MissingBitmapFontError(state.fontFamily))
         }
+        this.graphics.removeChildren()
       }
+    } else {
+      this.graphics.removeChildren()
     }
   }
 }
