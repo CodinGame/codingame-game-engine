@@ -22,7 +22,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
 
   $scope.gameParams = $localStorage.$default({
     gameParams: {}
-  }).gameParams
+  })
   $scope.loadGame = loadGame
   $scope.selectReplay = selectReplay
   $scope.viewReplay = viewReplay
