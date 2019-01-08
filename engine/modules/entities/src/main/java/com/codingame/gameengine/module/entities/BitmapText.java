@@ -1,5 +1,7 @@
 package com.codingame.gameengine.module.entities;
 
+import java.util.Objects;
+
 /**
  * Represents a label on screen, you can use any bitmap font in your asset folder as it's font.
  */
@@ -32,8 +34,11 @@ public class BitmapText extends TextBasedEntity<BitmapText> {
      * @param fontFamily
      *            the size for the font of this <code>BitmapText</code>.
      * @return this <code>BitmapText</code>.
+     * @exception NullPointerException
+     *                if fontFamily is null.
      */
     public BitmapText setFont(String fontFamily) {
+        Objects.requireNonNull(fontFamily);
         this.font = fontFamily;
         set("fontFamily", fontFamily, null);
         return this;
