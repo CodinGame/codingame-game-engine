@@ -96,15 +96,18 @@ export class LoadCommand {
         trimmed: false
       }
     }
-
-    this.loader.add('data:text/json;charset=UTF-8,' + JSON.stringify(data), {crossOrigin: true})
+    if (!PIXI.utils.TextureCache.hasOwnProperty('data:text/json;charset=UTF-8,' + JSON.stringify(data) + '_image')) {
+      this.loader.add('data:text/json;charset=UTF-8,' + JSON.stringify(data), {crossOrigin: true})
+    }
   }
 
   apply () {
-    return new Promise((resolve) => {
-      this.loader.load()
-      this.loader.on('complete', resolve)
-    })
+    if (Object.keys(this.loader.resources).length > 0) {
+      return new Promise((resolve) => {
+        this.loader.load()
+        this.loader.on('complete', resolve)
+      })
+    }
   }
 }
 
