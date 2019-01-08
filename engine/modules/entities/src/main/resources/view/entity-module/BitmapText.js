@@ -35,6 +35,7 @@ export class BitmapText extends Entity {
           })
           this.graphics.addChild(this.displayed)
         } else {
+          this.displayed.text = state.text
           this.displayed.font = { size: state.fontSize || 1, name: state.fontFamily }
         }
         this.displayed.anchor.set(state.anchorX, state.anchorY)
