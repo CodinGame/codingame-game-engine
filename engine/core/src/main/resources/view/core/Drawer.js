@@ -382,6 +382,7 @@ export class Drawer {
     }
     if (parsedFrame === parsedFrame.previous) {
       parsedFrame.frameInfo.date = 0
+      parsedFrame.frameInfo.frameDuration = 0
     } else {
       parsedFrame.frameInfo.date = parsedFrame.previous.frameInfo.date + parsedFrame.previous.frameInfo.frameDuration
     }
