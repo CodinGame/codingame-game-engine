@@ -96,8 +96,9 @@ export class LoadCommand {
         trimmed: false
       }
     }
-    if (!PIXI.utils.TextureCache.hasOwnProperty('data:text/json;charset=UTF-8,' + JSON.stringify(data) + '_image')) {
-      this.loader.add('data:text/json;charset=UTF-8,' + JSON.stringify(data), {crossOrigin: true})
+    const dataString = 'data:text/json;charset=UTF-8,' + JSON.stringify(data)
+    if (!PIXI.utils.TextureCache.hasOwnProperty(dataString + '_image')) {
+      this.loader.add(dataString, {crossOrigin: true})
     }
   }
 
