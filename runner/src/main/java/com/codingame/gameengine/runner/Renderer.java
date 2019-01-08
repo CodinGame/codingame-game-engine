@@ -230,14 +230,14 @@ class Renderer {
                             } else {
                                 if (assetsNeedHashing) {
                                     String newName = hashAsset(f);
-                                    images.addProperty(origAssetsPath.relativize(f).toString(), newName);
+                                    images.addProperty(origAssetsPath.relativize(f).toString().replace("\\", "/"), newName);
                                     Files.copy(
                                         f, tmpdir.resolve("hashed_assets").resolve(newName),
                                         StandardCopyOption.REPLACE_EXISTING
                                     );
                                 } else {
                                     images.addProperty(
-                                        origAssetsPath.relativize(f).toString(),
+                                        origAssetsPath.relativize(f).toString().replace("\\", "/"),
                                         tmpdir.relativize(f).toString().replace("\\", "/")
                                     );
                                 }
