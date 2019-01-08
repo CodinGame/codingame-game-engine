@@ -69,6 +69,6 @@ public class CommandLinePlayerAgent extends Agent {
 
     @Override
     public void destroy() {
-        process.destroy()
+        process.destroy();
     }
 }
