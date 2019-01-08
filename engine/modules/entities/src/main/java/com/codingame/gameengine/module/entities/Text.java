@@ -1,7 +1,5 @@
 package com.codingame.gameengine.module.entities;
 
-import java.util.Objects;
-
 /**
  * Represents a label on screen.
  */
