@@ -1,7 +1,9 @@
 package com.codingame.gameengine.module.entities;
 
 import java.util.Objects;
-
+/**
+ * Generic type for entities containing text.
+ */
 public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends TextureBasedEntity<T> {
     protected String text = "";
     protected int fontSize = 26;
