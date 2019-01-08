@@ -105,7 +105,7 @@ public class Text extends TextBasedEntity<Text> {
     }
 
     /**
-     * Returs the thickness of the stroke of this <code>Text</code> in pixels.
+     * Returns the thickness of the stroke of this <code>Text</code> in pixels.
      * 
      * @return the thickness of the stroke of this <code>Text</code>
      */
@@ -147,7 +147,7 @@ public class Text extends TextBasedEntity<Text> {
     /**
      * Sets the weight of the font of this <code>Text</code>.
      * 
-     * @param style
+     * @param weight
      *            the FontWeight of the <code>Text</code>.
      * @return this <code>Text</code>.
      */
