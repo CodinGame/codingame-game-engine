@@ -17,11 +17,9 @@ public class Text extends TextBasedEntity<Text> {
         }
     }
 
-    private String text = "";
     private int strokeColor = 0;
     private double strokeThickness = 0;
     private int fillColor = 0;
-    private int fontSize = 26;
     private String fontFamily = "Lato";
     private FontWeight fontWeight = FontWeight.NORMAL;
 
