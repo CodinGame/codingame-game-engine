@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -193,9 +194,11 @@ class Renderer {
                 jsonAssets.addProperty("baseUrl", assetsPath);
             }
             JsonObject images = new JsonObject();
+            JsonArray fonts = new JsonArray();
             JsonArray sprites = new JsonArray();
             jsonAssets.add("images", images);
             jsonAssets.add("sprites", sprites);
+            jsonAssets.add("fonts", fonts);
 
             Path origAssetsPath = tmpdir.resolve("assets");
             try {
@@ -226,6 +229,37 @@ class Renderer {
                                 try (FileWriter writer = new FileWriter(jsonToWriteTo)) {
                                     Gson gson = new GsonBuilder().create();
                                     gson.toJson(jsonObject, writer);
+                                }
+                            } else if (isFont(f)) {
+                                if (assetsNeedHashing) {
+                                    List<String> content = Files.readAllLines(f);
+                                    String newContent = "";
+                                    Pattern regex = Pattern.compile("<page.*file=\\\"([^\\\"]+)\\\".*\\/>"); // looking for the font resources
+                                    for(String line : content) {
+                                        Matcher ressourcesMatcher = regex.matcher(line);
+                                        String newLine = "";
+                                        int startCpy = 0;
+                                        while(ressourcesMatcher.find()) {
+                                            int startMatch = ressourcesMatcher.start(1);
+                                            int endMatch = ressourcesMatcher.end(1);
+                                            newLine = newLine.concat(line.substring(startCpy,startMatch));
+                                            Path assetPath = f.getParent().resolve(ressourcesMatcher.group(1));
+                                            newLine = newLine.concat(hashAsset(assetPath));
+                                            startCpy = endMatch;
+                                        }
+                                        newLine = newLine.concat(line.substring(startCpy));
+                                        newContent = newContent.concat("\n".concat(newLine));
+                                    }
+                                    String newName = hashAsset(f);
+                                    fonts.add(newName);
+                                    Files.write(
+                                        tmpdir.resolve("hashed_assets").resolve(newName),
+                                        newContent.getBytes(),
+                                        StandardOpenOption.CREATE);
+                                } else {
+                                    fonts.add(
+                                        tmpdir.relativize(f).toString().replace("\\", "/")
+                                    );
                                 }
                             } else {
                                 if (assetsNeedHashing) {
@@ -261,7 +295,9 @@ class Renderer {
     private static boolean isSpriteJson(Path f) {
         return "json".equals(FilenameUtils.getExtension(f.toString()));
     }
-
+    private static boolean isFont(Path f) {
+        return "fnt".equals(FilenameUtils.getExtension(f.toString()));
+    }
     public static List<Path> generateView(String jsonResult, String assetsPath) {
         List<Path> paths;
 
