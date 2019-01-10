@@ -21,8 +21,7 @@ The following limits will make your game run faster, but they are not strict lim
 
 - Statement length: less than 6k characters
 - Total entity creations: less than 200.
-- Max timeout: 50ms per round
-- Max rounds: 250 rounds.
+- Max total time alloted to the players: 25s.
 
 ## Protocol:
 
