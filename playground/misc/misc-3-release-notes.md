@@ -7,7 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### New feature
 
-- [Buffered Groups](graphics/graphics-6-advanced.md#buffered-groups) have been added.
+- [Buffered Groups](playground/graphics/graphics-6-advanced.md#buffered-groups) have been added.
 
 ### Bug fixes
 
@@ -42,9 +42,9 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### New features
 
-- [Solo](getting-started/tutorial-3-solo.md) and [Optimization](getting-started/tutorial-4-opti.md) games have been added.
+- [Solo](playground/getting-started/tutorial-3-solo.md) and [Optimization](playground/getting-started/tutorial-4-opti.md) games have been added.
     - Implementation of Multiplayer and Solo classes extending from formerly used `AbstractPlayer`, `GameManager` and `GameRunner`. These features are *not* backward compatible.
-    - [Test cases](core-concepts/core-4-configuration.md#test-case-file) have been added.
+    - [Test cases](playground/core-concepts/core-4-configuration.md#test-case-file) have been added.
     - The configuration verification has been updated to match the new constraints.
     - The form to set up basic configurations when exporting the game has been updated. It now handles the different type of games and specific settings for each of them.
 

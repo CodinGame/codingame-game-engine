@@ -18,7 +18,7 @@ Include the dependency below in the pom.xml of your project.
 	<version>2.4</version>
 </dependency>
 ```
-Or a more recent version. See the [Release Notes](misc/misc-3-release-notes.md).
+Or a more recent version. See the [Release Notes](playground/misc/misc-3-release-notes.md).
 
 The GraphicEntityModule is an injectable Guice Singleton.
 
@@ -32,4 +32,4 @@ The GraphicEntityModule is an injectable Guice Singleton.
 
 # Go further and create your own modules
 
-Using this module is the easiest way to draw your graphical entities in the viewer. Although it provides many features, you might want to add your own. See the [SDK extensions](extensions/extensions-1-tools.md) to get help starting!
+Using this module is the easiest way to draw your graphical entities in the viewer. Although it provides many features, you might want to add your own. See the [SDK extensions](playground/extensions/extensions-1-tools.md) to get help starting!

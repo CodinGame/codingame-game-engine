@@ -16,7 +16,7 @@ Include the dependency below in the pom.xml of your project.
   <version>2.13</version>
 </dependency>
 ```
-Or a more recent version. See the [Release Notes](misc/misc-3-release-notes.md).
+Or a more recent version. See the [Release Notes](playground/misc/misc-3-release-notes.md).
 
 As the Game Runner is meant for testing, you must create a Class with a `main` method in `src/test/java`.
 

@@ -56,7 +56,7 @@ public class MyModule implements Module {
 
 ### Sending data
 
-The [Game Manager](core-concepts/core-3-game-manager.md) offers two methods for you to send data to your Javascript module. You should use them in the methods implemented from `Module`.
+The [Game Manager](playground/core-concepts/core-3-game-manager.md) offers two methods for you to send data to your Javascript module. You should use them in the methods implemented from `Module`.
 
 ```java
 /**

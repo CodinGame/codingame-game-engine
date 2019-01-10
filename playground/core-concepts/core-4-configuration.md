@@ -13,7 +13,7 @@ For type-specific configuration, see:
 
 In order to use the CodinGame SDK, you need to correctly configure the file `pom.xml`.
 
-A good start would be to check the [game skeleton' pom.xml](https://github.com/CodinGame/game-skeleton/blob/master/pom.xml). It contains all you need to start your project. Make sure you use the lastest version of the SDK. See the [Release Notes](misc/misc-3-release-notes.md).
+A good start would be to check the [game skeleton' pom.xml](https://github.com/CodinGame/game-skeleton/blob/master/pom.xml). It contains all you need to start your project. Make sure you use the lastest version of the SDK. See the [Release Notes](playground/misc/misc-3-release-notes.md).
 
 Think of updating the `artifactId` value with the name of your game in case you want to create several games.
 
@@ -45,7 +45,7 @@ See [Stub Generator Syntax](https://github.com/CodinGame/codingame-game-engine/b
 
 Assets are expected to be placed in the `src/main/resources/view/assets` folder of your game's project.
 
-You can then use the images in the texture cache with the [Graphic Entity Module](graphics/graphics-1-introduction.md):
+You can then use the images in the texture cache with the [Graphic Entity Module](playground/graphics/graphics-1-introduction.md):
 ```java
 entityManager.createSprite.setImage("background.png");
 ```
@@ -62,7 +62,7 @@ InputStream in = ClassLoader.getSystemResourceAsStream("my_awesome_file.txt");
 
 ### Levels & Leagues
 
-You have the possibility to create several levels (also named leagues). A new level allows you to set a different configuration and different rules (you can get the league level in the Referee with the [Game Manager](core-concepts/core-4-game-manager.md)).
+You have the possibility to create several levels (also named leagues). A new level allows you to set a different configuration and different rules (you can get the league level in the Referee with the [Game Manager](playground/core-concepts/core-4-game-manager.md)).
 
 There is a difference between multiplayer and solo game levels:
 - In a **multiplayer** game, your levels become leagues. The players will need to beat your Boss in the leaderboard to access the next league.

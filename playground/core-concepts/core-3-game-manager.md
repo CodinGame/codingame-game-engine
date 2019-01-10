@@ -106,7 +106,7 @@ You can set the maximum number of turns before the game ends (even if there are 
 gameManager.setMaxTurns(200);
 ```
 
->This parameter is an important performance setting. See the [Guidelines](misc/misc-1-guidelines.md) for more details.
+>This parameter is an important performance setting. See the [Guidelines](playground/misc/misc-1-guidelines.md) for more details.
 
 ### Turn maximum time
 
@@ -116,7 +116,7 @@ You can set the maximum time allowed to a Player to execute their code for a tur
 gameManager.setTurnMaxTime(45);
 ```
 
->This parameter is an important performance setting. See the [Guidelines](misc/misc-1-guidelines.md) for more details.
+>This parameter is an important performance setting. See the [Guidelines](playground/misc/misc-1-guidelines.md) for more details.
 
 ### Tooltips
 

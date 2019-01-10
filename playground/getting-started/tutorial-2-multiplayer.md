@@ -67,7 +67,7 @@ The class to run is test/java/Main.java:
 
 This will launch a [web server](http://localhost:8888/) to serve a page with the viewer of the game.
 
-![Game Preview](resources/testhtml.png)
+![Game Preview](playground/resources/testhtml.png)
 
 Use this page to see the rendering of your game. It also allows you to export a zip archive of the game.
 
@@ -81,6 +81,6 @@ Then, import on CodinGame the game you have exported during the previous step. T
 
 Now that you are able to start a game on your computer and export it to CodinGame, you can start creating your own game. For that, it is suggested you start with the Skeleton: [https://github.com/CodinGame/game-skeleton](https://github.com/CodinGame/game-skeleton)
 
-You can also read the code of others games (see [Examples](misc/misc-2-examples.md)). More advanced documentation is available in the [Core concepts](core-concepts/core-1-introduction.md) section.
+You can also read the code of others games (see [Examples](playground/misc/misc-2-examples.md)). More advanced documentation is available in the [Core concepts](playground/core-concepts/core-1-introduction.md) section.
 
 If you do not have an artistic mind, we provide a [Github asset repository](https://github.com/CodinGame/codingame-sdk-assets) with a lot of free graphical resources to bootstrap your game.
