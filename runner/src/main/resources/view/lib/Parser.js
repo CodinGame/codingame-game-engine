@@ -1,6 +1,7 @@
 const OCCURENCE_TOKEN = '@>'
 
 function ParseError (name, params) {
+  this.message = name + ': ' + JSON.stringify(params)
   this.name = name
   this.params = params
 }
@@ -219,10 +220,10 @@ Parser.prototype.parseTree = function (node, input, loopCnt) {
           const name = vari.trim()
           match = name.match(/"(.*)"/)
           if (match) {
-            return {type: 'CONST', value: match[1]}
+            return { type: 'CONST', value: match[1] }
           } else {
             const codeName = parser.getFirstCodeName(input.vars, name)
-            return {type: 'VAR', node: input.getVar(codeName)}
+            return { type: 'VAR', node: input.getVar(codeName) }
           }
         })
         write.param.separator = separator
@@ -343,7 +344,7 @@ Parser.prototype.extractParam = function (type) {
   return type.substring(iopen + 1, iclose)
 }
 Parser.prototype.getLineNumber = function () {
-  return this.code.substring(0, this.cursor - 1).split('').filter(r => r === '\n').length + 1
+  return this.code.substring(0, this.cursor - 1).split('\n').length
 }
 
 export default Parser
