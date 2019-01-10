@@ -2,6 +2,84 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next version
+
+### New features
+
+- [BitmapText](playground/graphics/graphics-text#BitmapText) have been added.
+- [Text](playground/graphics/graphics-text#Text) can be bold.
+- Shapes now have a blendmode property.
+
+### Bug fixes
+
+- Subfolders of the asset folder are working on windows now.
+- The frame zero has now a duration of zero
+- The [SpriteSheetLoader](playground/graphics/graphics-spritesheet#Using the SpriteSheetLoader) doesn't reload the SpriteSheet if it's already in the TextureCache.
+- The local player now uses the parameters stored in the LocalStorage.
+- Removed the max turn warning, since it's replaced by a limit of alloted time.
+- Better process cleanup.
+- Fixed security issue (ZipSlip bug).
+- Fixed the minimum max time alloted to players (now it really is 50ms).
+
+
+## 2.15
+*November 29, 2018*
+
+### Bug fixes
+
+- Frame zero is not animated anymore.
+- Less spam warnings.
+
+## 2.14
+*October 30, 2018*
+
+### New features
+
+- Limited the max total alloted time to the players to 25s.
+- SpriteAnimation now a has reworked API and a pause function.
+
+### Bug fixes
+
+- Better error handling.
+- Reworked the commit system, fixing some big issues and reducing data usage.
+
+## 2.11
+*September 14, 2018*
+
+### Bug fixes
+
+- Fixed BufferedGroup performance issues.
+- Better handling of modules errors.
+
+## 2.9
+*August 21, 2018*
+
+### New feature
+
+- Local test page design now matches the website one
+
+## 2.8
+*August 9, 2018*
+
+### Bug fixes
+
+- Reworked the Test case API.
+- Fixed some WEBGL memory leaks.
+
+## 2.7
+*August 1, 2018*
+
+### Bug fixes
+
+- Handling the abscence of logo in the demo.
+- Limiting the size of the game summary.
+
+## 2.5
+*July 6, 2018*
+
+### New feature
+ - Game Params are now displayed in the local test page.
+
 ## 2.4
 *June 25, 2018*
 
