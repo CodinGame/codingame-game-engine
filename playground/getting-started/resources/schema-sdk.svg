@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="216.58037mm"
+   height="105.45536mm"
+   viewBox="0 0 216.58037 105.45536"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="schema-sdk.svg">
+  <defs
+     id="defs2">
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         id="path4839"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL-7"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4839-6"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="EmptyTriangleOutL-7-5"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4839-6-9"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         transform="matrix(0.8,0,0,0.8,-4.8,0)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="658.70562"
+     inkscape:cy="425.14185"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1046"
+     inkscape:window-x="1920"
+     inkscape:window-y="18"
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(3.202327,1.9791754)">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.27971804;stroke-miterlimit:24.89999962;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect17564"
+       width="216.58037"
+       height="105.45536"
+       x="-3.202327"
+       y="-1.9791754" />
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.26603565;stroke-opacity:1"
+       id="rect4504"
+       width="35.980354"
+       height="31.023111"
+       x="18.21246"
+       y="25.363171" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="35.550816"
+       y="23.061752"
+       id="text4508"><tspan
+         sodipodi:role="line"
+         id="tspan4506"
+         x="35.550816"
+         y="23.061752"
+         style="font-size:4.93888906px;text-align:center;text-anchor:middle;stroke-width:0.26458332px">Player</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:40.0000006%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="20.33511"
+       y="30.526783"
+       id="text4512"><tspan
+         sodipodi:role="line"
+         x="20.33511"
+         y="30.526783"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4514">Stores information</tspan><tspan
+         sodipodi:role="line"
+         x="20.33511"
+         y="35.181797"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4518">about a player in</tspan><tspan
+         sodipodi:role="line"
+         x="20.33511"
+         y="39.836807"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4520">the game.</tspan><tspan
+         sodipodi:role="line"
+         x="20.33511"
+         y="44.491821"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4526" /><tspan
+         sodipodi:role="line"
+         x="20.33511"
+         y="48.725155"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4522">Also used for</tspan><tspan
+         sodipodi:role="line"
+         x="20.33511"
+         y="53.380165"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4524">communication.</tspan></text>
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.26603565;stroke-opacity:1"
+       id="rect4504-3"
+       width="35.980354"
+       height="31.023113"
+       x="18.030951"
+       y="67.380562" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="36.252636"
+       y="65.07914"
+       id="text4508-8"><tspan
+         sodipodi:role="line"
+         id="tspan4506-8"
+         x="36.252636"
+         y="65.07914"
+         style="font-size:4.93888906px;text-align:center;text-anchor:middle;stroke-width:0.26458332px">Referee</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:40.0000006%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="20.153601"
+       y="72.544174"
+       id="text4512-3"><tspan
+         sodipodi:role="line"
+         x="20.153601"
+         y="72.544174"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4524-3">Logic of the game.</tspan><tspan
+         sodipodi:role="line"
+         x="20.153601"
+         y="77.199188"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4590" /><tspan
+         sodipodi:role="line"
+         x="20.153601"
+         y="81.432518"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4592">Called by the</tspan><tspan
+         sodipodi:role="line"
+         x="20.153601"
+         y="86.087532"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4594">GameManager on</tspan><tspan
+         sodipodi:role="line"
+         x="20.153601"
+         y="90.742546"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4596">each game turn.</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.25125399;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.005016, 1.005016;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 67.771115,18.242559 V 98.940474"
+       id="path4598"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:44.99999881%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="34.557545"
+       y="5.0133948"
+       id="text4602"><tspan
+         sodipodi:role="line"
+         id="tspan4600"
+         x="34.557545"
+         y="5.0133948"
+         style="font-size:4.23333367px;line-height:44.99999881%;text-align:center;text-anchor:middle;stroke-width:0.26458332px">Classes provided by</tspan><tspan
+         sodipodi:role="line"
+         x="34.557545"
+         y="9.972127"
+         style="font-size:4.23333367px;line-height:44.99999881%;text-align:center;text-anchor:middle;stroke-width:0.26458332px"
+         id="tspan4604">the developer of the game</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:40.0000006%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="105.27384"
+       y="46.463818"
+       id="text4512-3-6"><tspan
+         sodipodi:role="line"
+         x="105.27384"
+         y="51.32967"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan4596-8" /></text>
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.36492643;stroke-opacity:1"
+       id="rect4504-3-3"
+       width="61.394855"
+       height="34.20974"
+       x="74.979614"
+       y="41.772137" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="104.26441"
+       y="39.421265"
+       id="text4508-8-0"><tspan
+         sodipodi:role="line"
+         id="tspan4506-8-3"
+         x="104.26441"
+         y="39.421265"
+         style="font-size:4.93888906px;text-align:center;text-anchor:middle;stroke-width:0.26458332px">GameManager</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:40.0000006%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="75.994492"
+       y="46.886299"
+       id="text4512-3-0"><tspan
+         sodipodi:role="line"
+         x="75.994492"
+         y="46.886299"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan13155">Main loop that calls the referee</tspan><tspan
+         sodipodi:role="line"
+         x="75.994492"
+         y="51.541313"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan13157">and the players.</tspan><tspan
+         sodipodi:role="line"
+         x="75.994492"
+         y="56.196323"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan13159" /><tspan
+         sodipodi:role="line"
+         x="75.994492"
+         y="60.429657"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan13161">Allow to access the list of players,</tspan><tspan
+         sodipodi:role="line"
+         x="75.994492"
+         y="65.084671"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan13169">send data to view, set frame</tspan><tspan
+         sodipodi:role="line"
+         x="75.994492"
+         y="69.739685"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan13171">durations, add tooltips, etc.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:44.99999881%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="138.51073"
+       y="8.301158"
+       id="text4602-6"><tspan
+         sodipodi:role="line"
+         x="138.51073"
+         y="8.301158"
+         style="font-size:4.93888939px;line-height:44.99999881%;text-align:center;text-anchor:middle;stroke-width:0.26458332px"
+         id="tspan4604-2">CodinGame SDK</tspan></text>
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:0.36451209;stroke-opacity:1"
+       id="rect4504-3-3-2"
+       width="61.395267"
+       height="34.131874"
+       x="141.96924"
+       y="41.768505" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="172.31256"
+       y="39.417839"
+       id="text4508-8-0-4"><tspan
+         sodipodi:role="line"
+         id="tspan4506-8-3-7"
+         x="172.31256"
+         y="39.417839"
+         style="font-size:4.93888906px;text-align:center;text-anchor:middle;stroke-width:0.26458332px">GraphicEntityModule</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:40.0000006%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="142.98433"
+       y="46.882874"
+       id="text4512-3-0-7"><tspan
+         sodipodi:role="line"
+         x="142.98433"
+         y="46.882874"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan13171-8">Module used to draw sprites and</tspan><tspan
+         sodipodi:role="line"
+         x="142.98433"
+         y="51.537888"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan17521">shapes in the Viewer.</tspan><tspan
+         sodipodi:role="line"
+         x="142.98433"
+         y="56.192898"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan17554" /><tspan
+         sodipodi:role="line"
+         x="142.98433"
+         y="60.426231"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan17556">Usage of this module is optional</tspan><tspan
+         sodipodi:role="line"
+         x="142.98433"
+         y="65.081245"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan17558">but it allows to create a viewer</tspan><tspan
+         sodipodi:role="line"
+         x="142.98433"
+         y="69.736259"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan17560">faster than developing your own</tspan><tspan
+         sodipodi:role="line"
+         x="142.98433"
+         y="74.391273"
+         style="font-size:3.52777767px;line-height:40.0000006%;stroke-width:0.26458332px"
+         id="tspan17562">viewer module.</tspan></text>
+  </g>
+</svg>
