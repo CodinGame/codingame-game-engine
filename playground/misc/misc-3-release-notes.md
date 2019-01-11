@@ -7,8 +7,8 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🎁 New features
 
-- [BitmapText](playground/graphics/graphics-text#BitmapText) has been added.
-- [Text](playground/graphics/graphics-text#Text) can be bold.
+- [BitmapText](playground/graphics/graphics-text.md#BitmapText) has been added.
+- [Text](playground/graphics/graphics-text.md#Text) can be bold.
 - Shapes now have a blendmode property.
 
 ### 🐞 Bug fixes
@@ -35,7 +35,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ## 2.14
 *October 30, 2018*
 
-### New features
+### 🎁 New features
 
 - Limited the max total alloted time to the players to 25s.
 - SpriteAnimation now a has reworked API and a pause function.
