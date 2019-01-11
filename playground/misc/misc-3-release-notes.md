@@ -71,7 +71,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### Bug fixes
 
-- Handling the abscence of logo in the demo.
+- Handling of the absence of a logo in the demo.
 - Limiting the size of the game summary.
 
 ## 2.5
