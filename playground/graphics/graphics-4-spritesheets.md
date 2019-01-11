@@ -2,7 +2,7 @@
 
 The Graphic Entity Module can cut and handle spritesheets. There are two ways of doing that.
 
-## Using the SpriteSheetSplitter
+## Using the SpriteSheetSplitter <a name="SpriteSheetSplitter"></a>
 
 This is the easiest way to create a set of sprites from a spritesheet. This solution is good for prototyping but it is performance costly.
 
