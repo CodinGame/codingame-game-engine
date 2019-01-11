@@ -6,7 +6,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### New features
 
-- [BitmapText](playground/graphics/graphics-text#BitmapText) have been added.
+- [BitmapText](playground/graphics/graphics-text#BitmapText) has been added.
 - [Text](playground/graphics/graphics-text#Text) can be bold.
 - Shapes now have a blendmode property.
 
