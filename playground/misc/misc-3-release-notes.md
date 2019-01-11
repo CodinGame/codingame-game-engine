@@ -28,7 +28,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### Bug fixes
 
 - Frame zero is not animated anymore.
-- Less spam warnings.
+- Less spammy warnings.
 
 ## 2.14
 *October 30, 2018*
