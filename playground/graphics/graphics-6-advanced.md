@@ -16,7 +16,7 @@ The behaviour can be different:
 
 If your game uses tiles, you might experience some artifacts when resizing the viewer.
 
-![Artifacts](playground/resources/artifacts.png)
+![Artifacts](resources/artifacts.png)
 
 They appear due to rounding errors. These artifacts can be reduced thanks to `BufferedGroup`. Buffered groups work the same way as `Group`, but the viewer renders its children when they change into a dynamic texture before being displayed. 
 ⚠**Warnings**⚠

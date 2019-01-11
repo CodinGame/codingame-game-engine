@@ -14,7 +14,7 @@ The `Referee` class must implement the methods `init` and `gameTurn`. The `Playe
 
 The entry point of the game is the class `SoloGameManager` or `MultiplayerGameManager` (corresponding to the type of game you are creating). This class calls the `Referee` on each turn, and sends data to the viewer.
 
-![Main classes](playground/resources/schema-sdk.svg)
+![Main classes](resources/schema-sdk.svg)
 
 # Resources
 

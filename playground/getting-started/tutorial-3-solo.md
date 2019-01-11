@@ -74,7 +74,7 @@ Here's the file hierarchy for the project Fishy Adventures:
 
 The class to run is test/java/Main.java. This will launch a [web server](http://localhost:8888/) to serve a page with the viewer of the game.
 
-![Game Preview](playground/resources/testhtml.png)
+![Game Preview](resources/testhtml.png)
 
 Use this page to see the rendering of your game. It also allows you to export a zip archive of the game.
 

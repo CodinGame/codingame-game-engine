@@ -8,7 +8,7 @@ This is the easiest way to create a set of sprites from a spritesheet. This solu
 
 For this example, we will use this spritesheet (taken from our [free to use assets repository](https://github.com/CodinGame/codingame-sdk-assets)):
 
-![Spritesheet](playground/resources/spritesheet.png)
+![Spritesheet](resources/spritesheet.png)
 
 - 12 images
 - 4 images per row
