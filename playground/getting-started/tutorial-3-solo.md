@@ -65,7 +65,7 @@ Here's the file hierarchy for the project Fishy Adventures:
 │           └── log4j2.properties
 ```
 
-- **./config:** contains the settings such as the game title, statement, test cases, number of players, etc.
+- **./config:** contains settings such as the statement, test cases, number of players, etc.
 - **./src/main/java:** source code of the game itself
 - **./src/main/resources:** graphical assets and configuration of the view
 - **./src/test/java:** classes used for local development (AI codes to test your game)
