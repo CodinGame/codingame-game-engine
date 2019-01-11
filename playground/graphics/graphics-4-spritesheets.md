@@ -25,7 +25,7 @@ String[] seaweedSprites = graphicEntityModule.createSpriteSheetSplitter()
     .setOrigCol(0)
     .setImagesPerRow(4)
     .setName("seaweed")
-    .load();
+    .split();
 ```
 
 We can now use these images in Sprite entites as shown [here](graphics-2-entities.md#creating-a-group-of-sprites).
