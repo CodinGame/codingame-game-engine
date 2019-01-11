@@ -23,12 +23,10 @@ This is the main configuration file. It must be located in the `config` folder a
 
 Example of `config.ini`.
 ```
-title=Game Example
 type=multi
 min_players=2
 max_players=2
 ```
-- **title**: The title of the game, used internally by the platform.
 - **type**: The type of the game, must be either `multi`, `solo` or `opti`.
 - **min_players**: The minimum number of players to play the game. Must be 1 for Solo and Optimization games, up to 8 for Multiplayer games.
 - **max_players**: The maximum number of players to play the game. Must be 1 for Solo and Optimization games, up to 8 for Multiplayer games. Of course, you cannot have max_players &lt; min_players.
@@ -66,9 +64,9 @@ You have the possibility to create several levels (also named leagues). A new le
 
 There is a difference between multiplayer and solo game levels:
 - In a **multiplayer** game, your levels become leagues. The players will need to beat your Boss in the leaderboard to access the next league.
-- In a **solo** game, they are several questions. Players can switch between the different questions as they wish to.
+- In a **solo** game, there can only be on level.
 
-To create new levels, you need to make new folders named `level<number>` in the `config` directory. Their `<number>` must be positive and will be used to display your questions/leagues in the right order. Each level can be configured like the `config` directory, which allow you to have different statements, stubs, titles, etc.
+To create multiple leagues, you need to make new folders named `level<number>` in the `config` directory. Their `<number>` must be positive and will be used to display your leagues in the right order. Each level can be configured like the `config` directory, which allow you to have different statements, stubs, etc.
 
 If you want to use the same configuration in several levels, you do not need to copy your files in every directory. If a file is missing in a `level` folder, it will inherit from `config` automatically when uploading your game.
 

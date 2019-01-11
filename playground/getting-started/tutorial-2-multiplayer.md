@@ -54,7 +54,7 @@ Here's the file hierarchy for the project Tic-tac-toe:
 │           └── log4j2.properties
 ```
 
-- **./config:** contains the settings such as the game title, statement, number of players, etc.
+- **./config:** contains settings such as the statement, number of players, etc.
 - **./src/main/java:** source code of the game itself
 - **./src/main/resources:** graphical assets and configuration of the view
 - **./src/test/java:** classes used for local development (AI codes to test your game)
