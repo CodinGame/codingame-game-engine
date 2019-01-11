@@ -13,7 +13,7 @@ Include the dependency below in the pom.xml of your project.
 <dependency>
   <groupId>com.codingame.gameengine</groupId>
   <artifactId>runner</artifactId>
-  <version>2.13</version>
+  <version>3.0.0</version>
 </dependency>
 ```
 Or a more recent version. See the [Release Notes](playground/misc/misc-3-release-notes.md).
@@ -88,7 +88,7 @@ Many of the viewer's game-specific parameters may be changed by the default `con
 
 See the [Viewer configuration](core-4-configuration.md#viewer-configuration) for more details.
 
-# Testing
+# Testing <a name="testing"></a>
 
 You can run your game without launching a server. This is useful to batch test your game in various conditions.
 
