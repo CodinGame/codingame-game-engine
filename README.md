@@ -6,6 +6,6 @@ This engine is meant to be imported with maven from a project such as [the Game 
 
 # Getting started
 
-Check the documentation on the [tech.io playground](https://tech.io/playgrounds/25775).
+Check the documentation on the [tech.io playground](https://www.codingame.com/playgrounds/25775).
 
 Check the [javadoc](https://codingame.github.io/codingame-sdk-doc/).
