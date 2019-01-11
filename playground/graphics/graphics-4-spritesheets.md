@@ -2,7 +2,7 @@
 
 The Graphic Entity Module can cut and handle spritesheets. There are two ways of doing that.
 
-## Using the SpriteSheetLoader
+## Using the SpriteSheetSplitter
 
 This is the easiest way to create a set of sprites from a spritesheet. This solution is good for prototyping but it is performance costly.
 
@@ -16,7 +16,7 @@ For this example, we will use this spritesheet (taken from our [free to use asse
 - We want to use all the images starting from the top left corner, so the `OrigRow` and `OrigCol` must be set to 0
 
 ```java
-String[] seaweedSprites = graphicEntityModule.createSpriteSheetLoader()
+String[] seaweedSprites = graphicEntityModule.createSpriteSheetSplitter()
     .setSourceImage("spritesheet.png")
     .setImageCount(12)
     .setWidth(128)
