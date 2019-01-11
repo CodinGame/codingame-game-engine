@@ -206,7 +206,7 @@ class Serializer {
         }
     }
 
-    private String serializeLoadSpriteSheet(SpriteSheetLoader spriteSheet) {
+    private String serializeLoadSpriteSheet(SpriteSheetSplitter spriteSheet) {
         return join(
             spriteSheet.getName(), spriteSheet.getSourceImage(),
             spriteSheet.getWidth(), spriteSheet.getHeight(), spriteSheet.getOrigRow(), spriteSheet.getOrigCol(), spriteSheet.getImageCount(),
@@ -214,7 +214,7 @@ class Serializer {
         );
     }
 
-    public Optional<String> serializeLoadSpriteSheets(List<SpriteSheetLoader> spriteSheets) {
+    public Optional<String> serializeLoadSpriteSheets(List<SpriteSheetSplitter> spriteSheets) {
         if (spriteSheets.isEmpty()) {
             return Optional.empty();
         } else {
