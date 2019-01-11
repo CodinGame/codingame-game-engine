@@ -4,7 +4,7 @@ import java.util.stream.IntStream;
 
 import com.google.inject.Inject;
 
-public class SpriteSheetLoader {
+public class SpriteSheetSplitter {
     private String name;
     private String sourceImage;
     private Integer width;
@@ -17,7 +17,7 @@ public class SpriteSheetLoader {
     private final GraphicEntityModule graphicEntityModule;
 
     @Inject
-    public SpriteSheetLoader(GraphicEntityModule graphicEntityModule) {
+    public SpriteSheetSplitter(GraphicEntityModule graphicEntityModule) {
         this.graphicEntityModule = graphicEntityModule;
     }
 
@@ -53,51 +53,51 @@ public class SpriteSheetLoader {
         return imagesPerRow;
     }
 
-    public SpriteSheetLoader setName(String name) {
+    public SpriteSheetSplitter setName(String name) {
         this.name = name;
         return this;
     }
 
-    public SpriteSheetLoader setSourceImage(String sourceImage) {
+    public SpriteSheetSplitter setSourceImage(String sourceImage) {
         this.sourceImage = sourceImage;
         return this;
     }
 
-    public SpriteSheetLoader setWidth(int width) {
+    public SpriteSheetSplitter setWidth(int width) {
         this.width = width;
         return this;
     }
 
-    public SpriteSheetLoader setHeight(int height) {
+    public SpriteSheetSplitter setHeight(int height) {
         this.height = height;
         return this;
     }
 
-    public SpriteSheetLoader setOrigRow(int origRow) {
+    public SpriteSheetSplitter setOrigRow(int origRow) {
         this.origRow = origRow;
         return this;
     }
 
-    public SpriteSheetLoader setOrigCol(int origCol) {
+    public SpriteSheetSplitter setOrigCol(int origCol) {
         this.origCol = origCol;
         return this;
     }
 
-    public SpriteSheetLoader setImageCount(int imageCount) {
+    public SpriteSheetSplitter setImageCount(int imageCount) {
         this.imageCount = imageCount;
         return this;
     }
 
-    public SpriteSheetLoader setImagesPerRow(int imagesPerRow) {
+    public SpriteSheetSplitter setImagesPerRow(int imagesPerRow) {
         this.imagesPerRow = imagesPerRow;
         return this;
     }
 
     /**
-     * Load a spritesheet (all fields are required except imagesPerRow). Returns an array of image names that can be used in Sprite or SpriteAnimation.
+     * Splits up a spritesheet (all fields are required except imagesPerRow). Returns an array of image names that can be used in Sprite or SpriteAnimation.
      * @return an array of image names.
      */
-    public String[] load() {
+    public String[] split() {
         if (name == null) {
             throw new IllegalStateException("invalid name");
         }
@@ -120,7 +120,7 @@ public class SpriteSheetLoader {
             throw new IllegalStateException("invalid origCol");
         }
 
-        graphicEntityModule.loadSpriteSheet(this);
+        graphicEntityModule.loadSpriteSheetSplitter(this);
         if (imageCount > 1) {
             return IntStream.range(0, imageCount).mapToObj(i -> name + i).toArray(String[]::new);
         } else {
