@@ -32,7 +32,7 @@ public class GraphicEntityModule implements Module {
 
     static int ENTITY_COUNT = 0;
 
-    private List<SpriteSheetLoader> newSpriteSheets;
+    private List<SpriteSheetSplitter> newSpriteSheetSplitters;
     private List<Entity<?>> newEntities;
     private List<Entity<?>> entities;
     private Map<String, WorldState> worldStates;
@@ -42,7 +42,7 @@ public class GraphicEntityModule implements Module {
 
     private GameManager<AbstractPlayer> gameManager;
     @Inject private Serializer gameSerializer;
-    @Inject private Provider<SpriteSheetLoader> spriteSheetProvider;
+    @Inject private Provider<SpriteSheetSplitter> spriteSheetProvider;
 
     @Inject
     GraphicEntityModule(GameManager<AbstractPlayer> gameManager) {
@@ -50,7 +50,7 @@ public class GraphicEntityModule implements Module {
         world = new World();
         entities = new ArrayList<>();
         newEntities = new ArrayList<>();
-        newSpriteSheets = new ArrayList<>();
+        newSpriteSheetSplitters = new ArrayList<>();
         lockWorld = false;
         worldStates = new HashMap<>();
         currentWorldState = new WorldState("0");
@@ -89,16 +89,16 @@ public class GraphicEntityModule implements Module {
         return world;
     }
 
-    void loadSpriteSheet(SpriteSheetLoader spritesheet) {
-        newSpriteSheets.add(spritesheet);
+    void loadSpriteSheetSplitter(SpriteSheetSplitter spritesheetsplitter) {
+        newSpriteSheetSplitters.add(spritesheetsplitter);
     }
 
     /**
-     * Create a spritesheet loader.
+     * Create a spritesheet splitter.
      * 
-     * @return a SpriteSheetLoader
+     * @return a SpriteSheetSplitter
      */
-    public SpriteSheetLoader createSpriteSheetLoader() {
+    public SpriteSheetSplitter createSpriteSheetSplitter() {
         return spriteSheetProvider.get();
     }
 
@@ -177,8 +177,8 @@ public class GraphicEntityModule implements Module {
 
         autocommit();
 
-        Optional<String> load = gameSerializer.serializeLoadSpriteSheets(newSpriteSheets);
-        newSpriteSheets.clear();
+        Optional<String> load = gameSerializer.serializeLoadSpriteSheets(newSpriteSheetSplitters);
+        newSpriteSheetSplitters.clear();
 
         Optional<String> create = gameSerializer.serializeCreateEntities(newEntities);
         newEntities.clear();
