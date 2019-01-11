@@ -12,9 +12,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### Bug fixes
 
+- 💥 _Breaking change_ Renamed SpriteSheetLoader to SpriteSheetSplitter.
 - Subfolders of the assets folder work on Windows now.
 - Frame zero now has a duration of zero.
-- The [SpriteSheetLoader](playground/graphics/graphics-spritesheet#Using the SpriteSheetLoader) doesn't reload the sprite sheet if it's already in the TextureCache.
+- The [SpriteSheetSplitter](playground/graphics/graphics-spritesheet#Using the SpriteSheetSplitter) doesn't reload the sprite sheet if it's already in the TextureCache.
 - The local player now uses the parameters stored in the LocalStorage.
 - Removed the max turn warning, since it's replaced by a limit of alloted time.
 - Better process cleanup.
