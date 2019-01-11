@@ -2,7 +2,8 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next version
+## 3.0.0
+*January 11, 2019*
 
 ### 🎁 New features
 
