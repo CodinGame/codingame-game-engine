@@ -2,7 +2,7 @@
 
 The Graphic Entity Module includes two different classes to display text, here's how they work.
 
-## Text
+## Text <a name="Text"></a>
 
 The basic class to display text, it will be displayed as a label in the viewer.
 
@@ -18,7 +18,7 @@ The only font family values that will work are:
 "Lato" and those that are available by default on all browsers.
 If the browser does not recognise the font family, it will be displayed in a fallback font chosen by the browser.
 
-## BitmapText
+## BitmapText <a name="BitmapText"></a>
 
 This class is used to display text using a bitmap font in your assets folder.
 
