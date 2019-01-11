@@ -1,6 +1,7 @@
 const OCCURENCE_TOKEN = '@>'
 
 function ParseError (name, params) {
+  this.message = name + ': ' + JSON.stringify(params)
   this.name = name
   this.params = params
 }
@@ -106,12 +107,14 @@ Parser.prototype.read = function (input, n) {
     const type = typeValue[1]
     if (!/^[a-zA-Z0-9]+$/.test(name)) {
       throw new ParseError('InvalidVariable', {
-        variable: name
+        variable: name,
+        line: this.getLineNumber()
       })
     }
     if (!type) {
       throw new ParseError('MissingType', {
-        variable: name
+        variable: name,
+        line: this.getLineNumber()
       })
     }
     const nType = new Node(type, n)
@@ -125,12 +128,14 @@ Parser.prototype.read = function (input, n) {
     } else if (type === 'word' || type === 'string') {
       throw new ParseError('MissingLength', {
         variable: name,
-        type: type
+        type: type,
+        line: this.getLineNumber()
       })
     } else if (this.allowType.indexOf(type) < 0) {
       throw new ParseError('InvalidType', {
         variable: name,
-        type: type
+        type: type,
+        line: this.getLineNumber()
       })
     }
 
@@ -155,7 +160,8 @@ Parser.prototype.parseTree = function (node, input, loopCnt) {
 
   if (typeof param !== 'undefined') {
     throw new ParseError('InvalidKeyword', {
-      param: cmd + ':' + param
+      param: cmd + ':' + param,
+      line: this.getLineNumber()
     })
   }
 
@@ -214,10 +220,10 @@ Parser.prototype.parseTree = function (node, input, loopCnt) {
           const name = vari.trim()
           match = name.match(/"(.*)"/)
           if (match) {
-            return {type: 'CONST', value: match[1]}
+            return { type: 'CONST', value: match[1] }
           } else {
             const codeName = parser.getFirstCodeName(input.vars, name)
-            return {type: 'VAR', node: input.getVar(codeName)}
+            return { type: 'VAR', node: input.getVar(codeName) }
           }
         })
         write.param.separator = separator
@@ -300,7 +306,8 @@ Parser.prototype.parseTree = function (node, input, loopCnt) {
     }
     default:
       throw new ParseError('InvalidKeyword', {
-        param: cmd
+        param: cmd,
+        line: this.getLineNumber()
       })
   }
 }
@@ -335,6 +342,9 @@ Parser.prototype.extractParam = function (type) {
   const iopen = type.indexOf('(')
   const iclose = type.indexOf(')')
   return type.substring(iopen + 1, iclose)
+}
+Parser.prototype.getLineNumber = function () {
+  return this.code.substring(0, this.cursor - 1).split('\n').length
 }
 
 export default Parser
