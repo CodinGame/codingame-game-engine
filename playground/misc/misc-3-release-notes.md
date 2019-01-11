@@ -4,13 +4,13 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ## Next version
 
-### New features
+### 🎁 New features
 
 - [BitmapText](playground/graphics/graphics-text#BitmapText) has been added.
 - [Text](playground/graphics/graphics-text#Text) can be bold.
 - Shapes now have a blendmode property.
 
-### Bug fixes
+### 🐞 Bug fixes
 
 - 💥 _Breaking change_ Renamed SpriteSheetLoader to SpriteSheetSplitter.
 - Subfolders of the assets folder work on Windows now.
@@ -26,7 +26,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ## 2.15
 *November 29, 2018*
 
-### Bug fixes
+### 🐞 Bug fixes
 
 - Frame zero is not animated anymore.
 - Less spammy warnings.
@@ -39,7 +39,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - Limited the max total alloted time to the players to 25s.
 - SpriteAnimation now a has reworked API and a pause function.
 
-### Bug fixes
+### 🐞 Bug fixes
 
 - Better error handling.
 - Reworked the commit system, fixing some big issues and reducing data usage.
@@ -47,7 +47,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ## 2.11
 *September 14, 2018*
 
-### Bug fixes
+### 🐞 Bug fixes
 
 - Fixed BufferedGroup performance issues.
 - Better handling of modules errors.
@@ -55,14 +55,14 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ## 2.9
 *August 21, 2018*
 
-### New feature
+### 🎁 New feature
 
 - Local test page design now matches the website one
 
 ## 2.8
 *August 9, 2018*
 
-### Bug fixes
+### 🐞 Bug fixes
 
 - Reworked the Test case API.
 - Fixed some WEBGL memory leaks.
@@ -70,7 +70,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ## 2.7
 *August 1, 2018*
 
-### Bug fixes
+### 🐞 Bug fixes
 
 - Handling of the absence of a logo in the demo.
 - Limiting the size of the game summary.
@@ -78,17 +78,17 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ## 2.5
 *July 6, 2018*
 
-### New feature
+### 🎁 New feature
  - Game Params are now displayed in the local test page.
 
 ## 2.4
 *June 25, 2018*
 
-### New feature
+### 🎁 New feature
 
 - [Buffered Groups](playground/graphics/graphics-6-advanced.md#buffered-groups) have been added.
 
-### Bug fixes
+### 🐞 Bug fixes
 
 - Test cases can now handle several lines as input.
 - The configuration verification does not check the presence of `welcome_en.html` in the first league anymore. It also concerns games with no league system.
@@ -96,7 +96,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ## 2.3
 *June 8, 2018*
 
-### Bug fixes
+### 🐞 Bug fixes
 
 - The `BindException` thrown when running a new instance of the game when the server is already on use has been caught. It now logs a warning.
 - A bug would prevent you from exporting a game that was too heavy. It is now fixed.
@@ -104,7 +104,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ## 2.2
 *June 4, 2018*
 
-### Bug fixes
+### 🐞 Bug fixes
 
 - Solo games agents not having colors would produce an error once uploaded on CodinGame. A default color has been added.
 - A regression would prevent the configuration form from being displayed. This feature is back.
@@ -119,7 +119,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ## 2.0
 *June 1, 2018*
 
-### New features
+### 🎁 New features
 
 - [Solo](playground/getting-started/tutorial-3-solo.md) and [Optimization](playground/getting-started/tutorial-4-opti.md) games have been added.
     - Implementation of Multiplayer and Solo classes extending from formerly used `AbstractPlayer`, `GameManager` and `GameRunner`. These features are *not* backward compatible.
