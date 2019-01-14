@@ -1,6 +1,11 @@
 # Release notes
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
+## Next Release
+
+### 🎁 New feature
+
+- A frame is created by default at the end of each gameTurn.
 
 ## 3.0.0
 *January 11, 2019*
