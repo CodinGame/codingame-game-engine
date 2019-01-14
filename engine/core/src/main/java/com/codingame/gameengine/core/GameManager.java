@@ -117,7 +117,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
                 swapInfoAndViewData();
                 log.info("Turn " + turn);
                 newTurn = true;
-                outputsRead = false; // Set as true after first getOutputs() to forbib sendInputs
+                outputsRead = false; // Set as true after first getOutputs() to forbid sendInputs
 
                 referee.gameTurn(turn);
                 registeredModules.forEach(Module::onAfterGameTurn);
