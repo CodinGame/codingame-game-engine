@@ -117,10 +117,15 @@ abstract public class GameManager<T extends AbstractPlayer> {
                 swapInfoAndViewData();
                 log.info("Turn " + turn);
                 newTurn = true;
-                outputsRead = false; // Set as true after first getOutputs() to forbib sendInputs
+                outputsRead = false; // Set as true after first getOutputs() to forbid sendInputs
 
                 referee.gameTurn(turn);
                 registeredModules.forEach(Module::onAfterGameTurn);
+
+                // Create a frame if no player has been executed
+                if (!players.isEmpty() && players.stream().noneMatch(p -> p.hasBeenExecuted())) {
+                    execute(players.get(0), 0);
+                }
 
                 // reset players' outputs
                 for (AbstractPlayer player : players) {
@@ -163,8 +168,10 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * 
      * @param player
      *            Player to execute.
+     * @param nbrOutputLines
+     *            The amount of expected output lines from the player.
      */
-    void execute(T player) {
+    protected void execute(T player, int nbrOutputLines) {
         if (!this.initDone) {
             throw new RuntimeException("Impossible to execute a player during init phase.");
         }
@@ -180,7 +187,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         dumpView();
         dumpInfos();
         dumpNextPlayerInput(player.getInputs().toArray(new String[0]));
-        if (player.getExpectedOutputLines() > 0) {
+        if (nbrOutputLines > 0) {
             addTurnTime();
         }
         dumpNextPlayerInfos(player.getIndex(), player.getExpectedOutputLines(), player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime);
@@ -201,6 +208,16 @@ abstract public class GameManager<T extends AbstractPlayer> {
 
         player.resetInputs();
         newTurn = false;
+    }
+
+    /**
+     * Executes a player for a maximum of turnMaxTime milliseconds and store the output. Used by player.execute().
+     * 
+     * @param player
+     *            Player to execute.
+     */
+    void execute(T player) {
+        execute(player, player.getExpectedOutputLines());
     }
 
     /**
