@@ -123,10 +123,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
                 registeredModules.forEach(Module::onAfterGameTurn);
 
                 // Create a frame if no player has been executed
-                if (players.stream().noneMatch(p -> p.hasBeenExecuted())) {
-                    for (T player : players) {
-                        execute(player, 0);
-                    }
+                if (!players.isEmpty() && players.stream().noneMatch(p -> p.hasBeenExecuted())) {
+                    execute(players.get(0), 0);
                 }
 
                 // reset players' outputs
