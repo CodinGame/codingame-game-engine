@@ -5,7 +5,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🎁 New feature
 
-- A frame is created by default at the end of each gameTurn.
+- A frame is created even if no players have been executed at the end of each gameTurn.
 
 ## 3.0.0
 *January 11, 2019*
