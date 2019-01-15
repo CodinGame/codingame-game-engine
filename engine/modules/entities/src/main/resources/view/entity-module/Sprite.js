@@ -28,7 +28,11 @@ export class Sprite extends TextureBasedEntity {
     super.updateDisplay(state, changed, globalData)
     if (changed.image) {
       try {
-        this.graphics.texture = PIXI.Texture.fromFrame(state.image)
+        if (state.image !== null) {
+          this.graphics.texture = PIXI.Texture.fromFrame(state.image)
+        } else {
+          this.graphics.texture = PIXI.Texture.EMPTY
+        }
       } catch (error) {
         if (!this.missingTextures[state.image]) {
           this.missingTextures[state.image] = true

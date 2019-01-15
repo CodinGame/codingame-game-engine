@@ -7,6 +7,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - A frame is created even if no players have been executed at the end of each gameTurn.
 
+### 🐞 Bug fix
+
+- Fixed an issue with sprites
+
 ## 3.0.0
 *January 11, 2019*
 
