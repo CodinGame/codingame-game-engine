@@ -268,7 +268,7 @@ Your test cases must be named `test<number>.json` and placed in the `config` dir
 
 First, you will need to add a `criteria` and a `sorting_order` property in `config.ini`.
 - The `criteria` corresponds to the label of the player's score. For example, it can be `Points`, `Fuel` or `Distance`.
-- The `sorting_order` determines the ranking order. Its value must be either `asc` or `desc`. If the player whose Fuel quantity is higher should be first, choose `asc`. If the goal is to win the game in the shortest time, choose `desc`.
+- The `sorting_order` determines the ranking order. Its value must be either `asc` or `desc`. If the player whose `Fuel` quantity is higher should be first, choose `desc`. If the goal is to win the game with the least `Distance`, choose `asc`.
 
 You can also choose to translate your criteria in French by using the optional properties `criteria_en` and `criteria_fr`.
 
