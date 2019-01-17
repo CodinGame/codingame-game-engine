@@ -185,6 +185,13 @@ and
 gameManager.loseGame();
 ```
 
+### Score calculation
+
+Once the game is online, players will be able to submit their code and a score will be calculated to determine their rank in the leaderboard.
+
+This score corresponds to **the sum of all the scores obtained when running validators**. Validators are specific kinds of test cases. Make sure you [configure them correctly](core-4-configuration.md#test-case-file).
+
+
 ## Optimization Game Features <a name="optimization-game-features"></a>
 
 An Optimization game is a Solo game with a score. The only differences comes in the [configuration](core-4-configuration.md#optimization-game-configuration) and the metadata you need to send.
@@ -198,8 +205,3 @@ public void onEnd() {
 }
 ```
 
-### Score calculation
-
-Once the game is online, players will be able to submit their code and a score will be calculated to determine their rank in the leaderboard.
-
-This score corresponds to **the sum of all the scores obtained when running validators**. Validators are specific kinds of test cases. Make sure you [configure them correctly](core-4-configuration.md#test-case-file).
