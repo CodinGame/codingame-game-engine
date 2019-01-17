@@ -14,7 +14,7 @@ graphicEntityModule.createText("Hello World")
     .setFontSize(50)
     .setFillColor(0x000000); // Setting the text color to black
 ```
-![Example](resources/text-1.png)
+![Example](resources/text1.png)
 
 The only font family values that will work are: 
 "Lato" and those that are available by default on all browsers.
