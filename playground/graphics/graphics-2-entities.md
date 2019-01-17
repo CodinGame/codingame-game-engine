@@ -17,7 +17,9 @@ Every sprite, shape, text, etc are entities displayable in the viewer. They impl
 Circle circle = graphicEntityModule.createCircle()
 			.setRadius(50)
 			.setLineWidth(0)
-			.setFillColor(0x00FF00);
+			.setFillColor(0x00FF00)
+			.setX(70)
+			.setY(70);
 ```
 ## Moving a circle
 ```java
@@ -29,21 +31,34 @@ circle
 ### With a Curve
 ```java
 circle
-	.setX(player.getX(), Curve.LINEAR)
-	.setY(player.getY(), Curve.LINEAR);
+	.setX(player.getX(), Curve.EASE_IN_AND_OUT)
+	.setY(player.getY(), Curve.EASE_IN_AND_OUT);
 ```
+By default the `Curve.LINEAR` is used.
+
+It should look like this :
+![Example](resources/circles.gif)
+The first circle is not animated,
+the second is animated with the default curve
+and the last one is animated with the custom curve.
+
 ## Creating a group of sprites <a name="creating-a-group-of-sprites"></a>
 ```java
 Sprite planet1 = graphicEntityModule.createSprite()
-				.setImage("planet")
+				.setImage("planet0.png")
+				.setAnchorX(0.5)
+				.setAnchorY(0.5)
 				.setX(-20);
 Sprite planet2 = graphicEntityModule.createSprite()
-				.setImage("planet")
-				.setX(30);
+				.setImage("planet1.png")
+				.setAnchorX(0.5)
+				.setAnchorY(0.5)
+				.setX(30)
 				.setY(-10);
 Sprite planet3 = graphicEntityModule.createSprite()
-				.setImage("planet")
-				.setY(20);
+				.setImage("planet2.png")
+				.setAnchorX(0.5)
+				.setAnchorY(0.5);
 
 // The planets are around the point (960,540).
 Group system = graphicEntityModule.createGroup(planet1, planet2, planet3)
@@ -59,3 +74,5 @@ Group system = graphicEntityModule.createGroup(planet1, planet2, planet3)
 	
 	system.setRotation(system.getRotation() + Math.PI / 2);
 ```
+It should look like this :
+![Example](resources/planets.gif)
