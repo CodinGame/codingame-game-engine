@@ -18,7 +18,7 @@ The entry point of the game is the class `SoloGameManager` or `MultiplayerGameMa
 
 # Resources
 
-- [Javadoc](https://codingame.github.io/codingame-sdk-doc/)
+- [Javadoc](https://codingame.github.io/codingame-game-engine/)
 - [SDK source](https://github.com/CodinGame/codingame-game-engine)
 - [Free to use graphical assets](https://github.com/CodinGame/codingame-sdk-assets)
 - [Game Skeleton](https://github.com/CodinGame/game-skeleton)
