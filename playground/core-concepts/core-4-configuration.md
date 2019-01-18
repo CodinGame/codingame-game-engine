@@ -60,13 +60,11 @@ InputStream in = ClassLoader.getSystemResourceAsStream("my_awesome_file.txt");
 
 ### Levels & Leagues
 
-You have the possibility to create several levels (also named leagues). A new level allows you to set a different configuration and different rules (you can get the league level in the Referee with the [Game Manager](playground/core-concepts/core-4-game-manager.md)).
+In a **multiplayer** game, you have the possibility to create several levels (also named leagues). A new level allows you to set a different configuration and different rules (you can get the league level in the Referee with the [Game Manager](playground/core-concepts/core-4-game-manager.md)).
 
-There is a difference between multiplayer and solo game levels:
-- In a **multiplayer** game, your levels become leagues. The players will need to beat your Boss in the leaderboard to access the next league.
-- In a **solo** game, there can only be on level.
+When the game will be released your levels will become leagues. The players will need to beat your Boss in the leaderboard to access the next league.
 
-To create multiple leagues, you need to make new folders named `level<number>` in the `config` directory. Their `<number>` must be positive and will be used to display your leagues in the right order. Each level can be configured like the `config` directory, which allow you to have different statements, stubs, etc.
+To create multiple levels, you need to make new folders named `level<number>` in the `config` directory. Their `<number>` must be positive and will be used to display your leagues in the right order. Each level can be configured like the `config` directory, which allow you to have different statements, stubs, etc.
 
 If you want to use the same configuration in several levels, you do not need to copy your files in every directory. If a file is missing in a `level` folder, it will inherit from `config` automatically when uploading your game.
 
