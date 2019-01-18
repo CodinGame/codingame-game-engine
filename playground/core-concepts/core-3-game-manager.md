@@ -187,16 +187,17 @@ gameManager.loseGame();
 
 ### Score calculation
 
-Once the game is online, players will be able to submit their code and a score will be calculated to determine their rank in the leaderboard.
-
-This score corresponds to **the sum of all the scores obtained when running validators**. Validators are specific kinds of test cases. Make sure you [configure them correctly](core-4-configuration.md#test-case-file).
+Once the game is published, players can submit their code to acquire a **score**. This **score** is the percentage of validators that the player has successfully passed.
+Validators are a specific kind of test case. Make sure you [configure them correctly](core-4-configuration.md#test-case-file).
 
 
 ## Optimization Game Features <a name="optimization-game-features"></a>
 
-An Optimization game is a Solo game with a score. The only differences comes in the [configuration](core-4-configuration.md#optimization-game-configuration) and the metadata you need to send.
+An Optimization game is a Solo game with a criteria score, such as `Points`, or `Fuel` as well as the normal validator score.
 
-Once your game is correctly configured, you need to send your player's score. We advise you set it at the end of the game as below:
+To configure the optimization criteria, you'll need to track in yourself in the game's code and send it as metadata with the `GameRunner`'s `putMetadata()` method. [More information here](core-4-configuration.md#optimization-game-configuration) on the configuration of an opitmization game.
+
+Once your game is correctly configured, we advise you set the criteria score at the end of the game as below:
 ```java
 @Override
 public void onEnd() {
@@ -205,3 +206,12 @@ public void onEnd() {
 }
 ```
 
+### Rank calculation
+
+When a player submits code in an optimization game, they are assigned:
+- An ordinary **score**: the percentage of validators successfully passed.
+- A total **critera score**: the sum of the **criteria scores** from each validator.
+
+The player's rank is determiend firstly by their **score**, then by their **total criteria score**. This means a very optimized solution that fails a single validator will rank lower than a poorly optimized solution that achieves 100%.
+
+In case of a draw in both score and total criteria score, the ranking is arbitrary.
