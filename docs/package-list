@@ -1,0 +1,4 @@
+com.codingame.gameengine.core
+com.codingame.gameengine.module.entities
+com.codingame.gameengine.runner
+com.codingame.gameengine.runner.dto
