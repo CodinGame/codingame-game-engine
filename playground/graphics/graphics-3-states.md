@@ -39,6 +39,8 @@ graphicEntityModule.commitEntityState(0.9, circle);
 circle.setRadius(50);
 graphicEntityModule.commitEntityState(1, circle);
 ```
+It should look like this :
+![Example](resources/frames.gif)
 
 ## Animating several entities
 

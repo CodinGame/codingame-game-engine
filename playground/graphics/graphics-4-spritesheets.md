@@ -26,9 +26,24 @@ String[] seaweedSprites = graphicEntityModule.createSpriteSheetSplitter()
     .setImagesPerRow(4)
     .setName("seaweed")
     .split();
+
+//Creating an animation from the splitted spritesheet
+graphicEntityModule.createSpriteAnimation()
+    .setImages(seaweedSprites)
+    .setX(50)
+    .setY(50)
+    .setLoop(true);
+
+//Or a sprite from the 1st image of the spritesheet
+graphicEntityModule.createSprite()
+    .setImage(seaweedSprites[0])
+    .setX(250)
+    .setY(250);
 ```
 
-We can now use these images in Sprite entites as shown [here](graphics-2-entities.md#creating-a-group-of-sprites).
+It should look like this :
+![Example](resources/spritesheet.gif)
+
 
 ## Using JSON sprites resources as assets
 
