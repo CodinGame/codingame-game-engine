@@ -203,12 +203,12 @@ export class EndScreenModule {
 
     layer.backgroundRanking = background
 
-    let sprite = this.spriteName || 'logo.png'
+    let sprite = this.spriteName
     var titleRanking
-    try {
+    if (PIXI.utils.TextureCache.hasOwnProperty(sprite)) {
       titleRanking = new PIXI.Sprite.fromFrame(sprite)
-    } catch (error) {
-      ErrorLog.push(new MissingImageError(sprite, error))
+    } else {
+      ErrorLog.push(new MissingImageError(sprite))
       titleRanking = new PIXI.Sprite(PIXI.Texture.EMPTY)
     }
     titleRanking.anchor.x = titleRanking.anchor.y = 0.5
