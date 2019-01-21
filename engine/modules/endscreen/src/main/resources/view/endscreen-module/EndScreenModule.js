@@ -28,7 +28,6 @@ export class EndScreenModule {
   handleFrameData (frameInfo, data) {
     let scores = null
     let spriteName = null
-    console.log(data)
     if (data) {
       scores = data[0]
       spriteName = data[1]
@@ -142,7 +141,6 @@ export class EndScreenModule {
   createFinisher (finisher) {
     var layer = new PIXI.Container()
 
-    /** ************************************* */
     var avatarContainer = new PIXI.Container()
     avatarContainer.y = 0
     avatarContainer.x = 0
