@@ -4,7 +4,13 @@ import com.codingame.gameengine.core.AbstractPlayer;
 import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.core.Module;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
+/**
+ * The EndScreen takes care of displaying and animating an end screen with the scores of the players at the end of the game.
+ * 
+ */
+@Singleton
 public class EndScreenModule implements Module {
 
     private GameManager<AbstractPlayer> gameManager;
