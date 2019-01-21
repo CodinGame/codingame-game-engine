@@ -2,7 +2,7 @@ import {WIDTH, HEIGHT} from '../core/constants.js'
 import {lerp, unlerp} from '../core/utils.js'
 import {ErrorLog} from '../core/ErrorLog.js'
 import {MissingImageError} from './errors/MissingImageError.js'
-
+import {flagForDestructionOnReinit} from '../core/rendering.js'
 /* global PIXI */
 
 export class EndScreenModule {
@@ -49,7 +49,6 @@ export class EndScreenModule {
   }
 
   reinitScene (container, canvasData) {
-    this.toDestroy = []
     this.container = container
     this.endLayer = this.createEndScene(this)
     if (this.atEnd) {
@@ -137,8 +136,8 @@ export class EndScreenModule {
         fill: color
       })
       textEl.lineHeight = Math.round(size / 1.2)
-      this.toDestroy.push(textEl)
     }
+    flagForDestructionOnReinit(textEl)
     if (align === 'right') {
       textEl.anchor.x = 1
     } else if (align === 'center') {
