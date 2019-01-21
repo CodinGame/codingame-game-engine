@@ -12,7 +12,7 @@
     <groupId>com.codingame.gameengine</groupId>
     <artifactId>module-endscreen</artifactId>
 	<name>CodinGame Game Engine End Screen Module</name>
-	<description>A end screen module for the CodinGame engine toolkit.</description>
+	<description>An end screen module for the CodinGame engine toolkit.</description>
 
 	<dependencies>
 		<dependency>
