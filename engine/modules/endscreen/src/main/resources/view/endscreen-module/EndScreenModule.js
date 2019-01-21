@@ -10,7 +10,6 @@ export class EndScreenModule {
     this.states = []
     this.scores = []
     this.globalData = {}
-    window.module = this
     this.atEnd = false
   }
 
