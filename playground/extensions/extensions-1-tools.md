@@ -10,7 +10,7 @@ If you want to create your own module, see [How to get started](extensions-2-tut
 
 ## Importing the module
 
-### Maven modules
+### Modules on maven
 
 You will need to include the module dependency in the pom.xml of your project.
 
@@ -47,13 +47,13 @@ Custom modules usually come up with a `.java` and a `.js` file. Place these file
 
 You will also need to import your module to the `src/main/resources/view/config.js` file, in the `modules` array.
 
-Example of a project using the Graphic Entity Module and the old End Screen Module:
+Example of a project using the Graphic Entity Module and a custom module:
 `config.js`
 ```javascript
 import { GraphicEntityModule } from './entity-module/GraphicEntityModule.js';
-import { EndScreenModule } from './modules/endscreen/EndScreenModule.js';
+import { CustomModule } from './modules/custom/CustomModule.js';
 
 export const modules = [
 	GraphicEntityModule,
-	EndScreenModule
+	CustomModule
 ];
