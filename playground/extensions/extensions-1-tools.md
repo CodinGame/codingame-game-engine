@@ -8,14 +8,32 @@ If you want to create your own module, see [How to get started](extensions-2-tut
 
 # Usage
 
-Modules usually come up with a `.java` and a `.js` file. Place these files in `src/main/java` and `src/main/resources/view` respectively.
+## Importing the module
+
+### Modules on maven
+
+You will need to include the module dependency in the pom.xml of your project.
 
 You will also need to import your module to the `src/main/resources/view/config.js` file, in the `modules` array.
 
 Example of a project using the Graphic Entity Module and the End Screen Module:
+`pom.xml`
+```xml
+<dependency>
+	<groupId>com.codingame.gameengine</groupId>
+	<artifactId>module-entities</artifactId>
+	<version>3.2.0</version>
+</dependency>
+<dependency>
+	<groupId>com.codingame.gameengine</groupId>
+	<artifactId>module-endscreen</artifactId>
+	<version>3.2.0</version>
+</dependency>
+```
+`config.js`
 ```javascript
 import { GraphicEntityModule } from './entity-module/GraphicEntityModule.js';
-import { EndScreenModule } from './modules/endscreen/EndScreenModule.js';
+import { EndScreenModule } from './endscreen-module/EndScreenModule.js';
 
 export const modules = [
 	GraphicEntityModule,
@@ -23,7 +41,19 @@ export const modules = [
 ];
 ```
 
-To understand how to edit modules, see the examples:
-- [Tooltip Module](extensions-3-tooltip.md)
-- [End Screen Module](extensions-4-endscreen.md)
-- [Anim Module](extensions-5-animmodule.md)
+### Custom modules
+
+Custom modules usually come up with a `.java` and a `.js` file. Place these files in `src/main/java` and `src/main/resources/view` respectively.
+
+You will also need to import your module to the `src/main/resources/view/config.js` file, in the `modules` array.
+
+Example of a project using the Graphic Entity Module and a custom module:
+`config.js`
+```javascript
+import { GraphicEntityModule } from './entity-module/GraphicEntityModule.js';
+import { CustomModule } from './modules/custom/CustomModule.js';
+
+export const modules = [
+	GraphicEntityModule,
+	CustomModule
+];
