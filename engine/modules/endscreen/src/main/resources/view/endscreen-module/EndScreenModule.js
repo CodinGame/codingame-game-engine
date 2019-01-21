@@ -120,23 +120,16 @@ export class EndScreenModule {
     }
   }
 
-  generateText (text, size, align, color, forceLato) {
+  generateText (text, size, align, color) {
     var textEl
-    if (!forceLato) {
-      textEl = new PIXI.extras.BitmapText(text, {
-        font: size + 'px 04b',
-        tint: color
-      })
-      textEl.lineHeight = size
-    } else {
-      textEl = new PIXI.Text(text, {
-        fontSize: Math.round(size / 1.2) + 'px',
-        fontFamily: 'Lato',
-        fontWeight: 'bold',
-        fill: color
-      })
-      textEl.lineHeight = Math.round(size / 1.2)
-    }
+
+    textEl = new PIXI.Text(text, {
+      fontSize: Math.round(size / 1.2) + 'px',
+      fontFamily: 'Lato',
+      fontWeight: 'bold',
+      fill: color
+    })
+    textEl.lineHeight = Math.round(size / 1.2)
     flagForDestructionOnReinit(textEl)
     if (align === 'right') {
       textEl.anchor.x = 1
@@ -169,13 +162,13 @@ export class EndScreenModule {
     var avatar = new PIXI.Sprite(finisher.player.avatar)
     avatar.width = avatar.height = 120
 
-    var rank = this.generateText(finisher.rank.toString(), 76, 'center', finisher.player.color, true)
+    var rank = this.generateText(finisher.rank.toString(), 76, 'center', finisher.player.color)
     rank.anchor.y = 0.5
     rank.position.x = 160
     rank.position.y = 56
     avatarContainer.addChild(rank)
 
-    var rankLetter = this.generateText(finisher.rank === 1 ? 'ST' : 'ND'.toString(), 34, 'left', finisher.player.color, true)
+    var rankLetter = this.generateText(finisher.rank === 1 ? 'ST' : 'ND'.toString(), 34, 'left', finisher.player.color)
     rankLetter.position.x = 184
     rankLetter.position.y = 32
     avatarContainer.addChild(rankLetter)
@@ -185,10 +178,8 @@ export class EndScreenModule {
 
     avatarContainer.addChild(hudAvatar)
 
-    /** ************************************* */
-
-    var name = this.generateText(finisher.player.name.toUpperCase(), 50, 'left', finisher.player.color, true)
-    var scoreLabel = this.generateText(((finisher.score >= 0) ? finisher.score.toString() + ' points' : '-'), 64, 'left', finisher.player.color, true)
+    var name = this.generateText(finisher.player.name.toUpperCase(), 50, 'left', finisher.player.color)
+    var scoreLabel = this.generateText(((finisher.score >= 0) ? finisher.score.toString() + ' points' : '-'), 64, 'left', finisher.player.color)
 
     name.x = 330
     name.y = -4
