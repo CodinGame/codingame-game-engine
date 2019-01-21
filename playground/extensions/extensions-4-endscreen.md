@@ -36,7 +36,6 @@ To guarantee the correct ranking, you must set this module's score property in y
       endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray());
   }
 ```
-⚠ This example might require you modify it for proper use in your own game.
 
 The module loads by default your `logo.png` as title, you can set your own image with `setTitleRankingsSprite()`.
 ```java
