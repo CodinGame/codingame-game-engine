@@ -1,14 +1,34 @@
 # EndScreenModule
 
-Requires game engine version 1.35 or higher.
+The module is bundled with the version 3.2.0 of the sdk or higher.
 
 Can be used to display the ranking of a multiplayer game with any additional info you choose. The ranking will appear at the very end of the replay.
 
-This module requires an image named `title_ranking.png` (see how to load assets [here](playground/core-concepts/core-4-configuration.md#loading-assets)). You can either add your own image or remove the line in `TooltipModule.js` which displays this image.
+## Import
+
+Add the dependency in the `pom.xml` of your project.
+```xml
+<dependency>
+	<groupId>com.codingame.gameengine</groupId>
+	<artifactId>module-endscreen</artifactId>
+	<version>3.2.0</version>
+</dependency>
+```
+And load the module in your `config.js`.
+```javascript
+import { GraphicEntityModule } from './entity-module/GraphicEntityModule.js';
+import { EndScreenModule } from './endscreen-module/EndScreenModule.js';
+
+export const modules = [
+	GraphicEntityModule,
+	EndScreenModule
+];
+```
+
+## Usage
 
 To guarantee the correct ranking, you must set this module's score property in your Referee's `onEnd()` method.
 
-### Example
 `Referee.java`
 ```java
   @Override
@@ -17,4 +37,7 @@ To guarantee the correct ranking, you must set this module's score property in y
   }
 ```
 
-⚠ This example might require you modify it for proper use in your own game.
+The module loads by default your `logo.png` as title, you can set your own image with `setTitleRankingsSprite()`.
+```java
+  endScreenModule.setTitleRankingsSprite("myCustomSprite.png");
+```
