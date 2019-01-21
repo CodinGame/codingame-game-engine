@@ -61,7 +61,7 @@ public class EndScreenModule implements Module {
 
     @Override
     public final void onAfterOnEnd() {
-        Object[] data = {scores, titleRankingsSprite};
+        Object[] data = { scores, titleRankingsSprite };
         gameManager.setViewData("endScreen", data);
     }
 
