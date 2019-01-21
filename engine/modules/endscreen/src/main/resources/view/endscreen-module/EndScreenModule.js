@@ -129,7 +129,6 @@ export class EndScreenModule {
       fill: color
     })
     textEl.lineHeight = Math.round(size / 1.2)
-    flagForDestructionOnReinit(textEl)
     if (align === 'right') {
       textEl.anchor.x = 1
     } else if (align === 'center') {
