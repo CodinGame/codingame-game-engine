@@ -19,6 +19,7 @@ In the Solo version of this game, the purpose is to collect one egg. Here, there
 As stated in the Solo guide, you need to download the source code of the game. The Optimization version of the game is located on the `optimization` branch of the repository:
 ```
 git clone https://github.com/CodinGame/game-fishy-adventures.git
+cd game-fishy-adventures
 git checkout optimization
 ```
 
