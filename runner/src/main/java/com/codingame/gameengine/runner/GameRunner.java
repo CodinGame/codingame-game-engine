@@ -137,7 +137,7 @@ abstract class GameRunner {
             if (validTurn) {
                 gameResult.outputs.get("referee").add(refereeStdout.toString());
                 refereeStdout.reset();
-                gameResult.summaries.add(turnInfo.get(InputCommand.SUMMARY).orElse(null));
+                gameResult.summaries.add(turnInfo.get(InputCommand.SUMMARY).orElse(turnInfo.get(InputCommand.INFOS).orElse(null)));
             }
 
             if ((validTurn) && (!turnInfo.get(InputCommand.SCORES).isPresent())) {
@@ -425,9 +425,9 @@ abstract class GameRunner {
         requireGameNotEnded();
         Properties conf = new Properties();
         initialize(conf);
-        
+
         runAgents();
-        
+
         referee.destroy();
         destroyPlayers();
         gameEnded = true;
