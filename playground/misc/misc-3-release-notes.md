@@ -6,7 +6,11 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🎁 New feature
 
-- the [EndScreenModule](playground/extensions/extensions-4-endscreen.md) is now bundled with the sdk.
+- The [EndScreenModule](playground/extensions/extensions-4-endscreen.md) is now bundled with the sdk.
+
+### 🐞 Bug fix
+
+- Fixed absence of game summaries from the local test page of SOLO games.
 
 ## 3.1.0
 
