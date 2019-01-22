@@ -4,6 +4,39 @@ This module can be used to assign some data to an entity from the [GraphicEntity
 
 You may change the assigned data of each entity once per game turn.
 
-The majority of the text to display should be written into your copy of the tooltip module to reduce the amount of data the Referee must produce.
+## Import
+⚠ This module requires the [GraphicEntityModule](https://github.com/CodinGame/codingame-game-engine/tree/master/engine/modules/entities) to work.
 
-⚠ This example might require you modify it for proper use in your own game.
+Add the dependency in the `pom.xml` of your project.
+```xml
+<dependency>
+	<groupId>com.codingame.gameengine</groupId>
+	<artifactId>module-tooltip</artifactId>
+	<version>3.2.0</version>
+</dependency>
+```
+And load the module in your `config.js`.
+```javascript
+import { GraphicEntityModule } from './entity-module/GraphicEntityModule.js';
+import { TooltipModule } from './tooltip-module/TooltipModule.js';
+
+export const modules = [
+	GraphicEntityModule,
+	TooltipModule
+];
+```
+
+## Usage
+
+`Referee.java`
+```java
+// adding a tooltip to an entity
+  tooltip.setTooltipText(myEntity, "the tooltip text linked to this entity");
+
+// removing the tooltip from an other entity
+    tooltip.removeTooltipText(otherEntity);
+
+// getting the tooltip text associated to an entity
+  String text = tooltip.getTooltipText(myEntity);
+// in this case text will now be "the tooltip text linked to this entity"
+```
