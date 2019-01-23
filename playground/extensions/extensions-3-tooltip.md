@@ -30,13 +30,18 @@ export const modules = [
 
 `Referee.java`
 ```java
-// adding a tooltip to an entity
-  tooltip.setTooltipText(myEntity, "the tooltip text linked to this entity");
+@Inject TooltipModule tooltips;
 
-// removing the tooltip from an other entity
-    tooltip.removeTooltipText(otherEntity);
+@Override
+public void init() {
+  // adding a tooltip to an entity
+    tooltips.setTooltipText(myEntity, "the tooltip text linked to this entity");
 
-// getting the tooltip text associated to an entity
-  String text = tooltip.getTooltipText(myEntity);
-// in this case text will now be "the tooltip text linked to this entity"
+  // removing the tooltip from an other entity
+      tooltips.removeTooltipText(otherEntity);
+
+  // getting the tooltip text associated to an entity
+    String text = tooltips.getTooltipText(myEntity);
+  // in this case text will now be "the tooltip text linked to this entity"
+}
 ```
