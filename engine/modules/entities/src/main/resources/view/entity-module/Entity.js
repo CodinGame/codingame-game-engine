@@ -30,6 +30,11 @@ export class Entity {
     }
   }
 
+  setHidden (hide) {
+    this.hide = hide
+    this.container.visible = this.currentState.visible && !this.hide
+  }
+
   addState (t, params, frame) {
     if (!this.states[frame]) {
       this.states[frame] = []
@@ -143,7 +148,7 @@ export class Entity {
     this.container.position.set(state.x * globalData.coeff, state.y * globalData.coeff)
     this.container.scale.set(state.scaleX || eps, state.scaleY || eps)
     this.container.rotation = state.rotation
-    this.container._visible = state.visible
+    this.container._visible = state.visible && !this.hide
   }
 
   static createState (time = 1, values = {}, curve = {}) {
