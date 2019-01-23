@@ -50,7 +50,7 @@ public class TooltipModule implements Module {
         newRegistration.clear();
     }
 
-    boolean stringEquals(String a, String b) {
+    private boolean stringEquals(String a, String b) {
         if (a == b) {
             return true;
         } else if (a != null && a.equals(b)) {
