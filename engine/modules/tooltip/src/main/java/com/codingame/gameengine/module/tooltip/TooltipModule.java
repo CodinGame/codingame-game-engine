@@ -41,9 +41,7 @@ public class TooltipModule implements Module {
     }
 
     @Override
-    public void onAfterOnEnd() {
-        sendFrameData();
-    }
+    public void onAfterOnEnd() {}
 
     private void sendFrameData() {
         Object[] data = { newRegistration };
