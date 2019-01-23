@@ -37,7 +37,7 @@ public class ToggleModule implements Module {
             return other != null && this.state == other.state && stringEquals(this.name, other.name);
         }
 
-        boolean stringEquals(String a, String b) {
+        private boolean stringEquals(String a, String b) {
             if (a == b) {
                 return true;
             } else if (a != null && a.equals(b)) {
