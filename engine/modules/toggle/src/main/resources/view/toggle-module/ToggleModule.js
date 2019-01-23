@@ -16,7 +16,7 @@ export class ToggleModule {
         const toggleInfo = this.currentFrame.registered[registeredEntity]
         const toggleState = toggles[toggleInfo.name]
 
-        if (toggleState === undefined && !this.missingToggles[toggleInfo.name]) {
+        if (toggleState == null && !this.missingToggles[toggleInfo.name]) {
           ErrorLog.push(new MissingToggleError(toggleInfo.name))
           this.missingToggles[toggleInfo.name] = true
         }
