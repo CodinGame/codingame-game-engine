@@ -26,14 +26,14 @@ public class ToggleModule implements Module {
 
     class Toggle {
         public String name;
-        public Boolean state = true;
+        public boolean state = true;
 
-        public Toggle(String name, Boolean state) {
+        public Toggle(String name, boolean state) {
             this.name = name;
             this.state = state;
         }
 
-        public Boolean equals(Toggle other) {
+        public boolean equals(Toggle other) {
             return other != null && this.state == other.state && stringEquals(this.name, other.name);
         }
 
@@ -82,7 +82,7 @@ public class ToggleModule implements Module {
      * @param toggle the name of the toggle you want to use
      * @param state the state of the toggle where the entity will be displayed at
      */
-    public void displayOnToggleState(Entity<?> entity, String toggle, Boolean state) {
+    public void displayOnToggleState(Entity<?> entity, String toggle, boolean state) {
         int id = entity.getId();
         Toggle associatedToggle = new Toggle(toggle, state);
         if (!associatedToggle.equals(registered.get(id))) {
