@@ -27,7 +27,7 @@ export const modules = [
   ToggleModule
 ]
 
-// The list of option toggles displayed in the viewer
+// The list of toggles displayed in the options of the viewer
 export const options = [
   {
   // The name displayed over the toggle
@@ -40,7 +40,7 @@ export const options = [
       toggles.myToggle = value // replace "myToggle" by the name of the toggle you want to use
       ToggleModule.refreshContent()
     },
-    // What will be displayed depending of the state of your toggle
+    // The labels for the on/off states of your toggle
     values: {
       'TOGGLED ON': true,
       'TOGGLED OFF': false
@@ -65,9 +65,14 @@ export const toggles = {
 
 `Referee.java`
 ```java
-  // Associating `myEntity` to the true state of `myToggle`
+@Inject ToggleModule toggleModule;
+
+@Override
+public void init() {
+  // Only display `myEntity` when the state of `myToggle` is `true`
   toggleModule.displayOnToggleState(myEntity, "myToggle", true);
   // My entity will only be displayed when `myToggle` is true 
   // (on the `TOGGLED ON` position according to our previous setup)
+}
 ```
 
