@@ -1,6 +1,7 @@
 # AnimModule
+This module is not a maven module, you can find it's source code on Github: [https://github.com/CodinGame/codingame-sdk-modules/tree/master/AnimModule](https://github.com/CodinGame/codingame-sdk-modules/tree/master/AnimModule)
 
-Useful for games with a lot of AnimatedSprites overlayed over the rest of the game.
+This module is useful for games with a lot of AnimatedSprites overlayed over the rest of the game.
 
 Instead of having the Referee output the entire sequence of images for each new animation, you may have it reference a pre-existing animation as defined in `AnimData.js` and configured in `AnimModule.js`.
 

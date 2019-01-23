@@ -2,8 +2,6 @@
 
 Although the CodinGame SDK already includes the [GraphicEntityModule](graphics-1-introduction.md), you can add modules to your game. Modules are extensions allowing you to directly interact with the viewer using [PixiJS](http://www.pixijs.com/), which gives you a lot more control on its behaviour.
 
-This section presents a few existing modules. You can find their source code on Github: [https://github.com/CodinGame/codingame-sdk-modules](https://github.com/CodinGame/codingame-sdk-modules)
-
 If you want to create your own module, see [How to get started](extensions-2-tutorial.md).
 
 # Usage
