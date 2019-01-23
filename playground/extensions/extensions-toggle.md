@@ -48,7 +48,7 @@ export const options = [
   },
   {
     title: 'MY OTHER TOGGLE',
-    ...
+    ⋮
   }
 ]
 
