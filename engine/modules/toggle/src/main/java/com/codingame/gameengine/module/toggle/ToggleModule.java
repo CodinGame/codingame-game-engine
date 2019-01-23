@@ -14,7 +14,7 @@ import com.google.inject.Singleton;
 /**
  * @author Jean Porée
  * 
- *         The toggle module allows to display or hide elements from the graphicEntityModule using the cg-player option toggles.
+ *         This module allows you to display or hide elements of the GraphicEntityModule using the viewer's options menu.
  * 
  */
 @Singleton

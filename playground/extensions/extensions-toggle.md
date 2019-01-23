@@ -1,6 +1,6 @@
 # ToggleModule
 
-This modules allows you to show elements only when a toggle of the cg-player is in a certain state.
+This module allows you to display or hide elements of the GraphicEntityModule using the viewer's options menu.
 This can help to create debug modes.
 
 ## Setup
@@ -27,7 +27,7 @@ export const modules = [
   ToggleModule
 ]
 
-// The list of toggles displayed in the cg-player
+// The list of option toggles displayed in the viewer
 export const options = [
   {
   // The name displayed over the toggle

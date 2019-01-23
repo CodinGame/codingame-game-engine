@@ -12,7 +12,7 @@
     <groupId>com.codingame.gameengine</groupId>
     <artifactId>module-toggle</artifactId>
 	<name>CodinGame Game Engine Toggle Module</name>
-	<description>This module allows to display or hide elements from the graphicEntityModule using the cg-player option toggles.</description>
+	<description>This module allows you to display or hide elements of the GraphicEntityModule using the viewer's options menu.</description>
 
 	<dependencies>
 		<dependency>
