@@ -15,6 +15,7 @@ public class EndScreenModule implements Module {
 
     private GameManager<AbstractPlayer> gameManager;
     private int[] scores;
+    private String[] displayedText;
     private String titleRankingsSprite = "logo.png";
 
     @Inject
@@ -31,6 +32,20 @@ public class EndScreenModule implements Module {
      */
     public void setScores(int[] scores) {
         this.scores = scores;
+    }
+
+    /**
+     * Send scores to the module
+     * 
+     * @param scores
+     *            the scores of the different players, the index matches the player.getIndex()
+     * @param displayedText
+     *            the text displayed instead of the score of a player, if null or empty string for a player the score will still be displayed
+     *
+     */
+    public void setScores(int[] scores, String[] displayedText) {
+        this.scores = scores;
+        this.displayedText = displayedText;
     }
 
     /**
@@ -61,7 +76,7 @@ public class EndScreenModule implements Module {
 
     @Override
     public final void onAfterOnEnd() {
-        Object[] data = { scores, titleRankingsSprite };
+        Object[] data = { scores, titleRankingsSprite, displayedText };
         gameManager.setViewData("endScreen", data);
     }
 

@@ -28,20 +28,26 @@ export class EndScreenModule {
   handleFrameData (frameInfo, data) {
     let scores = null
     let spriteName = null
+    let displayedText = null
     if (data) {
       scores = data[0]
       spriteName = data[1]
+      displayedText = data[2]
     }
     const state = {
       number: frameInfo.number,
       scores,
-      spriteName
+      spriteName,
+      displayedText
     }
     if (scores) {
       this.scores = scores
     }
     if (spriteName) {
       this.spriteName = spriteName
+    }
+    if (displayedText) {
+      this.displayedText = displayedText
     }
     this.states.push(state)
     return state
@@ -176,7 +182,9 @@ export class EndScreenModule {
     avatarContainer.addChild(hudAvatar)
 
     var name = this.generateText(finisher.player.name.toUpperCase(), 50, 'left', finisher.player.color)
-    var scoreLabel = this.generateText(((finisher.score >= 0) ? finisher.score.toString() + ' points' : '-'), 64, 'left', finisher.player.color)
+
+    var scoreText = finisher.text || ((finisher.score >= 0) ? finisher.score.toString() + ' points' : '-')
+    var scoreLabel = this.generateText(scoreText, 64, 'left', finisher.player.color)
 
     name.x = 330
     name.y = -4
@@ -218,6 +226,7 @@ export class EndScreenModule {
     for (var i = 0; i < this.globalData.playerCount; ++i) {
       podium.push({
         score: this.scores[i],
+        text: (this.displayedText) ? this.displayedText[i] : null,
         player: this.globalData.players[i],
         rank: 0
       })
