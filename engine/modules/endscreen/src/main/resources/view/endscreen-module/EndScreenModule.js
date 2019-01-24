@@ -2,7 +2,7 @@ import {WIDTH, HEIGHT} from '../core/constants.js'
 import {lerp, unlerp} from '../core/utils.js'
 import {ErrorLog} from '../core/ErrorLog.js'
 import {MissingImageError} from './errors/MissingImageError.js'
-import {flagForDestructionOnReinit} from '../core/rendering.js'
+
 /* global PIXI */
 
 export class EndScreenModule {

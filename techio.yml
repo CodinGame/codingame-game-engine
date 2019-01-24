@@ -41,14 +41,16 @@ plan:
   plan:
   - title: Introduction
     statement: playground/extensions/extensions-1-tools.md
-  - title: Create your own modules
-    statement: playground/extensions/extensions-2-tutorial.md
   - title: Tooltip Module
     statement: playground/extensions/extensions-3-tooltip.md
   - title: End Screen Module
     statement: playground/extensions/extensions-4-endscreen.md
+  - title: Toggle Module
+    statement: playground/extensions/extensions-toggle.md
   - title: Anim Module
     statement: playground/extensions/extensions-5-animmodule.md
+  - title: Create your own modules
+    statement: playground/extensions/extensions-2-tutorial.md
 - title: One more thing
   plan:
   - title: Guidelines
