@@ -18,6 +18,9 @@
 	<modules>
 		<module>engine/core</module>
 		<module>engine/modules/entities</module>
+		<module>engine/modules/endscreen</module>
+		<module>engine/modules/toggle</module>
+		<module>engine/modules/tooltip</module>
 		<module>runner</module>
 	</modules>
 
