@@ -4,7 +4,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ## 3.2.0
 
-### 🎁 New feature
+### 🎁 New features
 
 - The [EndScreenModule](playground/extensions/extensions-4-endscreen.md) and the [TooltipModule](playground/extensions/extensions-3-tooltip.md) are now bundled with the sdk.
 - The [ToggleModule](playground/extensions/extensions-toggle.md) has been added.
