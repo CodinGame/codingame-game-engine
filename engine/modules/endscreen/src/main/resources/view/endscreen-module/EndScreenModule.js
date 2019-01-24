@@ -183,7 +183,7 @@ export class EndScreenModule {
 
     var name = this.generateText(finisher.player.name.toUpperCase(), 50, 'left', finisher.player.color)
 
-    var scoreText = finisher.text || ((finisher.score >= 0) ? finisher.score.toString() + ' points' : '-')
+    const scoreText = finisher.text || ((finisher.score >= 0) ? finisher.score.toString() + ' points' : '-')
     var scoreLabel = this.generateText(scoreText, 64, 'left', finisher.player.color)
 
     name.x = 330
