@@ -1,5 +1,5 @@
 # AnimModule
-This module is not a maven module, you can find it's source code on Github: [https://github.com/CodinGame/codingame-sdk-modules/tree/master/AnimModule](https://github.com/CodinGame/codingame-sdk-modules/tree/master/AnimModule)
+This module is not a maven module, you can find it's source code on Github: [https://github.com/CodinGame/codingame-sdk-anim-module](https://github.com/CodinGame/codingame-sdk-anim-module)
 
 This module is useful for games with a lot of AnimatedSprites overlayed over the rest of the game.
 
