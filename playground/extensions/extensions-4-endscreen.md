@@ -33,11 +33,24 @@ To guarantee the correct ranking, you must set this module's score property in y
 ```java
   @Override
   public void onEnd() {
-      endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray());
+    endScreenModule.setScores(gameManager.getPlayers().stream().mapToInt(p -> p.getScore()).toArray());
   }
 ```
 
 The module loads by default your `logo.png` as title, you can set your own image with `setTitleRankingsSprite()`.
 ```java
   endScreenModule.setTitleRankingsSprite("myCustomSprite.png");
+```
+
+You can also display a custom text instead of the score.
+
+`Referee.java`
+```java
+  @Override
+  public void onEnd() {
+    int[] scores = { player1.getScore(), player2.getScore() };
+    String[] text = { scores[0] + " mana", scores[1] + " mana" };
+
+    endScreenModule.setScores(scores, text);
+  }
 ```
