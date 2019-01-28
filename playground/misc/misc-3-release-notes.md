@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next release
+
+### 🐞 Bug fix
+
+- `setFrameDuration()` regression from 3.0.0 fixed.
+
 ## 3.3.0
 
 ### 🎁 New feature
@@ -22,6 +28,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### ⚠️ Known issues
 
 - Maven modules not available as dependencies
+- `setFrameDuration()` does not work in the `init()`
 
 ## 3.1.0
 
@@ -32,6 +39,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - Fixed an issue with sprites
+
+### ⚠️ Known issues
+
+- `setFrameDuration()` does not work in the `init()`
 
 ## 3.0.0
 *January 11, 2019*
@@ -54,6 +65,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - Fixed security issue (ZipSlip bug).
 - Fixed the minimum max time alloted to players (now it really is 50ms).
 
+
+### ⚠️ Known issues
+
+- `setFrameDuration()` does not work in the `init()`
 
 ## 2.15
 *November 29, 2018*
