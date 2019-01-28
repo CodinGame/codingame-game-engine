@@ -280,6 +280,7 @@ export class Drawer {
     this.reasons = []
     this.frames = []
     this.currentFrame = 0
+    this.currentFrameDuration = 1000
     this.progress = 1
     const firstFrame = this._frames[0].frame
     firstFrame.key = this._frames[0].key
@@ -376,10 +377,10 @@ export class Drawer {
     }
 
     if (frame.duration) {
-      parsedFrame.frameInfo.frameDuration = frame.duration
-    } else {
-      parsedFrame.frameInfo.frameDuration = parsedFrame.previous.frameInfo.frameDuration || 1000
+      this.currentFrameDuration = frame.duration
     }
+    parsedFrame.frameInfo.frameDuration = this.currentFrameDuration
+
     if (parsedFrame === parsedFrame.previous) {
       parsedFrame.frameInfo.date = 0
       parsedFrame.frameInfo.frameDuration = 0
@@ -658,6 +659,7 @@ export class Drawer {
     this.reasons = []
     this.frames = []
     this.currentFrame = 0
+    this.currentFrameDuration = 1000
     this.progress = 1
     const firstFrame = this._frames[0].frame
     firstFrame.key = this._frames[0].key
