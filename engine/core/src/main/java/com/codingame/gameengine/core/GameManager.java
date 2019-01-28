@@ -287,7 +287,9 @@ abstract public class GameManager<T extends AbstractPlayer> {
         if (totalViewDataBytesSent > VIEW_DATA_TOTAL_HARD_QUOTA) {
             throw new RuntimeException("The amount of data sent to the viewer is too big!");
         } else if (totalViewDataBytesSent > VIEW_DATA_TOTAL_SOFT_QUOTA && !viewWarning) {
-            log.warn("Warning: the amount of data sent to the viewer is too big.\nPlease try to optimize your code to send less data (try replacing some commitEntityStates by a commitWorldState).");
+            log.warn(
+                "Warning: the amount of data sent to the viewer is too big.\nPlease try to optimize your code to send less data (try replacing some commitEntityStates by a commitWorldState)."
+            );
             viewWarning = true;
         }
 
@@ -532,11 +534,16 @@ abstract public class GameManager<T extends AbstractPlayer> {
     }
 
     private void addTurnTime() {
-        this.totalTurnTime += this.turnMaxTime;
-        if (this.totalTurnTime > GAME_DURATION_HARD_QUOTA) {
-            throw new RuntimeException("Total game duration too long");
-        } else if (this.totalTurnTime > GAME_DURATION_SOFT_QUOTA) {
-            log.warn("Warning: too many turns and/or too much time allocated to players per turn");
+        totalTurnTime += turnMaxTime;
+        if (totalTurnTime > GAME_DURATION_HARD_QUOTA) {
+            throw new RuntimeException(String.format("Total game duration too long (>%ds)", GAME_DURATION_HARD_QUOTA));
+        } else if (totalTurnTime > GAME_DURATION_SOFT_QUOTA) {
+            log.warn(
+                String.format(
+                    "Warning: too many turns and/or too much time allocated to players per turn (%ds/%ds)",
+                    totalTurnTime, GAME_DURATION_HARD_QUOTA
+                )
+            );
         }
     }
 
