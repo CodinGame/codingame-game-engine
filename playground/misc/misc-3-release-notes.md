@@ -2,7 +2,7 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next release
+## 3.3.0
 
 ### 🎁 New feature
 
@@ -18,6 +18,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - Fixed absence of game summaries from the local test page of SOLO games.
+
+### ⚠️ Known issues
+
+- Maven modules not available as dependencies
 
 ## 3.1.0
 
