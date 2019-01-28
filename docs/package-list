@@ -1,4 +1,7 @@
 com.codingame.gameengine.core
+com.codingame.gameengine.module.endscreen
 com.codingame.gameengine.module.entities
+com.codingame.gameengine.module.toggle
+com.codingame.gameengine.module.tooltip
 com.codingame.gameengine.runner
 com.codingame.gameengine.runner.dto
