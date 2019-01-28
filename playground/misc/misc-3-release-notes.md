@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next release
+
+### 🎁 New feature
+
+- The [EndScreenModule](playground/extensions/extensions-4-endscreen.md) allows you to display a custom text instead of the score.
+
 ## 3.2.0
 
 ### 🎁 New features
