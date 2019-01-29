@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+# Next Release
+
+### 🐞 Bug fix
+
+- Better handling of errors from initializing modules
+
 ## 3.3.1
 
 ### 🐞 Bug fix
