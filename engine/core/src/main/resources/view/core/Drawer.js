@@ -72,6 +72,10 @@ export class Drawer {
   handleModuleError (name, error) {
     ErrorLog.push(new ModuleError(name, error))
     console.error(error)
+    ErrorLog.push({
+      message: `< module "${name}" disabled >\n`
+    })
+    delete this.modules[name]
   }
 
   instantiateModules () {
@@ -418,11 +422,15 @@ export class Drawer {
     for (let moduleName in this.modules) {
       const module = this.modules[moduleName]
       var stage = new PIXI.Container()
-      module.reinitScene(stage, {
-        width: scope.canvasWidth,
-        height: scope.canvasHeight,
-        oversampling: this.oversampling
-      })
+      try {
+        module.reinitScene(stage, {
+          width: scope.canvasWidth,
+          height: scope.canvasHeight,
+          oversampling: this.oversampling
+        })
+      } catch (error) {
+        this.handleModuleError(moduleName, error)
+      }
       container.addChild(stage)
     }
   }
@@ -513,10 +521,6 @@ export class Drawer {
           module.animateScene(step)
         } catch (e) {
           this.handleModuleError(moduleName, e)
-          ErrorLog.push({
-            message: `< module ${moduleName} disabled >`
-          })
-          module.animateScene = null
         }
       }
     }
