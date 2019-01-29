@@ -106,6 +106,32 @@ public class MultiplayerGameRunner extends GameRunner {
     public void addAgent(String commandLine, String nickname, String avatarUrl) {
         addAgent(new CommandLinePlayerAgent(commandLine), nickname, avatarUrl);
     }
+    
+    /**
+     * Adds an AI to the next game to run, with the specified nickname.
+     * 
+     * @param playerClass
+     *            the Java class of an AI for your game.
+     * @param nickname
+     *            the player's nickname
+     */
+    public void addAgent(Class<?> playerClass, String nickname) {
+        addAgent(new JavaPlayerAgent(playerClass.getName()), nickname, null);
+    }
+
+    /**
+     * Adds an AI to the next game to run, with the specified nickname.
+     * <p>
+     * The given command will be executed with <code>Runtime.getRuntime().exec()</code>.
+     * 
+     * @param commandLine
+     *            the system command line to run the AI.
+     * @param nickname
+     *            the player's nickname
+     */
+    public void addAgent(String commandLine, String nickname) {
+        addAgent(new CommandLinePlayerAgent(commandLine), nickname, null);
+    }
 
     @Override
     protected void buildInitCommand(Command initCommand) {
