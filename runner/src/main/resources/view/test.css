@@ -257,7 +257,7 @@ button {
     flex-wrap: wrap;
     margin: -10px;
     flex: 1;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .outputs-seperator {
