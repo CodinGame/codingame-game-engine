@@ -37,12 +37,31 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
   $interval(checkSize, 1000)
 
   $scope.errors = ''
+  $scope.errorTable = {}
   ErrorLog.listen(function (error) {
-    $scope.errors += error.message + '\n'
-    if (error.cause) {
-      $scope.errors += error.cause + '\n'
-    }
+    addError(error)
   })
+
+  function addError (error) {
+    let errorText = error.message + '\n'
+    if (error.cause) {
+      errorText += error.cause + '\n'
+    }
+    if (!$scope.errorTable[errorText]) {
+      $scope.errorTable[errorText] = {text: errorText, quantity: 1}
+    } else {
+      $scope.errorTable[errorText].quantity += 1
+    }
+    refreshErrors()
+  }
+  function refreshErrors () {
+    let errorLog = ''
+    for (let errorName in $scope.errorTable) {
+      const error = $scope.errorTable[errorName]
+      errorLog += error.quantity !== 1 ? '(' + error.quantity + ') ' + error.text : error.text
+    }
+    $scope.errors = errorLog
+  }
 
   init()
 
@@ -63,10 +82,10 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
       return
     }
     if (ctrl.data.failCause) {
-      $scope.errors = ctrl.data.failCause
-      return;
+      addError(ctrl.data.failCause)
+      return
     }
-    
+
     $scope.gameLoaded = true
     $scope.uinput = ctrl.data.uinput
     ctrl.gameInfo = convertFrameFormat(ctrl.data)
