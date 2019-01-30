@@ -39,7 +39,6 @@ public class ConfigHelper {
     }
 
     public static class GameConfig {
-        private String title;
         private boolean leaguesDetected;
         private GameType gameType;
         private Map<String, QuestionConfig> questionsConfig = new HashMap<>();
@@ -66,14 +65,6 @@ public class ConfigHelper {
 
         public void setLeaguesDetected(boolean leaguesDetected) {
             this.leaguesDetected = leaguesDetected;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
         }
     }
 
@@ -117,7 +108,6 @@ public class ConfigHelper {
     }
 
     public static class QuestionConfig {
-        private String title;
         private boolean configDetected;
         private Map<Integer, String> statementsLanguageMap = new HashMap<Integer, String>();
         private Map<Integer, String> welcomeLanguageMap = new HashMap<Integer, String>();
@@ -183,14 +173,6 @@ public class ConfigHelper {
 
         public List<TestCase> getTestCases() {
             return testCases;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
         }
 
         public Map<Integer, String> getStatementsLanguageMap() {
@@ -266,8 +248,6 @@ public class ConfigHelper {
         }
 
         public void merge(QuestionConfig defaultConfig) {
-            this.title = ObjectUtils.firstNonNull(title, defaultConfig.title);
-
             this.statementsLanguageMap = firstNonNullOrEmptyMap(
                 statementsLanguageMap,
                 defaultConfig.statementsLanguageMap
@@ -383,7 +363,6 @@ public class ConfigHelper {
                     try (FileInputStream is = new FileInputStream(p.toFile())) {
                         config.load(is);
 
-                        String title = config.getProperty("title");
                         String minPlayers = config.getProperty("min_players");
                         String maxPlayers = config.getProperty("max_players");
                         String criteria = config.getProperty("criteria");
@@ -392,7 +371,6 @@ public class ConfigHelper {
                         String sortingOrder = config.getProperty("sorting_order");
                         String questionType = config.getProperty("type");
 
-                        questionConfig.setTitle(title);
                         questionConfig.setMinPlayers(minPlayers != null ? Integer.valueOf(minPlayers) : null);
                         questionConfig.setMaxPlayers(maxPlayers != null ? Integer.valueOf(maxPlayers) : null);
                         questionConfig.setCriteria(criteria);
@@ -454,7 +432,6 @@ public class ConfigHelper {
         });
 
         QuestionConfig defaultConfig = questionsConfig.get("");
-        gameConfig.setTitle(defaultConfig.getTitle());
 
         // If there is more than 1 element in leagues, then we have a real league system and the empty string key in leagues
         // represents the default value. So if we have a real league system, we will remove the default config and override
@@ -463,11 +440,6 @@ public class ConfigHelper {
             questionsConfig.remove("");
             for (String leagueKey : questionsConfig.keySet()) {
                 QuestionConfig questionConfig = questionsConfig.get(leagueKey);
-                // If not set, we force the title of the league with the concatenation of the main title and the league dir. name
-                ObjectUtils.firstNonNull(
-                    questionConfig.title,
-                    String.format("%s - %s", defaultConfig.title, leagueKey)
-                );
                 questionConfig.merge(defaultConfig);
                 questionConfig.configDetected = isPresentConfigIni(gameConfig, questionConfig);
             }
@@ -519,7 +491,6 @@ public class ConfigHelper {
     }
 
     private boolean isPresentConfigIni(GameConfig gameConfig, QuestionConfig questionConfig) {
-        return gameConfig.getTitle() != null
-            || questionConfig.minPlayers != null || questionConfig.maxPlayers != null;
+        return questionConfig.minPlayers != null || questionConfig.maxPlayers != null;
     }
 }

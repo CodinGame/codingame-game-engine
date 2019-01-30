@@ -484,8 +484,6 @@ class Renderer {
         throws MissingConfigException {
         if (!questionConfig.isConfigDetected()) {
             throw new MissingConfigException(tag + "Missing config.ini file");
-        } else if (gameConfig.getTitle() == null || gameConfig.getTitle().isEmpty()) {
-            throw new MissingConfigException(tag + "Missing title property in config.ini.");
         } else if (questionConfig.getMinPlayers() == null) {
             throw new MissingConfigException(tag + "Missing min_players property in config.ini.");
         } else if (questionConfig.getMaxPlayers() == null) {
@@ -640,7 +638,6 @@ class Renderer {
 
                                             exchange.getRequestReceiver().receiveFullString((e, data) -> {
                                                 ConfigResponseDto configResponseDto = new Gson().fromJson(data, ConfigResponseDto.class);
-                                                config.put("title", configResponseDto.title);
                                                 config.put("min_players", String.valueOf(configResponseDto.minPlayers));
                                                 config.put("max_players", String.valueOf(configResponseDto.maxPlayers));
                                                 config.put("type", configResponseDto.type);
