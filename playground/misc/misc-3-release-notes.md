@@ -6,9 +6,11 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🐞 Bug fix
 
+- Included missing `addAgent` polymorphism – custom nickname with default avatar.
 - Improved display of player output in local test page.
 - Better handling of errors from initializing modules
 - Unused `title` property no longer mandatory in `config.ini`
+- `setFrameDuration()` now throws an exception on non-positive values.
 
 ## 3.3.1
 
