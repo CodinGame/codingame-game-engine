@@ -190,7 +190,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         if (nbrOutputLines > 0) {
             addTurnTime();
         }
-        dumpNextPlayerInfos(player.getIndex(), player.getExpectedOutputLines(), player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime);
+        dumpNextPlayerInfos(player.getIndex(), nbrOutputLines, player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime);
 
         // READ PLAYER OUTPUTS
         iCmd = InputCommand.parse(s.nextLine());

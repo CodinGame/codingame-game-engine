@@ -2,7 +2,7 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next Release
+## 3.3.2
 
 ### 🐞 Bug fix
 
@@ -11,6 +11,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - Better handling of errors from initializing modules.
 - Unused `title` property no longer mandatory in `config.ini`.
 - `setFrameDuration()` now throws an exception on non-positive values.
+- We no longer wait the full player timeout time when creating a frame when no players have been executed.
 
 ## 3.3.1
 
@@ -18,11 +19,19 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - `setFrameDuration()` regression from 3.0.0 fixed.
 
+### ⚠️ Known issues
+
+- Frames created when no players have been executed will still wait the full player timeout time.
+
 ## 3.3.0
 
 ### 🎁 New feature
 
 - The [EndScreenModule](playground/extensions/extensions-4-endscreen.md) allows you to display a custom text instead of the score.
+
+### ⚠️ Known issues
+
+- Frames created when no players have been executed will still wait the full player timeout time.
 
 ## 3.2.0
 
@@ -37,6 +46,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### ⚠️ Known issues
 
+- Frames created when no players have been executed will still wait the full player timeout time.
 - Maven modules not available as dependencies
 - `setFrameDuration()` does not work in the `init()`.
 
@@ -52,6 +62,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### ⚠️ Known issues
 
+- Frames created when no players have been executed will still wait the full player timeout time.
 - `setFrameDuration()` does not work in the `init()`.
 
 ## 3.0.0
