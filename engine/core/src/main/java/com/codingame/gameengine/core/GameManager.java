@@ -371,9 +371,13 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * 
      * @param frameDuration
      *            The frame duration in milliseconds.
+     * @throws IllegalArgumentException
+     *             if frameDuration <= 0
      */
     public void setFrameDuration(int frameDuration) {
-        if (this.frameDuration != frameDuration) {
+        if (frameDuration <= 0) {
+            throw new IllegalArgumentException("Invalid frame duration: Negative of null frame duration is not supported");
+        } else if (this.frameDuration != frameDuration) {
             this.frameDuration = frameDuration;
             currentViewData.addProperty("duration", frameDuration);
         }
