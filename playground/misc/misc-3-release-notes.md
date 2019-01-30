@@ -2,9 +2,15 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## 3.3.2
+## Next release
 
 ### 🐞 Bug fix
+
+- Better display of game errors
+
+## 3.3.2
+
+### 🐞 Bug fixes
 
 - Included missing `addAgent` polymorphism – custom nickname with default avatar.
 - Improved display of player output in local test page.
