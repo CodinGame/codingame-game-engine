@@ -372,7 +372,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * @param frameDuration
      *            The frame duration in milliseconds.
      * @throws IllegalArgumentException
-     *             if frameDuration <= 0
+     *             if frameDuration &le; 0
      */
     public void setFrameDuration(int frameDuration) {
         if (frameDuration <= 0) {
