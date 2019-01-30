@@ -140,6 +140,7 @@ button {
     font-weight: normal;
     word-break: break-word;
     color: white;
+    max-height: 250px;
 }
 .players-outputs-player-console-title, .game-outputs-title, .game-outputs-down-referee-title, .players-outputs-player-header-title {
     font-size: 13px;
