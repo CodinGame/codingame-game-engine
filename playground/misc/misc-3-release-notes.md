@@ -7,7 +7,8 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - Improved display of player output in local test page.
-- Better handling of errors from initializing modules
+- Better handling of errors from initializing modules.
+- `setFrameDuration()` now throws errors on negative or null values.
 
 ## 3.3.1
 
