@@ -73,7 +73,7 @@ export class Drawer {
     ErrorLog.push(new ModuleError(name, error))
     console.error(error)
     ErrorLog.push({
-      message: `< module "${name}" disabled >\n`
+      message: `<Module "${name}" disabled>\n`
     })
     delete this.modules[name]
   }
