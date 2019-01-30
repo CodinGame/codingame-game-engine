@@ -8,8 +8,8 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - Included missing `addAgent` polymorphism – custom nickname with default avatar.
 - Improved display of player output in local test page.
-- Better handling of errors from initializing modules
-- Unused `title` property no longer mandatory in `config.ini`
+- Better handling of errors from initializing modules.
+- Unused `title` property no longer mandatory in `config.ini`.
 - `setFrameDuration()` now throws an exception on non-positive values.
 
 ## 3.3.1
@@ -38,7 +38,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### ⚠️ Known issues
 
 - Maven modules not available as dependencies
-- `setFrameDuration()` does not work in the `init()`
+- `setFrameDuration()` does not work in the `init()`.
 
 ## 3.1.0
 
@@ -48,11 +48,11 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🐞 Bug fix
 
-- Fixed an issue with sprites
+- Fixed an issue with sprites.
 
 ### ⚠️ Known issues
 
-- `setFrameDuration()` does not work in the `init()`
+- `setFrameDuration()` does not work in the `init()`.
 
 ## 3.0.0
 *January 11, 2019*
@@ -78,7 +78,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### ⚠️ Known issues
 
-- `setFrameDuration()` does not work in the `init()`
+- `setFrameDuration()` does not work in the `init()`.
 
 ## 2.15
 *November 29, 2018*
@@ -114,7 +114,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🎁 New feature
 
-- Local test page design now matches the website one
+- Local test page design now matches the website one.
 
 ## 2.8
 *August 9, 2018*
