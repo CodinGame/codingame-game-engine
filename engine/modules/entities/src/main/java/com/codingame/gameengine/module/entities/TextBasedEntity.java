@@ -3,6 +3,7 @@ package com.codingame.gameengine.module.entities;
 import java.util.Objects;
 /**
  * Generic type for entities containing text.
+ * @param <T> a subclass inheriting TextureBasedEntity, used in order to return <b>this</b> as a T instead of a <code>TextBasedEntity</code>.
  */
 public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends TextureBasedEntity<T> {
     protected String text = "";

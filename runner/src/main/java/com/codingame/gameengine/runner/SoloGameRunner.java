@@ -19,6 +19,9 @@ public class SoloGameRunner extends GameRunner {
 
     private List<String> testCaseInput;
 
+    /**
+     * Once this runner is instantiated, the system property game.mode is set to "solo"
+     */
     public SoloGameRunner() {
         System.setProperty("game.mode", "solo");
     }

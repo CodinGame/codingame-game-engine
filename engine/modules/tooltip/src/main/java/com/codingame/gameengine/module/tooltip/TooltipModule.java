@@ -63,7 +63,7 @@ public class TooltipModule implements Module {
     /**
      * Sets a tooltip text linked to an entity
      * 
-     * @param entity
+     * @param entity the <code>Entity</code> to link the tooltip to 
      * @param text is the tooltip text that will be displayed when hovering over the entity
      */
     public void setTooltipText(Entity<?> entity, String text) {
@@ -76,7 +76,7 @@ public class TooltipModule implements Module {
 
     /**
      * 
-     * @param entity
+     * @param entity the <code>Entity</code> to get the associated tooltip text from
      * @return the tooltip text liked to the entity
      */
     public String getTooltipText(Entity<?> entity) {
@@ -85,7 +85,7 @@ public class TooltipModule implements Module {
 
     /**
      * Removes the tooltip text linked to the entity
-     * @param entity
+     * @param entity the <code>Entity</code> to remove a tooltip from
      */
     public void removeTooltipText(Entity<?> entity) {
         newRegistration.put(entity.getId(), null);

@@ -25,8 +25,7 @@ import com.google.gson.Gson;
 /***
  * Mainly based on ContributionArchiveHelper.java
  */
-
-public class ConfigHelper {
+class ConfigHelper {
     private static final Pattern STATEMENT_FILE_PATTERN = Pattern.compile("statement_(?<language>.*?)\\.html?");
     private static final Pattern WELCOME_FILE_PATTERN = Pattern.compile("welcome_(?<language>.*?)\\.html?");
     private static final Pattern WELCOME_IMG_PATTERN = Pattern.compile(".*\\.(png|jpe?g)");

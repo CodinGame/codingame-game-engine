@@ -9,7 +9,7 @@ enum ExportStatus {
     SUCCESS, FAIL
 }
 
-public class ExportReport {
+class ExportReport {
     private List<ReportItem> reportItems = new ArrayList<>();
     private ExportStatus exportStatus = ExportStatus.SUCCESS;
     private String dataUrl;

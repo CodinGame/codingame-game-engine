@@ -46,7 +46,7 @@ abstract public class AbstractMultiplayerPlayer extends AbstractPlayer {
     /**
      * Set current score. This is used to rank the players at the end of the game.
      * 
-     * @param score
+     * @param score current player score
      */
     public final void setScore(int score) {
         super.setScore(score);

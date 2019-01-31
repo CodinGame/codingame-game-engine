@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
+/**
+ * This class is used in with the <code>GameRunner</code> to add an AI as a player.
+ */
 public class CommandLinePlayerAgent extends Agent {
 
     private OutputStream processStdin;
@@ -13,6 +16,12 @@ public class CommandLinePlayerAgent extends Agent {
     private String commandLine;
     private Process process;
 
+    /**
+     * Creates an Agent for your game, will run the given commandLine at game start
+     * 
+     * @param commandLine
+     *            the commandLine to run
+     */
     public CommandLinePlayerAgent(String commandLine) {
         super();
         try {

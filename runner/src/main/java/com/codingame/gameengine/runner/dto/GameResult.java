@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A data class for game execution data
+ */
+@SuppressWarnings("javadoc")
 public class GameResult {
     public Map<String, List<String>> errors = new HashMap<>();
     public Map<String, List<String>> outputs = new HashMap<>();

@@ -3,8 +3,8 @@ package com.codingame.gameengine.module.entities;
 import java.util.Optional;
 
 /**
- * A graphical entity, displayed on screen in the game's replay.
  * <p>
+ * A graphical entity, displayed on screen in the game's replay.
  * </p>
  * The graphical counterpart's coordinates are converted from world units to pixel coordinates.
  * 
@@ -19,7 +19,7 @@ public abstract class Entity<T extends Entity<?>> {
     private double scaleX = 1, scaleY = 1;
     private boolean visible = false;
     private double rotation, alpha = 1;
-    ContainerBasedEntity parent;
+    ContainerBasedEntity<?> parent;
     Mask mask;
 
     static enum Type {
@@ -29,7 +29,7 @@ public abstract class Entity<T extends Entity<?>> {
     Entity() {
         id = ++GraphicEntityModule.ENTITY_COUNT;
         state = new EntityState();
-        
+
         // World commits made before the creation of an entity should not affect that entity.
         // This is why we set `visible` to false by default and immediately setVisible(true),
         // this way the first commit of this entity will turn it into something visible.
@@ -114,10 +114,12 @@ public abstract class Entity<T extends Entity<?>> {
     }
 
     /**
+     * <p>
      * Sets the z-index of this <code>Entity</code> used to compute the display order for overlapping entities.
+     * </p>
      * <p>
      * An <code>Entity</code> with a higher z-index is displayed over one with a smaller z-index.
-     * <p>
+     * </p>
      * In case of equal values, the most recently created <code>Entity</code> will be on top.
      * 
      * @param zIndex
@@ -183,8 +185,9 @@ public abstract class Entity<T extends Entity<?>> {
     }
 
     /**
-     * Sets the alpha of this <code>Entity</code> as a percentage.
      * <p>
+     * Sets the alpha of this <code>Entity</code> as a percentage.
+     * </p>
      * 1 is opaque and 0 is invisible.
      * 
      * @param alpha
@@ -198,8 +201,9 @@ public abstract class Entity<T extends Entity<?>> {
     }
 
     /**
-     * Sets the alpha of this <code>Entity</code> as a percentage.
      * <p>
+     * Sets the alpha of this <code>Entity</code> as a percentage.
+     * </p>
      * 1 is opaque and 0 is invisible.
      * 
      * @param alpha
@@ -275,6 +279,7 @@ public abstract class Entity<T extends Entity<?>> {
      * Flags this <code>Entity</code> to be drawn on screen or not.
      * <p>
      * Default is true.
+     * </p>
      * 
      * @param visible
      *            the value for this <code>Entity</code>'s visible flag.
@@ -317,6 +322,7 @@ public abstract class Entity<T extends Entity<?>> {
      * Returns the horizontal scale of this <code>Entity</code> as a percentage.
      * <p>
      * Default is 1.
+     * </p>
      * 
      * @return the horizontal scale of this <code>Entity</code>.
      */
@@ -328,6 +334,7 @@ public abstract class Entity<T extends Entity<?>> {
      * Returns the vertical scale of this <code>Entity</code> as a percentage.
      * <p>
      * Default is 1.
+     * </p>
      * 
      * @return the vertical scale of this <code>Entity</code>.
      */
@@ -339,6 +346,7 @@ public abstract class Entity<T extends Entity<?>> {
      * Returns the alpha of this <code>Entity</code> as a percentage.
      * <p>
      * Default is 1.
+     * </p>
      * 
      * @return the alpha of this <code>Entity</code>.
      */
@@ -376,7 +384,10 @@ public abstract class Entity<T extends Entity<?>> {
     }
 
     /**
+     * <p>
      * Sets a given <code>Sprite</code> as this <code>Entity</code>'s <code>Mask</code>.
+     * </p>
+     * <b>Note:</b> texture masks will only work on browsers which support WebGL
      * 
      * @param sprite
      *            the mask.
@@ -387,7 +398,10 @@ public abstract class Entity<T extends Entity<?>> {
     }
 
     /**
+     * <p>
      * Sets a given <code>SpriteAnimation</code> as this <code>Entity</code>'s <code>Mask</code>.
+     * </p>
+     * <b>Note:</b> texture masks will only work on browsers which support WebGL
      * 
      * @param animation
      *            the mask.
@@ -404,8 +418,8 @@ public abstract class Entity<T extends Entity<?>> {
     }
 
     /**
-     * Returns this <code>Entity</code>'s <code>Mask</code>.
      * <p>
+     * Returns this <code>Entity</code>'s <code>Mask</code>.
      * </p>
      * A <code>Mask</code> can be:
      * <ul>
@@ -414,8 +428,8 @@ public abstract class Entity<T extends Entity<?>> {
      * <li>a <code>SpriteAnimation</code></li>
      * </ul>
      * <p>
-     * </p>
      * Default is null.
+     * </p>
      * 
      * @return this <code>Entity</code>'s <code>Mask</code>.
      */

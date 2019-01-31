@@ -1,6 +1,6 @@
 package com.codingame.gameengine.runner;
 
-public class MissingConfigException extends Exception {
+class MissingConfigException extends Exception {
 
     private static final long serialVersionUID = -2697528486967229871L;
 

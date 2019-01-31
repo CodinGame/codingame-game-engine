@@ -30,7 +30,7 @@ public class MultiplayerGameRunner extends GameRunner {
      * If those parameters are present in the given input, the input values should override the generated values.
      * </p>
      * 
-     * @param seed
+     * @param seed this game's seed returned by the <code>GameManager</code> during execution
      */
     public void setSeed(Long seed) {
         this.seed = seed;

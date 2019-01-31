@@ -4,7 +4,7 @@ enum ReportItemType {
     ERROR, WARNING, MISSING_MANDATORY_FILE, INFO
 }
 
-public class ReportItem {
+class ReportItem {
     private String message;
     private ReportItemType type;
     private String link;
