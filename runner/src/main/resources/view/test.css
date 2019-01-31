@@ -124,22 +124,50 @@ button {
     background-color: #29323c;
     border: solid 1px #363e48;
     overflow: auto;
-    white-space: pre-wrap;
     font-size: 13px;
     font-weight: normal;
     word-break: break-word;
 }
 .outputs-demo {
-    height: calc(100% - 20px);
     padding: 10px 15px;
     background-color: #29323c;
     border: solid 1px #363e48;
     overflow: auto;
-    white-space: pre-wrap;
     font-size: 13px;
     font-weight: normal;
     word-break: break-word;
     color: white;
+    max-height: 250px;
+    display: flex;
+    flex-direction: column;
+}
+.output-log {
+    display: flex;
+    padding: 2px;
+}
+.collapsed-count {
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+}
+.collapsed-count.small {
+    font-size: 10px;
+}
+.collapsed-bubble {
+    width: 17px;
+    height: 17px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    border: 2px solid transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.error-text{
+    white-space: pre-line;
 }
 .players-outputs-player-console-title, .game-outputs-title, .game-outputs-down-referee-title, .players-outputs-player-header-title {
     font-size: 13px;

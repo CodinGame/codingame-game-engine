@@ -8,9 +8,13 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - PIXI updated from v4.4.3 to v4.8.5
 
+### 🐞 Bug fix
+
+- Better display of game errors
+
 ## 3.3.2
 
-### 🐞 Bug fix
+### 🐞 Bug fixes
 
 - Included missing `addAgent` polymorphism – custom nickname with default avatar.
 - Improved display of player output in local test page.
