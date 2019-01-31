@@ -13,7 +13,7 @@ export class GraphicEntityModule {
     this.extrapolationMap = {}
 
     this.globalData = {
-      coeff: 1,
+      toWorldUnits: 1,
       mustResetTree: true,
       mustResort: true,
       maskUpdates: {},
@@ -204,7 +204,28 @@ export class GraphicEntityModule {
     this.globalData.players = players
     const width = globalData.width
     const height = globalData.height
-    this.globalData.coeff = fitAspectRatio(width, height, WIDTH, HEIGHT)
-    api.coeff = this.globalData.coeff
+    this.globalData.toWorldUnits = fitAspectRatio(width, height, WIDTH, HEIGHT)
+    api.toWorldUnits = this.globalData.toWorldUnits
+
+    // Retro-compatibility
+    Object.defineProperty(api, 'coeff', {get: () => {
+      const msg = 'The "coeff" property of GraphicEntityModule\'s API is deprecated, please use "toWorldUnits" instead'
+      const stack = (new Error).stack
+      
+      if (console.groupCollapsed) {
+        console.groupCollapsed(
+          "%cDeprecation Warning: %c%s",
+          "color:#614108;background:#fffbe6",
+          "font-weight:normal;color:#614108;background:#fffbe6",
+          msg
+        )
+        console.warn(stack)
+        console.groupEnd()
+      } else {
+        console.warn("Deprecation Warning: ", msg)
+      }
+
+      return api.toWorldUnits
+    }})
   }
 }

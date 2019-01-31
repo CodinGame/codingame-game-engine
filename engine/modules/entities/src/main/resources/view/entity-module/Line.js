@@ -26,7 +26,7 @@ export default class Line extends Shape {
       this.graphics.clear()
       this.graphics.lineStyle(globalData.atLeastOnePixel(state.lineWidth), state.lineColor, state.lineAlpha)
       this.graphics.moveTo(0, 0)
-      this.graphics.lineTo(-this.container.x + state.x2 * globalData.coeff, -this.container.y + state.y2 * globalData.coeff)
+      this.graphics.lineTo(-this.container.x + state.x2 * globalData.toWorldUnits, -this.container.y + state.y2 * globalData.toWorldUnits)
     }
   }
 }
