@@ -17,8 +17,8 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 /**
- * The GraphicEntityModule takes care of displaying and animating graphical entities on the replay of the game.
  * <p>
+ * The GraphicEntityModule takes care of displaying and animating graphical entities on the replay of the game.
  * </p>
  * Use it by creating shapes, sprites, texts etc, then commiting their states to a certain moment of the frame. By default, the states are commited
  * automatically at the end of the frame.
@@ -62,8 +62,10 @@ public class GraphicEntityModule implements Module {
      * Creates a new world data object to be used to compute all frames throughout the game.
      * <p>
      * This method may only be called once. This method may not be called after the frames have started being computed.
+     * </p>
      * <p>
      * The world's width and height determine how the positions of all entities are mapped onto the viewer.
+     * </p>
      * 
      * @param width
      *            The number of units across the width of the visible part of the game. Default is 1920.
@@ -124,7 +126,7 @@ public class GraphicEntityModule implements Module {
      * This entity's graphical counterpart, at instant t of the frame being computed, will have the same properties as the java object as it is now.
      * <p>
      * Only the most recent commit is kept for a given t.
-     * <p>
+     * </p>
      * 
      * @param t
      *            The instant of the frame 0 &ge; t &ge; 1.
@@ -278,7 +280,7 @@ public class GraphicEntityModule implements Module {
         return e;
 
     }
-    
+
     /**
      * Creates a new BitmapText entity, its graphical counterpart will be created on the frame currently being computed.
      * 
@@ -295,6 +297,7 @@ public class GraphicEntityModule implements Module {
      * Creates a new Group entity, its graphical counterpart will be created on the frame currently being computed.
      * <p>
      * A Group represents a collection of other entities. It acts as a container.
+     * </p>
      * 
      * @param entities
      *            0 or more entities to immediately add to this group.
@@ -313,6 +316,7 @@ public class GraphicEntityModule implements Module {
      * Creates a new BufferedGroup entity, its graphical counterpart will be created on the frame currently being computed.
      * <p>
      * A BufferedGroup acts like a group but uses its own rendering system to avoid rounding errors when its children are scaled up or down.
+     * </p>
      * 
      * @param entities
      *            0 or more entities to immediately add to this group.

@@ -6,9 +6,9 @@ package com.codingame.gameengine.module.entities;
 public class Text extends TextBasedEntity<Text> {
 
     /**
-     * The list of supported font weights.
-     * 
+     * The list of supported font weights. 
      */
+    @SuppressWarnings("javadoc")
     public static enum FontWeight {
         NORMAL, BOLD, BOLDER, LIGHTER;
 

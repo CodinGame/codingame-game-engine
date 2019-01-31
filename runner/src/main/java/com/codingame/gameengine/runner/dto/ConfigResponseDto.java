@@ -1,5 +1,9 @@
 package com.codingame.gameengine.runner.dto;
 
+/**
+ * A data class for level configuration data 
+ */
+@SuppressWarnings("javadoc")
 public class ConfigResponseDto {
     public int minPlayers;
     public int maxPlayers;

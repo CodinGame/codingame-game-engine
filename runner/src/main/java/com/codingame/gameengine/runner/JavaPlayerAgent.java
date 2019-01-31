@@ -85,6 +85,7 @@ public class JavaPlayerAgent extends Agent {
         javaRunnerThread.start();
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void destroy() {
         if (javaRunnerThread != null) {
@@ -98,7 +99,7 @@ public class JavaPlayerAgent extends Agent {
             if (javaRunnerThread.isAlive()) {
                 // TODO
                 javaRunnerThread.interrupt();
-                // javaRunnerThread.destroy();
+//                 javaRunnerThread.destroy();
                 javaRunnerThread.stop();
             }
         }

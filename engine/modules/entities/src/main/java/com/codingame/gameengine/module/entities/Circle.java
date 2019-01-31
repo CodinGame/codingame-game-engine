@@ -1,8 +1,8 @@
 package com.codingame.gameengine.module.entities;
 
 /**
- * A Circle specifies an area in a the <code>world</code> defined by the Circle's center point (x,y) and its radius.
  * <p>
+ * A Circle specifies an area in a the <code>world</code> defined by the Circle's center point (x,y) and its radius. 
  * </p>
  * The coordinates and radius are in world units.
  */
@@ -51,8 +51,8 @@ public class Circle extends Shape<Circle> {
     }
 
     /**
-     * Returns the radius of this <code>Circle</code> in world units.
      * <p>
+     * Returns the radius of this <code>Circle</code> in world units. 
      * </p>
      * Default is 100.
      * 

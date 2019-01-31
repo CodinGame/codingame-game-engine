@@ -22,8 +22,7 @@ import java.util.regex.Pattern;
  * <br>
  * The HTML file(s) must be named "statement_&lt;language&gt;.html.tpl" and placed in "config" directory
  */
-
-public class StatementSplitter {
+class StatementSplitter {
 
     private static final Pattern LEAGUE_MARKER = Pattern.compile("\\s*<!--\\s+LEAGUES\\s+(?<leagues>.+)\\s+-->\\s*");
     private static final Pattern BEGIN_MARKER = Pattern.compile("\\s*<!--\\s+BEGIN\\s+(?<leagues>.+)\\s+-->\\s*");

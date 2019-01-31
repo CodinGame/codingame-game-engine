@@ -11,14 +11,28 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.util.Types;
 
+/**
+ * Entry point for the local <code>GameRunner</code> and CodinGame's server side game runner
+ */
 public class RefereeMain {
 
     private static boolean inProduction = false;
 
+    /**
+     * Is overriden by CodinGame's server side game runner 
+     * @return whether or not this execution is happening locally or on CodinGame
+     */
     public static boolean isInProduction() {
         return inProduction;
     }
 
+    /**
+     * CodinGame's game runner will launch the referee using this method.
+     * 
+     * @param args unused
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     */
     public static void main(String[] args) throws InstantiationException, IllegalAccessException {
         inProduction = true;
         InputStream in = System.in;
@@ -38,6 +52,12 @@ public class RefereeMain {
         start(in, out);
     }
 
+    /**
+     * The local <code>GameRunner</code> will launch the referee using this method.
+     * 
+     * @param is <code>InputStream</code> used to capture the referee's stdin
+     * @param out <code>PrintStream</code> used to capture the referee's stdout
+     */
     @SuppressWarnings("unchecked")
     public static void start(InputStream is, PrintStream out) {
 

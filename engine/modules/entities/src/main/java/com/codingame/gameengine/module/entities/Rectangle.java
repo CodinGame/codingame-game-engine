@@ -1,8 +1,8 @@
 package com.codingame.gameengine.module.entities;
 
 /**
- * A Rectangle specifies an area in a the <code>world</code> enclosed by the Rectangle's upper-left point (x,y), its width, and its height.
  * <p>
+ * A Rectangle specifies an area in a the <code>world</code> enclosed by the Rectangle's upper-left point (x,y), its width, and its height.
  * </p>
  * The coordinates, width and height are in world units.
  */
@@ -44,6 +44,7 @@ public class Rectangle extends Shape<Rectangle> {
      * Returns the width of this <code>Rectangle</code> in world units.
      * <p>
      * Default is 100.
+     * </p>
      * 
      * @return the width of this <code>Rectangle</code>.
      */
@@ -81,6 +82,7 @@ public class Rectangle extends Shape<Rectangle> {
      * Returns the height of this <code>Rectangle</code> in world units.
      * <p>
      * Default is 100.
+     * </p>
      * 
      * @return the height of this <code>Rectangle</code>.
      */
