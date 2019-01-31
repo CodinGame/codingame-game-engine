@@ -54,7 +54,22 @@
 					show-replay-prompt="false"
 					game-params="gameParams">
 				</cg-player>
-				<div id="console" class="outputs-demo" ng-bind="errors" ng-if="errors"></div>
+				<div id="console" class="outputs-demo">
+					<div class="output-log" ng-repeat="(key,value) in errors" ng-if="errors">
+						<span class="collapsed-bubble" ng-if="value.quantity > 1">
+							<span class="collapsed-count"
+								ng-bind="value.quantity"
+								ng-if="value.quantity < 9">
+							</span>
+							<span class="collapsed-count"
+								ng-if="value.quantity > 9">
+								+
+							</span>
+						</span>
+						<span class="error-text"ng-bind="key"></span>
+					</div>
+				</div>
+				
 				<div class="close-button-wrapper">
 					<button class="close-button" ng-click="closeViewReplayPopup()">Close</button>
 				</div>
@@ -165,7 +180,18 @@
 						<div class="game-outputs-up-log">
 							<div class="output-frame">
 								<div class="game-outputs-title">Game errors</div>
-								<div id="console" class="outputs" ng-bind="errors" readonly></div>
+								<div id="console" class="outputs">
+									<div class="output-log" ng-repeat="(key,value) in errors" ng-if="errors">
+										<span class="collapsed-bubble" ng-if="value.quantity > 1">
+											<span class="collapsed-count" ng-bind="value.quantity" ng-if="value.quantity < 9">
+											</span>
+											<span class="collapsed-count" ng-if="value.quantity > 9">
+												+
+											</span>
+										</span>
+										<span class="error-text" ng-bind="key"></span>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="game-outputs-up-uinput">
