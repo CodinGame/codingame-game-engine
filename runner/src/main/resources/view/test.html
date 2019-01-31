@@ -59,11 +59,11 @@
 						<span class="collapsed-bubble" ng-if="value.quantity > 1">
 							<span class="collapsed-count"
 								ng-bind="value.quantity"
-								ng-if="value.quantity < 9">
+								ng-if="value.quantity <= 9">
 							</span>
-							<span class="collapsed-count"
+							<span class="collapsed-count small"
 								ng-if="value.quantity > 9">
-								+
+								9+
 							</span>
 						</span>
 						<span class="error-text"ng-bind="key"></span>

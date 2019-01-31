@@ -150,7 +150,9 @@ button {
     height: 15px;
     line-height: 15px;
 }
-
+.collapsed-count.small {
+    font-size: 10px;
+}
 .collapsed-bubble {
     width: 17px;
     height: 17px;
