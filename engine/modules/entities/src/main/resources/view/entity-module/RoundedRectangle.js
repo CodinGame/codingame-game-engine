@@ -26,12 +26,11 @@ export class RoundedRectangle extends Shape {
     super.updateDisplay(state, changed, globalData)
     if (changed.lineWidth ||
       changed.lineColor ||
-      changed.width ||
-      changed.height ||
       changed.lineAlpha ||
       changed.fillColor ||
       changed.radius ||
-      changed.fillColor) {
+      changed.height ||
+      changed.width) {
       this.graphics.clear()
       if (state.fillColor !== null) {
         this.graphics.beginFill(state.fillColor, state.fillAlpha)
