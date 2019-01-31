@@ -263,6 +263,17 @@ public class GraphicEntityModule implements Module {
         newEntity(c);
         return c;
     }
+    
+    /**
+     * Creates a new RoundedRectangle entity, its graphical counterpart will be created on the frame currently being computed.
+     * 
+     * @return the entity. Modify its properties to animate the graphical counterpart.
+     */
+    public RoundedRectangle createRoundedRectangle() {
+        RoundedRectangle c = new RoundedRectangle();
+        newEntity(c);
+        return c;
+    }
 
     /**
      * Creates a new Text entity, its graphical counterpart will be created on the frame currently being computed.

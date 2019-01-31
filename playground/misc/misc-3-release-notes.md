@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🎁 New feature
+
+- Added `RoundedRectangle` Shape
+
 ## 3.3.2
 
 ### 🐞 Bug fix
