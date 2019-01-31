@@ -36,8 +36,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
 
   $interval(checkSize, 1000)
 
-  $scope.errors = ''
-  $scope.errorTable = {}
+  $scope.errors = {}
   ErrorLog.listen(function (error) {
     addError(error)
   })
@@ -47,20 +46,11 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
     if (error.cause) {
       errorText += error.cause + '\n'
     }
-    if (!$scope.errorTable[errorText]) {
-      $scope.errorTable[errorText] = {text: errorText, quantity: 1}
+    if (!$scope.errors[errorText]) {
+      $scope.errors[errorText] = {quantity: 1}
     } else {
-      $scope.errorTable[errorText].quantity += 1
+      $scope.errors[errorText].quantity += 1
     }
-    refreshErrors()
-  }
-  function refreshErrors () {
-    let errorLog = ''
-    for (let errorName in $scope.errorTable) {
-      const error = $scope.errorTable[errorName]
-      errorLog += error.quantity !== 1 ? '(' + error.quantity + ') ' + error.text : error.text
-    }
-    $scope.errors = errorLog
   }
 
   init()
