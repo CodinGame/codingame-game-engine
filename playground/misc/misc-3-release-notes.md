@@ -7,6 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🎁 New feature
 
 - Added `RoundedRectangle` Shape
+- Added `Polygon` Shape
 
 ### 📒 Notes
 
