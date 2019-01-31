@@ -35,8 +35,8 @@ public class SpriteSheetSplitter {
     }
 
     /**
-     * Returns the prefix for all subimages
-     * @return the prefix for all subimages
+     * Returns the prefix of all subimage names
+     * @return the prefix of all subimage names
      */
     public String getName() {
         return name;
@@ -99,8 +99,8 @@ public class SpriteSheetSplitter {
     }
 
     /**
-     * Sets the prefix for all subimages.
-     * @param name the prefix for all subimages
+     * Sets the prefix of all subimage names.
+     * @param name the prefix of all subimages
      * @return this <code>SpriteSheetSplitter</code>
      */
     public SpriteSheetSplitter setName(String name) {
@@ -119,8 +119,8 @@ public class SpriteSheetSplitter {
     }
 
     /**
-     * Sets the width for subimages
-     * @param width the width for subimages
+     * Sets the width of the subimages to extract
+     * @param width the width of the subimages
      * @return this <code>SpriteSheetSplitter</code>
      */
     public SpriteSheetSplitter setWidth(int width) {
@@ -129,8 +129,8 @@ public class SpriteSheetSplitter {
     }
     
     /**
-     * Sets the height for subimages
-     * @param height the height for subimages
+     * Sets the height of the subimages to extract
+     * @param height the height of the subimages
      * @return this <code>SpriteSheetSplitter</code>
      */
     public SpriteSheetSplitter setHeight(int height) {
