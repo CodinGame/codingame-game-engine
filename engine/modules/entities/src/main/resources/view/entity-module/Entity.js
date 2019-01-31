@@ -145,7 +145,7 @@ export class Entity {
 
     this.container.zIndex = state.zIndex
     this.container.alpha = state.alpha
-    this.container.position.set(state.x * globalData.coeff, state.y * globalData.coeff)
+    this.container.position.set(state.x * globalData.toWorldUnits, state.y * globalData.toWorldUnits)
     this.container.scale.set(state.scaleX || eps, state.scaleY || eps)
     this.container.rotation = state.rotation
     this.container._visible = state.visible && !this.hide

@@ -87,6 +87,7 @@ class Serializer {
 
         types = new HashMap<>();
         types.put(Type.RECTANGLE, "R");
+        types.put(Type.ROUNDED_RECTANGLE, "K");
         types.put(Type.CIRCLE, "C");
         types.put(Type.GROUP, "G");
         types.put(Type.BUFFERED_GROUP, "B");
