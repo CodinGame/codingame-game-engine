@@ -108,6 +108,26 @@ export const PROPERTIES = {
     convert (value) {
       return value ? value.split(',').map(id => +id) : []
     }
+  },
+
+  points: {
+    ...stringOpts,
+    convert (value) {
+      if (!value) {
+        return []
+      }
+      const points = []
+      let currentPoint = {}
+      value.split(',').forEach((coord, idx) => {
+        currentPoint['xy'[idx % 2]] = parseInt(coord)
+        if (idx % 2 == 1) {
+          points.push(currentPoint)
+          currentPoint = {}
+        }
+      });
+
+      return points
+    }
   }
 }
 

@@ -65,6 +65,7 @@ class Serializer {
         keys.put("duration", "d");
         keys.put("baseWidth", "bw");
         keys.put("baseHeight", "bh");
+        keys.put("points", "ps");
 
         commands = new HashMap<>();
         commands.put("CREATE", "C");
@@ -96,6 +97,7 @@ class Serializer {
         types.put(Type.TEXT, "T");
         types.put(Type.BITMAPTEXT, "X");
         types.put(Type.SPRITEANIMATION, "A");
+        types.put(Type.POLYGON, "P");
 
         if (keys.values().stream().distinct().count() != keys.values().size()) {
             throw new RuntimeException("Duplicate keys");

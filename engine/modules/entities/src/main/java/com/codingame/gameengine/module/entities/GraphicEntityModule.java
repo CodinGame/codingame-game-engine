@@ -26,8 +26,6 @@ import com.google.inject.Singleton;
 @Singleton
 public class GraphicEntityModule implements Module {
 
-    //JAVA
-    //TODO: masks
     //TODO: extra properties for Texts (text wrapping, alignement, ...)
 
     static int ENTITY_COUNT = 0;
@@ -273,6 +271,17 @@ public class GraphicEntityModule implements Module {
      */
     public RoundedRectangle createRoundedRectangle() {
         RoundedRectangle c = new RoundedRectangle();
+        newEntity(c);
+        return c;
+    }
+    
+    /**
+     * Creates a new Polygon entity, its graphical counterpart will be created on the frame currently being computed.
+     * 
+     * @return the entity. Modify its properties to animate the graphical counterpart.
+     */
+    public Polygon createPolygon() {
+        Polygon c = new Polygon();
         newEntity(c);
         return c;
     }
