@@ -13,7 +13,7 @@ export class GraphicEntityModule {
     this.extrapolationMap = {}
 
     this.globalData = {
-      coeff: 1,
+      toWorldUnits: 1,
       mustResetTree: true,
       mustResort: true,
       maskUpdates: {},
@@ -204,7 +204,10 @@ export class GraphicEntityModule {
     this.globalData.players = players
     const width = globalData.width
     const height = globalData.height
-    this.globalData.coeff = fitAspectRatio(width, height, WIDTH, HEIGHT)
-    api.coeff = this.globalData.coeff
+    this.globalData.toWorldUnits = fitAspectRatio(width, height, WIDTH, HEIGHT)
+    api.toWorldUnits = this.globalData.toWorldUnits
+    // Retro-compatibility
+    api.coeff = api.toWorldUnits
+    
   }
 }
