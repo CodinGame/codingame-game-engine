@@ -8,6 +8,7 @@ import { Group } from './Group.js'
 import { BufferedGroup } from './BufferedGroup.js'
 import { SpriteAnimation } from './SpriteAnimation.js'
 import { RoundedRectangle } from './RoundedRectangle.js';
+import { Polygon } from './Polygon.js';
 
 export class EntityFactory {
   static create (type) {
@@ -21,7 +22,8 @@ export class EntityFactory {
       G: Group,
       B: BufferedGroup,
       A: SpriteAnimation,
-      K: RoundedRectangle
+      K: RoundedRectangle,
+      P: Polygon
     }[type]
     if (!EntityClass) {
       throw new Error('Exception: entity type not found: ' + type)

@@ -40,7 +40,8 @@ const PROPERTY_KEY_MAP = {
   l: 'loop',
   d: 'duration',
   bw: 'baseWidth',
-  bh: 'baseHeight'
+  bh: 'baseHeight',
+  ps: 'points'
 }
 
 export class CreateCommand {

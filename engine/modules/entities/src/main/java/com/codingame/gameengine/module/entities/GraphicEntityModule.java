@@ -274,6 +274,17 @@ public class GraphicEntityModule implements Module {
         newEntity(c);
         return c;
     }
+    
+    /**
+     * Creates a new Polygon entity, its graphical counterpart will be created on the frame currently being computed.
+     * 
+     * @return the entity. Modify its properties to animate the graphical counterpart.
+     */
+    public Polygon createPolygon() {
+        Polygon c = new Polygon();
+        newEntity(c);
+        return c;
+    }
 
     /**
      * Creates a new Text entity, its graphical counterpart will be created on the frame currently being computed.
