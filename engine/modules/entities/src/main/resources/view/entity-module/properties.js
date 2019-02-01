@@ -117,6 +117,12 @@ export const PROPERTIES = {
         return []
       }
       return value.split(',').map(v => parseInt(v))
+    },
+    lerpMethod: (a, b, u) => {
+      if (a.length === b.length) {
+        return a.map((v, idx) => lerp(v, b[idx], u))
+      }
+      return noLerp(a, b, u)
     }
   }
 }
