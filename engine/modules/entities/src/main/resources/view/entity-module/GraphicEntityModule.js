@@ -51,7 +51,7 @@ export class GraphicEntityModule {
       }
     }
 
-    const parsedFrame = {...frameInfo}
+    const parsedFrame = { ...frameInfo }
 
     parsedFrame.previous = this.frames[this.frames.length - 1] || parsedFrame
 
@@ -208,24 +208,28 @@ export class GraphicEntityModule {
     api.toWorldUnits = this.globalData.toWorldUnits
 
     // Retro-compatibility
-    Object.defineProperty(api, 'coeff', {get: () => {
-      const msg = 'The "coeff" property of GraphicEntityModule\'s API is deprecated, please use "toWorldUnits" instead'
-      const stack = (new Error).stack
-      
-      if (console.groupCollapsed) {
-        console.groupCollapsed(
-          "%cDeprecation Warning: %c%s",
-          "color:#614108;background:#fffbe6",
-          "font-weight:normal;color:#614108;background:#fffbe6",
-          msg
-        )
-        console.warn(stack)
-        console.groupEnd()
-      } else {
-        console.warn("Deprecation Warning: ", msg)
-      }
+    if (!api.hasOwnProperty('coeff')) {
+      Object.defineProperty(api, 'coeff', {
+        get: () => {
+          const msg = 'The "coeff" property of GraphicEntityModule\'s API is deprecated, please use "toWorldUnits" instead'
+          const stack = (new Error()).stack
 
-      return api.toWorldUnits
-    }})
+          if (console.groupCollapsed) {
+            console.groupCollapsed(
+              '%cDeprecation Warning: %c%s',
+              'color:#614108;background:#fffbe6',
+              'font-weight:normal;color:#614108;background:#fffbe6',
+              msg
+            )
+            console.warn(stack)
+            console.groupEnd()
+          } else {
+            console.warn('Deprecation Warning: ', msg)
+          }
+
+          return api.toWorldUnits
+        }
+      })
+    }
   }
 }
