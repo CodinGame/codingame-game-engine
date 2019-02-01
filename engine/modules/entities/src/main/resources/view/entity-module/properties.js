@@ -1,4 +1,4 @@
-import {lerp, lerpColor, lerpAngle} from '../core/utils.js'
+import { lerp, lerpColor, lerpAngle } from '../core/utils.js'
 
 const noLerp = (a, b, u) => u < 1 ? a : b
 const timeLerp = (a, b, u) => b < a ? b : lerp(a, b, u)
@@ -116,17 +116,7 @@ export const PROPERTIES = {
       if (!value) {
         return []
       }
-      const points = []
-      let currentPoint = {}
-      value.split(',').forEach((coord, idx) => {
-        currentPoint['xy'[idx % 2]] = parseInt(coord)
-        if (idx % 2 == 1) {
-          points.push(currentPoint)
-          currentPoint = {}
-        }
-      });
-
-      return points
+      return value.split(',').map(v => parseInt(v))
     }
   }
 }
