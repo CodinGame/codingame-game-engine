@@ -1,24 +1,15 @@
 import { Shape } from './Shape.js'
 
-export class RoundedRectangle extends Shape {
-  static defaultSideLength () {
-    return 100
-  }
-  static defaultRadius () {
-    return 20
-  }
+export class Polygon extends Shape {
   constructor () {
     super()
     Object.assign(this.defaultState, {
-      width: RoundedRectangle.defaultSideLength(),
-      height: RoundedRectangle.defaultSideLength(),
-      radius: RoundedRectangle.defaultRadius()
+      points: []
     })
   }
 
   initDisplay () {
     super.initDisplay()
-    this.graphics.drawRoundedRect(0, 0, this.defaultState.width, this.defaultState.height, this.defaultState.radius)
     this.graphics.endFill()
   }
 
@@ -28,19 +19,14 @@ export class RoundedRectangle extends Shape {
       changed.lineColor ||
       changed.lineAlpha ||
       changed.fillColor ||
-      changed.radius ||
-      changed.height ||
-      changed.width) {
+      changed.points) {
       this.graphics.clear()
       if (state.fillColor !== null) {
         this.graphics.beginFill(state.fillColor, state.fillAlpha)
       }
 
       this.graphics.lineStyle(globalData.atLeastOnePixel(state.lineWidth), state.lineColor, state.lineAlpha)
-      this.graphics.drawRoundedRect(0, 0,
-        state.width * globalData.toWorldUnits,
-        state.height * globalData.toWorldUnits,
-        state.radius * globalData.toWorldUnits)
+      this.graphics.drawPolygon(state.points.map(coord => coord * globalData.toWorldUnits))
       if (state.fillColor !== null) {
         this.graphics.endFill()
       }

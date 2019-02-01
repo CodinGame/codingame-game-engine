@@ -1,4 +1,4 @@
-import {lerp, lerpColor, lerpAngle} from '../core/utils.js'
+import { lerp, lerpColor, lerpAngle } from '../core/utils.js'
 
 const noLerp = (a, b, u) => u < 1 ? a : b
 const timeLerp = (a, b, u) => b < a ? b : lerp(a, b, u)
@@ -107,6 +107,22 @@ export const PROPERTIES = {
     ...stringOpts,
     convert (value) {
       return value ? value.split(',').map(id => +id) : []
+    }
+  },
+
+  points: {
+    ...stringOpts,
+    convert (value) {
+      if (!value) {
+        return []
+      }
+      return value.split(',').map(v => parseInt(v))
+    },
+    lerpMethod: (a, b, u) => {
+      if (a.length === b.length) {
+        return a.map((v, idx) => lerp(v, b[idx], u))
+      }
+      return noLerp(a, b, u)
     }
   }
 }

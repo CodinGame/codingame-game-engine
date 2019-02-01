@@ -25,7 +25,6 @@ export class Rectangle extends Shape {
       changed.width ||
       changed.height ||
       changed.lineAlpha ||
-      changed.fillColor ||
       changed.fillColor) {
       this.graphics.clear()
       if (state.fillColor !== null) {
