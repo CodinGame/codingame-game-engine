@@ -122,6 +122,15 @@ class ConfigHelper {
         private Map<Integer, String> criteriaLanguageMap = new HashMap<Integer, String>();
         private String sortingOrder;
         private String questionType;
+        private Boolean ignoreDraws;
+
+        public Boolean getIgnoreDraws() {
+            return ignoreDraws;
+        }
+
+        public void setIgnoreDraws(Boolean ignoreDraws) {
+            this.ignoreDraws = ignoreDraws;
+        }
 
         //Used to sort test cases by their filename number
         private Map<Integer, TestCase> testCaseDtoMap = new TreeMap<>();
@@ -369,12 +378,14 @@ class ConfigHelper {
                         String criteriaFr = config.getProperty("criteria_fr");
                         String sortingOrder = config.getProperty("sorting_order");
                         String questionType = config.getProperty("type");
+                        String ignoreDraws = config.getProperty("ignore_draws");
 
                         questionConfig.setMinPlayers(minPlayers != null ? Integer.valueOf(minPlayers) : null);
                         questionConfig.setMaxPlayers(maxPlayers != null ? Integer.valueOf(maxPlayers) : null);
                         questionConfig.setCriteria(criteria);
                         questionConfig.setSortingOrder(sortingOrder);
                         questionConfig.setQuestionType(questionType);
+                        questionConfig.setIgnoreDraws(ignoreDraws != null ? Boolean.valueOf(ignoreDraws) : null);
 
                         if (sortingOrder != null && criteria != null) {
                             if (criteriaEn != null) {
