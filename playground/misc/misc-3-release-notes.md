@@ -2,7 +2,7 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## 3.4.0
+## 3.4.1
 
 ### 🎁 New features
 
@@ -16,6 +16,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 📒 Notes
 
 - PIXI updated from v4.4.3 to v4.8.5
+
+## 3.4.0
+
+⛔ Broken version
 
 ## 3.3.2
 

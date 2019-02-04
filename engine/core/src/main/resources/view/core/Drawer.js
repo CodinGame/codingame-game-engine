@@ -702,7 +702,7 @@ export class Drawer {
 
       loader.add('avatar' + index, agent.avatar, {loadType: 2, crossOrigin: true}, function (event) {
         agentData.avatar = event.texture
-        PIXI.Texture.AddToCache(event.texture, '$' + agentData.index)
+        PIXI.Texture.addToCache(event.texture, '$' + agentData.index)
       })
       return agentData
     })
@@ -816,7 +816,7 @@ export class Drawer {
         this.demo.agents.forEach(agent => {
           loader.add('avatar' + agent.index, agent.avatar, {loadType: 2, crossOrigin: true}, function (event) {
             agent.avatarTexture = event.texture
-            PIXI.Texture.AddToCache(event.texture, '$' + agent.index)
+            PIXI.Texture.addToCache(event.texture, '$' + agent.index)
           })
         })
       }
@@ -837,8 +837,8 @@ export class Drawer {
       const onComplete = function () {
         var key
         for (key in resources.images) {
-          if (resources.images.hasOwnProperty(key)) {
-            PIXI.Texture.AddToCache(loader.resources[key].texture, key)
+          if (resources.images.hasOwnProperty(key) && loader.resources[key].texture) {
+            PIXI.Texture.addToCache(loader.resources[key].texture, key)
           }
         }
         for (key in resources.spines) {

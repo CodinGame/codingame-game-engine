@@ -1,7 +1,7 @@
-import {PROPERTIES} from './properties.js'
-import {EntityFactory} from './EntityFactory.js'
+import { PROPERTIES } from './properties.js'
+import { EntityFactory } from './EntityFactory.js'
 import * as transitions from '../core/transitions.js'
-import {assets} from '../assets.js'
+import { assets } from '../assets.js'
 
 /* global PIXI */
 
@@ -98,8 +98,8 @@ export class LoadCommand {
       }
     }
     const dataString = 'data:text/json;charset=UTF-8,' + JSON.stringify(data)
-    if (!PIXI.utils.TextureCache.hasOwnProperty(dataString + '_image')) {
-      this.loader.add(dataString, {crossOrigin: true})
+    if (!PIXI.utils.TextureCache[dataString + '_image']) {
+      this.loader.add(dataString, { crossOrigin: true })
     }
   }
 
@@ -151,7 +151,7 @@ export class PropertiesCommand {
 
   apply (entities, frameInfo) {
     let entity = entities.get(this.id)
-    entity.addState(this.t, {values: this.params, curve: this.curve}, frameInfo.number, frameInfo)
+    entity.addState(this.t, { values: this.params, curve: this.curve }, frameInfo.number, frameInfo)
   }
 }
 export class WorldCommitCommand {
@@ -162,7 +162,7 @@ export class WorldCommitCommand {
   apply (entities, frameInfo) {
     entities.forEach(entity => {
       this.times.forEach(time => {
-        entity.addState(time, {values: {}, curve: {}}, frameInfo.number, frameInfo)
+        entity.addState(time, { values: {}, curve: {} }, frameInfo.number, frameInfo)
       })
     })
   }
