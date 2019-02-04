@@ -1,7 +1,7 @@
-import {WIDTH, HEIGHT} from '../core/constants.js'
-import {lerp, unlerp} from '../core/utils.js'
-import {ErrorLog} from '../core/ErrorLog.js'
-import {MissingImageError} from './errors/MissingImageError.js'
+import { WIDTH, HEIGHT } from '../core/constants.js'
+import { lerp, unlerp } from '../core/utils.js'
+import { ErrorLog } from '../core/ErrorLog.js'
+import { MissingImageError } from './errors/MissingImageError.js'
 
 /* global PIXI */
 
@@ -210,8 +210,8 @@ export class EndScreenModule {
 
     let sprite = this.spriteName
     var titleRanking
-    if (PIXI.utils.TextureCache.hasOwnProperty(sprite)) {
-      titleRanking = new PIXI.Sprite.fromFrame(sprite)
+    if (PIXI.utils.TextureCache[sprite]) {
+      titleRanking = PIXI.Sprite.fromFrame(sprite)
     } else {
       ErrorLog.push(new MissingImageError(sprite))
       titleRanking = new PIXI.Sprite(PIXI.Texture.EMPTY)
