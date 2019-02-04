@@ -4,20 +4,18 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ## Next Release
 
-### 🎁 New feature
+### 🎁 New features
 
 - Added `RoundedRectangle` Shape
 - Added `Polygon` Shape
 
-### 📒 Notes
-
-- PIXI updated from v4.4.3 to v4.8.5
-
-## 3.3.2
-
 ### 🐞 Bug fix
 
 - Better display of game errors
+
+### 📒 Notes
+
+- PIXI updated from v4.4.3 to v4.8.5
 
 ## 3.3.2
 
