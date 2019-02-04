@@ -540,11 +540,11 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private void addTurnTime() {
         totalTurnTime += turnMaxTime;
         if (totalTurnTime > GAME_DURATION_HARD_QUOTA) {
-            throw new RuntimeException(String.format("Total game duration too long (>%ds)", GAME_DURATION_HARD_QUOTA));
+            throw new RuntimeException(String.format("Total game duration too long (>%dms)", GAME_DURATION_HARD_QUOTA));
         } else if (totalTurnTime > GAME_DURATION_SOFT_QUOTA) {
             log.warn(
                 String.format(
-                    "Warning: too many turns and/or too much time allocated to players per turn (%ds/%ds)",
+                    "Warning: too many turns and/or too much time allocated to players per turn (%dms/%dms)",
                     totalTurnTime, GAME_DURATION_HARD_QUOTA
                 )
             );
