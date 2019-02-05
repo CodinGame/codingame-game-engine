@@ -9,7 +9,7 @@ Include the dependency below in the pom.xml of your project.
 <dependency>
   <groupId>com.codingame.gameengine</groupId>
   <artifactId>core</artifactId>
-  <version>2.4</version>
+  <version>3.4.1</version>
 </dependency>
 ```
 Or a more recent version. See the [Release Notes](misc/misc-3-release-notes.md).

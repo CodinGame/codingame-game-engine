@@ -12,7 +12,7 @@ Add the dependency in the `pom.xml` of your project.
 <dependency>
 	<groupId>com.codingame.gameengine</groupId>
 	<artifactId>module-tooltip</artifactId>
-	<version>3.2.0</version>
+	<version>3.4.1</version>
 </dependency>
 ```
 And load the module in your `config.js`.
