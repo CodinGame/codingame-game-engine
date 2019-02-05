@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🐞 Bug fix
+
+- `Circle` entities now displayed again
+
 ## 3.4.1
 
 ### 🎁 New features
@@ -16,6 +22,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 📒 Notes
 
 - PIXI updated from v4.4.3 to v4.8.5
+
+### ⚠️ Known issues
+
+- `Circle` entities no longer displayed
 
 ## 3.4.0
 
