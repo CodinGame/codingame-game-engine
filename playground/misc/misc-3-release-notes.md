@@ -7,6 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - `Circle` entities now displayed again
+- Included missing `setLeagueLevel` method in the `GameRunner`
 
 ## 3.4.1
 

@@ -27,9 +27,13 @@ Here's the file hierarchy for the project Tic-tac-toe:
 ```
 .
 ├── config
-│   ├── Boss.java
-│   ├── config.ini
-│   └── statement_en.html
+│   ├── Boss.java
+│   ├── config.ini
+│   ├── level1
+│   │   └── statement_en.html
+│   ├── level2
+│   │   └── statement_en.html
+│   └── stub.txt
 ├── pom.xml
 ├── README.md
 ├── src
