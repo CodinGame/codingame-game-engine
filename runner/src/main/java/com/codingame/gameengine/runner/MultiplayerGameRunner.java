@@ -19,6 +19,19 @@ public class MultiplayerGameRunner extends GameRunner {
     }
 
     /**
+     * Sets the league level to run. The first league is 1.
+     * <p>The value can also be set by setting the environment variable <code>league.level</code>.</p>
+     * @param leagueLevel the league level. 1 is the lowest level and default value.
+     */
+  
+    public void setLeagueLevel(int leagueLevel) {
+      if (leagueLevel < 1 || leagueLevel >= 20) {
+        throw new IllegalArgumentException("League level must be higher than 0 and lesser than 20");
+      }
+      System.setProperty("league.level", String.valueOf(leagueLevel));
+    }
+
+    /**
      * <p>
      * The seed is used to generated parameters such as width and height.<br>
      * If a seed is present in the given input, the input value should override the generated values.<br>

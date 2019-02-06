@@ -26,7 +26,9 @@ In addition, you will need to set **Agents** to the Game Runner. They are progra
 
 By default, you can access the game viewer for testing at [http://localhost:8888/test.html](http://localhost:8888/test.html). You may change the configuration of the game viewer by editing the `config.js` file. See the [Viewer configuration](core-4-configuration.md#viewer-configuration) for more details.
 
-Warning ⚠ To use the game viewer locally, your browser must support ES6 JavaScript **modules**. For Chrome, that's version 61 or above. For Firefox, from version 54 this feature is behind the `dom.moduleScripts.enabled` preference. To change preferences in Firefox, visit `about:config`.
+**Warning** ⚠ To use the game viewer locally, your browser must support ES6 JavaScript **modules**. For Chrome, that's version 61 or above. For Firefox, from version 54 this feature is behind the `dom.moduleScripts.enabled` preference. To change preferences in Firefox, visit `about:config`.
+
+The `MultiplayerGameRunner` also provides a `setLeagueLevel` method which you can use to test each league of your game. If left unspecified, the first level of the game will be run.
 
 
 # Examples
