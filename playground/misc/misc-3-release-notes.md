@@ -7,7 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🐞 Bug fix
 
-- The `EndScreenModule` now handles properly more than two players.
+- The `EndScreenModule` now properly handles more than two players.
 
 ## 3.4.2
 
