@@ -250,9 +250,24 @@ export class EndScreenModule {
       this.finishers.push(elem)
     }
 
-    for (i = 0; i < this.finishers.length; ++i) {
-      this.finishers[i].position.x = (WIDTH - this.finishers[0].width) / 2
-      this.finishers[i].position.y = i * 150
+    if (this.finishers.length <= 4) {
+      let maxFinisherWidth = Math.max(...this.finishers.map(f => f.width))
+      for (i = 0; i < this.finishers.length; ++i) {
+        this.finishers[i].position.x = (WIDTH - maxFinisherWidth) / 2
+        this.finishers[i].position.y = i * 150
+      }
+    } else {
+      const margin = 50
+      const middle = Math.ceil(this.finishers.length / 2)
+      let maxFinisherWidth = Math.max(...this.finishers.slice(0, middle).map(f => f.width))
+      for (i = 0; i < this.finishers.length; ++i) {
+        if (i < middle) {
+          this.finishers[i].position.x = WIDTH / 2 - (maxFinisherWidth + margin)
+        } else {
+          this.finishers[i].position.x = WIDTH / 2 + margin
+        }
+        this.finishers[i].position.y = (i % middle) * 150
+      }
     }
     finishers.y = 400
 
