@@ -125,9 +125,15 @@ export class EndScreenModule {
     }
   }
 
-  generateText (text, size, align, color) {
+  fitTextInWidth (text, width) {
+    let currText = text.text
+    while (text.width > width) {
+      currText = currText.slice(0, -1)
+      text.text = currText + '...'
+    }
+  }
+  generateText (text, size, align, color, maxWidth = null) {
     var textEl
-
     textEl = new PIXI.Text(text, {
       fontSize: Math.round(size / 1.2) + 'px',
       fontFamily: 'Lato',
@@ -140,6 +146,10 @@ export class EndScreenModule {
     } else if (align === 'center') {
       textEl.anchor.x = 0.5
     }
+    if (maxWidth !== null) {
+      this.fitTextInWidth(textEl, maxWidth)
+    }
+
     return textEl
   }
 
@@ -185,10 +195,16 @@ export class EndScreenModule {
 
     avatarContainer.addChild(hudAvatar)
 
-    var name = this.generateText(finisher.player.name.toUpperCase(), 50, 'left', finisher.player.color)
+    let maxTextWidth
+    if (this.globalData.playerCount <= 4) {
+      maxTextWidth = 1500
+    } else {
+      maxTextWidth = 500
+    }
+    var name = this.generateText(finisher.player.name.toUpperCase(), 50, 'left', finisher.player.color, maxTextWidth)
 
     const scoreText = finisher.text || ((finisher.score >= 0) ? finisher.score.toString() + ' points' : '-')
-    var scoreLabel = this.generateText(scoreText, 64, 'left', finisher.player.color)
+    var scoreLabel = this.generateText(scoreText, 64, 'left', finisher.player.color, maxTextWidth)
 
     name.x = 330
     name.y = -4
