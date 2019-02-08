@@ -37,7 +37,7 @@ max_players=2
 
 You may add to the config/ folder a text file named `stub.txt`. If the contents of this file is a syntaxically valid **CodinGame Stub Generator** input, the IDE will be prefilled with input/output code.
 
-See [Stub Generator Syntax](https://github.com/CodinGame/codingame-game-engine/blob/master/stubGeneratorSyntax.md) for details.
+See [Stub Generator Syntax](https://www.codingame.com/playgrounds/40701/contribute---help/stub-generator-syntax) for details.
 
 ### Loading assets <a name="loading-assets"></a>
 
@@ -119,6 +119,8 @@ For a game with multiple leagues, you may place a file named `statement_en.html.
 Within the `.tpl` file, you may place special comment blocks to indicate whether a block of html should be included for any specified league.
 
 Optionally, you can tranlate your statements in French using `statement_fr.html` files.
+
+Learn more about how to write a statement for sdk games in the [CodinGame contribution documentation](https://www.codingame.com/playgrounds/40701/contribute---help/writing-the-statement#game-statement)
 
 #### Example
 
