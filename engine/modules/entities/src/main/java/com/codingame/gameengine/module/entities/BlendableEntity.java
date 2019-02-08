@@ -58,7 +58,7 @@ public abstract class BlendableEntity<T extends Entity<?>> extends Entity<T> {
      * The possible values are found in <code>BlendMode</code>.
      * 
      * @see <a href="http://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES">PIXI BLEND_MODES</a>
-     * @param blendMode
+     * @param blendMode the <code>BlendMode</code> to use.
      * @return this <code>TextureBasedEntity</code>.
      */
     public T setBlendMode(BlendMode blendMode) {
