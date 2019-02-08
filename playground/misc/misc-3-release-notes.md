@@ -2,9 +2,16 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## 3.4.2
+
+## Next release
 
 ### 🐞 Bug fix
+
+- The `EndScreenModule` now properly handles more than two players.
+
+## 3.4.2
+
+### 🐞 Bug fixes
 
 - `Circle` entities now displayed again
 - Included missing `setLeagueLevel` method in the `GameRunner`

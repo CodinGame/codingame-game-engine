@@ -125,9 +125,15 @@ export class EndScreenModule {
     }
   }
 
-  generateText (text, size, align, color) {
+  fitTextInWidth (text, width) {
+    let currText = text.text
+    while (text.width > width) {
+      currText = currText.slice(0, -1)
+      text.text = currText + '...'
+    }
+  }
+  generateText (text, size, align, color, maxWidth = null) {
     var textEl
-
     textEl = new PIXI.Text(text, {
       fontSize: Math.round(size / 1.2) + 'px',
       fontFamily: 'Lato',
@@ -140,6 +146,10 @@ export class EndScreenModule {
     } else if (align === 'center') {
       textEl.anchor.x = 0.5
     }
+    if (maxWidth !== null) {
+      this.fitTextInWidth(textEl, maxWidth)
+    }
+
     return textEl
   }
 
@@ -171,7 +181,11 @@ export class EndScreenModule {
     rank.position.y = 56
     avatarContainer.addChild(rank)
 
-    var rankLetter = this.generateText(finisher.rank === 1 ? 'ST' : 'ND'.toString(), 34, 'left', finisher.player.color)
+    let rankChars = 'TH'
+    if (finisher.rank < 4) {
+      rankChars = ['ST', 'ND', 'RD'][finisher.rank - 1]
+    }
+    var rankLetter = this.generateText(rankChars.toString(), 34, 'left', finisher.player.color)
     rankLetter.position.x = 184
     rankLetter.position.y = 32
     avatarContainer.addChild(rankLetter)
@@ -181,10 +195,16 @@ export class EndScreenModule {
 
     avatarContainer.addChild(hudAvatar)
 
-    var name = this.generateText(finisher.player.name.toUpperCase(), 50, 'left', finisher.player.color)
+    let maxTextWidth
+    if (this.globalData.playerCount <= 4) {
+      maxTextWidth = 1500
+    } else {
+      maxTextWidth = 500
+    }
+    var name = this.generateText(finisher.player.name.toUpperCase(), 50, 'left', finisher.player.color, maxTextWidth)
 
     const scoreText = finisher.text || ((finisher.score >= 0) ? finisher.score.toString() + ' points' : '-')
-    var scoreLabel = this.generateText(scoreText, 64, 'left', finisher.player.color)
+    var scoreLabel = this.generateText(scoreText, 64, 'left', finisher.player.color, maxTextWidth)
 
     name.x = 330
     name.y = -4
@@ -237,22 +257,33 @@ export class EndScreenModule {
 
     this.finishers = []
     var finishers = new PIXI.Container()
-    var curRank = 1
+
     var elem
     for (i = 0; i < podium.length; ++i) {
-      if (i > 0 && podium[i - 1].score !== podium[i].score) {
-        curRank++
-      }
-
-      podium[i].rank = curRank
+      podium[i].rank = podium.filter(p => p.score > podium[i].score).length + 1
       elem = this.createFinisher(podium[i])
       finishers.addChild(elem)
       this.finishers.push(elem)
     }
 
-    for (i = 0; i < this.finishers.length; ++i) {
-      this.finishers[i].position.x = (WIDTH - this.finishers[0].width) / 2
-      this.finishers[i].position.y = i * 150
+    if (this.finishers.length <= 4) {
+      let maxFinisherWidth = Math.max(...this.finishers.map(f => f.width))
+      for (i = 0; i < this.finishers.length; ++i) {
+        this.finishers[i].position.x = (WIDTH - maxFinisherWidth) / 2
+        this.finishers[i].position.y = i * 150
+      }
+    } else {
+      const margin = 50
+      const middle = Math.ceil(this.finishers.length / 2)
+      let maxFinisherWidth = Math.max(...this.finishers.slice(0, middle).map(f => f.width))
+      for (i = 0; i < this.finishers.length; ++i) {
+        if (i < middle) {
+          this.finishers[i].position.x = WIDTH / 2 - (maxFinisherWidth + margin)
+        } else {
+          this.finishers[i].position.x = WIDTH / 2 + margin
+        }
+        this.finishers[i].position.y = (i % middle) * 150
+      }
     }
     finishers.y = 400
 
