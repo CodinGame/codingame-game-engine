@@ -241,14 +241,10 @@ export class EndScreenModule {
 
     this.finishers = []
     var finishers = new PIXI.Container()
-    var curRank = 1
+
     var elem
     for (i = 0; i < podium.length; ++i) {
-      if (i > 0 && podium[i - 1].score !== podium[i].score) {
-        curRank++
-      }
-
-      podium[i].rank = curRank
+      podium[i].rank = podium.filter(p => p.score > podium[i].score).length + 1
       elem = this.createFinisher(podium[i])
       finishers.addChild(elem)
       this.finishers.push(elem)
