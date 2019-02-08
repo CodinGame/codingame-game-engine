@@ -171,7 +171,11 @@ export class EndScreenModule {
     rank.position.y = 56
     avatarContainer.addChild(rank)
 
-    var rankLetter = this.generateText(finisher.rank === 1 ? 'ST' : 'ND'.toString(), 34, 'left', finisher.player.color)
+    let rankChars = 'TH'
+    if (finisher.rank < 4) {
+      rankChars = ['ST', 'ND', 'RD'][finisher.rank - 1]
+    }
+    var rankLetter = this.generateText(rankChars.toString(), 34, 'left', finisher.player.color)
     rankLetter.position.x = 184
     rankLetter.position.y = 32
     avatarContainer.addChild(rankLetter)
