@@ -73,7 +73,7 @@ Use this page to see the rendering of your game. It also allows you to export a 
 
 ## Deploy on codingame
 
-Go to [www.codingame.com](https://www.codingame.com), then click on **Contribute** > **Create a new puzzle** > **Multiplayer Game** (This section is not available to anyone yet, please contact us if you want the access).
+Go to [www.codingame.com](https://www.codingame.com), then click on **Contribute** > **Create** > **Multiplayer Game**.
 
 Then, import on CodinGame the game you have exported during the previous step. The game will be compiled on our servers and a preview link will appear if the compilation succeeded and if the configuration is correct.
 
