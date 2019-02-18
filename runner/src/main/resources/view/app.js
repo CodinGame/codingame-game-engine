@@ -72,7 +72,9 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
       return
     }
     if (ctrl.data.failCause) {
-      addError(ctrl.data.failCause)
+      addError({
+        message: ctrl.data.failCause
+      })
       return
     }
 

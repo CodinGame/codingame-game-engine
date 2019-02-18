@@ -172,42 +172,48 @@ abstract public class GameManager<T extends AbstractPlayer> {
      *            The amount of expected output lines from the player.
      */
     protected void execute(T player, int nbrOutputLines) {
-        if (!this.initDone) {
-            throw new RuntimeException("Impossible to execute a player during init phase.");
-        }
-
-        player.setTimeout(false);
-
-        InputCommand iCmd = InputCommand.parse(s.nextLine());
-
-        if (iCmd.cmd != InputCommand.Command.GET_GAME_INFO) {
-            throw new RuntimeException("Invalid command: " + iCmd.cmd);
-        }
-
-        dumpView();
-        dumpInfos();
-        dumpNextPlayerInput(player.getInputs().toArray(new String[0]));
-        if (nbrOutputLines > 0) {
-            addTurnTime();
-        }
-        dumpNextPlayerInfos(player.getIndex(), nbrOutputLines, player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime);
-
-        // READ PLAYER OUTPUTS
-        iCmd = InputCommand.parse(s.nextLine());
-        if (iCmd.cmd == InputCommand.Command.SET_PLAYER_OUTPUT) {
-            List<String> output = new ArrayList<>(iCmd.lineCount);
-            for (int i = 0; i < iCmd.lineCount; i++) {
-                output.add(s.nextLine());
+        try {
+            if (!this.initDone) {
+                throw new RuntimeException("Impossible to execute a player during init phase.");
             }
-            player.setOutputs(output);
-        } else if (iCmd.cmd == InputCommand.Command.SET_PLAYER_TIMEOUT) {
-            player.setTimeout(true);
-        } else {
-            throw new RuntimeException("Invalid command: " + iCmd.cmd);
-        }
 
-        player.resetInputs();
-        newTurn = false;
+            player.setTimeout(false);
+
+            InputCommand iCmd = InputCommand.parse(s.nextLine());
+
+            if (iCmd.cmd != InputCommand.Command.GET_GAME_INFO) {
+                throw new RuntimeException("Invalid command: " + iCmd.cmd);
+            }
+
+            dumpView();
+            dumpInfos();
+            dumpNextPlayerInput(player.getInputs().toArray(new String[0]));
+            if (nbrOutputLines > 0) {
+                addTurnTime();
+            }
+            dumpNextPlayerInfos(player.getIndex(), nbrOutputLines, player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime);
+
+            // READ PLAYER OUTPUTS
+            iCmd = InputCommand.parse(s.nextLine());
+            if (iCmd.cmd == InputCommand.Command.SET_PLAYER_OUTPUT) {
+                List<String> output = new ArrayList<>(iCmd.lineCount);
+                for (int i = 0; i < iCmd.lineCount; i++) {
+                    output.add(s.nextLine());
+                }
+                player.setOutputs(output);
+            } else if (iCmd.cmd == InputCommand.Command.SET_PLAYER_TIMEOUT) {
+                player.setTimeout(true);
+            } else {
+                throw new RuntimeException("Invalid command: " + iCmd.cmd);
+            }
+
+            player.resetInputs();
+            newTurn = false;
+        } catch (RuntimeException e) {
+            //Don't let the user catch game fail exceptions
+            dumpFail(e);
+            throw e;
+        }
     }
 
     /**
