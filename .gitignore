@@ -4,4 +4,4 @@ target/
 .classpath
 .project
 .vscode
-/bin
+*.iml

@@ -1,13 +1,16 @@
 import * as config from '../config.js'
-import {Drawer} from '../core/Drawer.js'
-import {ErrorLog} from '../core/ErrorLog.js'
-import {demo as defaultDemo} from '../demo.js'
+import { Drawer } from '../core/Drawer.js'
+import { ErrorLog } from '../core/ErrorLog.js'
+import { demo as defaultDemo } from '../demo.js'
 import Parser from './lib/Parser.js'
+
+console.log("app.js")
 
 /* global fetch, angular, $, XMLHttpRequest */
 
 function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameManagerFactory, $localStorage) {
   'ngInject'
+  console.log('PlayerCtrl')
   const ctrl = this
   let player = null
   let lastWidth
@@ -47,7 +50,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
       errorText += error.cause + '\n'
     }
     if (!$scope.errors[errorText]) {
-      $scope.errors[errorText] = {quantity: 1}
+      $scope.errors[errorText] = { quantity: 1 }
     } else {
       $scope.errors[errorText].quantity += 1
     }
@@ -79,7 +82,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
     $scope.gameLoaded = true
     $scope.uinput = ctrl.data.uinput
     ctrl.gameInfo = convertFrameFormat(ctrl.data)
-    $scope.agents = {...ctrl.data.agents}
+    $scope.agents = { ...ctrl.data.agents }
 
     ctrl.gameManager = gameManagerFactory.createGameManagerFromGameInfo($scope.drawer, ctrl.gameInfo, true)
     ctrl.gameManager.subscribe(onUpdate)
@@ -133,7 +136,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
       let f = v.split('\n')
       let header = f[0].split(' ')
 
-      return {view: v.replace(/^(KEY_FRAME)|(INTERMEDIATE_FRAME)/, ''), keyframe: header[0] === 'KEY_FRAME'}
+      return { view: v.replace(/^(KEY_FRAME)|(INTERMEDIATE_FRAME)/, ''), keyframe: header[0] === 'KEY_FRAME' }
     })
     for (let i = 0; i < frames.length; i++) {
       frames[i].gameSummary = data.summaries[i]
@@ -143,9 +146,9 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
       }
       frames[i].agentId = -1
     }
-    const agents = data.agents.map(a => Object.assign(a, {avatarUrl: a.avatar}))
+    const agents = data.agents.map(a => Object.assign(a, { avatarUrl: a.avatar }))
     const tooltips = data.tooltips.map(JSON.stringify)
-    return {agents: agents, frames: frames, tooltips: tooltips}
+    return { agents: agents, frames: frames, tooltips: tooltips }
   }
 
   function checkSize () {
@@ -209,6 +212,8 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
   }
 
   function viewReplay () {
+    $scope.drawer.destroy()
+
     drawerFactory.createDrawer(Drawer, ctrl.introReplayData).then(drawer => {
       $scope.replayDrawer = drawer
     })
@@ -217,6 +222,8 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
 
   function closeViewReplayPopup () {
     $scope.showViewReplayPopup = false
+    $scope.replayDrawer.destroy()
+    init()
   }
 
   function isReplayAvailable () {
