@@ -5,3 +5,5 @@ target/
 .project
 .vscode
 /bin
+/docs/
+*.iml
