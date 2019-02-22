@@ -73,6 +73,52 @@ public class Referee extends AbstractReferee {
 
 The Game Manager's API will thus work with your `Player` class, which you may modify at leisure.
 
+## Working with Guice
+
+Since the SDK uses injections to handle the instantiation of its different components, it is important to note a few things:
+- An injected field will be instantiated by Guice, those field with `@Inject` will always be `null` if you instantiate the class yourself.
+- Any simple class can be injected into yout `Referee` and you can inject the `Referee` or `GraphicEntityModule` into any custom class.
+
+### Example
+
+`Referee.java`
+```java
+public class Referee extends AbstractReferee {
+    @Inject MultiplayerGameManager<Player> gameManager;
+    @Inject MyGridMaker gridMaker;
+
+    @Override
+    public void init() {
+      // Map size can be 5,6,7 or 8
+      int mapSize = 5 + new Random(gameManager.getSeed()).nextInt(4)
+      gridMaker.init(mapSize);
+    }
+}
+```
+
+`MyGridMaker.java`
+```java
+public class MyGridMaker {
+    @Inject GraphicEntityModule entityModule;
+
+    public static final int cell_size = 20;
+
+    @Override
+    public void init(int size) {
+      // Use the injected GraphicEntityModule to create a grid
+      for (int y = 0; y < size; ++y) {
+        for (int x = 0; x < size; ++x) {
+          entityModule.createRectangle()
+          .setX(x * cell_size)
+          .setY(y * cell_size)
+          .setWidth(cell_size)
+          .setHeight(cell_size);
+        }
+      }
+    }
+}
+```
+
 # Features
 
 ## General Features
