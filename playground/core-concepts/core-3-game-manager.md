@@ -75,9 +75,10 @@ The Game Manager's API will thus work with your `Player` class, which you may mo
 
 ## Working with Guice
 
-Since the SDK uses injections to handle the instantiation of its different components, it is important to note a few things:
-- An injected field will be instantiated by Guice, those field with `@Inject` will always be `null` if you instantiate the class yourself.
-- Any simple class can be injected into yout `Referee` and you can inject the `Referee` or `GraphicEntityModule` into any custom class.
+Using Guice in your own code is totally optional but since the SDK uses injections to handle the instantiation of its different components, it is important to note a few things:
+- An injected field will be instantiated by Guice, those fields with `@Inject` will always be `null` if you instantiate the class yourself using the `new` operator.
+- Any simple class can be injected into your `Referee` and you can inject the `Referee` or `GraphicEntityModule` into any simple class.
+- Writing a lot of Guice code may cause the game to slow down.
 
 ### Example
 
