@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 3.4.5
+
+### 🐞 Bug fix
+
+- `EndScreenModule` now compatible with PIXI v4.8.5
+
 ## 3.4.4
 
 ### 🐞 Bug fix
