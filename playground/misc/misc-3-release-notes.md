@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🐞 Bug fix
+
+- The intro replay file `demo.js` is now smaller when generated from scratch.
+
 ## 3.4.5
 
 ### 🐞 Bug fix
