@@ -48,9 +48,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSyntaxException;
 
 import io.undertow.Handlers;
 import io.undertow.Undertow;
@@ -235,14 +237,14 @@ class Renderer {
                                     List<String> content = Files.readAllLines(f);
                                     String newContent = "";
                                     Pattern regex = Pattern.compile("<page.*file=\\\"([^\\\"]+)\\\".*\\/>"); // looking for the font resources
-                                    for(String line : content) {
+                                    for (String line : content) {
                                         Matcher ressourcesMatcher = regex.matcher(line);
                                         String newLine = "";
                                         int startCpy = 0;
-                                        while(ressourcesMatcher.find()) {
+                                        while (ressourcesMatcher.find()) {
                                             int startMatch = ressourcesMatcher.start(1);
                                             int endMatch = ressourcesMatcher.end(1);
-                                            newLine = newLine.concat(line.substring(startCpy,startMatch));
+                                            newLine = newLine.concat(line.substring(startCpy, startMatch));
                                             Path assetPath = f.getParent().resolve(ressourcesMatcher.group(1));
                                             newLine = newLine.concat(hashAsset(assetPath));
                                             startCpy = endMatch;
@@ -255,7 +257,8 @@ class Renderer {
                                     Files.write(
                                         tmpdir.resolve("hashed_assets").resolve(newName),
                                         newContent.getBytes(),
-                                        StandardOpenOption.CREATE);
+                                        StandardOpenOption.CREATE
+                                    );
                                 } else {
                                     fonts.add(
                                         tmpdir.relativize(f).toString().replace("\\", "/")
@@ -295,9 +298,11 @@ class Renderer {
     private static boolean isSpriteJson(Path f) {
         return "json".equals(FilenameUtils.getExtension(f.toString()));
     }
+
     private static boolean isFont(Path f) {
         return "fnt".equals(FilenameUtils.getExtension(f.toString()));
     }
+
     public static List<Path> generateView(String jsonResult, String assetsPath) {
         List<Path> paths;
 
@@ -664,11 +669,7 @@ class Renderer {
 
                                             try (PrintWriter out = new PrintWriter(demoFile)) {
                                                 out.println("export const demo = ");
-
-                                                List<String> lines = Files.readAllLines(gameFile.toPath());
-                                                for (String line : lines) {
-                                                    out.println(line);
-                                                }
+                                                out.print(extractDemoFromGameJson(gameFile).toString());
                                                 out.println(";");
                                             }
 
@@ -681,6 +682,22 @@ class Renderer {
                                     } finally {
                                         exchange.endExchange();
                                     }
+                                }
+
+                                private JsonObject extractDemoFromGameJson(File gameFile) {
+                                    JsonObject result = new JsonObject();
+                                    JsonParser parser = new JsonParser();
+                                    try {
+                                        JsonElement obj = parser.parse(new FileReader(gameFile));
+                                        JsonElement views = obj.getAsJsonObject().get("views");
+                                        JsonElement agents = obj.getAsJsonObject().get("agents");
+                                        result.add("views", views);
+                                        result.add("agents", agents);
+
+                                    } catch (IllegalStateException | JsonIOException | JsonSyntaxException | FileNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return result;
                                 }
 
                                 private void sendException(HttpServerExchange exchange, Exception e, int statusCode) {
