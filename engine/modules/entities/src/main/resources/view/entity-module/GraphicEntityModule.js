@@ -84,7 +84,6 @@ export class GraphicEntityModule {
           this.extrapolationMap[entity.id] = { ...entity.defaultState }
         }
 
-        const currentState = this.extrapolationMap[entity.id]
         const subStates = entity.states[frameNumber]
 
         // Sort on t to begin extrapolation
@@ -94,20 +93,23 @@ export class GraphicEntityModule {
           // Create a subState at t=1
           entity.addState(1, {}, frameNumber, frameInfo)
         }
-        let prevState = currentState
+
+        let prevState = this.extrapolationMap[entity.id] // currentState
         // If the entity had a state in the previous frame get the last one of them
         if (entity.states[previousFrameNumber] && previousFrameNumber !== frameNumber) {
           prevState = entity.states[previousFrameNumber][entity.states[previousFrameNumber].length - 1]
         }
-        for (const state of subStates) {
+
+        entity.states[frameNumber] = subStates.map((subState) => {
           // Extrapolate through existing substates, updating the extrapolationMap in the process (currentState)
-          Object.assign(currentState, state)
-          Object.assign(state, currentState)
+          const state = this.extrapolationMap[entity.id] = { ...this.extrapolationMap[entity.id], ...subState}
+
           if (typeof entity.computeAnimationProgressTime === 'function') {
             entity.computeAnimationProgressTime(prevState, state)
           }
           prevState = state
-        }
+          return state
+        })
       })
   }
 
