@@ -53,6 +53,7 @@ export class CreateCommand {
   apply (entities) {
     let entity = EntityFactory.create(this.type)
     entity.id = this.id
+
     entities.set(this.id, entity)
   }
 }

@@ -1,11 +1,11 @@
-import {assets} from '../assets.js'
+import { assets } from '../assets.js'
 import * as config from '../config.js'
-import {unlerp, fitAspectRatio} from './utils.js'
-import {WIDTH, HEIGHT, BASE_FRAME_DURATION} from './constants.js'
-import {ErrorLog} from './ErrorLog.js'
-import {demo as defaultDemo} from '../demo.js'
-import {setRenderer, destroyFlagged, flagForDestructionOnReinit} from './rendering.js'
-import {ModuleError} from './ModuleError.js'
+import { unlerp, fitAspectRatio } from './utils.js'
+import { WIDTH, HEIGHT, BASE_FRAME_DURATION } from './constants.js'
+import { ErrorLog } from './ErrorLog.js'
+import { demo as defaultDemo } from '../demo.js'
+import { setRenderer, destroyFlagged, flagForDestructionOnReinit } from './rendering.js'
+import { ModuleError } from './ModuleError.js'
 /* global PIXI requestAnimationFrame $ */
 
 export class Drawer {
@@ -124,7 +124,7 @@ export class Drawer {
   getOptions () {
     // Return an array of copies
     if (config.options) {
-      return config.options.map(v => ({...v}))
+      return config.options.map(v => ({ ...v }))
     }
     return []
   }
@@ -189,60 +189,80 @@ export class Drawer {
     scope.time = 0
 
     if (this.demo) {
-      if (this.demo.logo) {
-        try {
-          const logo = PIXI.Sprite.fromFrame(this.demo.logo)
-          logo.position.set(Drawer.WIDTH / 2, Drawer.HEIGHT / 2)
-          logo.anchor.set(0.5)
-          logo.baseScale = fitAspectRatio(logo.texture.width, logo.texture.height, 2 * Drawer.WIDTH / 3, Drawer.HEIGHT / 2, 0)
-          scene.addChild(logo)
-          scope.logo = logo
-        } catch (error) {
-          ErrorLog.push({
-            cause: error,
-            message: 'Missing "logo.png" to complete replay.'
-          })
-          scope.logo = new PIXI.Container()
-          scope.logo.baseScale = 1
-          scene.addChild(scope.logo)
-          scope.missingLogo = true
+      this.currentFrame = -1
+
+      return this.initDefaultFrames(this.demo.playerCount, this.demo.frames, this.demo.agents).then(() => {
+        this.currentFrame = 0
+
+        scope = this.scope
+        container = this.container
+
+        if (this.demo.logo) {
+          try {
+            const logo = PIXI.Sprite.fromFrame(this.demo.logo)
+            logo.position.set(Drawer.WIDTH / 2, Drawer.HEIGHT / 2)
+            logo.anchor.set(0.5)
+            logo.baseScale = fitAspectRatio(logo.texture.width, logo.texture.height, 2 * Drawer.WIDTH / 3, Drawer.HEIGHT / 2, 0)
+            scene.addChild(logo)
+            scope.logo = logo
+          } catch (error) {
+            ErrorLog.push({
+              cause: error,
+              message: 'Missing "logo.png" to complete replay.'
+            })
+            scope.logo = new PIXI.Container()
+            scope.logo.baseScale = 1
+            scene.addChild(scope.logo)
+            scope.missingLogo = true
+          }
         }
-      }
 
-      var darkness = new PIXI.Graphics()
-      if (!scope.missingLogo) {
-        darkness.beginFill(0, this.demo.overlayAlpha || 0)
-        darkness.drawRect(0, 0, Drawer.WIDTH + 20, Drawer.HEIGHT + 20)
-        darkness.endFill()
-        darkness.x -= 10
-        darkness.y -= 10
-      }
+        var darkness = new PIXI.Graphics()
+        if (!scope.missingLogo) {
+          darkness.beginFill(0, this.demo.overlayAlpha || 0)
+          darkness.drawRect(0, 0, Drawer.WIDTH + 20, Drawer.HEIGHT + 20)
+          darkness.endFill()
+          darkness.x -= 10
+          darkness.y -= 10
+        }
 
-      var demoContainer = new PIXI.Container()
-      try {
-        this.initDefaultFrames(this.demo.playerCount, this.demo.frames, this.demo.agents)
+        var demoContainer = new PIXI.Container()
+        // try {
         /** **************************************************************************************************************************************** */
         this.preconstructScene(this.scope, container, this.initWidth, this.initHeight)
         this.initScene(this.scope, demoContainer, this.frames, true)
         this.updateScene(this.scope, this.question, this.frames, this.currentFrame, this.progress, 1, this.reasons[this.currentFrame], true)
         /** **************************************************************************************************************************************** */
-      } catch (error) {
-        ErrorLog.push({
-          cause: error,
-          message: 'Cannot load demo, you might want to reset the demo'
-        })
-      }
-      scope.demo = demoContainer
-      scope.demotime = 0
+        // } catch (error) {
+        //   ErrorLog.push({
+        //     cause: error,
+        //     message: 'Cannot load demo, you might want to reset the demo'
+        //   })
+        //   throw error
+        // }
+        scope.demo = demoContainer
+        scope.demotime = 0
 
-      this.currentFrame = -1
-      container.addChild(demoContainer)
-      container.addChild(darkness)
-      container.addChild(scene)
+        this.currentFrame = -1
+        container.addChild(demoContainer)
+        container.addChild(darkness)
+        container.addChild(scene)
+        scope.updateTime = 0
+        scope.frameTime = 0
+      })
+    } else {
+      return new Promise(resolve => {
+        scope.updateTime = 0
+        scope.frameTime = 0
+        resolve()
+      })
     }
+  }
 
-    scope.updateTime = 0
-    scope.frameTime = 0
+  getParsePromise (i, _frames, frames, demo) {
+    return () => {
+      return this.parseFrame(_frames[i], frames, demo)
+    }
   }
 
   initDefaultFrames (playerCount, frames, agents) {
@@ -276,24 +296,37 @@ export class Drawer {
       } catch (err) {
         data = {}
       }
-      return {...data, key: header[0] === 'KEY_FRAME'}
+      return { ...data, key: header[0] === 'KEY_FRAME' }
     }).filter(x => x.key)
 
     this.parseGlobalData(this._frames[0].global)
     this.playerCount = playerCount
     this.reasons = []
     this.frames = []
-    this.currentFrame = 0
+    this.currentFrame = -1
     this.currentFrameDuration = 1000
     this.progress = 1
     const firstFrame = this._frames[0].frame
     firstFrame.key = this._frames[0].key
-    this.frames.push(this.parseFrame(firstFrame, this.frames))
-    for (var i = 1; i < this._frames.length; ++i) {
-      this.frames.push(this.parseFrame(this._frames[i], this.frames))
+
+    let parsePromise = new Promise(resolve => resolve())
+
+    try {
+      parsePromise = this.parseFrame(firstFrame, this.frames, true).then((f) => {
+        this.frames.push(f)
+      })
+
+      for (var i = 1; i < this._frames.length; ++i) {
+        parsePromise = parsePromise.then(this.getParsePromise(i, this._frames, this.frames, true)).then((f) => {
+          this.frames.push(f)
+        })
+      }
+    } catch (err) {
+      console.warn(err)
     }
 
     this.asyncRenderingTime = Drawer.RenderTimeout
+    return parsePromise
   };
 
   /** Mandatory */
@@ -363,43 +396,50 @@ export class Drawer {
   }
 
   /** Mandatory */
-  parseFrame (frame, previousFrames) {
-    const parsedFrame = {
-      data: {},
-      frameInfo: {
-        number: previousFrames.length
-      }
-    }
+  parseFrame (frame, previousFrames, demo) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (demo && this.loading !== undefined) {
+          reject(new Error('Loading of a game has started. Aborting intro replay.'))
+        }
+        const parsedFrame = {
+          data: {},
+          frameInfo: {
+            number: previousFrames.length
+          }
+        }
 
-    parsedFrame.previous = previousFrames[previousFrames.length - 1] || parsedFrame
-    if (parsedFrame !== parsedFrame.previous) {
-      parsedFrame.previous.next = parsedFrame
-    }
+        parsedFrame.previous = previousFrames[previousFrames.length - 1] || parsedFrame
+        if (parsedFrame !== parsedFrame.previous) {
+          parsedFrame.previous.next = parsedFrame
+        }
 
-    if (!frame.key) {
-      return parsedFrame.previous
-    }
+        if (!frame.key) {
+          resolve(parsedFrame.previous)
+        }
 
-    if (frame.duration) {
-      this.currentFrameDuration = frame.duration
-    }
-    parsedFrame.frameInfo.frameDuration = this.currentFrameDuration
+        if (frame.duration) {
+          this.currentFrameDuration = frame.duration
+        }
+        parsedFrame.frameInfo.frameDuration = this.currentFrameDuration
 
-    if (parsedFrame === parsedFrame.previous) {
-      parsedFrame.frameInfo.date = 0
-      parsedFrame.frameInfo.frameDuration = 0
-    } else {
-      parsedFrame.frameInfo.date = parsedFrame.previous.frameInfo.date + parsedFrame.previous.frameInfo.frameDuration
-    }
+        if (parsedFrame === parsedFrame.previous) {
+          parsedFrame.frameInfo.date = 0
+          parsedFrame.frameInfo.frameDuration = 0
+        } else {
+          parsedFrame.frameInfo.date = parsedFrame.previous.frameInfo.date + parsedFrame.previous.frameInfo.frameDuration
+        }
 
-    for (let moduleName in this.modules) {
-      const module = this.modules[moduleName]
-      if (typeof module.handleFrameData === 'function') {
-        parsedFrame.data[moduleName] = module.handleFrameData(parsedFrame.frameInfo, frame[moduleName])
-      }
-    }
+        for (let moduleName in this.modules) {
+          const module = this.modules[moduleName]
+          if (typeof module.handleFrameData === 'function') {
+            parsedFrame.data[moduleName] = module.handleFrameData(parsedFrame.frameInfo, frame[moduleName])
+          }
+        }
 
-    return parsedFrame
+        resolve(parsedFrame)
+      }, 0)
+    })
   }
 
   preconstructScene (scope, container, canvasWidth, canvasHeight) {
@@ -569,13 +609,19 @@ export class Drawer {
   }
 
   reinitDefaultScene () {
-    if (this.loaded >= 1) {
+    if (this.loaded >= 1 && this.loading === undefined) {
       this.intro = true
       this.destroyScene(this.scope)
       this.purge()
       this.asyncRenderingTime = Drawer.RenderTimeout
-      this.initDefaultScene(this.scope, this.container, this.initWidth, this.initHeight)
-      this.changed = true
+      if (this.defaultSceneLoaded === undefined || this.defaultSceneLoaded === true) {
+        this.defaultSceneLoaded = false
+
+        this.initDefaultScene(this.scope, this.container, this.initWidth, this.initHeight).then(() => {
+          this.defaultSceneLoaded = true
+        })
+        this.changed = true
+      }
     }
   }
 
@@ -589,7 +635,7 @@ export class Drawer {
 
   reinit (force) {
     if (this.loaded >= 1) {
-      if (this.currentFrame >= 0 && !this.intro) {
+      if (this.currentFrame >= 0 && !this.intro && this.loading === false) {
         this.reinitScene()
       } else {
         if (!this.intro || force) { this.reinitDefaultScene() }
@@ -618,7 +664,9 @@ export class Drawer {
         this.changed |= this.renderPreloadScene(this.scope, step)
       } else if (this.changed || (this.asyncRendering && this.asyncRenderingTime > 0)) {
         if (this.currentFrame < 0) {
-          this.changed |= this.renderDefaultScene(this.scope, step)
+          if (this.defaultSceneLoaded) {
+            this.changed |= this.renderDefaultScene(this.scope, step)
+          }
         } else if (this.intro) {
           this.changed = true
           if (this.endDefaultScene(this.scope, step)) {
@@ -655,7 +703,7 @@ export class Drawer {
       } catch (err) {
         data = {}
       }
-      return {...data, key: header[0] === 'KEY_FRAME'}
+      return { ...data, key: header[0] === 'KEY_FRAME' }
     })
 
     this.parseGlobalData(this._frames[0].global)
@@ -663,14 +711,22 @@ export class Drawer {
     this.reasons = []
     this.frames = []
     this.currentFrame = 0
+
     this.currentFrameDuration = 1000
     this.progress = 1
     const firstFrame = this._frames[0].frame
     firstFrame.key = this._frames[0].key
-    this.frames.push(this.parseFrame(firstFrame, this.frames))
+
+    let parsePromise = this.parseFrame(firstFrame, this.frames).then((f) => {
+      this.frames.push(f)
+    })
+
     for (var i = 1; i < this._frames.length; ++i) {
-      this.frames.push(this.parseFrame(this._frames[i], this.frames))
+      parsePromise = parsePromise.then(this.getParsePromise(i, this._frames, this.frames, false)).then((f) => {
+        this.frames.push(f)
+      })
     }
+    return parsePromise
   }
 
   isTurnBasedGame () {
@@ -700,7 +756,7 @@ export class Drawer {
         avatar: null
       }
 
-      loader.add('avatar' + index, agent.avatar, {loadType: 2, crossOrigin: true}, function (event) {
+      loader.add('avatar' + index, agent.avatar, { loadType: 2, crossOrigin: true }, function (event) {
         agentData.avatar = event.texture
         PIXI.Texture.addToCache(event.texture, '$' + agentData.index)
       })
@@ -710,10 +766,11 @@ export class Drawer {
 
     let completed = false
     const onComplete = function () {
-      drawer._initFrames(agents.length, frames)
-      drawer.loading = false
-      drawer.reinit(false)
-      completed = true
+      drawer._initFrames(agents.length, frames).then(() => {
+        drawer.loading = false
+        drawer.reinit(false)
+        completed = true
+      })
     }
 
     loader.on('complete', onComplete)
@@ -796,25 +853,25 @@ export class Drawer {
       setRenderer(this.renderer)
       var loader = new PIXI.loaders.Loader(resources.baseUrl)
       for (key in resources.images) {
-        loader.add(key, resources.images[key], {crossOrigin: true})
+        loader.add(key, resources.images[key], { crossOrigin: true })
       }
       var i
       for (i = 0; i < resources.sprites.length; ++i) {
-        loader.add(resources.sprites[i], {crossOrigin: true})
+        loader.add(resources.sprites[i], { crossOrigin: true })
       }
       for (i = 0; i < resources.fonts.length; ++i) {
-        loader.add(resources.fonts[i], {crossOrigin: true})
+        loader.add(resources.fonts[i], { crossOrigin: true })
       }
       for (key in resources.spines) {
-        loader.add(key, resources.spines[key], {crossOrigin: true})
+        loader.add(key, resources.spines[key], { crossOrigin: true })
       }
       for (i = 0; i < resources.others.length; ++i) {
-        loader.add(resources.others[i], {crossOrigin: true})
+        loader.add(resources.others[i], { crossOrigin: true })
       }
 
       if (this.demo) {
         this.demo.agents.forEach(agent => {
-          loader.add('avatar' + agent.index, agent.avatar, {loadType: 2, crossOrigin: true}, function (event) {
+          loader.add('avatar' + agent.index, agent.avatar, { loadType: 2, crossOrigin: true }, function (event) {
             agent.avatarTexture = event.texture
             PIXI.Texture.addToCache(event.texture, '$' + agent.index)
           })
@@ -830,7 +887,7 @@ export class Drawer {
       loader.on('start', onStart)
       loader.on('progress', function (loader, resource) {
         if (loader.progress < 100) {
-          self.preload(self.scope, self.container, self.loaded = loader.progress / 100, self.initWidth, self.initHeight, resource)
+          self.preload(self.scope, self.container, self.loaded = loader.progress / 101, self.initWidth, self.initHeight, resource)
         }
       })
 
