@@ -31,6 +31,7 @@ export const modules = [
 export const options = [
   ToggleModule.defineToggle({
     // The name of the toggle
+    // replace "myToggle" by the name of the toggle you want to use
     toggle: 'myToggle',
     // The text displayed over the toggle
     title: 'MY TOGGLE',
@@ -38,7 +39,9 @@ export const options = [
     values: {
       'TOGGLED ON': true,
       'TOGGLED OFF': false
-    }
+    },
+    // Default value of your toggle
+    default: true
   }),
   ToggleModule.defineToggle({
     toggle: 'myOtherToggle',
