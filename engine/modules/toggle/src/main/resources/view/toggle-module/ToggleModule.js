@@ -1,21 +1,23 @@
-import { api as entityModule } from '../../entity-module/GraphicEntityModule.js'
-import { toggles } from '../../config.js'
+import { api as entityModule } from '../entity-module/GraphicEntityModule.js'
 import {ErrorLog} from '../core/ErrorLog.js'
 import {MissingToggleError} from './errors/MissingToggleError.js'
+import {DuplicateToggleValueError} from './errors/DuplicateToggleValueError.js'
 
 export class ToggleModule {
+	   
   constructor (assets) {
     this.previousFrame = {}
     this.missingToggles = {}
+    
     ToggleModule.refreshContent = () => {
-      if (!this.currentFrame) {
+      if (!this.currentFrame || !ToggleModule.toggles) {
         return
       }
       for (const registeredEntity in this.currentFrame.registered) {
         const entity = entityModule.entities.get(parseInt(registeredEntity))
         const toggleInfo = this.currentFrame.registered[registeredEntity]
-        const toggleState = toggles[toggleInfo.name]
-
+        const toggleState = ToggleModule.toggles[toggleInfo.name]
+        
         if (toggleState == null && !this.missingToggles[toggleInfo.name]) {
           ErrorLog.push(new MissingToggleError(toggleInfo.name))
           this.missingToggles[toggleInfo.name] = true
@@ -25,8 +27,28 @@ export class ToggleModule {
         )
       }
     }
+    
+    for (const e of ToggleModule.errors) {
+    	ErrorLog.push(e)
+    }
+    
   }
+
   static refreshContent () {}
+
+  static defineToggle(option) {
+	  if (new Set(Object.values(option.values)).size != Object.values(option.values).length) {
+		  ToggleModule.errors.push(new DuplicateToggleValueError(option.toggle))
+	  }
+
+	  ToggleModule.toggles[option.toggle] = option.default
+	  option.get = () => ToggleModule.toggles[option.toggle]
+	  option.set = (value) => {
+		  ToggleModule.toggles[option.toggle] = value
+		  ToggleModule.refreshContent()
+	  }
+	  return option
+  }
 
   static get name () {
     return 'toggles'
@@ -53,3 +75,6 @@ export class ToggleModule {
     ToggleModule.refreshContent()
   }
 }
+
+ToggleModule.toggles = {}
+ToggleModule.errors = []

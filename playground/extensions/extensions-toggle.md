@@ -29,36 +29,22 @@ export const modules = [
 
 // The list of toggles displayed in the options of the viewer
 export const options = [
-  {
-  // The name displayed over the toggle
+  ToggleModule.defineToggle({
+    // The name of the toggle
+    toggle: 'myToggle',
+    // The text displayed over the toggle
     title: 'MY TOGGLE',
-    // Getters and setters for the on/off state of your toggle
-    get: function () {
-      return toggles.myToggle // replace "myToggle" by the name of the toggle you want to use
-    },
-    set: function (value) {
-      toggles.myToggle = value // replace "myToggle" by the name of the toggle you want to use
-      ToggleModule.refreshContent()
-    },
     // The labels for the on/off states of your toggle
     values: {
       'TOGGLED ON': true,
       'TOGGLED OFF': false
     }
-  },
-  {
-    title: 'MY OTHER TOGGLE',
+  }),
+  ToggleModule.defineToggle({
+    toggle: 'myOtherToggle',
     ⋮
-  }
+  })
 ]
-
-// The list of the toggles used by the ToggleModule
-// replace "myToggle" by the name of the toggle you want to use
-export const toggles = {
-  myToggle: true, // default value of your toggle
-  myOtherToggle: false
-}
-
 ```
 
 ## Usage
