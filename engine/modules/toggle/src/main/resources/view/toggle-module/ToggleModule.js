@@ -1,10 +1,9 @@
 import { api as entityModule } from '../entity-module/GraphicEntityModule.js'
-import {ErrorLog} from '../core/ErrorLog.js'
-import {MissingToggleError} from './errors/MissingToggleError.js'
-import {DuplicateToggleValueError} from './errors/DuplicateToggleValueError.js'
+import { ErrorLog } from '../core/ErrorLog.js'
+import { MissingToggleError } from './errors/MissingToggleError.js'
+import { DuplicateToggleValueError } from './errors/DuplicateToggleValueError.js'
 
 export class ToggleModule {
-
   constructor (assets) {
     this.previousFrame = {}
     this.missingToggles = {}
@@ -28,21 +27,21 @@ export class ToggleModule {
       }
     }
 
-    pushDuplicateErrors();
+    pushDuplicateErrors()
   }
 
   static refreshContent () {}
 
-  static defineToggle(option) {
-	  checkDuplicates(option);
+  static defineToggle (option) {
+    checkDuplicates(option)
 
-	  ToggleModule.toggles[option.toggle] = option.default
-	  option.get = () => ToggleModule.toggles[option.toggle]
-	  option.set = (value) => {
-		  ToggleModule.toggles[option.toggle] = value
-		  ToggleModule.refreshContent()
-	  }
-	  return option
+    ToggleModule.toggles[option.toggle] = option.default
+    option.get = () => ToggleModule.toggles[option.toggle]
+    option.set = (value) => {
+      ToggleModule.toggles[option.toggle] = value
+      ToggleModule.refreshContent()
+    }
+    return option
   }
 
   static get name () {
@@ -74,11 +73,11 @@ export class ToggleModule {
 ToggleModule.toggles = {}
 ToggleModule.duplicateErrors = {}
 
-function createIfNull(obj, key, value) {
+function createIfNull (obj, key, value) {
   obj[key] = obj[key] || value
 }
 
-function insertNewDuplicate(dups, v, key) {
+function insertNewDuplicate (dups, v, key) {
   createIfNull(dups, v.key, { keys: [], value: v.value })
 
   if (!dups[v.key].keys.includes(v.key)) {
@@ -87,14 +86,14 @@ function insertNewDuplicate(dups, v, key) {
   dups[v.key].keys.push(key)
 }
 
-function checkDuplicates(option) {
+function checkDuplicates (option) {
   var values = []
 
   ToggleModule.duplicateErrors[option.toggle] = {}
 
-	for (const key in option.values) {
+  for (const key in option.values) {
     const value = option.values[key]
-    const v = values.find(elem => elem.value == value)
+    const v = values.find(elem => elem.value === value)
 
     if (v) {
       insertNewDuplicate(ToggleModule.duplicateErrors[option.toggle], v, key)
@@ -104,7 +103,7 @@ function checkDuplicates(option) {
   }
 }
 
-function pushDuplicateErrors() {
+function pushDuplicateErrors () {
   for (const toggle in ToggleModule.duplicateErrors) {
     for (const dup of Object.values(ToggleModule.duplicateErrors[toggle])) {
       ErrorLog.push(new DuplicateToggleValueError(toggle, dup))
