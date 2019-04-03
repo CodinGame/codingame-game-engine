@@ -84,18 +84,18 @@ function insertNewDuplicate (duplicates, matchedPair, key) {
 }
 
 function checkDuplicates (option) {
-  var values = []
+  var previousOptionValues = []
 
   ToggleModule.duplicateErrors[option.toggle] = {}
 
   for (const key in option.values) {
     const value = option.values[key]
-    const matchedPair = values.find(elem => elem.value === value)
+    const matchedPair = previousOptionValues.find(elem => elem.value === value)
 
     if (matchedPair) {
       insertNewDuplicate(ToggleModule.duplicateErrors[option.toggle], matchedPair, key)
     } else {
-      values.push({ key, value })
+      previousOptionValues.push({ key, value })
     }
   }
 }
