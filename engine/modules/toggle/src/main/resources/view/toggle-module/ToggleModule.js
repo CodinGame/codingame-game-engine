@@ -77,13 +77,13 @@ function createIfNull (obj, key, value) {
   obj[key] = obj[key] || value
 }
 
-function insertNewDuplicate (dups, v, key) {
-  createIfNull(dups, v.key, { keys: [], value: v.value })
+function insertNewDuplicate (duplicates, matchedPair, key) {
+  createIfNull(duplicates, matchedPair.key, { keys: [], value: matchedPair.value })
 
-  if (!dups[v.key].keys.includes(v.key)) {
-    dups[v.key].keys.push(v.key)
+  if (!duplicates[matchedPair.key].keys.includes(matchedPair.key)) {
+    duplicates[matchedPair.key].keys.push(matchedPair.key)
   }
-  dups[v.key].keys.push(key)
+  duplicates[matchedPair.key].keys.push(key)
 }
 
 function checkDuplicates (option) {
@@ -93,10 +93,10 @@ function checkDuplicates (option) {
 
   for (const key in option.values) {
     const value = option.values[key]
-    const v = values.find(elem => elem.value === value)
+    const matchedPair = values.find(elem => elem.value === value)
 
-    if (v) {
-      insertNewDuplicate(ToggleModule.duplicateErrors[option.toggle], v, key)
+    if (matchedPair) {
+      insertNewDuplicate(ToggleModule.duplicateErrors[option.toggle], matchedPair, key)
     } else {
       values.push({ key: key, value: value })
     }
