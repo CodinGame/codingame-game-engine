@@ -10,7 +10,7 @@ export class ToggleModule {
     this.missingToggles = {}
 
     ToggleModule.refreshContent = () => {
-      if (!this.currentFrame || !ToggleModule.toggles) {
+      if (!this.currentFrame) {
         return
       }
       for (const registeredEntity in this.currentFrame.registered) {
