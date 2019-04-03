@@ -78,11 +78,8 @@ function createIfNull (obj, key, value) {
 }
 
 function insertNewDuplicate (duplicates, matchedPair, key) {
-  createIfNull(duplicates, matchedPair.key, { keys: [], value: matchedPair.value })
+  createIfNull(duplicates, matchedPair.key, { keys: [ matchedPair.key ], value: matchedPair.value })
 
-  if (!duplicates[matchedPair.key].keys.includes(matchedPair.key)) {
-    duplicates[matchedPair.key].keys.push(matchedPair.key)
-  }
   duplicates[matchedPair.key].keys.push(key)
 }
 
@@ -98,7 +95,7 @@ function checkDuplicates (option) {
     if (matchedPair) {
       insertNewDuplicate(ToggleModule.duplicateErrors[option.toggle], matchedPair, key)
     } else {
-      values.push({ key: key, value: value })
+      values.push({ key, value })
     }
   }
 }
