@@ -78,7 +78,7 @@ function checkDuplicates (option) {
 
   for (const key in option.values) {
     const value = option.values[key]
-    var matchedPair = ToggleModule.optionValues[option.toggle].find(elem => elem.value === value)
+    let matchedPair = ToggleModule.optionValues[option.toggle].find(elem => elem.value === value)
 
     if (!matchedPair) {
       matchedPair = { keys: [ ], value }
@@ -91,7 +91,7 @@ function checkDuplicates (option) {
 
 function pushDuplicateErrors () {
   for (const toggle in ToggleModule.optionValues) {
-    for (const optionValues of Object.values(ToggleModule.optionValues[toggle])) {
+    for (const optionValues of ToggleModule.optionValues[toggle]) {
       if (optionValues.keys.length > 1) {
         ErrorLog.push(new DuplicateToggleValueError(toggle, optionValues))
       }
