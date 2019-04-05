@@ -2,11 +2,11 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next Version
+## 3.4.7
 
 ### 🐞 Bug fix
 
-- Fixed ToggleModule and improved the API.
+- Fixed ToggleModule and improved its API.
 
 ## 3.4.6
 
