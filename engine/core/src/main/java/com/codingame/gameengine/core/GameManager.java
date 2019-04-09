@@ -113,7 +113,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
             initDone = true;
 
             // Game Loop ----------------------------------------------------------
-            for (turn = 0; turn < getMaxTurns() && !isGameEnd() && !allPlayersInactive(); turn++) {
+            for (turn = 1; turn <= getMaxTurns() && !isGameEnd() && !allPlayersInactive(); turn++) {
                 swapInfoAndViewData();
                 log.info("Turn " + turn);
                 newTurn = true;
@@ -276,7 +276,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         OutputData data = new OutputData(OutputCommand.VIEW);
         if (newTurn) {
             data.add("KEY_FRAME " + frame);
-            if (turn == 0) {
+            if (turn == 1) {
                 JsonObject initFrame = new JsonObject();
                 initFrame.add("global", globalViewData);
                 initFrame.add("frame", prevViewData);

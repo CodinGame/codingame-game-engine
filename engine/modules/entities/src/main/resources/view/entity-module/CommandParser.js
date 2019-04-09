@@ -1,4 +1,4 @@
-import {CreateCommand, PropertiesCommand, LoadCommand, WorldCommitCommand} from './Command.js'
+import { CreateCommand, PropertiesCommand, LoadCommand, WorldCommitCommand } from './Command.js'
 
 const COMMAND_KEY_MAP = {
   C: CreateCommand,
