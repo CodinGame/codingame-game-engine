@@ -131,7 +131,7 @@ function unescape (text) {
   // replace \' by '
   const unescaped = text.split("\\'").join("'")
 
-  if (unescaped.includes(' ')) {
+  if (unescaped.includes(' ') || unescaped.includes(';')) {
     return unescaped.slice(1, unescaped.length - 1)
   } else {
     return unescaped

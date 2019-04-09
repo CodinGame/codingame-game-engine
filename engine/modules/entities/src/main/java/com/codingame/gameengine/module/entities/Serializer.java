@@ -141,7 +141,7 @@ class Serializer {
 
     static String escape(String text) {
         String escaped = text.replaceAll("\\'", "\\\\'");
-        if (escaped.contains(" ")) {
+        if (escaped.contains(" ") || escaped.contains(";")) {
             return "'" + escaped + "'";
         }
         return escaped;
