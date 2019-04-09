@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Version
+
+### 🐞 Bug fix
+
+- A Text can now have semi colon in it
+
 ## 3.4.7
 
 ### 🐞 Bug fix
