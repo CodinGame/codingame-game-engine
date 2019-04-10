@@ -6,7 +6,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🐞 Bug fix
 
-- A Text can now have semi colon in it
+- A Text can now have semicolons in it
 
 ## 3.4.7
 
