@@ -152,7 +152,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
 
             s.close();
 
-        } catch (RuntimeException e) {
+        } catch (Throwable e) {
             dumpFail(e);
             s.close();
             throw e;
@@ -262,7 +262,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         out.println(data);
     }
 
-    private void dumpFail(RuntimeException e) {
+    private void dumpFail(Throwable e) {
         OutputData data = new OutputData(OutputCommand.FAIL);
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
