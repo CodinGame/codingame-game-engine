@@ -209,7 +209,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
 
             player.resetInputs();
             newTurn = false;
-        } catch (RuntimeException e) {
+        } catch (Throwable e) {
             //Don't let the user catch game fail exceptions
             dumpFail(e);
             throw e;
