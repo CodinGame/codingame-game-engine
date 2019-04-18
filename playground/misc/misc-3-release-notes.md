@@ -10,11 +10,12 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - A Text can now have semicolons in it
 - Improved error handling
 
+
 ## 3.4.7
 
 ### 🐞 Bug fix
 
-- Fixed ToggleModule and improved its API.
+- Fixed `ToggleModule` and improved its API.
 
 ## 3.4.6
 
@@ -23,11 +24,19 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - The intro replay file `demo.js` is now smaller when generated from scratch.
 - Improve game load performance.
 
+### ⚠️ Known issues
+
+- `ToggleModule` only works in local IDE
+
 ## 3.4.5
 
 ### 🐞 Bug fix
 
 - `EndScreenModule` now compatible with PIXI v4.8.5
+
+### ⚠️ Known issues
+
+- `ToggleModule` only works in local IDE
 
 ## 3.4.4
 
@@ -35,11 +44,19 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - Improved error handling.
 
+### ⚠️ Known issues
+
+- `ToggleModule` only works in local IDE
+
 ## 3.4.3
 
 ### 🐞 Bug fix
 
 - The `EndScreenModule` now properly handles more than two players.
+
+### ⚠️ Known issues
+
+- `ToggleModule` only works in local IDE
 
 ## 3.4.2
 
@@ -47,6 +64,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - `Circle` entities now displayed again
 - Included missing `setLeagueLevel` method in the `GameRunner`
+
+### ⚠️ Known issues
+
+- `ToggleModule` only works in local IDE
 
 ## 3.4.1
 
@@ -66,6 +87,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### ⚠️ Known issues
 
 - `Circle` entities no longer displayed
+- `ToggleModule` only works in local IDE
 
 ## 3.4.0
 
@@ -82,6 +104,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - `setFrameDuration()` now throws an exception on non-positive values.
 - We no longer wait the full player timeout time when creating a frame when no players have been executed.
 
+### ⚠️ Known issues
+
+- `ToggleModule` only works in local IDE
+
 ## 3.3.1
 
 ### 🐞 Bug fix
@@ -91,6 +117,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### ⚠️ Known issues
 
 - Frames created when no players have been executed will still wait the full player timeout time.
+- `ToggleModule` only works in local IDE
 
 ## 3.3.0
 
@@ -101,6 +128,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### ⚠️ Known issues
 
 - Frames created when no players have been executed will still wait the full player timeout time.
+- `ToggleModule` only works in local IDE
 
 ## 3.2.0
 
@@ -118,6 +146,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - Frames created when no players have been executed will still wait the full player timeout time.
 - Maven modules not available as dependencies
 - `setFrameDuration()` does not work in the `init()`.
+- `ToggleModule` only works in local IDE
 
 ## 3.1.0
 
