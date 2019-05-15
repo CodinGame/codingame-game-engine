@@ -405,6 +405,7 @@ angular.module('player')
         .replace(/\xa4GREEN\xa4/g, '<span class="consoleSuccess">')
         .replace(/\xa7RED\xa7/g, '</span>')
         .replace(/\xa7GREEN\xa7/g, '</span>')
+        .replace(/\n/g, '<br />')
 
       input = input.replace(/[\u0000-\u0009\u000b-\u000c\u000e-\u001F]/g, function (c) {
         return '\\' + c.charCodeAt(0)

@@ -7,6 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - `Invalid negative values for colours no longer crash the game`
+- `Fixed missing line breaks in the Game Summary console`
 
 ## 3.4.8
 
