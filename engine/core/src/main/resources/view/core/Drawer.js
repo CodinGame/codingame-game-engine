@@ -65,6 +65,9 @@ export class Drawer {
       '#ff0000' // solid red
     ]
   }
+  static get SDK_GAME () {
+    return true
+  }
 
   getDefaultOverSampling () {
     return config.defaultOverSampling || 2
