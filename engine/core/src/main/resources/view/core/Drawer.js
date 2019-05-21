@@ -1,11 +1,11 @@
-import {assets} from '../assets.js'
+import { assets } from '../assets.js'
 import * as config from '../config.js'
-import {unlerp, fitAspectRatio} from './utils.js'
-import {WIDTH, HEIGHT, BASE_FRAME_DURATION} from './constants.js'
-import {ErrorLog} from './ErrorLog.js'
-import {demo as defaultDemo} from '../demo.js'
-import {setRenderer, destroyFlagged, flagForDestructionOnReinit} from './rendering.js'
-import {ModuleError} from './ModuleError.js'
+import { unlerp, fitAspectRatio } from './utils.js'
+import { WIDTH, HEIGHT, BASE_FRAME_DURATION } from './constants.js'
+import { ErrorLog } from './ErrorLog.js'
+import { demo as defaultDemo } from '../demo.js'
+import { setRenderer, destroyFlagged } from './rendering.js'
+import { ModuleError } from './ModuleError.js'
 /* global PIXI requestAnimationFrame $ */
 
 export class Drawer {
@@ -124,7 +124,7 @@ export class Drawer {
   getOptions () {
     // Return an array of copies
     if (config.options) {
-      return config.options.map(v => ({...v}))
+      return config.options.map(v => ({ ...v }))
     }
     return []
   }
@@ -185,7 +185,6 @@ export class Drawer {
     var scene = new PIXI.Container()
 
     scope.drawer = this
-    scope.renderables = []
     scope.time = 0
 
     if (this.demo) {
@@ -276,7 +275,7 @@ export class Drawer {
       } catch (err) {
         data = {}
       }
-      return {...data, key: header[0] === 'KEY_FRAME'}
+      return { ...data, key: header[0] === 'KEY_FRAME' }
     }).filter(x => x.key)
 
     this.parseGlobalData(this._frames[0].global)
@@ -406,9 +405,6 @@ export class Drawer {
     scope.canvasHeight = canvasHeight
     scope.canvasWidth = canvasWidth
 
-    scope.renderables = []
-    scope.updatables = []
-
     scope.time = 0
     scope.endTime = 0
 
@@ -443,10 +439,6 @@ export class Drawer {
     scope.currentFrame = parsedFrame
     scope.currentProgress = progress
     scope.reason = reason
-
-    for (var i = 0; i < scope.updatables.length; ++i) {
-      scope.updatables[i].update(frameNumber, progress, parsedFrame, scope)
-    }
 
     for (let moduleName in this.modules) {
       const module = this.modules[moduleName]
@@ -483,18 +475,6 @@ export class Drawer {
     }
   }
 
-  renderRenderables (step, scope) {
-    var next = []
-    for (var i = 0; i < scope.renderables.length; ++i) {
-      var updatable = scope.renderables[i]
-      var remove = updatable.render(step, scope)
-      if (!remove) {
-        next.push(updatable)
-      }
-    }
-    scope.renderables = next
-  }
-
   renderScene (scope, question, frames, frameNumber, progress, speed, reason, step) {
     /** ************************************* */
     /*        ASYNCHRONOUS                    */
@@ -511,8 +491,6 @@ export class Drawer {
       }
       scope.endTime = 0
     }
-
-    this.renderRenderables(step, scope)
 
     for (let moduleName in this.modules) {
       const module = this.modules[moduleName]
@@ -655,7 +633,7 @@ export class Drawer {
       } catch (err) {
         data = {}
       }
-      return {...data, key: header[0] === 'KEY_FRAME'}
+      return { ...data, key: header[0] === 'KEY_FRAME' }
     })
 
     this.parseGlobalData(this._frames[0].global)
@@ -700,7 +678,7 @@ export class Drawer {
         avatar: null
       }
 
-      loader.add('avatar' + index, agent.avatar, {loadType: 2, crossOrigin: true}, function (event) {
+      loader.add('avatar' + index, agent.avatar, { loadType: 2, crossOrigin: true }, function (event) {
         agentData.avatar = event.texture
         PIXI.Texture.addToCache(event.texture, '$' + agentData.index)
       })
@@ -796,25 +774,25 @@ export class Drawer {
       setRenderer(this.renderer)
       var loader = new PIXI.loaders.Loader(resources.baseUrl)
       for (key in resources.images) {
-        loader.add(key, resources.images[key], {crossOrigin: true})
+        loader.add(key, resources.images[key], { crossOrigin: true })
       }
       var i
       for (i = 0; i < resources.sprites.length; ++i) {
-        loader.add(resources.sprites[i], {crossOrigin: true})
+        loader.add(resources.sprites[i], { crossOrigin: true })
       }
       for (i = 0; i < resources.fonts.length; ++i) {
-        loader.add(resources.fonts[i], {crossOrigin: true})
+        loader.add(resources.fonts[i], { crossOrigin: true })
       }
       for (key in resources.spines) {
-        loader.add(key, resources.spines[key], {crossOrigin: true})
+        loader.add(key, resources.spines[key], { crossOrigin: true })
       }
       for (i = 0; i < resources.others.length; ++i) {
-        loader.add(resources.others[i], {crossOrigin: true})
+        loader.add(resources.others[i], { crossOrigin: true })
       }
 
       if (this.demo) {
         this.demo.agents.forEach(agent => {
-          loader.add('avatar' + agent.index, agent.avatar, {loadType: 2, crossOrigin: true}, function (event) {
+          loader.add('avatar' + agent.index, agent.avatar, { loadType: 2, crossOrigin: true }, function (event) {
             agent.avatarTexture = event.texture
             PIXI.Texture.addToCache(event.texture, '$' + agent.index)
           })
@@ -877,45 +855,6 @@ export class Drawer {
     })
   }
 
-  /**
-   * Turns a graphic into a texture, saves the texture for later destruction
-   */
-  generateTexture (graphics) {
-    var tex = graphics.generateTexture()
-    flagForDestructionOnReinit(tex)
-    return tex
-  }
-
-  /**
-   * Creates a Text and keeps the texture for later destruction
-   */
-  generateText (text, size, color, align) {
-    var bitmap = size * this.scope.canvasWidth / this.oversampling >= 30 * 960
-    //  var bitmap = size * this.scope.canvasWidth / 1 >= 30 * 960;
-    var textEl
-    if (bitmap) {
-      textEl = new PIXI.extras.BitmapText(text, {
-        font: size + 'px agency_80',
-        tint: color
-      })
-      textEl.lineHeight = size
-    } else {
-      textEl = new PIXI.Text(text, {
-        fontSize: Math.round(size / 1.2) + 'px',
-        fontFamily: 'Lato',
-        fontWeight: 'bold',
-        fill: color
-      })
-      textEl.lineHeight = Math.round(size / 1.2)
-    }
-    if (align === 'right') {
-      textEl.anchor.x = 1
-    } else if (align === 'center') {
-      textEl.anchor.x = 0.5
-    }
-    flagForDestructionOnReinit(textEl)
-    return textEl
-  }
   isReady () {
     return this.loaded >= 1
   }
