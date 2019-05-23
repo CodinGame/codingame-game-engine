@@ -20,15 +20,19 @@ public class MultiplayerGameRunner extends GameRunner {
 
     /**
      * Sets the league level to run. The first league is 1.
-     * <p>The value can also be set by setting the environment variable <code>league.level</code>.</p>
-     * @param leagueLevel the league level. 1 is the lowest level and default value.
+     * <p>
+     * The value can also be set by setting the environment variable <code>league.level</code>.
+     * </p>
+     * 
+     * @param leagueLevel
+     *            the league level. 1 is the lowest level and default value.
      */
-  
+
     public void setLeagueLevel(int leagueLevel) {
-      if (leagueLevel < 1 || leagueLevel >= 20) {
-        throw new IllegalArgumentException("League level must be higher than 0 and lesser than 20");
-      }
-      System.setProperty("league.level", String.valueOf(leagueLevel));
+        if (leagueLevel < 1 || leagueLevel >= 20) {
+            throw new IllegalArgumentException("League level must be higher than 0 and lesser than 20");
+        }
+        System.setProperty("league.level", String.valueOf(leagueLevel));
     }
 
     /**
@@ -43,7 +47,8 @@ public class MultiplayerGameRunner extends GameRunner {
      * If those parameters are present in the given input, the input values should override the generated values.
      * </p>
      * 
-     * @param seed this game's seed returned by the <code>GameManager</code> during execution
+     * @param seed
+     *            this game's seed returned by the <code>GameManager</code> during execution
      */
     public void setSeed(Long seed) {
         this.seed = seed;
@@ -119,7 +124,7 @@ public class MultiplayerGameRunner extends GameRunner {
     public void addAgent(String commandLine, String nickname, String avatarUrl) {
         addAgent(new CommandLinePlayerAgent(commandLine), nickname, avatarUrl);
     }
-    
+
     /**
      * Adds an AI to the next game to run, with the specified nickname.
      * 
