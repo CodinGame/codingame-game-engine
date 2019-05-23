@@ -162,4 +162,53 @@ public class MultiplayerGameRunner extends GameRunner {
             }
         }
     }
+
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * The given command array will be executed with <code>Runtime.getRuntime().exec()</code>.
+     * </p>
+     * Example: <code>new String[]{"echo", "test command"}</code>
+     * 
+     * @param commandArray
+     *            the system command array to run the AI.
+     * @param nickname
+     *            the player's nickname
+     * @param avatarUrl
+     *            the url of the player's avatar
+     */
+    public void addAgent(String[] commandArray, String nickname, String avatarUrl) {
+        addAgent(new CommandLinePlayerAgent(commandArray), nickname, avatarUrl);
+    }
+
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * The given command array will be executed with <code>Runtime.getRuntime().exec()</code>.
+     * </p>
+     * Example: <code>new String[]{"echo", "test command"}</code>
+     * 
+     * @param commandArray
+     *            the system command array to run the AI.
+     * @param nickname
+     *            the player's nickname
+     */
+    public void addAgent(String[] commandArray, String nickname) {
+        addAgent(commandArray, nickname, null);
+    }
+
+    /**
+     * Adds an AI to the next game to run.
+     * <p>
+     * The given command array will be executed with <code>Runtime.getRuntime().exec()</code>.
+     * </p>
+     * Example: <code>new String[]{"echo", "test command"}</code>
+     * 
+     * @param commandArray
+     *            the system command array to run the AI.
+     */
+    public void addAgent(String[] commandArray) {
+        addAgent(commandArray, null, null);
+    }
+
 }
