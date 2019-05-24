@@ -20,13 +20,19 @@ public class CommandLinePlayerAgent extends Agent {
      * Creates an Agent for your game, will run the given commandLine at game start
      * 
      * @param commandLine
-     *            the commandLine to run
+     *            the command line to run
      */
     public CommandLinePlayerAgent(String commandLine) {
         super();
-        this.commandArray = new String[] {commandLine};
+        this.commandArray = commandLine.split(" ");
     }
-
+    
+    /**
+     * Creates an Agent for your game, will run the given commandLine at game start
+     * 
+     * @param commandArray
+     *            the command array to run
+     */
     public CommandLinePlayerAgent(String[] commandArray) {
         super();
         this.commandArray = commandArray;
