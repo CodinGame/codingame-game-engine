@@ -271,10 +271,8 @@ abstract class GameRunner {
         if (playerOutput != null)
             playerOutput = playerOutput.replace('\r', '\n');
 
-        boolean outputCheckOk = checkOutput(playerOutput, nextPlayerInfo.nbLinesNextOutput) == OutputResult.OK;
-
-        if (outputCheckOk) {
-            // Read this turns stderr
+        if (checkOutput(playerOutput, nextPlayerInfo.nbLinesNextOutput) == OutputResult.OK) {
+            // Read this turn's stderr
             readError(player);
         } else {
             // Give the agent time to crash cleanly
@@ -283,13 +281,11 @@ abstract class GameRunner {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // Read this turns stderr and crash output
+            // Read this turns stderr and the crash output
             readError(player);
-        }
-
-        if (!outputCheckOk) {
             return null;
         }
+
         if ((playerOutput != null) && playerOutput.isEmpty() && (nextPlayerInfo.nbLinesNextOutput == 1)) {
             return "\n";
         }
