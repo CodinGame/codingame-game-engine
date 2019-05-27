@@ -152,8 +152,8 @@ export class PropertiesCommand {
   apply (entities, frameInfo) {
     let entity = entities.get(this.id)
     entity.addState(this.t, { values: this.params, curve: this.curve }, frameInfo.number, frameInfo)
+    entity.stateAdded = true
   }
-}
 export class WorldCommitCommand {
   constructor (args, globalData) {
     this.times = args.map(v => +v)
