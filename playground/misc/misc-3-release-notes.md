@@ -8,6 +8,8 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - `Invalid negative values for colours no longer crash the game`
 - `Fixed missing line breaks in the Game Summary console`
+- `Better error reporting on player agent crash`
+- `Multiple commands can now be launched with CommandLinePlayerAgent`
 
 ## 3.4.8
 
