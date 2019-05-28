@@ -71,7 +71,6 @@ class Serializer {
         commands.put("CREATE", "C");
         commands.put("UPDATE", "U");
         commands.put("LOADSPRITESHEET", "L");
-        commands.put("WORLDUPDATE", "W");
 
         separators = new HashMap<>();
         separators.put("COMMAND", ";");
@@ -225,18 +224,6 @@ class Serializer {
                 commands.get("LOADSPRITESHEET") + spriteSheets.stream()
                     .map(e -> serializeLoadSpriteSheet(e))
                     .collect(Collectors.joining(separators.get("COMMAND")))
-            );
-        }
-    }
-
-    public Optional<String> serializeWorldCommits(List<String> worldCommits) {
-        if (worldCommits.isEmpty()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(
-                commands.get("WORLDUPDATE") +
-                worldCommits.stream()
-                        .collect(Collectors.joining(separators.get("COMMAND_ARGUMENT")))
             );
         }
     }

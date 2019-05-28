@@ -10,6 +10,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - `Fixed missing line breaks in the Game Summary console`
 - `Better error reporting on player agent crash`
 - `Multiple commands can now be launched with CommandLinePlayerAgent`
+- `Games now require less RAM in the CodinGame IDE`
 
 ## 3.4.8
 

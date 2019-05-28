@@ -75,6 +75,13 @@ export class GraphicEntityModule {
     const previousFrameNumber = frameInfo.previous.number
     this
       .entities.forEach(entity => {
+        // Only create if entity is affected by this frameInfo
+        if (entity.stateAdded) {
+          entity.stateAdded = false
+        } else {
+          return
+        }
+
         // Create empty substate array if none
         if (!entity.states[frameNumber]) {
           entity.states[frameNumber] = []

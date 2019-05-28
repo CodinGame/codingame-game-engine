@@ -1,10 +1,9 @@
-import { CreateCommand, PropertiesCommand, LoadCommand, WorldCommitCommand } from './Command.js'
+import { CreateCommand, PropertiesCommand, LoadCommand } from './Command.js'
 
 const COMMAND_KEY_MAP = {
   C: CreateCommand,
   U: PropertiesCommand,
-  L: LoadCommand,
-  W: WorldCommitCommand
+  L: LoadCommand
 }
 
 function splitOnCharOutsideQuotes (text, charParam) {

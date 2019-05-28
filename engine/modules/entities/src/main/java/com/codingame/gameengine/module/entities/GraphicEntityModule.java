@@ -200,14 +200,12 @@ public class GraphicEntityModule implements Module {
             currentWorldState.updateAllEntities(nextWorldState);
         }
 
-        Optional<String> worldCommits = gameSerializer.serializeWorldCommits(worldCommitsBuilder);
-
         Optional<String> update = gameSerializer.serializeWorldDiff(updateBuilder);
 
         worldStates.clear();
         gameManager.setViewData(
             "entitymodule",
-            Stream.of(load, create, update, worldCommits)
+            Stream.of(load, create, update)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.joining("\n"))
