@@ -62,19 +62,31 @@ export class Entity {
   render (progress, data, globalData) {
     let subframes = this.states[data.number]
     this.container.visible = false
+    let start = null
+    let end
+    // This t is used to animate the interpolation
+    let t = 1
     if (subframes && subframes.length) {
       let index = 0
       while (index < subframes.length - 1 && subframes[index].t < progress) {
         index++
       }
-      let start = subframes[index - 1]
-      let end = subframes[index]
-      // This t is used to animate the interpolation
-      let t
+
+      start = subframes[index - 1]
+      end = subframes[index]
 
       if (!start) {
-        // The start frame must be at the end of the previous turn
-        var prev = this.states[data.previous.number] || []
+        // The start frame must be at the end of a previous turn
+        let frameNumbers = Object.keys(this.states)
+        let index = frameNumbers.indexOf(data.number.toString()) - 1
+        // Failsafe
+        if (index === -1) {
+          index = frameNumbers.length - 1
+        }
+        while (index >= 0 && frameNumbers[index] >= data.number) {
+          index--
+        }
+        let prev = this.states[frameNumbers[index]] || []
         start = prev[prev.length - 1]
 
         // If it didn't exist on the previous turn, don't even animate it
@@ -88,41 +100,53 @@ export class Entity {
       } else {
         t = unlerp(start.t, end.t, progress)
       }
-      if (start) {
-        const changed = {}
-        const state = Object.assign({}, this.currentState)
+    } else {
+      // Look for the most recent state, but don't interpolate?
+      let frameNumbers = Object.keys(this.states)
+      let index = frameNumbers.length - 1
+      while (index >= 0 && frameNumbers[index] > data.number) {
+        index--
+      }
+      let substates = this.states[frameNumbers[index]]
 
-        for (let property of this.properties) {
-          const opts = PROPERTIES[property] || PROPERTIES.default
-          const lerpMethod = opts.lerpMethod
-          const curve = end.curve[property] || (a => a)
-          const newValue = lerpMethod(start[property], end[property], curve(t))
-          if (newValue !== this.currentState[property]) {
-            changed[property] = true
-            state[property] = newValue
-          }
-        }
-        this.updateDisplay(state, changed, globalData, data, progress)
-        Object.assign(this.currentState, state)
-        this.container.visible = this.container._visible
-        if (changed.children) {
-          globalData.mustResetTree = true
-          if (typeof this.postUpdate === 'function') {
-            globalData.updatedBuffers.push(this)
-          }
-        }
-        if (changed.zIndex) {
-          globalData.mustResort = true
-        }
-        if (changed.mask) {
-          globalData.maskUpdates[this.id] = state.mask
-        }
-        if (Object.keys(changed).length !== 0 && this.parent) {
-          this.parent.notifyChange()
+      if (substates != null) {
+        start = substates[substates.length - 1]
+        end = start
+      } else {
+        Object.assign(this.currentState, this.defaultState)
+      }
+    }
+    if (start) {
+      const changed = {}
+      const state = Object.assign({}, this.currentState)
+      for (let property of this.properties) {
+        const opts = PROPERTIES[property] || PROPERTIES.default
+        const lerpMethod = opts.lerpMethod
+        const curve = end.curve[property] || (a => a)
+        const newValue = lerpMethod(start[property], end[property], curve(t))
+        if (newValue !== this.currentState[property]) {
+          changed[property] = true
+          state[property] = newValue
         }
       }
-    } else {
-      Object.assign(this.currentState, this.defaultState)
+      this.updateDisplay(state, changed, globalData, data, progress)
+      Object.assign(this.currentState, state)
+      this.container.visible = this.container._visible
+      if (changed.children) {
+        globalData.mustResetTree = true
+        if (typeof this.postUpdate === 'function') {
+          globalData.updatedBuffers.push(this)
+        }
+      }
+      if (changed.zIndex) {
+        globalData.mustResort = true
+      }
+      if (changed.mask) {
+        globalData.maskUpdates[this.id] = state.mask
+      }
+      if (Object.keys(changed).length !== 0 && this.parent) {
+        this.parent.notifyChange()
+      }
     }
   }
 

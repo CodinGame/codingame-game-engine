@@ -9,6 +9,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - `Invalid negative values for colours no longer crash the game`
 - `Fixed missing line breaks in the Game Summary console`
 - `Frames now start at 0 in local test page`
+- `Games now require less RAM in the CodinGame IDE`
 
 ## 3.4.8
 

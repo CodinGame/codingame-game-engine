@@ -15,8 +15,21 @@ function getMouseOutFunc (id, tooltip) {
   }
 }
 
+function getEntityCurrentSubStates (entity, frame) {
+  if (entity.states[frame]) {
+    return entity.states[frame]
+  }
+  let frameNumbers = Object.keys(entity.states)
+  let index = frameNumbers.length - 1
+
+  while (index >= 0 && frameNumbers[index] > frame) {
+    index--
+  }
+  return entity.states[frameNumbers[index]] || []
+}
+
 function getEntityState (entity, frame) {
-  const subStates = entity.states[frame]
+  const subStates = getEntityCurrentSubStates(entity, frame)
   if (subStates && subStates.length) {
     return subStates[subStates.length - 1]
   }

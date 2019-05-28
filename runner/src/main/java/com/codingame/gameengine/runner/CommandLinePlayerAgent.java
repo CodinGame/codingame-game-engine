@@ -13,21 +13,29 @@ public class CommandLinePlayerAgent extends Agent {
     private OutputStream processStdin;
     private InputStream processStdout;
     private InputStream processStderr;
-    private String commandLine;
+    private String[] commandArray;
     private Process process;
 
     /**
      * Creates an Agent for your game, will run the given commandLine at game start
      * 
      * @param commandLine
-     *            the commandLine to run
+     *            the command line to run
      */
     public CommandLinePlayerAgent(String commandLine) {
         super();
-        try {
-            this.commandLine = commandLine;
-        } catch (Exception e) {
-        }
+        this.commandArray = commandLine.split(" ");
+    }
+    
+    /**
+     * Creates an Agent for your game, will run the given commandLine at game start
+     * 
+     * @param commandArray
+     *            the command array to run
+     */
+    public CommandLinePlayerAgent(String[] commandArray) {
+        super();
+        this.commandArray = commandArray;
     }
 
     @Override
@@ -47,11 +55,10 @@ public class CommandLinePlayerAgent extends Agent {
 
     @Override
     public void initialize(Properties conf) {
-
         try {
-            this.process = Runtime.getRuntime().exec(commandLine);
+            this.process = Runtime.getRuntime().exec(commandArray);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to launch " + commandLine, e);
+            throw new RuntimeException("Failed to launch " + String.join(" ", commandArray));
         }
         processStdin = process.getOutputStream();
         processStdout = process.getInputStream();

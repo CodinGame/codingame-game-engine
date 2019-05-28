@@ -270,11 +270,22 @@ abstract class GameRunner {
         String playerOutput = player.getOutput(nextPlayerInfo.nbLinesNextOutput, nextPlayerInfo.timeout);
         if (playerOutput != null)
             playerOutput = playerOutput.replace('\r', '\n');
-        readError(player);
 
-        if (checkOutput(playerOutput, nextPlayerInfo.nbLinesNextOutput) != OutputResult.OK) {
+        if (checkOutput(playerOutput, nextPlayerInfo.nbLinesNextOutput) == OutputResult.OK) {
+            // Read this turn's stderr
+            readError(player);
+        } else {
+            // Give the agent time to crash cleanly
+            try {
+                Thread.sleep(nextPlayerInfo.timeout);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            // Read this turns stderr and the crash output
+            readError(player);
             return null;
         }
+
         if ((playerOutput != null) && playerOutput.isEmpty() && (nextPlayerInfo.nbLinesNextOutput == 1)) {
             return "\n";
         }
