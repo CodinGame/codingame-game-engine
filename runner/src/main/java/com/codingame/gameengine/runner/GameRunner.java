@@ -95,22 +95,12 @@ abstract class GameRunner {
             throw new RuntimeException("Bootstrap of all players failed to bootsrap");
         }
 
-        bootstrapPlayersWait();
-
         for (Agent agent : players) {
             BlockingQueue<String> queue = new ArrayBlockingQueue<>(1024);
             AsynchronousWriter asyncWriter = new AsynchronousWriter(queue, agent.getInputStream());
             writers.add(asyncWriter);
             queues.add(queue);
             asyncWriter.start();
-        }
-    }
-
-    private void bootstrapPlayersWait() {
-        try {
-            // Arbitrary time to wait for bootstrap
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
         }
     }
 
