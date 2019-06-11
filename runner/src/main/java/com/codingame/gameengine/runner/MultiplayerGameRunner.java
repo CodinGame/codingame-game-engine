@@ -168,7 +168,7 @@ public class MultiplayerGameRunner extends GameRunner {
      * <p>
      * The given command array will be executed with <code>Runtime.getRuntime().exec()</code>.
      * </p>
-     * Example: <code>new String[]{"bash", "-c", "echo command1 && echo command2"}</code>
+     * Example: <code>new String[]{"bash", "-c", "echo command1 &amp;&amp; echo command2"}</code>
      * 
      * @param commandArray
      *            the system command array to run the AI.
@@ -186,7 +186,7 @@ public class MultiplayerGameRunner extends GameRunner {
      * <p>
      * The given command array will be executed with <code>Runtime.getRuntime().exec()</code>.
      * </p>
-     * Example: <code>new String[]{"bash", "-c", "echo command1 && echo command2"}</code>
+     * Example: <code>new String[]{"bash", "-c", "echo command1 &amp;&amp; echo command2"}</code>
      * 
      * @param commandArray
      *            the system command array to run the AI.
@@ -202,7 +202,7 @@ public class MultiplayerGameRunner extends GameRunner {
      * <p>
      * The given command array will be executed with <code>Runtime.getRuntime().exec()</code>.
      * </p>
-     * Example: <code>new String[]{"bash", "-c", "echo command1 && echo command2"}</code>
+     * Example: <code>new String[]{"bash", "-c", "echo command1 &amp;&amp; echo command2"}</code>
      * 
      * @param commandArray
      *            the system command array to run the AI.
