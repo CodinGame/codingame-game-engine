@@ -3,6 +3,16 @@ import { api as entityModule } from '../entity-module/GraphicEntityModule.js'
 
 /* global PIXI */
 
+function getSpriteMouseMoveFunc (entity, tooltip) {
+  return function (event) {
+    if (entity.graphics.containsPoint(event.data.global)) {
+      tooltip.inside[entity.id] = true
+    } else {
+      delete tooltip.inside[entity.id]
+    }
+  }
+}
+
 function getMouseOverFunc (id, tooltip) {
   return function () {
     tooltip.inside[id] = true
@@ -136,8 +146,12 @@ export class TooltipModule {
     entityModule.entities.forEach(entity => {
       if (this.interactive[entity.id]) {
         entity.container.interactive = true
-        entity.container.mouseover = getMouseOverFunc(entity.id, this.tooltip)
-        entity.container.mouseout = getMouseOutFunc(entity.id, this.tooltip)
+        if (typeof (entity.graphics && entity.graphics.containsPoint) === 'function') {
+          entity.container.mousemove = getSpriteMouseMoveFunc(entity, this.tooltip)
+        } else {
+          entity.container.mouseover = getMouseOverFunc(entity.id, this.tooltip)
+          entity.container.mouseout = getMouseOutFunc(entity.id, this.tooltip)
+        }
       }
     })
     this.container = container
