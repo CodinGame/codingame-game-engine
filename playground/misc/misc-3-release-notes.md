@@ -2,16 +2,22 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next release
+## Next Release
 
 ### 🐞 Bug fix
 
-- `Invalid negative values for colours no longer crash the game`
-- `Fixed missing line breaks in the Game Summary console`
-- `Frames now start at 0 in local test page`
-- `Better error reporting on player agent crash`
-- `Multiple commands can now be launched with CommandLinePlayerAgent`
-- `Games now require less RAM in the CodinGame IDE`
+ - Fixed Tooltip not showing all texts of stacked sprites below the cursor 
+
+## 3.4.9
+
+### 🐞 Bug fix
+
+- Invalid negative values for colours no longer crash the game
+- Fixed missing line breaks in the `Game Summary` console
+- Frames now start at `0` in local test page
+- Better error reporting on player agent crash
+- Multiple commands can now be launched with `CommandLinePlayerAgent`
+- Games now require less RAM in the CodinGame IDE
 
 ## 3.4.8
 
