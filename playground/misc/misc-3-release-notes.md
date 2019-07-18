@@ -7,6 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
  - Fixed Tooltip not showing all texts of stacked sprites below the cursor 
+ - Fixed viewer not updating on mouse wheel event 
 
 ## 3.4.9
 

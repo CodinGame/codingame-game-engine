@@ -738,13 +738,18 @@ export class Drawer {
     var key
     window.PIXI = Drawer.PIXI || window.PIXI
     this.oversampling = oversampling || 1
-    this.canvas = $(canvas)
-    this.canvas.off('mousemove')
-    this.canvas.mousemove(() => {
+    
+    const notifyRenderer = () => {
       if (this.currentFrame >= 0) {
         this.changed = true
       }
-    })
+    }
+
+    this.canvas = $(canvas)
+    this.canvas.off('mousemove')
+    this.canvas.off('wheel')
+    this.canvas.bind('wheel', notifyRenderer)
+    this.canvas.mousemove(notifyRenderer)
 
     if (colors) this.colors = this.parseColor(colors)
 
