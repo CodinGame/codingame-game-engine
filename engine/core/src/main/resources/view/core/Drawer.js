@@ -11,6 +11,7 @@ import { ModuleError } from './ModuleError.js'
 export class Drawer {
   constructor (customDemo) {
     this.toDestroy = []
+    this.stepByStepAnimateSpeed = config.stepByStepAnimateSpeed || null
 
     let demo = customDemo || defaultDemo
 
@@ -434,11 +435,22 @@ export class Drawer {
     }
   }
 
-  updateScene (scope, question, frames, frameNumber, progress, speed, reason) {
+  updateScene (scope, question, frames, frameNumber, progress, speed, reason, demo, forReal) {
+    const parsedFrame = frames[frameNumber]
+    if (!forReal && this.stepByStepAnimateSpeed) {
+      scope.targetProgress = progress
+      // Detect step to next frame
+      if (scope.currentFrame && scope.currentFrame !== parsedFrame && scope.currentFrame === parsedFrame.previous && this.speed === 0) {
+        scope.currentProgress = 0
+        scope.currentFrame = parsedFrame
+        return
+      }
+    }
+
     /** ************************************* */
     /*        SYNCHRONOUS                     */
     /** ************************************* */
-    var parsedFrame = frames[frameNumber]
+
     scope.currentFrame = parsedFrame
     scope.currentProgress = progress
     scope.reason = reason
@@ -493,6 +505,12 @@ export class Drawer {
         this.destroyEndScene(scope)
       }
       scope.endTime = 0
+    }
+
+    if (this.stepByStepAnimateSpeed && scope.currentProgress !== scope.targetProgress) {
+      var p = scope.currentProgress + step / 200 * this.getFrameSpeed(this.currentFrame) * this.stepByStepAnimateSpeed
+      p = Math.min(scope.targetProgress, p)
+      this.updateScene(this.scope, this.question, this.frames, this.currentFrame, p, this.speed, this.reasons[this.currentFrame], false, true)
     }
 
     for (let moduleName in this.modules) {
@@ -738,7 +756,7 @@ export class Drawer {
     var key
     window.PIXI = Drawer.PIXI || window.PIXI
     this.oversampling = oversampling || 1
-    
+
     const notifyRenderer = () => {
       if (this.currentFrame >= 0) {
         this.changed = true

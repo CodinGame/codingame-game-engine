@@ -2,7 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next versions
+
 ## 3.4.10
+
+### 🎁 New features
+
+- Added an optional export to `config.js` called `stepByStepAnimateSpeed` which lets you set whether to animate the view when stepping from one frame to the next
 
 ### 🐞 Bug fix
 
