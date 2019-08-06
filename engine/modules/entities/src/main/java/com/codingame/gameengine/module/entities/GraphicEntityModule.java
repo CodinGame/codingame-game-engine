@@ -111,7 +111,7 @@ public class GraphicEntityModule implements Module {
      * 
      * 
      * @param t
-     *            The instant of the frame 0 &ge; t &ge; 1.
+     *            The instant of the frame 0 &le; t &le; 1.
      * @exception IllegalArgumentException
      *                if the t is not a valid instant.
      * 
@@ -127,7 +127,7 @@ public class GraphicEntityModule implements Module {
      * </p>
      * 
      * @param t
-     *            The instant of the frame 0 &ge; t &ge; 1.
+     *            The instant of the frame 0 &le; t &le; 1.
      * @param entities
      *            The entity objects to commit.
      * @exception IllegalArgumentException
