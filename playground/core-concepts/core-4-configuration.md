@@ -13,7 +13,7 @@ For type-specific configuration, see:
 
 In order to use the CodinGame SDK, you need to correctly configure the file `pom.xml`.
 
-A good start would be to check the [game skeleton' pom.xml](https://github.com/CodinGame/game-skeleton/blob/master/pom.xml). It contains all you need to start your project. Make sure you use the lastest version of the SDK. See the [Release Notes](playground/misc/misc-3-release-notes.md).
+A good start would be to check the [game skeleton' pom.xml](https://github.com/CodinGame/game-skeleton/blob/master/pom.xml). It contains all you need to start your project. Make sure you use the latest version of the SDK. See the [Release Notes](playground/misc/misc-3-release-notes.md).
 
 Think of updating the `artifactId` value with the name of your game in case you want to create several games.
 
