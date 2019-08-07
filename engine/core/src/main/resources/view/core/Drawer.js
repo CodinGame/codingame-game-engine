@@ -704,8 +704,7 @@ export class Drawer {
         number: index,
         index: agent.index,
         type: agent.type,
-        // isMe: agent.type === 'CODINGAMER' && agent.typeData.me,
-        isMe: index === 0,
+        isMe: agent.type === 'CODINGAMER' && agent.typeData.me,
         avatar: null
       }
 
