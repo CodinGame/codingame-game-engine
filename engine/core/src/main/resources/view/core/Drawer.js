@@ -435,16 +435,11 @@ export class Drawer {
     }
   }
 
-  updateScene (scope, question, frames, frameNumber, progress, speed, reason, demo, forReal) {
+  updateScene (scope, question, frames, frameNumber, progress, speed, reason, demo, force) {
     const parsedFrame = frames[frameNumber]
-    if (!forReal && this.stepByStepAnimateSpeed) {
-      scope.targetProgress = progress
-      // Detect step to next frame
-      if (scope.currentFrame && scope.currentFrame !== parsedFrame && scope.currentFrame === parsedFrame.previous && this.speed === 0) {
-        scope.currentProgress = 0
-        scope.currentFrame = parsedFrame
-        return
-      }
+    if (!force && this.checkSteppedToNextFrame(scope, parsedFrame)) {
+      this.startAsynchronousAnimation(scope, progress, parsedFrame)
+      return
     }
 
     /** ************************************* */
@@ -465,6 +460,16 @@ export class Drawer {
         }
       }
     }
+  }
+
+  startAsynchronousAnimation (scope, progress, currentFrame) {
+    scope.targetProgress = progress
+    scope.currentProgress = 0
+    scope.currentFrame = currentFrame
+  }
+
+  checkSteppedToNextFrame (scope, parsedFrame) {
+    return scope.currentFrame && scope.currentFrame !== parsedFrame && scope.currentFrame === parsedFrame.previous && this.speed === 0
   }
 
   initEndScene (scope, failure) {
@@ -507,7 +512,7 @@ export class Drawer {
       scope.endTime = 0
     }
 
-    if (this.stepByStepAnimateSpeed && scope.currentProgress !== scope.targetProgress) {
+    if (this.stepByStepAnimateSpeed && this.isAsynchronousAnimationOngoing(scope)) {
       var p = scope.currentProgress + step / 200 * this.getFrameSpeed(this.currentFrame) * this.stepByStepAnimateSpeed
       p = Math.min(scope.targetProgress, p)
       this.updateScene(this.scope, this.question, this.frames, this.currentFrame, p, this.speed, this.reasons[this.currentFrame], false, true)
@@ -524,6 +529,10 @@ export class Drawer {
       }
     }
     return true
+  }
+
+  isAsynchronousAnimationOngoing (scope) {
+    return scope.targetProgress != null && scope.currentProgress !== scope.targetProgress
   }
 
   getFrameSpeed (frameNumber) {
@@ -695,7 +704,8 @@ export class Drawer {
         number: index,
         index: agent.index,
         type: agent.type,
-        isMe: agent.type === 'CODINGAMER' && agent.typeData.me,
+        // isMe: agent.type === 'CODINGAMER' && agent.typeData.me,
+        isMe: index === 0,
         avatar: null
       }
 
