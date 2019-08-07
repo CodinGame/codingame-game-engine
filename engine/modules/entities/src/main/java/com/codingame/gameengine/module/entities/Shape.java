@@ -17,7 +17,7 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
     }
 
     /**
-     * Sets the color of the fill of this <code>Shape</code> as an RGB integer or null if the fill should not be drawn.
+     * Sets the color of the fill of this <code>Shape</code> as an RGB integer. If the fill should not be drawn, use <code>setFillAlpha(0)</code>.
      * 
      * @param color
      *            the color of the fill of this <code>Shape</code>.
@@ -30,7 +30,7 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
     }
 
     /**
-     * Sets the color of the fill of this <code>Shape</code> as an RGB integer or null if the fill should not be drawn.
+     * Sets the color of the fill of this <code>Shape</code> as an RGB integer. If the fill should not be drawn, use <code>setFillAlpha(0)</code>.
      * 
      * @param color
      *            the color of the fill of this <code>Shape</code>.

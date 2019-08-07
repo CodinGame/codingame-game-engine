@@ -26,7 +26,7 @@ public abstract class AbstractReferee {
      * </ul>
      * 
      * @param turn
-     *            which turn of the game is currently being computed.
+     *            which turn of the game is currently being computed. Starts at 1.
      */
     abstract public void gameTurn(int turn);
 

@@ -147,7 +147,7 @@ If a player times out (send an invalid value, takes too long to execute ...) you
 
 ### Maximum number of turns
 
-You can set the maximum number of turns before the game ends (even if there are still active players). If you don't set this paramter, the game will end within **200** turns.
+You can set the maximum number of turns before the game ends (even if there are still active players). If you don't set this parameter, the game will end within **200** turns.
 
 ```java
 gameManager.setMaxTurns(250);
@@ -157,7 +157,7 @@ gameManager.setMaxTurns(250);
 
 ### Turn maximum time
 
-You can set the maximum time allowed to a Player to execute their code for a turn. If you don't set this paramter, the players will have **50**ms to execute.
+You can set the maximum time allowed to a Player to execute their code for a turn. If you don't set this parameter, the players will have **50**ms to execute.
 
 ```java
 gameManager.setTurnMaxTime(45);
