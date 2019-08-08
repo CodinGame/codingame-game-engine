@@ -439,12 +439,12 @@ abstract public class GameManager<T extends AbstractPlayer> {
     }
 
     /**
-     * Set the timeout delay for every players. This value can be updated during a game and will be used by execute(). Default is 50ms.
+     * Set the timeout delay for every player. This value can be updated during a game and will be used by execute(). Default is 50ms.
      * 
      * @param turnMaxTime
      *            Duration in milliseconds.
      * @throws IllegalArgumentException
-     *             if turnMaxTime &le; 0
+     *             if turnMaxTime &lt; 50 or &gt; 25000
      */
     public void setTurnMaxTime(int turnMaxTime) throws IllegalArgumentException {
         if (turnMaxTime < MIN_TURN_TIME) {
@@ -454,14 +454,40 @@ abstract public class GameManager<T extends AbstractPlayer> {
         }
         this.turnMaxTime = turnMaxTime;
     }
+    
+    /**
+     * Set the timeout delay of the first turn for every player. Default is 50ms.
+     * 
+     * @param turnMaxTime
+     *            Duration in milliseconds.
+     * @throws IllegalArgumentException
+     *             if firstTurnMaxTime &lt; 50 or &gt; 25000
+     */
+    public void setFirstTurnMaxTime(int firstTurnMaxTime) throws IllegalArgumentException {
+        if (firstTurnMaxTime < MIN_TURN_TIME) {
+            throw new IllegalArgumentException("Invalid turn max time : stay above 50ms");
+        } else if (firstTurnMaxTime > MAX_TURN_TIME) {
+            throw new IllegalArgumentException("Invalid turn max time : stay under 25s");
+        }
+        this.firstTurnMaxTime = firstTurnMaxTime;
+    }
 
     /**
-     * Get the timeout delay for every players.
+     * Get the timeout delay for every player.
      * 
      * @return the current timeout duration in milliseconds.
      */
     public int getTurnMaxTime() {
         return turnMaxTime;
+    }
+    
+    /**
+     * Get the timeout delay of the first turn for every player.
+     * 
+     * @return the first turn timeout duration in milliseconds.
+     */
+    public int getFirstTurnMaxTime() {
+        return firstTurnMaxTime;
     }
 
     /**
