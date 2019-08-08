@@ -11,6 +11,7 @@ import { ModuleError } from './ModuleError.js'
 export class Drawer {
   constructor (customDemo) {
     this.toDestroy = []
+    this.stepByStepAnimateSpeed = config.stepByStepAnimateSpeed || null
 
     let demo = customDemo || defaultDemo
 
@@ -434,11 +435,17 @@ export class Drawer {
     }
   }
 
-  updateScene (scope, question, frames, frameNumber, progress, speed, reason) {
+  updateScene (scope, question, frames, frameNumber, progress, speed, reason, demo, force) {
+    const parsedFrame = frames[frameNumber]
+    if (!force && this.checkSteppedToNextFrame(scope, parsedFrame)) {
+      this.startAsynchronousAnimation(scope, progress, parsedFrame)
+      return
+    }
+
     /** ************************************* */
     /*        SYNCHRONOUS                     */
     /** ************************************* */
-    var parsedFrame = frames[frameNumber]
+
     scope.currentFrame = parsedFrame
     scope.currentProgress = progress
     scope.reason = reason
@@ -453,6 +460,16 @@ export class Drawer {
         }
       }
     }
+  }
+
+  startAsynchronousAnimation (scope, progress, currentFrame) {
+    scope.targetProgress = progress
+    scope.currentProgress = 0
+    scope.currentFrame = currentFrame
+  }
+
+  checkSteppedToNextFrame (scope, parsedFrame) {
+    return scope.currentFrame && scope.currentFrame !== parsedFrame && scope.currentFrame === parsedFrame.previous && this.speed === 0
   }
 
   initEndScene (scope, failure) {
@@ -495,6 +512,12 @@ export class Drawer {
       scope.endTime = 0
     }
 
+    if (this.stepByStepAnimateSpeed && this.isAsynchronousAnimationOngoing(scope)) {
+      var p = scope.currentProgress + step / 200 * this.getFrameSpeed(this.currentFrame) * this.stepByStepAnimateSpeed
+      p = Math.min(scope.targetProgress, p)
+      this.updateScene(this.scope, this.question, this.frames, this.currentFrame, p, this.speed, this.reasons[this.currentFrame], false, true)
+    }
+
     for (let moduleName in this.modules) {
       const module = this.modules[moduleName]
       if (typeof module.animateScene === 'function') {
@@ -506,6 +529,10 @@ export class Drawer {
       }
     }
     return true
+  }
+
+  isAsynchronousAnimationOngoing (scope) {
+    return scope.targetProgress != null && scope.currentProgress !== scope.targetProgress
   }
 
   getFrameSpeed (frameNumber) {
@@ -738,7 +765,7 @@ export class Drawer {
     var key
     window.PIXI = Drawer.PIXI || window.PIXI
     this.oversampling = oversampling || 1
-    
+
     const notifyRenderer = () => {
       if (this.currentFrame >= 0) {
         this.changed = true
