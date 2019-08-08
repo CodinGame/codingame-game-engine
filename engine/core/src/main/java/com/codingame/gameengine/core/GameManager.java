@@ -456,7 +456,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     }
     
     /**
-     * Set the timeout delay of the first turn for every player. Default is 50ms.
+     * Set the timeout delay of the first turn for every player. Default is 1000ms.
      * 
      * @param turnMaxTime
      *            Duration in milliseconds.
