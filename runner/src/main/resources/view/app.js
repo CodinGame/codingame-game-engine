@@ -1,28 +1,30 @@
 import * as config from '../config.js'
-import {Drawer} from '../core/Drawer.js'
 import {ErrorLog} from '../core/ErrorLog.js'
 import {demo as defaultDemo} from '../demo.js'
 import Parser from './lib/Parser.js'
+import './player.js'
+
+const createCGPlayer = (opts) => {
+  return window['cg-player'].default({
+    ...opts,
+    localStorageKey: 'ngStorage-gameParams',
+    src: './player.html',
+    libraries: {
+      PIXI4: './lib/pixi4.js'
+    }
+  })
+}
 
 /* global fetch, angular, $, XMLHttpRequest */
 
-function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameManagerFactory, $localStorage) {
+function PlayerCtrl ($scope, $timeout, $interval, $filter, $element) {
   'ngInject'
   const ctrl = this
+  let cgPlayer = null
   let player = null
   let lastWidth
   let currentFrame = null
 
-  let playerLoadedPromise = new Promise((resolve) => {
-    $scope.playerLoaded = function (playerApi) {
-      ctrl.playerApi = playerApi
-      resolve(playerApi)
-    }
-  })
-
-  $scope.gameParams = $localStorage.$default({
-    gameParams: {}
-  })
   $scope.loadGame = loadGame
   $scope.selectReplay = selectReplay
   $scope.viewReplay = viewReplay
@@ -57,14 +59,32 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
 
   /// //////////////
 
-  function init () {
-    drawerFactory.createDrawer(Drawer).then(drawer => {
-      $scope.drawer = drawer
-      fetchGame().then(data => {
-        ctrl.data = data
-        loadGame()
-      })
+  async function init () {
+    cgPlayer = createCGPlayer({
+      viewerUrl: '/core/Drawer.js'
     })
+    cgPlayer.on('parsedGameInfo', onParsedGameInfo)
+    cgPlayer.createIframe($element.find('.cg-player-sandbox')[0])
+    cgPlayer.setOptions({
+      showConsole: false,
+      showRankings: false,
+      showSmallRankings: false,
+      asyncRendering: true,
+      shareable: false,
+      showReplayPrompt: false
+    })
+    fetchGame().then(data => {
+      ctrl.data = data
+      loadGame()
+    })
+  }
+
+  function onParsedGameInfo (gameInfo) {
+    $scope.playerColors = {}
+    gameInfo.agents.forEach(function (agent) {
+      $scope.playerColors[agent.index] = agent.color
+    })
+    cgPlayer.off('parsedGameInfo', onParsedGameInfo)
   }
 
   function loadGame () {
@@ -83,12 +103,9 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
     ctrl.gameInfo = convertFrameFormat(ctrl.data)
     $scope.agents = {...ctrl.data.agents}
 
-    ctrl.gameManager = gameManagerFactory.createGameManagerFromGameInfo($scope.drawer, ctrl.gameInfo, true)
-    ctrl.gameManager.subscribe(onUpdate)
-
-    return playerLoadedPromise.then(playerApi => {
-      playerApi.initReplay(ctrl.gameManager)
-    })
+    cgPlayer.sendFrames(ctrl.gameInfo)
+    // ctrl.gameManager = gameManagerFactory.createGameManagerFromGameInfo($scope.drawer, ctrl.gameInfo, true)
+    cgPlayer.subscribe(onUpdate)
   }
 
   function onUpdate (frame, progress, playing, isSubFrame, isTurnBased, atEnd) {
@@ -170,7 +187,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
         let result = null
         try {
           const json = JSON.parse(this.responseText)
-          json.agents.forEach(agent => { agent.color = Drawer.playerColors[agent.index] })
           result = json
         } catch (e) {
           console.error(e)
@@ -211,8 +227,18 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
   }
 
   function viewReplay () {
-    drawerFactory.createDrawer(Drawer, ctrl.introReplayData).then(drawer => {
-      $scope.replayDrawer = drawer
+    const cgPlayerReplay = createCGPlayer({
+      viewerUrl: '/core/Drawer.js',
+      customDemo: ctrl.introReplayData
+    })
+    cgPlayerReplay.createIframe($element.find('.cg-player-sandbox-replay')[0])
+    cgPlayerReplay.setOptions({
+      showConsole: false,
+      showRankings: false,
+      showSmallRankings: false,
+      asyncRendering: true,
+      shareable: false,
+      showReplayPrompt: false
     })
     $scope.showViewReplayPopup = true
   }
@@ -326,7 +352,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, drawerFactory, gameMa
   }
 }
 
-angular.module('player')
+angular.module('player', ['ngStorage'])
   .controller('PlayerCtrl', PlayerCtrl)
   .directive('resizeHandle', function ($localStorage) {
     'ngInject'
