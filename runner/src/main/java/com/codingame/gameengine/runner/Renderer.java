@@ -59,6 +59,7 @@ import io.undertow.Undertow;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.server.handlers.DisableCacheHandler;
+import io.undertow.server.handlers.SetHeaderHandler;
 import io.undertow.server.handlers.resource.FileResourceManager;
 import io.undertow.server.handlers.resource.Resource;
 import io.undertow.server.handlers.resource.ResourceHandler;
@@ -608,7 +609,7 @@ class Renderer {
             .addHttpListener(port, "0.0.0.0")
             .setHandler(
                 new DisableCacheHandler(
-                    Handlers.path(new ResourceHandler(mrs).addWelcomeFiles("test.html"))
+                    Handlers.path(new SetHeaderHandler(new ResourceHandler(mrs).addWelcomeFiles("test.html"), "Access-Control-Allow-Origin", "*"))
                         .addPrefixPath(
                             "/services/", new HttpHandler() {
                                 @Override
