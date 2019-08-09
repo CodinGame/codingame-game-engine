@@ -66,6 +66,8 @@ class Serializer {
         keys.put("baseWidth", "bw");
         keys.put("baseHeight", "bh");
         keys.put("points", "ps");
+        keys.put("skewX", "kx");
+        keys.put("skewY", "ky");
 
         commands = new HashMap<>();
         commands.put("CREATE", "C");

@@ -31,6 +31,8 @@ const PROPERTY_KEY_MAP = {
   sy: 'scaleY',
   ax: 'anchorX',
   ay: 'anchorY',
+  kx: 'skewX',
+  ky: 'skewY',
   v: 'visible',
   z: 'zIndex',
   b: 'blendMode',

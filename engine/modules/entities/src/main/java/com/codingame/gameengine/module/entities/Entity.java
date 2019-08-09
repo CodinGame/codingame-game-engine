@@ -17,6 +17,7 @@ public abstract class Entity<T extends Entity<?>> {
 
     private int x, y, zIndex;
     private double scaleX = 1, scaleY = 1;
+    private double skewX = 0, skewY = 0;
     private boolean visible = false;
     private double rotation, alpha = 1;
     ContainerBasedEntity<?> parent;
@@ -185,6 +186,58 @@ public abstract class Entity<T extends Entity<?>> {
     }
 
     /**
+     * Sets the horizontal skew of this <code>Entity</code> in radians.
+     * 
+     * @param skewX
+     *            the horizontal skew for this <code>Entity</code>.
+     * @return this <code>Entity</code>.
+     */
+    public T setSkewX(double skewX) {
+        return setSkewX(skewX, null);
+    }
+
+    /**
+     * Sets the horizontal skew of this <code>Entity</code> in radians.
+     * 
+     * @param skewX
+     *            the horizontal skew for this <code>Entity</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Entity</code>.
+     */
+    public T setSkewX(double skewX, Curve curve) {
+        this.skewX = skewX;
+        set("skewX", skewX, curve);
+        return self();
+    }
+
+    /**
+     * Sets the vertical skew of this <code>Entity</code> in radians.
+     * 
+     * @param skewY
+     *            the vertical skew for this <code>Entity</code>.
+     * @return this <code>Entity</code>.
+     */
+    public T setSkewY(double skewY) {
+        return setSkewY(skewY, null);
+    }
+
+    /**
+     * Sets the vertical skew of this <code>Entity</code> in radians.
+     * 
+     * @param skewY
+     *            the vertical skew for this <code>Entity</code>.
+     * @param curve
+     *            the transition to animate between values of this property.
+     * @return this <code>Entity</code>.
+     */
+    public T setSkewY(double skewY, Curve curve) {
+        this.skewY = skewY;
+        set("skewY", skewY, curve);
+        return self();
+    }
+
+    /**
      * <p>
      * Sets the alpha of this <code>Entity</code> as a percentage.
      * </p>
@@ -340,6 +393,30 @@ public abstract class Entity<T extends Entity<?>> {
      */
     public double getScaleY() {
         return scaleY;
+    }
+
+    /**
+     * Returns the horizontal skew of this <code>Entity</code> in radians.
+     * <p>
+     * Default is 0.
+     * </p>
+     * 
+     * @return the horizontal skew of this <code>Entity</code>.
+     */
+    public double getSkewX() {
+        return skewX;
+    }
+
+    /**
+     * Returns the vertical skew of this <code>Entity</code> in radians.
+     * <p>
+     * Default is 0.
+     * </p>
+     * 
+     * @return the vertical skew of this <code>Entity</code>.
+     */
+    public double getSkewY() {
+        return skewY;
     }
 
     /**
