@@ -2,7 +2,11 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next versions
+## Next Release
+
+### 🎁 New features
+
+- Added methods to change an entity's `skew` in the `GraphicEntityModule`
 
 ## 3.4.10
 
