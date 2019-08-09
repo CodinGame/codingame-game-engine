@@ -3,7 +3,9 @@
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<script type="text/javascript" src="lib/player.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.js" integrity="sha256-47AQCzX6dqzjicKe4PabaBJtLnWffl34LU9WJUulNog=" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.11/ngStorage.min.js" integrity="sha256-0YzDSJS0qH+wpvug+Im1cMB9CX919NMtHj0d2VVHPp4=" crossorigin="anonymous"></script>
 	<link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,600,700,800,900" rel="stylesheet" type="text/css">
 	<link href='http://fonts.googleapis.com/css?family=Lato:300,400,900' rel='stylesheet' type='text/css'>
 	<link href="http://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" type="text/css">
@@ -42,18 +44,7 @@
 
 		<div ng-show="showViewReplayPopup" class="report-popup-wrapper">
 			<div class="viewer-popup">	
-				<cg-player
-					ng-if="replayDrawer"
-					on-player-ready="playerLoaded($playerApi)"
-					drawer="replayDrawer"
-					show-console="false"
-					show-rankings="false"
-					show-small-rankings="false"
-					async-rendering="true"
-					shareable="false"
-					show-replay-prompt="false"
-					game-params="gameParams">
-				</cg-player>
+				<div class="cg-player-sandbox-replay"></div>
 				<div id="console" class="outputs-demo">
 					<div class="output-log" ng-repeat="(key,value) in errors" ng-if="errors">
 						<span class="collapsed-bubble" ng-if="value.quantity > 1">
@@ -160,18 +151,7 @@
 			<div class="left-wrapper left-bloc">
 				<div class="viewer-container">
 					<div class="viewer-wrapper">
-						<cg-player
-							ng-if="drawer"
-							on-player-ready="playerLoaded($playerApi)"
-							drawer="drawer"
-							show-console="false"
-							show-rankings="false"
-							show-small-rankings="false"
-							async-rendering="true"
-							shareable="false"
-							show-replay-prompt="false"
-							game-params="gameParams">
-						</cg-player>
+						<div class="cg-player-sandbox"></div>
 					</div>
 				</div>
 				
@@ -251,8 +231,8 @@
 				<div id="output-players" class="players-outputs-frame" ng-class="{'less-or-equal-than-two-players': lessOrEqualThanTwoPlayers()}">
 					<div ng-repeat="(index, agent) in agents" class="players-outputs-player" >
 						
-						<div class="players-outputs-player-header" ng-style="{'border-color': agent.color}">
-							<svg class="players-outputs-player-header-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.031 16" ng-style="{'fill': agent.color}">
+						<div class="players-outputs-player-header" ng-style="{'border-color': playerColors[agent.index]}">
+							<svg class="players-outputs-player-header-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.031 16" ng-style="{'fill': playerColors[agent.index]}">
 								<path id="User_16" d="M903.019,44H889a1,1,0,0,1-1-1c0-2.708,2.514-4.882,5.541-5.673a5,5,0,1,1,4.919,0c2.955,0.769,5.436,2.848,5.535,5.454A1,1,0,0,1,903.019,44ZM896,30a3,3,0,1,0,3,3A3,3,0,0,0,896,30Zm0,9c-2.461,0-5.349,1.214-5.862,3h11.723C901.348,40.213,898.46,39,896,39Z" transform="translate(-888 -28)"/>
 							</svg>
 							<div class="players-outputs-player-header-title" >{{agent.name}}</div>
@@ -260,12 +240,12 @@
 						<div class="console-output-frame">
 							<div class="console-output-wrapper">
 								<div class="console-output-stdout">
-									<div class="players-outputs-player-console-title" ng-style="{color: agent.color}">Standard Output</div>
+									<div class="players-outputs-player-console-title" ng-style="{color: playerColors[agent.index]}">Standard Output</div>
 									<pre class="console-outputs" ng-bind="agent.stdout"></pre>
 								</div>
 								<hr class="outputs-seperator"> 
 								<div class="console-output-stderr">
-									<div class="players-outputs-player-console-title" ng-style="{'color': agent.color}">Standard Error</div>
+									<div class="players-outputs-player-console-title" ng-style="{'color': playerColors[agent.index]}">Standard Error</div>
 									<pre class="console-outputs" ng-bind="agent.stderr"></pre>
 								</div>
 							</div>

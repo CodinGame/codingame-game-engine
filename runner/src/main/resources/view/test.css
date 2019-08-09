@@ -1,5 +1,9 @@
 /* Entire page */
 
+html, body {
+    height: 100%
+}
+
 body {
     color: white;
     font-family: 'Open Sans', Lato, sans-serif;
