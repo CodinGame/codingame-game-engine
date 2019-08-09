@@ -104,7 +104,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, $element) {
     $scope.agents = {...ctrl.data.agents}
 
     cgPlayer.sendFrames(ctrl.gameInfo)
-    // ctrl.gameManager = gameManagerFactory.createGameManagerFromGameInfo($scope.drawer, ctrl.gameInfo, true)
     cgPlayer.subscribe(onUpdate)
   }
 
