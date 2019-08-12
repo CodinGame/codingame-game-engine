@@ -45,8 +45,8 @@
 		<div ng-show="showViewReplayPopup" class="report-popup-wrapper">
 			<div class="viewer-popup">	
 				<div class="cg-player-sandbox-replay"></div>
-				<div id="console" class="outputs-demo">
-					<div class="output-log" ng-repeat="(key,value) in errors" ng-if="errors">
+				<div id="console" class="outputs-demo" ng-if="!isEmptyObject(errors)">
+					<div class="output-log" ng-repeat="(key,value) in errors">
 						<span class="collapsed-bubble" ng-if="value.quantity > 1">
 							<span class="collapsed-count"
 								ng-bind="value.quantity"
