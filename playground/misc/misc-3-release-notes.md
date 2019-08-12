@@ -2,11 +2,16 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next Release
+## 3.5.0
 
 ### 🎁 New features
 
 - Added methods to change an entity's `skew` in the `GraphicEntityModule`
+- Added methods to change the player timeout of the first round of a game.
+
+### 🐞 Bug fix
+
+ - Updated the test page's player to match the codingame IDE
 
 ## 3.4.10
 
