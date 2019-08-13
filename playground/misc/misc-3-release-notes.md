@@ -2,11 +2,23 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 3.5.2
+
+### 🐞 Bug fix
+
+ - Fixed the `skewX` and `skewY` interpolation method.
+ - Fixed the next frame button no longer updating the view
+
 ## 3.5.1
 
 ### 🐞 Bug fix
 
  - Fixed the `skewX` and `skewY` properties for all `Entities`.
+
+### ⚠️ Known issues
+
+- `skew` property is not functional, to use it please move to 3.5.2 or higher
+- the next frame button no longer updates the view
 
 ## 3.5.0
 
@@ -19,9 +31,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
  - Updated the test page's player to match the codingame IDE
 
- ### ⚠️ Known issues
+### ⚠️ Known issues
 
-- `skew` property is not functional, to use it please move to 3.5.1 or higher
+- `skew` property is not functional, to use it please move to 3.5.2 or higher
+- the next frame button no longer updates the view
 
 ## 3.4.10
 

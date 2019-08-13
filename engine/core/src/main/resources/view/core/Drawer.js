@@ -437,7 +437,7 @@ export class Drawer {
 
   updateScene (scope, question, frames, frameNumber, progress, speed, reason, demo, force) {
     const parsedFrame = frames[frameNumber]
-    if (!force && this.checkSteppedToNextFrame(scope, parsedFrame)) {
+    if (!force && this.stepByStepAnimateSpeed && this.checkSteppedToNextFrame(scope, parsedFrame)) {
       this.startAsynchronousAnimation(scope, progress, parsedFrame)
       return
     }
