@@ -165,7 +165,7 @@ class Serializer {
     private String minifyParam(String key, EntityState.Param param) {
         String result;
 
-        if (key.equals("rotation")) {
+        if (key.equals("rotation") || key.equals("skewX") || key.equals("skewY")) {
             result = String.valueOf((int) Math.toDegrees((double) param.value));
         } else if (param.value instanceof Double) {
             result = decimalFormat.format(param.value);

@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 3.5.1
+
+### 🐞 Bug fix
+
+ - Fixed the `skewX` and `skewY` properties for all `Entities`.
+
 ## 3.5.0
 
 ### 🎁 New features
@@ -12,6 +18,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
  - Updated the test page's player to match the codingame IDE
+
+ ### ⚠️ Known issues
+
+- `skew` property is not functional, to use it please move to 3.5.1 or higher
 
 ## 3.4.10
 

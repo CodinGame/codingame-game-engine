@@ -11,6 +11,8 @@ export class Entity {
       y: 0,
       scaleX: 1,
       scaleY: 1,
+      skewX: 0,
+      skewY: 0,
       zIndex: 0,
       alpha: 1,
       visible: false,
@@ -173,6 +175,7 @@ export class Entity {
     this.container.scale.set(state.scaleX || eps, state.scaleY || eps)
     this.container.rotation = state.rotation
     this.container._visible = state.visible && !this.hide
+    this.container.skew.set(state.skewX, state.skewY)
   }
 
   static createState (time = 1, values = {}, curve = {}) {

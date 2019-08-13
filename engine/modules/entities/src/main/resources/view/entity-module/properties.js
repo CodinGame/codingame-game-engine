@@ -63,6 +63,7 @@ export const PROPERTIES = {
   visible: boolOpts,
 
   rotation: angleOpts,
+  skew: angleOpts,
 
   fillColor: colorOpts,
   lineColor: colorOpts,
