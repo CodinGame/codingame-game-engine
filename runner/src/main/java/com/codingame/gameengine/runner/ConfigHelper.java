@@ -67,7 +67,7 @@ class ConfigHelper {
         }
     }
 
-    class TestCase {
+    public static class TestCase {
         private Map<Integer, String> title;
         private String testIn;
         private Boolean isTest;
