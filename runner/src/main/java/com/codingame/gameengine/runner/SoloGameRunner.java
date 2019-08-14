@@ -64,7 +64,7 @@ public class SoloGameRunner extends GameRunner {
      * The file path must be relative considering the root directory is <b>config</b>.
      * 
      * @param testCaseFileName
-     *            the test case file path
+     *            the test case file path (JSON or YAML)
      */
     public void setTestCase(String testCaseFileName) {
         setTestCase(new File(System.getProperty("user.dir")).toPath().resolve("config/" + testCaseFileName).toFile());
@@ -74,7 +74,7 @@ public class SoloGameRunner extends GameRunner {
      * Sets a test case file which <b>testIn</b> value will be sent to the Game Manager as a test case input.
      * 
      * @param testCaseFile
-     *            the test case file
+     *            the test case file (JSON or YAML)
      */
     public void setTestCase(File testCaseFile) {
         if (testCaseFile == null) {
