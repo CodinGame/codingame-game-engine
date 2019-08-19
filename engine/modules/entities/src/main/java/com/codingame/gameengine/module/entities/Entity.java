@@ -24,7 +24,7 @@ public abstract class Entity<T extends Entity<?>> {
     Mask mask;
 
     static enum Type {
-        CIRCLE, LINE, RECTANGLE, SPRITE, TEXT, BITMAPTEXT, GROUP, BUFFERED_GROUP, SPRITEANIMATION, ROUNDED_RECTANGLE, POLYGON
+        CIRCLE, LINE, RECTANGLE, SPRITE, TEXT, BITMAPTEXT, GROUP, BUFFERED_GROUP, SPRITEANIMATION, ROUNDED_RECTANGLE, POLYGON, TILING_SPRITE
     }
 
     Entity() {
@@ -450,19 +450,8 @@ public abstract class Entity<T extends Entity<?>> {
     }
 
     /**
-     * Sets a given <code>Shape</code> as this <code>Entity</code>'s <code>Mask</code>.
-     * 
-     * @param shape
-     *            the mask.
-     * @return this <code>Entity</code>.
-     */
-    public T setMask(Shape<?> shape) {
-        return saveMask(shape);
-    }
-
-    /**
      * <p>
-     * Sets a given <code>Sprite</code> as this <code>Entity</code>'s <code>Mask</code>.
+     * Sets a given <code>Mask</code> as this <code>Entity</code>'s <code>Mask</code>.
      * </p>
      * <b>Note:</b> texture masks will only work on browsers which support WebGL
      * 
@@ -470,8 +459,8 @@ public abstract class Entity<T extends Entity<?>> {
      *            the mask.
      * @return this <code>Entity</code>.
      */
-    public T setMask(Sprite sprite) {
-        return saveMask(sprite);
+    public T setMask(Mask mask) {
+        return saveMask(mask);
     }
 
     /**

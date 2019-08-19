@@ -2,6 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+
+## Next version
+
+### 🎁 New features
+
+- Add `TilingSprite`
+
 ## 3.5.2
 
 ### 🐞 Bug fix
