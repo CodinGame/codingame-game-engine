@@ -3,6 +3,8 @@ package com.codingame.gameengine.module.entities;
 /**
  * A TilingSprite is a graphical entity which displays a tiling image. That image must be loaded into the viewer's texture cache, which you can
  * configure by adding files to the <code>assets</code> folder of your game's project.
+ * 
+ * @see <a href="http://pixijs.download/v4.8.5/docs/PIXI.extras.TilingSprite.html">PIXI TilingSprite</a>
  */
 public class TilingSprite extends SpriteBasedEntity<TilingSprite> {
 
