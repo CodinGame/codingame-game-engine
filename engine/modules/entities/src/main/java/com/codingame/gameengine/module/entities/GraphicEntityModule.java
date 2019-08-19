@@ -261,7 +261,7 @@ public class GraphicEntityModule implements Module {
         newEntity(c);
         return c;
     }
-    
+
     /**
      * Creates a new RoundedRectangle entity, its graphical counterpart will be created on the frame currently being computed.
      * 
@@ -272,7 +272,7 @@ public class GraphicEntityModule implements Module {
         newEntity(c);
         return c;
     }
-    
+
     /**
      * Creates a new Polygon entity, its graphical counterpart will be created on the frame currently being computed.
      * 
@@ -356,6 +356,17 @@ public class GraphicEntityModule implements Module {
      */
     public SpriteAnimation createSpriteAnimation() {
         SpriteAnimation c = new SpriteAnimation();
+        newEntity(c);
+        return c;
+    }
+
+    /**
+     * Creates a new TilingSprite entity, its graphical counterpart will be created on the frame currently being computed.
+     * 
+     * @return the entity. Modify its properties to animate the graphical counterpart.
+     */
+    public TilingSprite createTilingSprite() {
+        TilingSprite c = new TilingSprite();
         newEntity(c);
         return c;
     }

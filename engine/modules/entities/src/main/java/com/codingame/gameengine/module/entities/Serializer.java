@@ -68,6 +68,10 @@ class Serializer {
         keys.put("points", "ps");
         keys.put("skewX", "kx");
         keys.put("skewY", "ky");
+        keys.put("tileX", "tx");
+        keys.put("tileY", "ty");
+        keys.put("tileScaleX", "tsx");
+        keys.put("tileScaleY", "tsy");
 
         commands = new HashMap<>();
         commands.put("CREATE", "C");
@@ -99,6 +103,7 @@ class Serializer {
         types.put(Type.BITMAPTEXT, "X");
         types.put(Type.SPRITEANIMATION, "A");
         types.put(Type.POLYGON, "P");
+        types.put(Type.TILING_SPRITE, "D");
 
         if (keys.values().stream().distinct().count() != keys.values().size()) {
             throw new RuntimeException("Duplicate keys");

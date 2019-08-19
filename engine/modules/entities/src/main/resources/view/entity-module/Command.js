@@ -43,7 +43,11 @@ const PROPERTY_KEY_MAP = {
   d: 'duration',
   bw: 'baseWidth',
   bh: 'baseHeight',
-  ps: 'points'
+  ps: 'points',
+  tx: 'tileX',
+  ty: 'tileY',
+  tsx: 'tileScaleX',
+  tsy: 'tileScaleY'
 }
 
 export class CreateCommand {
