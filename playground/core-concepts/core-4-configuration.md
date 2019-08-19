@@ -239,7 +239,7 @@ Optionally, you can tranlate your popups in French using `welcome_fr.html` files
 
 You will need to create test case files to run your **Solo** game.
 
-Your test cases must be named `test<number>.json` and placed in the `config` directory. Their `<number>` determine the order they will be listed in the CodinGame IDE. Here is an example:
+Your test cases must be named `test<number>.json` or `test<number>.yaml` and placed in the `config` directory. Their `<number>` determine the order they will be listed in the CodinGame IDE. Here is an example:
 
 `test1.json`
 ```json
@@ -253,6 +253,22 @@ Your test cases must be named `test<number>.json` and placed in the `config` dir
 	"isValidator": "false"
 }
 ```
+
+or the YAML equivalent:
+
+`test1.yaml`
+```yaml
+title:
+  2: One path
+  1: Un seul chemin
+testIn: |-
+  .o...
+  .ooo.
+  ...o.
+isTest: 'true'
+isValidator: 'false'
+```
+
 - **title:**
     - **2:** English title, this parameter is mandatory.
     - **1:** French title, optional.

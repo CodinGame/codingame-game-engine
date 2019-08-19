@@ -67,7 +67,7 @@ class ConfigHelper {
         }
     }
 
-    class TestCase {
+    public static class TestCase {
         private Map<Integer, String> title;
         private String testIn;
         private Boolean isTest;
@@ -451,10 +451,10 @@ class ConfigHelper {
             for (String leagueKey : questionsConfig.keySet()) {
                 QuestionConfig questionConfig = questionsConfig.get(leagueKey);
                 questionConfig.merge(defaultConfig);
-                questionConfig.configDetected = isPresentConfigIni(gameConfig, questionConfig);
+                questionConfig.configDetected = isPresentConfigIni(questionConfig);
             }
         } else {
-            defaultConfig.configDetected = isPresentConfigIni(gameConfig, defaultConfig);
+            defaultConfig.configDetected = isPresentConfigIni(defaultConfig);
         }
 
         MutableInt soloQuestions = new MutableInt();
@@ -500,7 +500,7 @@ class ConfigHelper {
         return gameConfig;
     }
 
-    private boolean isPresentConfigIni(GameConfig gameConfig, QuestionConfig questionConfig) {
+    private boolean isPresentConfigIni(QuestionConfig questionConfig) {
         return questionConfig.minPlayers != null || questionConfig.maxPlayers != null;
     }
 }

@@ -3,14 +3,16 @@ package com.codingame.gameengine.runner;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.yaml.snakeyaml.Yaml;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.codingame.gameengine.runner.ConfigHelper.TestCase;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 /**
  * The class to use to run local games and display the replay in a webpage on a temporary local server.
@@ -27,18 +29,33 @@ public class SoloGameRunner extends GameRunner {
     }
 
     private List<String> getLinesFromTestCaseFile(File file) {
-        List<String> lines = new ArrayList<>();
+        TestCase testCase;
         try {
-            JsonObject testCaseJson = new JsonParser().parse(FileUtils.readFileToString(file, StandardCharsets.UTF_8)).getAsJsonObject();
-            lines.addAll(Arrays.asList(testCaseJson.get("testIn").getAsString().split("\\n")));
+            testCase = parseTestCaseFile(file);
         } catch (IOException e) {
-            throw new RuntimeException("Cannot read file", e);
-        } catch (NullPointerException e) {
-            throw new RuntimeException("Cannot find \"testIn\" property");
+            throw new RuntimeException("Cannot read file " + file.getName(), e);
         } catch (Exception e) {
-            throw new RuntimeException("Cannot parse file", e);
+            throw new RuntimeException("Cannot parse file " + file.getName(), e);
         }
-        return lines;
+
+        if (testCase.getTestIn() == null) {
+            throw new RuntimeException("Cannot find \"testIn\" property");
+        }
+
+        return Arrays.asList(testCase.getTestIn().split("\\n"));
+    }
+
+    private TestCase parseTestCaseFile(File file) throws JsonSyntaxException, IOException {
+        String extension = FilenameUtils.getExtension(file.getName());
+
+        switch (extension.toLowerCase()) {
+        case "yaml":
+        case "yml":
+            return new Yaml().loadAs(FileUtils.readFileToString(file, StandardCharsets.UTF_8), TestCase.class);
+        case "json":
+        default:
+            return new Gson().fromJson(FileUtils.readFileToString(file, StandardCharsets.UTF_8), TestCase.class);
+        }
     }
 
     /**
@@ -47,7 +64,7 @@ public class SoloGameRunner extends GameRunner {
      * The file path must be relative considering the root directory is <b>config</b>.
      * 
      * @param testCaseFileName
-     *            the test case file path
+     *            the test case file path (JSON or YAML)
      */
     public void setTestCase(String testCaseFileName) {
         setTestCase(new File(System.getProperty("user.dir")).toPath().resolve("config/" + testCaseFileName).toFile());
@@ -57,7 +74,7 @@ public class SoloGameRunner extends GameRunner {
      * Sets a test case file which <b>testIn</b> value will be sent to the Game Manager as a test case input.
      * 
      * @param testCaseFile
-     *            the test case file
+     *            the test case file (JSON or YAML)
      */
     public void setTestCase(File testCaseFile) {
         if (testCaseFile == null) {
@@ -66,10 +83,10 @@ public class SoloGameRunner extends GameRunner {
         if (!testCaseFile.isFile()) {
             throw new RuntimeException("Given test case is not a file " + testCaseFile.getAbsolutePath());
         }
-        
+
         setTestCaseInput(getLinesFromTestCaseFile(testCaseFile));
     }
-    
+
     /**
      * Sets a list of <code>String</code> as a test case input that will be sent to the Game Manager.
      * 
@@ -79,7 +96,7 @@ public class SoloGameRunner extends GameRunner {
     public void setTestCaseInput(List<String> testCaseInput) {
         this.testCaseInput = testCaseInput;
     }
-    
+
     /**
      * Sets a <code>String</code> as a test case input that will be sent to the Game Manager.
      * <p>
