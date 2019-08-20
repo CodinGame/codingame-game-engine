@@ -455,7 +455,7 @@ public abstract class Entity<T extends Entity<?>> {
      * </p>
      * <b>Note:</b> texture masks will only work on browsers which support WebGL
      * 
-     * @param sprite
+     * @param mask
      *            the mask.
      * @return this <code>Entity</code>.
      */
