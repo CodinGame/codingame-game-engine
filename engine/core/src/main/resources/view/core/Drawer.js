@@ -624,7 +624,7 @@ export class Drawer {
     if (!this.loading) {
       if (this.loaded < 1) {
         this.changed |= this.renderPreloadScene(this.scope, step)
-      } else if (this.changed || (this.asyncRendering && this.asyncRenderingTime > 0)) {
+      } else if (this.changed || (this.asyncRendering && this.asyncRenderingTime > 0) || this.isAsynchronousAnimationOngoing(this.scope)) {
         if (this.currentFrame < 0) {
           this.changed |= this.renderDefaultScene(this.scope, step)
         } else if (this.intro) {
