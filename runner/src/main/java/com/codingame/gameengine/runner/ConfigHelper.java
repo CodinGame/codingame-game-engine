@@ -19,8 +19,10 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.mutable.MutableInt;
+import org.yaml.snakeyaml.Yaml;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 /***
  * Mainly based on ContributionArchiveHelper.java
@@ -432,8 +434,7 @@ class ConfigHelper {
                 } else if (welcomeImagesMatcher.matches()) {
                     questionConfig.getWelcomeImagesList().add(p.toFile());
                 } else if (testCaseMatcher.matches()) {
-                    TestCase testCase = new Gson()
-                        .fromJson((FileUtils.readFileToString(p.toFile(), StandardCharsets.UTF_8)), TestCase.class);
+                    TestCase testCase = parseTestCaseFile(p.toFile());
                     questionConfig.getTestCaseDtoMap().put(Integer.parseInt(testCaseMatcher.group("num")), testCase);
                 }
             } catch (IOException e) {
@@ -503,4 +504,18 @@ class ConfigHelper {
     private boolean isPresentConfigIni(QuestionConfig questionConfig) {
         return questionConfig.minPlayers != null || questionConfig.maxPlayers != null;
     }
+
+    public static TestCase parseTestCaseFile(File file) throws JsonSyntaxException, IOException {
+        String extension = FilenameUtils.getExtension(file.getName());
+
+        switch (extension.toLowerCase()) {
+        case "yaml":
+        case "yml":
+            return new Yaml().loadAs(FileUtils.readFileToString(file, StandardCharsets.UTF_8), TestCase.class);
+        case "json":
+        default:
+            return new Gson().fromJson(FileUtils.readFileToString(file, StandardCharsets.UTF_8), TestCase.class);
+        }
+    }
+
 }

@@ -2,17 +2,10 @@ package com.codingame.gameengine.runner;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.yaml.snakeyaml.Yaml;
-
 import com.codingame.gameengine.runner.ConfigHelper.TestCase;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 
 /**
  * The class to use to run local games and display the replay in a webpage on a temporary local server.
@@ -31,7 +24,7 @@ public class SoloGameRunner extends GameRunner {
     private List<String> getLinesFromTestCaseFile(File file) {
         TestCase testCase;
         try {
-            testCase = parseTestCaseFile(file);
+            testCase = ConfigHelper.parseTestCaseFile(file);
         } catch (IOException e) {
             throw new RuntimeException("Cannot read file " + file.getName(), e);
         } catch (Exception e) {
@@ -43,19 +36,6 @@ public class SoloGameRunner extends GameRunner {
         }
 
         return Arrays.asList(testCase.getTestIn().split("\\n"));
-    }
-
-    private TestCase parseTestCaseFile(File file) throws JsonSyntaxException, IOException {
-        String extension = FilenameUtils.getExtension(file.getName());
-
-        switch (extension.toLowerCase()) {
-        case "yaml":
-        case "yml":
-            return new Yaml().loadAs(FileUtils.readFileToString(file, StandardCharsets.UTF_8), TestCase.class);
-        case "json":
-        default:
-            return new Gson().fromJson(FileUtils.readFileToString(file, StandardCharsets.UTF_8), TestCase.class);
-        }
     }
 
     /**
