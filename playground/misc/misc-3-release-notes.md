@@ -2,11 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next release
+## 3.6.1
 
 ### 🐞 Bug fix
 
- - Fixed the `stepByStepAnimateSpeed` getting interrupted by clicking in the IDE.
+- Fix the `stepByStepAnimateSpeed` getting interrupted by clicking in the IDE
+- Fix YAML testcases export
 
 ## 3.6.0
 
