@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -675,6 +676,10 @@ class Renderer {
                                             }
 
                                             exchange.setStatusCode(StatusCodes.OK);
+                                        } if (exchange.getRelativePath().equals("/stub")) {
+                                            File stubFile = sourceFolderPath.resolve("config/stub.txt").toFile();
+                                            String stub = FileUtils.readFileToString(stubFile, StandardCharsets.UTF_8);
+                                            exchange.getResponseSender().send(stub);
                                         }
                                     } catch (MissingConfigException e) {
                                         sendException(exchange, e, StatusCodes.UNPROCESSABLE_ENTITY);

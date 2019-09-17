@@ -1,0 +1,58 @@
+<html>
+<body>
+  <script type="module">
+    import './lib/cginput.js'
+
+    let stub = null
+
+    function refreshStub (languageId) {
+      document.getElementById("result").innerText = cginput.generateStub({ stubInput: stub, languageId: languageId })
+    }
+
+    async function load () {
+      const response = await fetch('/services/stub')
+      stub = await response.text()
+      document.getElementById("raw").innerText = stub
+
+      refreshStub("java")
+    }
+
+    load()
+    document.getElementById("language").addEventListener('change', (event) => refreshStub(event.target.value))
+  </script>
+  <div id="raw">
+
+  </div>
+  <select id="language">
+    <option>bash</option>
+    <option>clojure</option>
+    <option>c++</option>
+    <option>c#</option>
+    <option>c</option>
+    <option>dart</option>
+    <option>f#</option>
+    <option>go</option>
+    <option>groovy</option>
+    <option>haskell</option>
+    <option>javascript</option>
+    <option selected="selected">java</option>
+    <option>kotlin</option>
+    <option>lua</option>
+    <option>objectivec</option>
+    <option>ocaml</option>
+    <option>pascal</option>
+    <option>perl</option>
+    <option>php</option>
+    <option>pseudocode</option>
+    <option>python3</option>
+    <option>python</option>
+    <option>ruby</option>
+    <option>rust</option>
+    <option>scala</option>
+    <option>swift3</option>
+    <option>swift</option>
+    <option>vb.net</option>
+  </select>
+  <pre id="result"></pre>
+</body>
+</html>
