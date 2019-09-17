@@ -112,6 +112,10 @@ export class Drawer {
   canSwapPlayers () {
     return false
   }
+  
+  addErrorListener (callback) {
+    ErrorLog.listen(callback)
+  }
 
   /** Mandatory */
   getResources () {

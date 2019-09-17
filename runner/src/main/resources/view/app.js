@@ -1,5 +1,4 @@
 import * as config from '../config.js'
-import { ErrorLog } from '../core/ErrorLog.js'
 import { demo as defaultDemo } from '../demo.js'
 import Parser from './lib/Parser.js'
 import './player.js'
@@ -15,17 +14,18 @@ const createCGPlayer = (opts) => {
   })
 }
 
-/* global fetch, angular, $, XMLHttpRequest */
+/* global fetch, angular, $ */
 
-function PlayerCtrl ($scope, $timeout, $interval, $filter, $element) {
+function PlayerCtrl ($scope, $timeout, $interval, $element) {
   'ngInject'
+
   const ctrl = this
+
   let cgPlayer = null
   let player = null
   let lastWidth
   let currentFrame = null
 
-  $scope.loadGame = loadGame
   $scope.selectReplay = selectReplay
   $scope.viewReplay = viewReplay
   $scope.exportZip = exportZip
@@ -43,9 +43,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, $element) {
   }
 
   $scope.errors = {}
-  ErrorLog.listen(function (error) {
-    addError(error)
-  })
 
   function addError (error) {
     let errorText = error.message + '\n'
@@ -77,10 +74,9 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, $element) {
       shareable: false,
       showReplayPrompt: false
     })
-    fetchGame().then(data => {
-      ctrl.data = data
-      loadGame()
-    })
+
+    cgPlayer.on('error', addError)
+    loadGame()
   }
 
   function onParsedGameInfo (gameInfo) {
@@ -91,8 +87,10 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, $element) {
     cgPlayer.off('parsedGameInfo', onParsedGameInfo)
   }
 
-  function loadGame () {
-    if ($scope.gameLoaded || !ctrl.data) {
+  async function loadGame () {
+    const response = await fetch('game.json')
+    ctrl.data = await response.json()
+    if (!ctrl.data) {
       return
     }
     if (ctrl.data.failCause) {
@@ -102,7 +100,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, $element) {
       return
     }
 
-    $scope.gameLoaded = true
     $scope.uinput = ctrl.data.uinput
     ctrl.gameInfo = convertFrameFormat(ctrl.data)
     $scope.agents = { ...ctrl.data.agents }
@@ -183,24 +180,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $filter, $element) {
     }
   }
 
-  function fetchGame () {
-    return new Promise((resolve, reject) => {
-      let xhr = new XMLHttpRequest()
-      xhr.onload = function () {
-        let result = null
-        try {
-          const json = JSON.parse(this.responseText)
-          result = json
-        } catch (e) {
-          console.error(e)
-          reject(e)
-        }
-        resolve(result)
-      }
-      xhr.open('GET', 'game.json', true)
-      xhr.send()
-    })
-  }
   $scope.selectProgress = 'inactive'
   async function selectReplay () {
     $scope.selectProgress = 'saving'
