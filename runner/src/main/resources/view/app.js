@@ -1,5 +1,4 @@
 import * as config from '../config.js'
-import { ErrorLog } from '../core/ErrorLog.js'
 import { demo as defaultDemo } from '../demo.js'
 import Parser from './lib/Parser.js'
 import './player.js'
@@ -44,9 +43,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
   }
 
   $scope.errors = {}
-  ErrorLog.listen(function (error) {
-    addError(error)
-  })
 
   function addError (error) {
     let errorText = error.message + '\n'
@@ -78,6 +74,8 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
       shareable: false,
       showReplayPrompt: false
     })
+
+    cgPlayer.on('error', addError)
     loadGame()
   }
 
