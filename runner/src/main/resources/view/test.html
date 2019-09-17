@@ -16,11 +16,11 @@
 <body>
 	<div ng-app="player" class="player" ng-controller="PlayerCtrl" ng-cloak>
 
-    <!-- ng-show="false" guarantees that this div will only be visible if angular loads but our app crashes -->
-    <div ng-show="false" class="module-load-error-overlay">
-      <div>The game's modules failed to load.</div>
-      <div>Check your browser's JavaScript console for details.</div>
-    </div>
+		<!-- ng-show="false" guarantees that this div will only be visible if angular loads but our app crashes -->
+		<div ng-show="false" class="module-load-error-overlay">
+			<div>The game's modules failed to load.</div>
+			<div>Check your browser's JavaScript console for details.</div>
+		</div>
 
 		<div ng-show="showExportPopup" class="report-popup-wrapper">
 			<div class="report-popup">
@@ -43,24 +43,21 @@
 		</div>
 
 		<div ng-show="showViewReplayPopup" class="report-popup-wrapper">
-			<div class="viewer-popup">	
+			<div class="viewer-popup">
 				<div class="cg-player-sandbox-replay"></div>
 				<div id="console" class="outputs-demo" ng-if="!isEmptyObject(errors)">
 					<div class="output-log" ng-repeat="(key,value) in errors">
 						<span class="collapsed-bubble" ng-if="value.quantity > 1">
-							<span class="collapsed-count"
-								ng-bind="value.quantity"
-								ng-if="value.quantity <= 9">
+							<span class="collapsed-count" ng-bind="value.quantity" ng-if="value.quantity <= 9">
 							</span>
-							<span class="collapsed-count small"
-								ng-if="value.quantity > 9">
+							<span class="collapsed-count small" ng-if="value.quantity > 9">
 								9+
 							</span>
 						</span>
-						<span class="error-text"ng-bind="key"></span>
+						<span class="error-text" ng-bind="key"></span>
 					</div>
 				</div>
-				
+
 				<div class="close-button-wrapper">
 					<button class="close-button" ng-click="closeViewReplayPopup()">Close</button>
 				</div>
@@ -126,18 +123,18 @@
 							</label>
 						</p>
 						<div ng-if="configForm.translate">
-								<p>
-									<label for="criteria">English criteria</label>
-								</p>
-								<p>
-									<input required type="text" ng-model="config.criteriaEn" />
-								</p>
-								<p>
-									<label for="criteria">French criteria</label>
-								</p>
-								<p>
-									<input required type="text" ng-model="config.criteriaFr" />
-								</p>
+							<p>
+								<label for="criteria">English criteria</label>
+							</p>
+							<p>
+								<input required type="text" ng-model="config.criteriaEn" />
+							</p>
+							<p>
+								<label for="criteria">French criteria</label>
+							</p>
+							<p>
+								<input required type="text" ng-model="config.criteriaFr" />
+							</p>
 						</div>
 					</div>
 					<div class="close-button-wrapper">
@@ -154,7 +151,7 @@
 						<div class="cg-player-sandbox"></div>
 					</div>
 				</div>
-				
+
 				<div class="game-outputs">
 					<div class="game-outputs-up">
 						<div class="game-outputs-up-log">
@@ -206,7 +203,7 @@
 										<div class="game-outputs-down-referee-title">Standard Output</div>
 										<div class="console-outputs pre-wrap" ng-bind="referee.stdout"></div>
 									</div>
-									<hr class="outputs-seperator"> 
+									<hr class="outputs-seperator">
 									<div class="console-output-stderr">
 										<div class="game-outputs-down-referee-title">Standard Error</div>
 										<div class="console-outputs pre-wrap" ng-bind="referee.stderr"></div>
@@ -230,7 +227,6 @@
 			<div class="players-outputs-wrapper right-bloc">
 				<div id="output-players" class="players-outputs-frame" ng-class="{'less-or-equal-than-two-players': lessOrEqualThanTwoPlayers()}">
 					<div ng-repeat="(index, agent) in agents" class="players-outputs-player" >
-						
 						<div class="players-outputs-player-header" ng-style="{'border-color': playerColors[agent.index]}">
 							<svg class="players-outputs-player-header-image" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16.031 16" ng-style="{'fill': playerColors[agent.index]}">
 								<path id="User_16" d="M903.019,44H889a1,1,0,0,1-1-1c0-2.708,2.514-4.882,5.541-5.673a5,5,0,1,1,4.919,0c2.955,0.769,5.436,2.848,5.535,5.454A1,1,0,0,1,903.019,44ZM896,30a3,3,0,1,0,3,3A3,3,0,0,0,896,30Zm0,9c-2.461,0-5.349,1.214-5.862,3h11.723C901.348,40.213,898.46,39,896,39Z" transform="translate(-888 -28)"/>
