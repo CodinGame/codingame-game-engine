@@ -85,10 +85,16 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
 
   function onParsedGameInfo (gameInfo) {
     $scope.playerColors = {}
+    ctrl.parsedGameInfo = gameInfo
     gameInfo.agents.forEach(function (agent) {
       $scope.playerColors[agent.index] = agent.color
     })
     cgPlayer.off('parsedGameInfo', onParsedGameInfo)
+    $timeout(() => {
+      const frameData = gameInfo.frames[0]
+      $scope.referee = { ...frameData.referee }
+      $scope.summary = frameData.gameSummary
+    })
   }
 
   async function loadGame () {
@@ -113,7 +119,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
   }
 
   function onUpdate (frame, progress, playing, isSubFrame, isTurnBased, atEnd) {
-    if (ctrl.gameInfo.frames[frame].keyframe && frame !== currentFrame) {
+    if (frame !== currentFrame) {
       $timeout(() => {
         currentFrame = frame
         onFrameChange(frame)
@@ -122,33 +128,28 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
   }
 
   function onFrameChange (frame) {
-    let startFrame = frame
-    while (startFrame > 0 && !ctrl.gameInfo.frames[startFrame - 1].keyframe) {
-      startFrame--
-    }
-
     for (let i in ctrl.data.ids) {
       $scope.agents[i].stdout = null
       $scope.agents[i].stderr = null
-      $scope.referee = {}
     }
 
-    while (startFrame <= frame) {
-      for (let i in ctrl.data.ids) {
-        const stdout = ctrl.data.outputs[i][startFrame]
-        if (stdout) {
-          $scope.agents[i].stdout = stdout
+    $scope.referee = {}
+    const frameData = ctrl.parsedGameInfo.frames[frame]
+    for (let i in ctrl.data.ids) {
+      const subframe = frameData.subframes[i]
+      if (subframe) {
+        if (subframe.stdout) {
+          $scope.agents[i].stdout = subframe.stdout
         }
-        const stderr = ctrl.data.errors[i][startFrame]
-        if (stderr) {
-          $scope.agents[i].stderr = stderr
+
+        if (subframe.stderr) {
+          $scope.agents[i].stderr = subframe.stderr
         }
       }
-      $scope.referee.stdout = $scope.referee.stdout || ctrl.data.outputs.referee[startFrame]
-      $scope.referee.stderr = $scope.referee.stderr || ctrl.data.errors.referee[startFrame]
-      $scope.summary = ctrl.data.summaries[startFrame]
-      startFrame++
     }
+    $scope.referee.stdout = frameData.referee.stdout
+    $scope.referee.stderr = frameData.referee.stderr
+    $scope.summary = frameData.gameSummary
   }
 
   function convertFrameFormat (data) {
@@ -158,8 +159,18 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
 
       return { view: v.replace(/^(KEY_FRAME)|(INTERMEDIATE_FRAME)/, ''), keyframe: header[0] === 'KEY_FRAME' }
     })
+    const refereeKeysMap = { 'errors': 'stderr', 'outputs': 'stdout' }
     for (let i = 0; i < frames.length; i++) {
       frames[i].gameSummary = data.summaries[i]
+      frames[i].referee = {}
+
+      for (const key in refereeKeysMap) {
+        const newKey = refereeKeysMap[key]
+        if (data[key].referee[i] && data[key].referee[i].length) {
+          frames[i].referee[newKey] = data[key].referee[i]
+        }
+      }
+
       for (let pi in data.ids) {
         frames[i].stderr = frames[i].stderr || data.errors[pi][i]
         frames[i].stdout = frames[i].stdout || data.outputs[pi][i]
