@@ -1,6 +1,6 @@
 import * as config from '../config.js'
 import { demo as defaultDemo } from '../demo.js'
-import Parser from './lib/Parser.js'
+import './lib/cginput.js'
 import './player.js'
 
 const createCGPlayer = (opts) => {
@@ -279,10 +279,9 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
       const exportResponseString = await data.text()
       let exportResponse = JSON.parse(exportResponseString)
 
-      let stubParser = new Parser()
       for (let stub in exportResponse.stubs) {
         try {
-          stubParser.parse(exportResponse.stubs[stub], 0)
+          window.cginput.parseStubInput(exportResponse.stubs[stub], 0)
         } catch (e) {
           exportResponse.reportItems.push({
             'type': 'WARNING',

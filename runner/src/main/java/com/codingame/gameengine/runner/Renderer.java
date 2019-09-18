@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
@@ -675,6 +676,23 @@ class Renderer {
                                             }
 
                                             exchange.setStatusCode(StatusCodes.OK);
+                                        } if (exchange.getRelativePath().equals("/stub")) {
+                                            File stubFile = sourceFolderPath.resolve("config/stub.txt").toFile();
+                                            if (exchange.getRequestMethod().equalToString("GET")) {
+                                                String stub = FileUtils.readFileToString(stubFile, StandardCharsets.UTF_8);
+                                                exchange.getResponseSender().send(stub);
+                                            } else if (exchange.getRequestMethod().equalToString("PUT")) {
+                                                exchange.getRequestReceiver().receiveFullString((e, data) -> {
+                                                    try {
+                                                        FileUtils.writeStringToFile(stubFile, data);
+                                                        exchange.setStatusCode(StatusCodes.CREATED);
+                                                    } catch (IOException ex) {
+                                                        sendException(e, ex, StatusCodes.BAD_REQUEST);
+                                                    }
+                                                });
+                                            } else {
+                                                exchange.setStatusCode(StatusCodes.NOT_FOUND);
+                                            }
                                         }
                                     } catch (MissingConfigException e) {
                                         sendException(exchange, e, StatusCodes.UNPROCESSABLE_ENTITY);

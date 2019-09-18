@@ -1,0 +1,203 @@
+<html>
+  <head>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism-tomorrow.css" rel="stylesheet" />
+      <script src="./lib/cginput.js"></script>
+      <script>
+        function getPrismJsLanguage (language) {
+          switch (language) {
+            case 'C#':
+              return 'csharp'
+            case 'C++':
+              return 'cpp'
+            case 'F#':
+              return 'fsharp'
+            case 'VB.NET':
+              return 'vbnet'
+            case 'Python':
+            case 'Python3':
+              return 'python'
+            default:
+              return language.toLowerCase()
+          }
+        }
+
+        function getStubInput () {
+          return document.getElementById("stubInput").value
+        }
+
+        function refreshStub () {
+          const resultNode = document.getElementById("result")
+          const errorNode = document.getElementById("error")
+          const languageId = document.getElementById("language").value
+          const prismLanguage = getPrismJsLanguage(languageId)
+
+          try {
+            resultNode.innerText = cginput.generateStub({ stubInput: getStubInput(), languageId: languageId })
+
+            resultNode.innerHTML = resultNode.innerHTML.replace(/[<]br[/]?[>]/gi,"\n");
+
+            resultNode.className = 'language-' + prismLanguage
+            Prism.highlightElement(resultNode)
+
+            errorNode.innerText = ''
+            resultNode.style.opacity = 1
+          } catch (e) {
+            errorNode.innerText = e.message
+            resultNode.style.opacity = 0.2
+          }
+        }
+    
+        async function load () {
+          const response = await fetch('/services/stub')
+          stub = await response.text()
+          document.getElementById("stubInput").value = stub
+    
+          refreshStub('java')
+        }
+
+        async function save () {
+          document.getElementById("save").disabled = true
+          await fetch('/services/stub', {
+            body: getStubInput(),
+            method: 'PUT'
+          })
+          document.getElementById("save").innerText = 'Saved'
+        }
+
+        function handleChangeStubInput () {
+          document.getElementById("save").disabled = false
+          document.getElementById("save").innerText = 'Save'
+          refreshStub()
+        }
+      </script>
+      <style>
+        html, body {
+            height: 100%
+        }
+
+        body {
+            color: white;
+            font-family: 'Open Sans', Lato, sans-serif;
+            font-weight: 400;
+            background-color: #363e48;
+        }
+
+        textarea {
+            color: white;
+            background-color: #29323c;
+            border: solid 1px #363e48;
+            outline: none;
+        }
+
+        button {
+            border: none;
+            font: inherit;
+            cursor: pointer;
+            margin: 0;
+            padding: 0;
+        }
+
+        *, :after, :before {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        #stubInput {
+          width: 600px;
+          height: 200px;
+        }
+
+        #save {
+          display: block;
+          width: 300px;
+          background-color: #f2bb13;
+          color:#252e38;
+          margin-top: 10px;
+          text-transform: uppercase;
+          font-size: 14px;
+          font-weight: 600;
+          min-height: 42px;
+        }
+
+        #save:hover {
+          opacity: 0.8;
+          transition: 0.2s;
+        }
+
+        #save:disabled {
+          opacity: 0.8;
+          cursor: default;
+        }
+
+        .edit, .preview {
+          margin: 10px;
+          background: #252e38;
+          padding: 20px;
+        }
+
+        .edit-title, .preview-title {
+          font-size: 13px;
+          font-weight: 600;
+          color: #f2bb13;
+          text-transform: uppercase;
+          margin-bottom: 9px;
+        }
+
+        #error, #result {
+          font-size: 13px;
+        }
+
+        #error {
+          color: red;
+          margin: 10px 0;
+        }
+      </style>
+  </head>
+<body onload="load()">
+  <div class="edit">
+    <div class="edit-title">Edit</div>
+    <textarea id="stubInput" onkeyup="handleChangeStubInput()"></textarea>
+    <button id="save" onclick="save()" disabled>Saved</button>
+  </div>
+  <div class="preview">
+    <div class="preview-title">Preview</div>
+    <select id="language" onchange="refreshStub()">
+      <option>Bash</option>
+      <option>Clojure</option>
+      <option>C++</option>
+      <option>C#</option>
+      <option>C</option>
+      <option>Dart</option>
+      <option>F#</option>
+      <option>Go</option>
+      <option>Groovy</option>
+      <option>Haskell</option>
+      <option>JavaScript</option>
+      <option selected="selected">Java</option>
+      <option>Kotlin</option>
+      <option>Lua</option>
+      <option>ObjectiveC</option>
+      <option>OCaml</option>
+      <option>Pascal</option>
+      <option>Perl</option>
+      <option>PHP</option>
+      <option>Python3</option>
+      <option>Python</option>
+      <option>Ruby</option>
+      <option>Rust</option>
+      <option>Scala</option>
+      <option>Swift3</option>
+      <option>Swift</option>
+      <option>VB.net</option>
+    </select>
+    <div id="error"></div>
+    <pre><code id="result"></code></pre>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-core.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/plugins/autoloader/prism-autoloader.js" data-autoloader-path="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/"></script>
+</body>
+</html>
