@@ -1,58 +1,148 @@
 <html>
-<body>
-  <script type="module">
-    import './lib/cginput.js'
+  <head>
+      <script src="./lib/cginput.js"></script>
+      <script>
+        function getStubInput () {
+          return document.getElementById("stubInput").value
+        }
 
-    let stub = null
+        function refreshStub () {
+          const languageId = document.getElementById("language").value
+          try {
+            document.getElementById("result").innerText = cginput.generateStub({ stubInput: getStubInput(), languageId: languageId })
+            document.getElementById("error").innerText = ''
+            document.getElementById("result").style.opacity = 1
+          } catch (e) {
+            document.getElementById("error").innerText = e.message
+            document.getElementById("result").style.opacity = 0.2
+          }
+        }
+    
+        async function load () {
+          const response = await fetch('/services/stub')
+          stub = await response.text()
+          document.getElementById("stubInput").value = stub
+    
+          refreshStub("java")
+        }
 
-    function refreshStub (languageId) {
-      document.getElementById("result").innerText = cginput.generateStub({ stubInput: stub, languageId: languageId })
-    }
+        async function save () {
+          await fetch('/services/stub', {
+            body: getStubInput(),
+            method: 'PUT'
+          })
+        }
+      </script>
+      <style>
+        html, body {
+            height: 100%
+        }
 
-    async function load () {
-      const response = await fetch('/services/stub')
-      stub = await response.text()
-      document.getElementById("raw").innerText = stub
+        body {
+            color: white;
+            font-family: 'Open Sans', Lato, sans-serif;
+            font-weight: 400;
+            background-color: #363e48;
+        }
 
-      refreshStub("java")
-    }
+        textarea {
+            color: white;
+            background-color: #29323c;
+            border: solid 1px #363e48;
+            outline: none;
+        }
 
-    load()
-    document.getElementById("language").addEventListener('change', (event) => refreshStub(event.target.value))
-  </script>
-  <div id="raw">
+        button {
+            border: none;
+            font: inherit;
+            cursor: pointer;
+            margin: 0;
+            padding: 0;
+        }
 
+        *, :after, :before {
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        #stubInput {
+          width: 600px;
+          height: 200px;
+        }
+
+        .save {
+          display: block;
+          width: 300px;
+          color:#252e38;
+          margin-top: 10px;
+          text-transform: uppercase;
+          font-size: 14px;
+          font-weight: 600;
+          min-height: 42px;
+        }
+
+        .edit, .preview {
+          margin: 10px;
+          background: #252e38;
+          padding: 20px;
+        }
+
+        .edit-title, .preview-title {
+          font-size: 13px;
+          font-weight: 600;
+          color: #f2bb13;
+          text-transform: uppercase;
+          margin-bottom: 9px;
+        }
+
+        #error {
+          color: red;
+          margin: 10px 0;
+        }
+      </style>
+  </head>
+<body onload="load()">
+  <div class="edit">
+    <div class="edit-title">Edit</div>
+    <textarea id="stubInput" onkeyup="refreshStub()"></textarea>
+    <button class="save" onclick="save()">SAVE</button>
   </div>
-  <select id="language">
-    <option>bash</option>
-    <option>clojure</option>
-    <option>c++</option>
-    <option>c#</option>
-    <option>c</option>
-    <option>dart</option>
-    <option>f#</option>
-    <option>go</option>
-    <option>groovy</option>
-    <option>haskell</option>
-    <option>javascript</option>
-    <option selected="selected">java</option>
-    <option>kotlin</option>
-    <option>lua</option>
-    <option>objectivec</option>
-    <option>ocaml</option>
-    <option>pascal</option>
-    <option>perl</option>
-    <option>php</option>
-    <option>pseudocode</option>
-    <option>python3</option>
-    <option>python</option>
-    <option>ruby</option>
-    <option>rust</option>
-    <option>scala</option>
-    <option>swift3</option>
-    <option>swift</option>
-    <option>vb.net</option>
-  </select>
-  <pre id="result"></pre>
+  <div class="preview">
+    <div class="preview-title">Preview</div>
+    <select id="language" onchange="refreshStub()">
+      <option>Bash</option>
+      <option>Clojure</option>
+      <option>C++</option>
+      <option>C#</option>
+      <option>C</option>
+      <option>Dart</option>
+      <option>F#</option>
+      <option>Go</option>
+      <option>Groovy</option>
+      <option>Haskell</option>
+      <option>JavaScript</option>
+      <option selected="selected">Java</option>
+      <option>Kotlin</option>
+      <option>Lua</option>
+      <option>Objectivec</option>
+      <option>Ocaml</option>
+      <option>Pascal</option>
+      <option>Perl</option>
+      <option>PHP</option>
+      <option>Python3</option>
+      <option>Python</option>
+      <option>Ruby</option>
+      <option>Rust</option>
+      <option>Scala</option>
+      <option>Swift3</option>
+      <option>Swift</option>
+      <option>VB.net</option>
+    </select>
+    <div id="error"></div>
+    <pre id="result"></pre>
+  </div>
 </body>
 </html>
