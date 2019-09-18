@@ -1,20 +1,49 @@
 <html>
   <head>
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/themes/prism-tomorrow.css" rel="stylesheet" />
       <script src="./lib/cginput.js"></script>
       <script>
+        function getPrismJsLanguage (language) {
+          switch (language) {
+            case 'C#':
+              return 'csharp'
+            case 'C++':
+              return 'cpp'
+            case 'F#':
+              return 'fsharp'
+            case 'VB.NET':
+              return 'vbnet'
+            case 'Python':
+            case 'Python3':
+              return 'python'
+            default:
+              return language.toLowerCase()
+          }
+        }
+
         function getStubInput () {
           return document.getElementById("stubInput").value
         }
 
         function refreshStub () {
+          const resultNode = document.getElementById("result")
+          const errorNode = document.getElementById("error")
           const languageId = document.getElementById("language").value
+          const prismLanguage = getPrismJsLanguage(languageId)
+
           try {
-            document.getElementById("result").innerText = cginput.generateStub({ stubInput: getStubInput(), languageId: languageId })
-            document.getElementById("error").innerText = ''
-            document.getElementById("result").style.opacity = 1
+            resultNode.innerText = cginput.generateStub({ stubInput: getStubInput(), languageId: languageId })
+
+            resultNode.innerHTML = resultNode.innerHTML.replace(/[<]br[/]?[>]/gi,"\n");
+
+            resultNode.className = 'language-' + prismLanguage
+            Prism.highlightElement(resultNode)
+
+            errorNode.innerText = ''
+            resultNode.style.opacity = 1
           } catch (e) {
-            document.getElementById("error").innerText = e.message
-            document.getElementById("result").style.opacity = 0.2
+            errorNode.innerText = e.message
+            resultNode.style.opacity = 0.2
           }
         }
     
@@ -23,7 +52,7 @@
           stub = await response.text()
           document.getElementById("stubInput").value = stub
     
-          refreshStub("java")
+          refreshStub('java')
         }
 
         async function save () {
@@ -76,12 +105,18 @@
         .save {
           display: block;
           width: 300px;
+          background-color: #f2bb13;
           color:#252e38;
           margin-top: 10px;
           text-transform: uppercase;
           font-size: 14px;
           font-weight: 600;
           min-height: 42px;
+        }
+
+        .save:hover {
+          opacity: 0.8;
+          transition: 0.2s;
         }
 
         .edit, .preview {
@@ -96,6 +131,10 @@
           color: #f2bb13;
           text-transform: uppercase;
           margin-bottom: 9px;
+        }
+
+        #error, #result {
+          font-size: 13px;
         }
 
         #error {
@@ -142,7 +181,10 @@
       <option>VB.net</option>
     </select>
     <div id="error"></div>
-    <pre id="result"></pre>
+    <pre><code id="result"></code></pre>
   </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/prism-core.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/plugins/autoloader/prism-autoloader.js" data-autoloader-path="https://cdnjs.cloudflare.com/ajax/libs/prism/1.17.1/components/"></script>
 </body>
 </html>
