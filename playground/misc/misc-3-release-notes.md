@@ -2,6 +2,16 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 3.7.0
+
+### 🎁 New features
+
+- Add possibility to edit and preview the stub: http://localhost:8888/stub.html
+
+### 🐞 Bug fix
+
+- Fix display of error messages
+
 ## 3.6.1
 
 ### 🐞 Bug fix
