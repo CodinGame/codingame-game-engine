@@ -223,7 +223,6 @@ abstract class GameRunner {
             String id = String.valueOf(i);
             gameResult.errors.get(id).add(player.readError());
         }
-        readError(referee);
     }
 
     /**
