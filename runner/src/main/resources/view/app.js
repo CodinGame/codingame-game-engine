@@ -47,7 +47,11 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
   function addError (error) {
     let errorText = error.message + '\n'
     if (error.cause) {
-      errorText += error.cause + '\n'
+      if (typeof error.cause === 'string') {
+        errorText += error.cause + '\n'
+      } else {
+        errorText += error.cause.message + '\n'
+      }
     }
     if (!$scope.errors[errorText]) {
       $scope.errors[errorText] = { quantity: 1 }
