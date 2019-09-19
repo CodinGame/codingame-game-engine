@@ -12,7 +12,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - Referee output now properly displayed
 - Player output now properly displayed
-- Stub generator parser updated to fix false error messages
+- Game Errors now displayed once more
 
 ## 3.6.1
 
@@ -24,6 +24,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### ⚠️ Known issues
 
 - Referee and player output improperly displayed
+- Game Errors not displayed
 
 ## 3.6.0
 
@@ -34,6 +35,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### ⚠️ Known issues
 
 - Referee and player output improperly displayed
+- Game Errors not displayed
 
 ## 3.5.2
 
