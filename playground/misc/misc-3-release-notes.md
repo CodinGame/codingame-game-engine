@@ -10,7 +10,9 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🐞 Bug fix
 
-- Fix display of error messages
+- Referee output now properly displayed
+- Player output now properly displayed
+- Game Errors now displayed once more
 
 ## 3.6.1
 
@@ -19,11 +21,21 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - Fix the `stepByStepAnimateSpeed` getting interrupted by clicking in the IDE
 - Fix YAML testcases export
 
+### ⚠️ Known issues
+
+- Referee and player output improperly displayed
+- Game Errors not displayed
+
 ## 3.6.0
 
 ### 🎁 New features
 
 - Add `TilingSprite`
+
+### ⚠️ Known issues
+
+- Referee and player output improperly displayed
+- Game Errors not displayed
 
 ## 3.5.2
 
