@@ -80,15 +80,6 @@ export class ViewportModule {
   }
 
   /**
-   * Called when global data is received. Should only be called on init.
-   * @param players information about players, such as avatar, name, color..
-   * @param globalData data that has been sent from the Java module.
-   */
-  handleGlobalData (players, globalData) {
-    this.globalData = globalData
-  }
-
-  /**
    * Called when the scene needs an update.
    * @param previousData data from the previous frame.
    * @param currentData data of the current frame.
@@ -96,13 +87,6 @@ export class ViewportModule {
    * @param speed the speed of the viewer, setted up by the user.
    */
   updateScene (previousData, currentData, progress, speed) {
-  }
-
-  /**
-   * Called every delta milliseconds.
-   * @param delta time between current and last call. Aproximately 16ms by default.
-   */
-  animateScene (delta) {
   }
 
 }
