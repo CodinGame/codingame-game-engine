@@ -83,15 +83,15 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
     loadGame()
   }
 
-  function onParsedGameInfo (gameInfo) {
+  function onParsedGameInfo (parsedGameInfo) {
     $scope.playerColors = {}
-    ctrl.parsedGameInfo = gameInfo
-    gameInfo.agents.forEach(function (agent) {
+    ctrl.parsedGameInfo = parsedGameInfo
+    parsedGameInfo.agents.forEach(function (agent) {
       $scope.playerColors[agent.index] = agent.color
     })
     cgPlayer.off('parsedGameInfo', onParsedGameInfo)
     $timeout(() => {
-      const frameData = gameInfo.frames[0]
+      const frameData = parsedGameInfo.frames[0]
       $scope.referee = { ...frameData.referee }
       $scope.summary = frameData.gameSummary
     })
