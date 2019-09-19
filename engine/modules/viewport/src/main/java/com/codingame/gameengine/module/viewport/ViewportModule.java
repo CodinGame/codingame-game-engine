@@ -46,9 +46,7 @@ public class ViewportModule implements Module {
     }
 
     private void sendFrameData() {
-        Object[] data = { newEntityIds };
-
-        gameManager.setViewData("viewport", data);
+        gameManager.setViewData("viewport", newEntityIds);
 
         newEntityIds.clear();
     }

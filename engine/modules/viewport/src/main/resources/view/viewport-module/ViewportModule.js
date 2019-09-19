@@ -19,7 +19,7 @@ export class ViewportModule {
    */
   handleFrameData (frameInfo, frameData) {
     // Handle your data here
-    const [newEntityIds] = frameData
+    const newEntityIds = frameData
 
     this.entityIds = [...this.entityIds, ...newEntityIds]
 
