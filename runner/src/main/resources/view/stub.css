@@ -1,0 +1,100 @@
+html,
+body {
+  height: 100%
+}
+
+body {
+  display: flex;
+  padding: 10px;
+  color: white;
+  font-family: 'Open Sans', Lato, sans-serif;
+  font-weight: 400;
+  background-color: #363e48;
+}
+
+textarea {
+  color: white;
+  background-color: #29323c;
+  border: solid 1px #363e48;
+  outline: none;
+}
+
+button {
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+*,
+:after,
+:before {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#stubInput {
+  width: 600px;
+  height: 230px;
+  padding: 3px;
+}
+
+#save {
+  display: block;
+  width: 300px;
+  background-color: #f2bb13;
+  color: #252e38;
+  margin-top: 10px;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+  min-height: 42px;
+}
+
+#save:hover {
+  opacity: 0.8;
+  transition: 0.2s;
+}
+
+#save:disabled {
+  opacity: 0.8;
+  cursor: default;
+}
+
+.edit {
+  flex: none;
+}
+
+.preview {
+  flex: 1;
+}
+
+.edit,
+.preview {
+  margin: 10px;
+  background: #252e38;
+  padding: 20px;
+}
+
+.edit-title,
+.preview-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #f2bb13;
+  text-transform: uppercase;
+  margin-bottom: 9px;
+}
+
+#error,
+#result {
+  font-size: 13px;
+}
+
+#error {
+  color: red;
+  margin: 10px 0;
+}
