@@ -7,6 +7,7 @@ import com.codingame.gameengine.core.AbstractPlayer;
 import com.codingame.gameengine.core.GameManager;
 import com.codingame.gameengine.core.Module;
 import com.codingame.gameengine.module.entities.GraphicEntityModule;
+import com.codingame.gameengine.module.entities.Group;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -53,11 +54,12 @@ public class ViewportModule implements Module {
     }
 
     /**
-     * Makes the Entity with the given ID a Viewport
+     * Makes the given Group a Viewport.
      * 
-     * @param entityId
+     * @param group
      */
-    public void createViewport(int entityId) {
+    public void createViewport(Group group) {
+        int entityId = group.getId();
         if (!registered.contains(entityId)) {
             newEntityIds.add(entityId);
             registered.add(entityId);
