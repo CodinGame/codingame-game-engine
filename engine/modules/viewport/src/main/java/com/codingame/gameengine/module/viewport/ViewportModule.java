@@ -52,9 +52,9 @@ public class ViewportModule implements Module {
     }
 
     /**
-     * Makes the given Group a Viewport.
+     * Wraps the given Group in a Viewport.
      * 
-     * @param group
+     * @param group A group to wrap into a Viewport
      */
     public void createViewport(Group group) {
         int entityId = group.getId();
