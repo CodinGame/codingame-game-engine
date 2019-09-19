@@ -90,11 +90,9 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
       $scope.playerColors[agent.index] = agent.color
     })
     cgPlayer.off('parsedGameInfo', onParsedGameInfo)
-    $timeout(() => {
-      const frameData = parsedGameInfo.frames[0]
-      $scope.referee = { ...frameData.referee }
-      $scope.summary = frameData.gameSummary
-    })
+    const frameData = parsedGameInfo.frames[0]
+    $scope.referee = { ...frameData.referee }
+    $scope.summary = frameData.gameSummary
   }
 
   async function loadGame () {
