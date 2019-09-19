@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🎁 New features
+
+- The [ViewportModule](playground/extensions/extensions-6-viewport.md) has been added
+
 ## 3.7.0
 
 ### 🎁 New features

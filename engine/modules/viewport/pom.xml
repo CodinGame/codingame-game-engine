@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.codingame</groupId>
+        <artifactId>gameengine</artifactId>
+        <version>master-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+	</parent>
+
+    <groupId>com.codingame.gameengine</groupId>
+    <artifactId>module-viewport</artifactId>
+	<name>CodinGame Game Engine Viewport Module</name>
+	<description>A module to display a zoomable viewport for the CodinGame engine toolkit.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.codingame.gameengine</groupId>
+			<artifactId>core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+            <groupId>com.codingame.gameengine</groupId>
+            <artifactId>module-entities</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+	</dependencies>
+	
+</project>

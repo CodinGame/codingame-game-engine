@@ -49,6 +49,8 @@ plan:
     statement: playground/extensions/extensions-toggle.md
   - title: Anim Module
     statement: playground/extensions/extensions-5-animmodule.md
+  - title: Viewport Module
+    statement: playground/extensions/extensions-6-viewport.md
   - title: Create your own modules
     statement: playground/extensions/extensions-2-tutorial.md
 - title: One more thing
