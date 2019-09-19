@@ -4,6 +4,8 @@ body {
 }
 
 body {
+  display: flex;
+  padding: 10px;
   color: white;
   font-family: 'Open Sans', Lato, sans-serif;
   font-weight: 400;
@@ -37,7 +39,8 @@ button {
 
 #stubInput {
   width: 600px;
-  height: 200px;
+  height: 230px;
+  padding: 3px;
 }
 
 #save {
@@ -60,6 +63,14 @@ button {
 #save:disabled {
   opacity: 0.8;
   cursor: default;
+}
+
+.edit {
+  flex: none;
+}
+
+.preview {
+  flex: 1;
 }
 
 .edit,

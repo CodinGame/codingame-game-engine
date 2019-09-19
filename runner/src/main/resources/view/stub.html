@@ -11,10 +11,11 @@
 
 <body onload="load()">
   <div class="edit">
-    <div class="edit-title">Edit</div>
-    <textarea id="stubInput" onkeyup="handleChangeStubInput()"></textarea>
+    <div class="edit-title">Edit stub</div>
+    <textarea id="stubInput" onkeyup="handleChangeStubInput()" spellcheck="false"></textarea>
     <button id="save" onclick="save()" disabled>Saved</button>
   </div>
+
   <div class="preview">
     <div class="preview-title">Preview</div>
     <select id="language" onchange="refreshStub()">
