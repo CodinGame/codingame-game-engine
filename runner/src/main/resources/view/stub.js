@@ -47,7 +47,7 @@ async function load() {
   stub = await response.text()
   document.getElementById('stubInput').value = stub
 
-  refreshStub('java')
+  refreshStub()
 }
 
 async function save() {
