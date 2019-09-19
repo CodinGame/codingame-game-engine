@@ -67,6 +67,7 @@ export class ViewportModule {
       get: () => viewport.input.isMouseDown ? 'grabbing' : 'grab'
     })
 
+    // Switch the GraphicEntityModule's Container with our Viewport 
     entity.container.removeChildren()
     viewport.addChild(entity.graphics)
     const parent = entity.container.parent
