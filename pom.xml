@@ -21,6 +21,7 @@
 		<module>engine/modules/endscreen</module>
 		<module>engine/modules/toggle</module>
 		<module>engine/modules/tooltip</module>
+		<module>engine/modules/viewport</module>
 		<module>runner</module>
 	</modules>
 
