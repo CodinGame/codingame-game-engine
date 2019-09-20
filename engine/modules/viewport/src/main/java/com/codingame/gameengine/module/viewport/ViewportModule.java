@@ -14,7 +14,7 @@ import com.google.inject.Singleton;
 /**
  * The ViewportModule allows you to create a zoomable/draggable container.
  * 
- * @see https://davidfig.github.io/pixi-viewport/jsdoc/
+ * @see <a href="https://davidfig.github.io/pixi-viewport/jsdoc/">pixi-viewport</a>
  * 
  */
 @Singleton
@@ -54,7 +54,8 @@ public class ViewportModule implements Module {
     /**
      * Wraps the given Group in a Viewport.
      * 
-     * @param group A group to wrap into a Viewport
+     * @param group
+     *            A group to wrap into a Viewport
      */
     public void createViewport(Group group) {
         int entityId = group.getId();
