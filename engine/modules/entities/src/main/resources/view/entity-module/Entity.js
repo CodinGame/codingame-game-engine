@@ -171,8 +171,12 @@ export class Entity {
 
     this.container.zIndex = state.zIndex
     this.container.alpha = state.alpha
-    this.container.position.set(state.x * globalData.toWorldUnits, state.y * globalData.toWorldUnits)
-    this.container.scale.set(state.scaleX || eps, state.scaleY || eps)
+    if (changed.x || changed.y) {
+      this.container.position.set(state.x * globalData.toWorldUnits, state.y * globalData.toWorldUnits)
+    }
+    if (changed.scaleX || changed.scaleY) {
+      this.container.scale.set(state.scaleX || eps, state.scaleY || eps)
+    }
     this.container.rotation = state.rotation
     this.container._visible = state.visible && !this.hide
     this.container.skew.set(state.skewX, state.skewY)
