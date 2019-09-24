@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 3.8.2
+
+### 🐞 Bug fix
+
+- ViewportModule: don't reset zoom when playing
+
 ## 3.8.1
 
 ### 🎁 New features
