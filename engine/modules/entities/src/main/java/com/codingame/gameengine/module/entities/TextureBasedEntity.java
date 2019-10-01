@@ -3,19 +3,17 @@ package com.codingame.gameengine.module.entities;
 /**
  * Any PIXI Entity based on a texture shares the properties found in this <code>TextureBasedEntity</code>.
  *
- * @param <T> a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of a <code>TextureBasedEntity</code>.
+ * @param <T>
+ *            a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of a <code>TextureBasedEntity</code>.
  */
 public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends BlendableEntity<T> {
 
-   
     private double anchorX = 0, anchorY = 0;
     private int tint = 0xFFFFFF;
 
     TextureBasedEntity() {
         super();
     }
-
-    
 
     /**
      * Sets both the X and Y anchors of this <code>TextureBasedEntity</code> as a percentage of its width and height.
