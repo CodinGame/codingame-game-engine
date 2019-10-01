@@ -72,6 +72,7 @@ class Serializer {
         keys.put("tileY", "ty");
         keys.put("tileScaleX", "tsx");
         keys.put("tileScaleY", "tsy");
+        keys.put("scaleMode", "sm");
 
         commands = new HashMap<>();
         commands.put("CREATE", "C");
