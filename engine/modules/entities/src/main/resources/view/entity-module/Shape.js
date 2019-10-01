@@ -6,18 +6,23 @@ export class Shape extends Entity {
   static defaultLineWidth () {
     return 0
   }
+
   static defaultFillColor () {
     return 0xffffff
   }
+
   static defaultLineColor () {
     return 0x0
   }
+
   static defaultLineAlpha () {
     return 1
   }
+
   static defaultFillAlpha () {
     return 1
   }
+
   constructor () {
     super()
     Object.assign(this.defaultState, {

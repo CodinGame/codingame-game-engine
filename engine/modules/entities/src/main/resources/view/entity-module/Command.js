@@ -57,7 +57,7 @@ export class CreateCommand {
   }
 
   apply (entities) {
-    let entity = EntityFactory.create(this.type)
+    const entity = EntityFactory.create(this.type)
     entity.id = this.id
     entities.set(this.id, entity)
   }
@@ -143,7 +143,7 @@ export class PropertiesCommand {
       if (typeof opts.convert === 'function') {
         value = opts.convert(value, globalData, frameInfo, this.t)
       }
-      let method = PropertiesCommand.curves[args[idx + 2]]
+      const method = PropertiesCommand.curves[args[idx + 2]]
 
       this.params[key] = value
       idx += 2
@@ -156,7 +156,7 @@ export class PropertiesCommand {
   }
 
   apply (entities, frameInfo) {
-    let entity = entities.get(this.id)
+    const entity = entities.get(this.id)
     entity.addState(this.t, { values: this.params, curve: this.curve }, frameInfo.number, frameInfo)
     entity.stateAdded = true
   }

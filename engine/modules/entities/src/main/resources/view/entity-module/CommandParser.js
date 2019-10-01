@@ -42,7 +42,7 @@ function splitOnCharOutsideQuotes (text, charParam) {
 
 function getCommands (Type, text, globalData, frameInfo) {
   const args = splitOnCharOutsideQuotes(text, ';')
-  let commands = []
+  const commands = []
   args.forEach(command => commands.push(new Type(splitOnCharOutsideQuotes(command, ' '), globalData, frameInfo)))
   return commands
 }

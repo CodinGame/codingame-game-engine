@@ -1,6 +1,6 @@
-import {TextureBasedEntity} from './TextureBasedEntity.js'
-import {ErrorLog} from '../core/ErrorLog.js'
-import {MissingImageError} from './errors/MissingImageError.js'
+import { TextureBasedEntity } from './TextureBasedEntity.js'
+import { ErrorLog } from '../core/ErrorLog.js'
+import { MissingImageError } from './errors/MissingImageError.js'
 
 /* global PIXI */
 

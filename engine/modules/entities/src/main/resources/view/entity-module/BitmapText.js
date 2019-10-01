@@ -1,6 +1,6 @@
 import { Entity } from './Entity.js'
-import {ErrorLog} from '../core/ErrorLog.js'
-import {MissingBitmapFontError} from './errors/MissingBitmapFontError.js'
+import { ErrorLog } from '../core/ErrorLog.js'
+import { MissingBitmapFontError } from './errors/MissingBitmapFontError.js'
 import { TextureBasedEntity } from './TextureBasedEntity.js'
 
 /* global PIXI */
@@ -31,7 +31,7 @@ export class BitmapText extends Entity {
       if (PIXI.extras.BitmapText.fonts[state.fontFamily]) {
         if (this.graphics.children.length === 0) {
           this.displayed = new PIXI.BitmapText(state.text, {
-            font: {size: state.fontSize || 1, name: state.fontFamily}
+            font: { size: state.fontSize || 1, name: state.fontFamily }
           })
           this.graphics.addChild(this.displayed)
         } else {

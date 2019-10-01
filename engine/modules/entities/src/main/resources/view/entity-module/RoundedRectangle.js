@@ -4,9 +4,11 @@ export class RoundedRectangle extends Shape {
   static defaultSideLength () {
     return 100
   }
+
   static defaultRadius () {
     return 20
   }
+
   constructor () {
     super()
     Object.assign(this.defaultState, {

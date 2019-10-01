@@ -109,7 +109,7 @@ export class GraphicEntityModule {
 
         entity.states[frameNumber] = subStates.map((subState) => {
           // Extrapolate through existing substates, updating the extrapolationMap in the process (currentState)
-          const state = this.extrapolationMap[entity.id] = { ...this.extrapolationMap[entity.id], ...subState}
+          const state = this.extrapolationMap[entity.id] = { ...this.extrapolationMap[entity.id], ...subState }
 
           if (typeof entity.computeAnimationProgressTime === 'function') {
             entity.computeAnimationProgressTime(prevState, state)
@@ -160,7 +160,7 @@ export class GraphicEntityModule {
       this.resortTree()
       this.globalData.mustResort = false
     }
-    for (let entityId in this.globalData.maskUpdates) {
+    for (const entityId in this.globalData.maskUpdates) {
       const entity = this.entities.get(+entityId)
       const maskId = this.globalData.maskUpdates[entityId]
       if (maskId === -1) {
@@ -169,7 +169,7 @@ export class GraphicEntityModule {
         entity.container.mask = this.entities.get(maskId).graphics
       }
     }
-    for (let entity of this.globalData.updatedBuffers) {
+    for (const entity of this.globalData.updatedBuffers) {
       entity.postUpdate()
     }
     this.globalData.maskUpdates = {}

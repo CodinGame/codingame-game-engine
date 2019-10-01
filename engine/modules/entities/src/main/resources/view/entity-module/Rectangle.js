@@ -4,6 +4,7 @@ export class Rectangle extends Shape {
   static defaultSideLength () {
     return 100
   }
+
   constructor () {
     super()
     Object.assign(this.defaultState, {

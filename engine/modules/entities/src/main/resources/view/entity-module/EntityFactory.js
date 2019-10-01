@@ -7,9 +7,9 @@ import { BitmapText } from './BitmapText.js'
 import { Group } from './Group.js'
 import { BufferedGroup } from './BufferedGroup.js'
 import { SpriteAnimation } from './SpriteAnimation.js'
-import { RoundedRectangle } from './RoundedRectangle.js';
-import { Polygon } from './Polygon.js';
-import { TilingSprite } from './TilingSprite.js';
+import { RoundedRectangle } from './RoundedRectangle.js'
+import { Polygon } from './Polygon.js'
+import { TilingSprite } from './TilingSprite.js'
 
 export class EntityFactory {
   static create (type) {

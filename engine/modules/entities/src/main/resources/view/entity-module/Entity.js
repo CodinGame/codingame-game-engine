@@ -41,7 +41,7 @@ export class Entity {
     if (!this.states[frame]) {
       this.states[frame] = []
     }
-    let state = Entity.createState(t, params.values, params.curve)
+    const state = Entity.createState(t, params.values, params.curve)
 
     const collision = this.states[frame].find(v => v.t === t)
     if (collision && Object.keys(state.curve).length === 0) {
@@ -62,7 +62,7 @@ export class Entity {
   }
 
   render (progress, data, globalData) {
-    let subframes = this.states[data.number]
+    const subframes = this.states[data.number]
     this.container.visible = false
     let start = null
     let end
@@ -79,7 +79,7 @@ export class Entity {
 
       if (!start) {
         // The start frame must be at the end of a previous turn
-        let frameNumbers = Object.keys(this.states)
+        const frameNumbers = Object.keys(this.states)
         let index = frameNumbers.indexOf(data.number.toString()) - 1
         // Failsafe
         if (index === -1) {
@@ -88,7 +88,7 @@ export class Entity {
         while (index >= 0 && frameNumbers[index] >= data.number) {
           index--
         }
-        let prev = this.states[frameNumbers[index]] || []
+        const prev = this.states[frameNumbers[index]] || []
         start = prev[prev.length - 1]
 
         // If it didn't exist on the previous turn, don't even animate it
@@ -104,12 +104,12 @@ export class Entity {
       }
     } else {
       // Look for the most recent state, but don't interpolate?
-      let frameNumbers = Object.keys(this.states)
+      const frameNumbers = Object.keys(this.states)
       let index = frameNumbers.length - 1
       while (index >= 0 && frameNumbers[index] > data.number) {
         index--
       }
-      let substates = this.states[frameNumbers[index]]
+      const substates = this.states[frameNumbers[index]]
 
       if (substates != null) {
         start = substates[substates.length - 1]
@@ -121,7 +121,7 @@ export class Entity {
     if (start) {
       const changed = {}
       const state = Object.assign({}, this.currentState)
-      for (let property of this.properties) {
+      for (const property of this.properties) {
         const opts = PROPERTIES[property] || PROPERTIES.default
         const lerpMethod = opts.lerpMethod
         const curve = end.curve[property] || (a => a)

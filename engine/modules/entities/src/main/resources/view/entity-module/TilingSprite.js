@@ -20,7 +20,7 @@ export class TilingSprite extends SpriteBasedEntity {
 
   updateDisplay (state, changed, globalData) {
     super.updateDisplay(state, changed, globalData)
-    
+
     this.graphics.tilePosition.x = state.tileX
     this.graphics.tilePosition.y = state.tileY
     this.graphics.tileScale.x = state.tileScaleX

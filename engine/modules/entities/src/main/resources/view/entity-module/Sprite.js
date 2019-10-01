@@ -1,6 +1,4 @@
-import {SpriteBasedEntity} from './SpriteBasedEntity.js'
-import {ErrorLog} from '../core/ErrorLog.js'
-import {MissingImageError} from './errors/MissingImageError.js'
+import { SpriteBasedEntity } from './SpriteBasedEntity.js'
 
 /* global PIXI */
 

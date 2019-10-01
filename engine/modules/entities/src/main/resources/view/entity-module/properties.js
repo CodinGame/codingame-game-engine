@@ -1,18 +1,16 @@
 import { lerp, lerpColor, lerpAngle } from '../core/utils.js'
-import {ErrorLog} from '../core/ErrorLog.js'
-import {InvalidPlayerColorToken} from './errors/InvalidPlayerColorToken.js'
-
+import { ErrorLog } from '../core/ErrorLog.js'
+import { InvalidPlayerColorToken } from './errors/InvalidPlayerColorToken.js'
 
 const noLerp = (a, b, u) => u < 1 ? a : b
 const timeLerp = (a, b, u) => b < a ? b : lerp(a, b, u)
-
 
 const colorOpts = {
   type: Number,
   lerpMethod: lerpColor,
   convert (value, globalData) {
     const playerIdx = -(value + 1)
-    
+
     try {
       return value < 0 ? (globalData.players[playerIdx].color) : value
     } catch (error) {
