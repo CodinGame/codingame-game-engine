@@ -8,7 +8,6 @@ public abstract class SpriteBasedEntity<T extends SpriteBasedEntity<?>> extends 
 
     private String image;
     private Integer baseWidth, baseHeight;
-    private ScaleMode scaleMode = ScaleMode.LINEAR;
 
     /**
      * Sets the image for this <code>Sprite</code>.
@@ -83,30 +82,6 @@ public abstract class SpriteBasedEntity<T extends SpriteBasedEntity<?>> extends 
      */
     public Integer getBaseHeight() {
         return baseHeight;
-    }
-
-    /**
-     * Sets the scale mode of this <code>TextureBasedEntity</code>.
-     * 
-     * @param scaleMode
-     *            the scale mode of this <code>TextureBasedEntity</code>.
-     * @return this <code>TextureBasedEntity</code>.
-     */
-    public T setScaleMode(ScaleMode scaleMode) {
-        this.scaleMode = scaleMode;
-        set("scaleMode", scaleMode);
-        return self();
-    }
-
-    /**
-     * Returns the scale mode of this <code>TextureBasedEntity</code>.
-     * <p>
-     * Default is LINEAR.
-     * 
-     * @return the scale mode of this <code>TextureBasedEntity</code>.
-     */
-    public ScaleMode getScaleMode() {
-        return scaleMode;
     }
 
 }

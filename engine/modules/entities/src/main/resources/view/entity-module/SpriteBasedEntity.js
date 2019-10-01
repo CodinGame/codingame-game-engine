@@ -10,8 +10,7 @@ export class SpriteBasedEntity extends TextureBasedEntity {
     Object.assign(this.defaultState, {
       image: null,
       baseWidth: null,
-      baseHeight: null,
-      scaleMode: 'LINEAR'
+      baseHeight: null
     })
     this.missingTextures = {}
   }
@@ -25,7 +24,6 @@ export class SpriteBasedEntity extends TextureBasedEntity {
         } else {
           this.graphics.texture = PIXI.Texture.EMPTY
         }
-        this.graphics.texture.baseTexture.scaleMode = PIXI.SCALE_MODES[state.scaleMode]
       } catch (error) {
         if (!this.missingTextures[state.image]) {
           this.missingTextures[state.image] = true

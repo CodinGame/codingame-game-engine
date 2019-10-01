@@ -47,8 +47,7 @@ const PROPERTY_KEY_MAP = {
   tx: 'tileX',
   ty: 'tileY',
   tsx: 'tileScaleX',
-  tsy: 'tileScaleY',
-  sm: 'scaleMode'
+  tsy: 'tileScaleY'
 }
 
 export class CreateCommand {
