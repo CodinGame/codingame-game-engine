@@ -188,13 +188,9 @@ public class GraphicEntityModule implements Module {
             .map(Entry::getValue)
             .collect(Collectors.toList());
 
-        List<String> worldCommitsBuilder = new ArrayList<>();
         List<WorldState> updateBuilder = new ArrayList<>();
 
         for (WorldState nextWorldState : orderedStates) {
-            if (nextWorldState.isWorldCommit()) {
-                worldCommitsBuilder.add(nextWorldState.getFrameTime());
-            }
             WorldState worldStateDiff = nextWorldState.diffFromOtherWorldState(currentWorldState);
             updateBuilder.add(worldStateDiff);
             currentWorldState.updateAllEntities(nextWorldState);
