@@ -30,10 +30,8 @@ public class RefereeMain {
      * CodinGame's game runner will launch the referee using this method.
      * 
      * @param args unused
-     * @throws InstantiationException
-     * @throws IllegalAccessException
      */
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+    public static void main(String[] args) {
         inProduction = true;
         InputStream in = System.in;
         PrintStream out = System.out;
