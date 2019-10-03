@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 import com.google.inject.Inject;
 
 /**
- * Utility to load an image containg serveral subimages displayed in sequential rectangles.
+ * Utility to load an image containing several subimages displayed in sequential rectangles.
  * <p>
  * Will extract each separate image and return generated names that can be used to create a <code>Sprite</code> or <code>SpriteAnimation</code>
  * </p>

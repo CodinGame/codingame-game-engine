@@ -19,7 +19,7 @@ public class RefereeMain {
     private static boolean inProduction = false;
 
     /**
-     * Is overriden by CodinGame's server side game runner 
+     * Is overridden by CodinGame's server side game runner 
      * @return whether or not this execution is happening locally or on CodinGame
      */
     public static boolean isInProduction() {
@@ -30,10 +30,8 @@ public class RefereeMain {
      * CodinGame's game runner will launch the referee using this method.
      * 
      * @param args unused
-     * @throws InstantiationException
-     * @throws IllegalAccessException
      */
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+    public static void main(String[] args) {
         inProduction = true;
         InputStream in = System.in;
         PrintStream out = System.out;
