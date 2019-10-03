@@ -103,8 +103,16 @@ public class GraphicEntityModule implements Module {
     }
 
     /**
-     * Every entity's graphical counterpart, at instant t of the frame being computed, will have the same properties as the java object as they are
-     * now.
+     * <p>
+     * Creates a commit for each entity that has had some of its properties modified since a previous commit or the previous frame.
+     * </p>
+     * <p>
+     * This means that each one of those entities' graphical counterparts, at instant t of the frame being computed, will have the same properties as
+     * the java object as they are now.
+     * </p>
+     * <p>
+     * To force an entity to keep its current state instead of interpolating to the values of next frame, use <code>commitEntityState</code> instead.
+     * </p>
      * <p>
      * Only the most recent commits are kept for a given t.
      * </p>
