@@ -19,7 +19,7 @@ public class RefereeMain {
     private static boolean inProduction = false;
 
     /**
-     * Is overriden by CodinGame's server side game runner 
+     * Is overridden by CodinGame's server side game runner 
      * @return whether or not this execution is happening locally or on CodinGame
      */
     public static boolean isInProduction() {

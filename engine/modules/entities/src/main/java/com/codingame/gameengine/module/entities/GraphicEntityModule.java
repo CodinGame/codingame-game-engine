@@ -20,13 +20,13 @@ import com.google.inject.Singleton;
  * <p>
  * The GraphicEntityModule takes care of displaying and animating graphical entities on the replay of the game.
  * </p>
- * Use it by creating shapes, sprites, texts etc, then commiting their states to a certain moment of the frame. By default, the states are commited
+ * Use it by creating shapes, sprites, texts etc, then committing their states to a certain moment of the frame. By default, the states are commited
  * automatically at the end of the frame.
  */
 @Singleton
 public class GraphicEntityModule implements Module {
 
-    //TODO: extra properties for Texts (text wrapping, alignement, ...)
+    //TODO: extra properties for Texts (text wrapping, alignment, ...)
 
     static int ENTITY_COUNT = 0;
 
