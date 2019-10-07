@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 3.8.3
+
+### 🐞 Bug fix
+
+- SpriteAnimation: fix wrong current frame when the animation duration is changed
+
 ## 3.8.2
 
 ### 🐞 Bug fix

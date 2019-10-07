@@ -14,7 +14,7 @@ export class SpriteAnimation extends TextureBasedEntity {
       duration: 1000,
       playing: true,
       restarted: null,
-      animationProgressTime: 0,
+      animationProgress: 0,
       date: 0
     })
   }
@@ -35,12 +35,10 @@ export class SpriteAnimation extends TextureBasedEntity {
     super.updateDisplay(state, changed, globalData)
 
     if (state.images) {
-      const duration = state.duration
       const images = state.images.split(',')
 
-      const animationProgress = (state.loop ? unlerpUnclamped : unlerp)(0, duration, state.animationProgressTime)
-      if (animationProgress >= 0) {
-        const animationIndex = Math.floor(images.length * animationProgress)
+      if (state.animationProgress >= 0) {
+        const animationIndex = Math.floor(images.length * state.animationProgress)
         const image = state.loop ? images[animationIndex % images.length] : (images[animationIndex] || images[images.length - 1])
         try {
           this.graphics.texture = PIXI.Texture.fromFrame(image)
@@ -55,11 +53,11 @@ export class SpriteAnimation extends TextureBasedEntity {
 
   computeAnimationProgressTime (prevState, currState) {
     if (currState.restarted && currState.restarted.date === currState.date) {
-      currState.animationProgressTime = 0
+      currState.animationProgress = 0
     } else {
-      currState.animationProgressTime = prevState.animationProgressTime
+      currState.animationProgress = prevState.animationProgress
       if (prevState.playing) {
-        currState.animationProgressTime += currState.date - prevState.date
+        currState.animationProgress += (currState.date - prevState.date) / prevState.duration
       }
     }
   }
