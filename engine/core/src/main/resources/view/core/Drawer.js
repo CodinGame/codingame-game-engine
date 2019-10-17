@@ -13,7 +13,7 @@ export class Drawer {
     this.toDestroy = []
     this.stepByStepAnimateSpeed = config.stepByStepAnimateSpeed || null
 
-    let demo = customDemo || defaultDemo
+    const demo = customDemo || defaultDemo
 
     if (demo) {
       const frames = demo.views
@@ -42,18 +42,23 @@ export class Drawer {
       PIXI: 'PIXI4'
     }
   }
+
   static get VERSION () {
     return 2
   }
+
   static get WIDTH () {
     return WIDTH
   }
+
   static get HEIGHT () {
     return HEIGHT
   }
+
   static getGameRatio () {
     return Drawer.WIDTH / Drawer.HEIGHT
   }
+
   static get playerColors () {
     return config.playerColors || [
       '#ff1d5c', // radical red
@@ -66,6 +71,7 @@ export class Drawer {
       '#ff0000' // solid red
     ]
   }
+
   static get SDK_GAME () {
     return true
   }
@@ -73,6 +79,7 @@ export class Drawer {
   getDefaultOverSampling () {
     return config.defaultOverSampling || 2
   }
+
   handleModuleError (name, error) {
     ErrorLog.push(new ModuleError(name, error))
     console.error(error)
@@ -109,10 +116,11 @@ export class Drawer {
   getGameName () {
     return config.gameName
   }
+
   canSwapPlayers () {
     return false
   }
-  
+
   addErrorListener (callback) {
     ErrorLog.listen(callback)
   }
@@ -274,8 +282,8 @@ export class Drawer {
     this.instantiateModules()
 
     this._frames = frames.map(f => {
-      let splittedF = f.split('\n')
-      let header = splittedF[0].split(' ')
+      const splittedF = f.split('\n')
+      const header = splittedF[0].split(' ')
 
       let data
       try {
@@ -361,7 +369,7 @@ export class Drawer {
 
   /** Mandatory */
   parseGlobalData (globalData) {
-    for (let moduleName in this.modules) {
+    for (const moduleName in this.modules) {
       const module = this.modules[moduleName]
       if (typeof module.handleGlobalData === 'function') {
         module.handleGlobalData(this.playerInfo, globalData[moduleName])
@@ -399,7 +407,7 @@ export class Drawer {
       parsedFrame.frameInfo.date = parsedFrame.previous.frameInfo.date + parsedFrame.previous.frameInfo.frameDuration
     }
 
-    for (let moduleName in this.modules) {
+    for (const moduleName in this.modules) {
       const module = this.modules[moduleName]
       if (typeof module.handleFrameData === 'function') {
         parsedFrame.data[moduleName] = module.handleFrameData(parsedFrame.frameInfo, frame[moduleName])
@@ -423,7 +431,7 @@ export class Drawer {
   }
 
   initScene (scope, container, frames) {
-    for (let moduleName in this.modules) {
+    for (const moduleName in this.modules) {
       const module = this.modules[moduleName]
       var stage = new PIXI.Container()
       try {
@@ -454,7 +462,7 @@ export class Drawer {
     scope.currentProgress = progress
     scope.reason = reason
 
-    for (let moduleName in this.modules) {
+    for (const moduleName in this.modules) {
       const module = this.modules[moduleName]
       if (parsedFrame.data.hasOwnProperty(moduleName)) {
         try {
@@ -522,7 +530,7 @@ export class Drawer {
       this.updateScene(this.scope, this.question, this.frames, this.currentFrame, p, this.speed, this.reasons[this.currentFrame], false, true)
     }
 
-    for (let moduleName in this.modules) {
+    for (const moduleName in this.modules) {
       const module = this.modules[moduleName]
       if (typeof module.animateScene === 'function') {
         try {
@@ -659,7 +667,7 @@ export class Drawer {
     this.instantiateModules()
 
     this._frames = frames.map(f => {
-      let header = f[0].split(' ')
+      const header = f[0].split(' ')
 
       let data
       try {
@@ -712,10 +720,12 @@ export class Drawer {
         avatar: null
       }
 
-      loader.add('avatar' + index, agent.avatar, { loadType: 2, crossOrigin: true }, function (event) {
-        agentData.avatar = event.texture
-        PIXI.Texture.addToCache(event.texture, '$' + agentData.index)
-      })
+      if (agent.avatar != null) {
+        loader.add('avatar' + index, agent.avatar, { loadType: 2, crossOrigin: true }, function (event) {
+          agentData.avatar = event.texture
+          PIXI.Texture.addToCache(event.texture, '$' + agentData.index)
+        })
+      }
       return agentData
     })
     this.loading = true
@@ -886,6 +896,7 @@ export class Drawer {
       this.reinit(true)
     }
   }
+
   createRenderer (width, height, canvas) {
     return PIXI.autoDetectRenderer(width, height, {
       view: canvas,
