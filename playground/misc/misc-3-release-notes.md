@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🐞 Bug fix
+
+- Fixed a small issue with the loading of avatars
+
 ## 3.8.3
 
 ### 🐞 Bug fix
