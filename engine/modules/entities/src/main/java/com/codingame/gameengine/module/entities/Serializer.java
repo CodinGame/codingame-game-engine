@@ -89,6 +89,8 @@ class Serializer {
         curves.put(Curve.NONE, "_");
         curves.put(Curve.IMMEDIATE, "Γ");
         curves.put(Curve.LINEAR, "/");
+        curves.put(Curve.EASE_IN, "🙖");
+        curves.put(Curve.EASE_OUT, "🙒");
         curves.put(Curve.EASE_IN_AND_OUT, "∫");
         curves.put(Curve.ELASTIC, "~");
 

@@ -126,17 +126,19 @@ export class PropertiesCommand {
       // '/': (a => a), this will be used by default
       '_': a => a < 1 ? 0 : 1,
       '∫': transitions.ease,
+      '🙖': transitions.easeIn,
+      '🙒': transitions.easeOut,
       '~': transitions.elastic,
       'Γ': a => 1
     }
   }
 
   constructor (args, globalData, frameInfo) {
-    let idx = 0
-    this.id = +args[idx++]
-    this.t = +args[idx++]
+    this.id = +args[0]
+    this.t = +args[1]
     this.params = {}
     this.curve = {}
+    let idx = 2
     while (idx < args.length) {
       const key = PROPERTY_KEY_MAP[args[idx]] || args[idx]
       const opts = (PROPERTIES[key] || PROPERTIES.default)
