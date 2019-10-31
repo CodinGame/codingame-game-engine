@@ -126,6 +126,8 @@ export class PropertiesCommand {
       // '/': (a => a), this will be used by default
       '_': a => a < 1 ? 0 : 1,
       '∫': transitions.ease,
+      '🙖': transitions.easeIn,
+      '🙒': transitions.easeOut,
       '~': transitions.elastic,
       'Γ': a => 1
     }
