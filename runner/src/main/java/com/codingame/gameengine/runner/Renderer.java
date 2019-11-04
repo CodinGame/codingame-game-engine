@@ -255,7 +255,10 @@ class Renderer {
                                         newContent = newContent.concat("\n".concat(newLine));
                                     }
                                     String newName = hashAsset(f);
-                                    fonts.add(newName);
+                                    if (!fonts.contains(new JsonPrimitive(newName))) {
+                                        fonts.add(newName);
+                                    }
+                                    
                                     Files.write(
                                         tmpdir.resolve("hashed_assets").resolve(newName),
                                         newContent.getBytes(),
