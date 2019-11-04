@@ -7,7 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - Fixed a small issue with the loading of avatars
-- Renderer: fixed crashes when the same font asset is included twice
+- Fixed crashes when the same font asset is included twice
 
 ## 3.8.3
 
