@@ -2,12 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next Release
+## 3.8.4
 
 ### 🐞 Bug fix
 
 - Fixed a small issue with the loading of avatars
 - Fixed crashes when the same font asset is included twice
+- Updated the stub generator library
 
 ## 3.8.3
 
