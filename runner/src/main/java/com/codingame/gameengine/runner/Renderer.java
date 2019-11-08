@@ -284,6 +284,9 @@ class Renderer {
                                     );
                                 }
                             }
+                        } catch (JsonSyntaxException e) {
+                            log.error("Invalid JSON in file " + f.getFileName() + " at " + f.toString().replaceAll("^" + tmpdir.toString(), ""));
+                            e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
