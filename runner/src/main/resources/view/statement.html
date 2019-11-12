@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="./statement.css">
+
+  <script src="statement.js"></script>
+</head>
+
+<body onload="load()">
+  <div class="edit">
+    <div class="edit-title">HTML Source</div>
+    <textarea id="statementInput" onkeyup="handleChangeStatementInput()" spellcheck="false"></textarea>
+    <button id="save" onclick="save()" disabled>Saved</button>
+  </div>
+
+  <div class="statement-body">
+    <div class="preview-title">Preview</div>
+    <div id="error"></div>
+    <code id="result"></code>
+  </div>
+
+</body>
+
+</html>
