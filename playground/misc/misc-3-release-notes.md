@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 3.9.0
+
+### 🎁 Features
+
+- Added EASE_IN and EASE_OUT curves
+
 ## 3.8.4
 
 ### 🐞 Bug fix
