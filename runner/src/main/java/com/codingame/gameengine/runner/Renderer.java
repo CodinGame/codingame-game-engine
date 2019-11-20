@@ -712,7 +712,7 @@ class Renderer {
                                                   } catch (IOException ex) {
                                                       sendException(e, ex, StatusCodes.BAD_REQUEST);
                                                   }
-                                              });
+                                              }, StandardCharsets.UTF_8);
                                           } else {
                                               exchange.setStatusCode(StatusCodes.NOT_FOUND);
                                           }

@@ -225,36 +225,26 @@ button {
   margin-left: 2px;
   display: inline-block;
   vertical-align: middle;
+  width: 20px;
+  height: 20px;
 }
 .statement-body .statement-section.statement-goal .icon.icon-goal {
   background-image: url("/images/statement/icon_statement_goal.png");
-  width: 20px;
-  height: 20px;
 }
 .statement-body .statement-section.statement-rules .icon.icon-rules {
   background-image: url("/images/statement/icon_statement_rules.png");
-  width: 20px;
-  height: 20px;
 }
 .statement-body .statement-section.statement-expertrules .icon.icon-expertrules {
   background-image: url("/images/statement/icon_statement_expert_rules.png");
-  width: 20px;
-  height: 20px;
 }
 .statement-body .statement-section.statement-warning .icon.icon-warning {
   background-image: url("/images/statement/icon_statement_warning.png");
-  width: 20px;
-  height: 20px;
 }
 .statement-body .statement-section.statement-protocol .icon.icon-protocol {
   background-image: url("/images/statement/icon_statement_protocol.png");
-  width: 20px;
-  height: 20px;
 }
 .statement-body .statement-section.statement-examples .icon.icon-example {
   background-image: url("/images/statement/icon_statement_examples.png");
-  width: 20px;
-  height: 20px;
 }
 
 .statement-victory-conditions {

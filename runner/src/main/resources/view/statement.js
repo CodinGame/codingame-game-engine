@@ -7,9 +7,7 @@ function refreshStatement () {
   const errorNode = document.getElementById('error')
 
   try {
-    resultNode.innerText = getStatementInput()
-
-    resultNode.innerHTML = resultNode.innerText.replace('\'', '&#39').replace('≤', '&le;')
+    resultNode.innerHTML = getStatementInput()
 
     errorNode.innerText = ''
     resultNode.style.opacity = 1
@@ -23,7 +21,7 @@ async function load () {
   const response = await fetch('/services/statement', {
     method: 'GET'
   })
-  statement = await response.text()
+  const statement = await response.text()
   document.getElementById('statementInput').value = statement
 
   refreshStatement()
