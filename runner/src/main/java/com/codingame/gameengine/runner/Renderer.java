@@ -700,14 +700,37 @@ class Renderer {
                                                 exchange.setStatusCode(StatusCodes.NOT_FOUND);
                                             }
                                         } else if (exchange.getRelativePath().equals("/statement")) {
-                                          File statementFile = sourceFolderPath.resolve("config/statement_en.html").toFile();
-                                          if (exchange.getRequestMethod().equalToString("GET")) {
-                                              String statement = FileUtils.readFileToString(statementFile, StandardCharsets.UTF_8);
-                                              exchange.getResponseSender().send(statement);
+                                          File statementFileEN = sourceFolderPath.resolve("config/statement_en.html").toFile();
+                                          File statementFileFR = sourceFolderPath.resolve("config/statement_fr.html").toFile();
+                                          if (exchange.getRequestMethod().equalToString("POST")) {
+                                        	  String statementEN = FileUtils.readFileToString(statementFileEN, StandardCharsets.UTF_8);
+                                        	  String statementFR;
+                                              if (!statementFileFR.exists()) {
+                                                  statementFR = "";
+                                              } else {
+                                                  statementFR = FileUtils.readFileToString(statementFileFR, StandardCharsets.UTF_8);
+                                              }
+
+                                              exchange.getRequestReceiver().receiveFullString((e, data) -> {
+                                            	  if (data.equals("FR")) {
+                                            		  exchange.getResponseSender().send(statementFR);
+                                            	  } else {
+                                            		  exchange.getResponseSender().send(statementEN);
+                                            	  }
+                                              }, StandardCharsets.UTF_8);
                                           } else if (exchange.getRequestMethod().equalToString("PUT")) {
+                                          	  JsonParser parser = new JsonParser();
                                               exchange.getRequestReceiver().receiveFullString((e, data) -> {
                                                   try {
-                                                      FileUtils.write(statementFile, data, StandardCharsets.UTF_8);
+                                                	  JsonObject result = parser.parse(data).getAsJsonObject();
+                                                	  String language = result.get("language").getAsString();
+                                                	  String statement = result.get("statement").getAsString();
+                                                	  if (language.equals("FR")) {
+                                                	      createFileIfNotExists(statementFileFR, e);
+                                                		  FileUtils.write(statementFileFR, statement, StandardCharsets.UTF_8);
+                                                	  } else if (language.equals("EN")) {
+                                                          FileUtils.write(statementFileEN, statement, StandardCharsets.UTF_8);
+                                                	  }
                                                       exchange.setStatusCode(StatusCodes.CREATED);
                                                   } catch (IOException ex) {
                                                       sendException(e, ex, StatusCodes.BAD_REQUEST);
@@ -724,6 +747,16 @@ class Renderer {
                                     } finally {
                                         exchange.endExchange();
                                     }
+                                }
+
+                                private void createFileIfNotExists(File statementFileFR, HttpServerExchange e) {
+                                    if (!statementFileFR.exists()){
+                                        try{
+                                          statementFileFR.createNewFile();
+                                        } catch (IOException ex) {
+                                          sendException(e, ex, StatusCodes.INTERNAL_SERVER_ERROR);
+                                        }
+                                      }
                                 }
 
                                 private JsonObject extractDemoFromGameJson(File gameFile) {

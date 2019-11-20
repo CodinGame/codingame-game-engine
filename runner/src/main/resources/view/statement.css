@@ -4,13 +4,12 @@ body {
 }
 
 body {
-  display: flex;
-  padding: 10px;
+  display: block;
   color: white;
   font-family: 'Open Sans', Lato, sans-serif;
   font-weight: 400;
   background-color: #363e48;
-  line-height: 1.6
+  line-height: 1.6;
 }
 
 textarea {
@@ -38,13 +37,41 @@ button {
   padding: 0;
 }
 
+.tab-buttons {
+  padding: 10px 10px 0px 10px;
+  height: 50px;
+}
+
+.tab-buttons button {
+  height: 40px;
+  background-color: #ffffff;
+  float: left;
+  padding: 0px 16px;
+  transition: 0.3s;
+  opacity: 0.8;
+  transition: opacity 0.2s, background-color: 0.2s;
+
+}
+
+.tab-buttons button.hover {
+  background-color: #000000
+}
+
+.tab-buttons button.active {
+  background-color: #f2bb13;
+  opacity: 1;
+}
+
 #statementInput {
   width: 600px;
-  height: 600px;
+  height: 100%;
+  display: flex;
+  flex: 1;
   padding: 3px;
 }
 
 #save {
+  flex: none;
   display: block;
   width: 300px;
   background-color: #f2bb13;
@@ -66,11 +93,32 @@ button {
   cursor: default;
 }
 
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  padding: 10px;
+}
+
+.tab-content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.preview {
+  overflow: auto;
+  padding-top: 20px;
+}
+
 .edit {
-  flex: none;
   background: #252e38;
   margin: 10px;
   padding: 20px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  min-height: 90vh;
 }
 
 .edit-title,
@@ -80,6 +128,8 @@ button {
   color: #f2bb13;
   text-transform: uppercase;
   margin-bottom: 9px;
+  flex: none;
+  display: flex;
 }
 
 #error,
@@ -121,12 +171,12 @@ button {
   font-weight: 400;
   font-size: 14px;
   line-height: 19px;
-  overflow: scroll;
   width: 100%;
   padding: 20px;
 }
 
-.statement-body ol, ul {
+.statement-body ol,
+.statement-body ul {
  		padding-left: 20px;
  		margin-top: 10px;
 		margin-bottom: 10px;
@@ -211,10 +261,13 @@ button {
 	background: #f9f9f9;
 	width: 100%;
 }
-.statement-body table, th, td {
+.statement-body table,
+.statement-body th,
+.statement-body td {
 	border: 1px solid #dadada;
 }
-.statement-body th, td {
+.statement-body th,
+.statement-body td {
 	padding: 5px;
 }
 .statement-body pre {
