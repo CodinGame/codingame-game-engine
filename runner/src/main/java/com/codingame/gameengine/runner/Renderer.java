@@ -258,7 +258,7 @@ class Renderer {
                                     if (!fonts.contains(new JsonPrimitive(newName))) {
                                         fonts.add(newName);
                                     }
-                                    
+
                                     Files.write(
                                         tmpdir.resolve("hashed_assets").resolve(newName),
                                         newContent.getBytes(),
@@ -284,6 +284,9 @@ class Renderer {
                                     );
                                 }
                             }
+                        } catch (JsonSyntaxException e) {
+                            log.error("Invalid JSON in file " + f.getFileName() + " at " + f.toString().replaceAll("^" + tmpdir.toString(), ""));
+                            e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -526,8 +529,8 @@ class Renderer {
                 throw new MissingConfigException("An optimization game must have a sorting_order property in config.ini.");
             } else if (!"ASC".equalsIgnoreCase(questionConfig.getSortingOrder())
                 && !"DESC".equalsIgnoreCase(questionConfig.getSortingOrder())) {
-                throw new MissingConfigException("The sorting order for an optimization game must be ASC (ascendant) or DESC (descendant)");
-            }
+                    throw new MissingConfigException("The sorting order for an optimization game must be ASC (ascendant) or DESC (descendant)");
+                }
         }
 
         switch (gameConfig.getGameType()) {
@@ -679,7 +682,8 @@ class Renderer {
                                             }
 
                                             exchange.setStatusCode(StatusCodes.OK);
-                                        } if (exchange.getRelativePath().equals("/stub")) {
+                                        }
+                                        if (exchange.getRelativePath().equals("/stub")) {
                                             File stubFile = sourceFolderPath.resolve("config/stub.txt").toFile();
                                             if (exchange.getRequestMethod().equalToString("GET")) {
                                                 String stub = FileUtils.readFileToString(stubFile, StandardCharsets.UTF_8);

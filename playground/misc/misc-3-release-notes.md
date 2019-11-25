@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## NEXT RELEASE
+
+### 🐞 Bug fix
+
+- Fixed crashes when invalid JSON files are in assets folder
+
 ## 3.9.0
 
 ### 🎁 Features
