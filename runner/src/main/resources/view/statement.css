@@ -53,8 +53,8 @@ button {
 
 }
 
-.tab-buttons button.hover {
-  background-color: #000000
+.tab-buttons button:hover {
+  opacity: 0.64;
 }
 
 .tab-buttons button.active {
