@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -50,6 +51,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
@@ -682,8 +684,7 @@ class Renderer {
                                             }
 
                                             exchange.setStatusCode(StatusCodes.OK);
-                                        }
-                                        if (exchange.getRelativePath().equals("/stub")) {
+                                        } else if (exchange.getRelativePath().equals("/stub")) {
                                             File stubFile = sourceFolderPath.resolve("config/stub.txt").toFile();
                                             if (exchange.getRequestMethod().equalToString("GET")) {
                                                 String stub = FileUtils.readFileToString(stubFile, StandardCharsets.UTF_8);
@@ -700,6 +701,46 @@ class Renderer {
                                             } else {
                                                 exchange.setStatusCode(StatusCodes.NOT_FOUND);
                                             }
+                                        } else if (exchange.getRelativePath().equals("/statement")) {
+                                            File statementFileEN = sourceFolderPath.resolve("config/statement_en.html").toFile();
+                                            File statementFileFR = sourceFolderPath.resolve("config/statement_fr.html").toFile();
+                                            if (exchange.getRequestMethod().equalToString("GET")) {
+                                                JsonObject statements = new JsonObject();
+                                                String statementEN = FileUtils.readFileToString(statementFileEN, StandardCharsets.UTF_8);
+                                                String statementFR;
+                                                if (!statementFileFR.exists()) {
+                                                    statementFR = null;
+                                                } else {
+                                                    statementFR = FileUtils.readFileToString(statementFileFR, StandardCharsets.UTF_8);
+                                                }
+                                                JsonElement statementElement = toJsonElement(statementFR);
+                                                statements.add("EN", new JsonPrimitive(statementEN));
+                                                statements.add("FR", statementElement);
+                                                exchange.getResponseSender().send(statements.toString());
+                                            } else if (exchange.getRequestMethod().equalToString("PUT")) {
+                                                JsonParser parser = new JsonParser();
+                                                exchange.getRequestReceiver().receiveFullString((e, data) -> {
+                                                    try {
+                                                        JsonObject result = parser.parse(data).getAsJsonObject();
+                                                        String language = result.get("language").getAsString();
+                                                        String statement = result.get("statement").getAsString();
+                                                        if (language.equals("FR")) {
+                                                            if (!createFileIfNotExists(statementFileFR, e)) {
+                                                                // terminate if error in createFileIfNotExists
+                                                                return;
+                                                            }
+                                                            FileUtils.write(statementFileFR, statement, StandardCharsets.UTF_8);
+                                                        } else if (language.equals("EN")) {
+                                                            FileUtils.write(statementFileEN, statement, StandardCharsets.UTF_8);
+                                                        }
+                                                        exchange.setStatusCode(StatusCodes.CREATED);
+                                                    } catch (IOException ex) {
+                                                        sendException(e, ex, StatusCodes.BAD_REQUEST);
+                                                    }
+                                                }, StandardCharsets.UTF_8);
+                                            } else {
+                                                exchange.setStatusCode(StatusCodes.NOT_FOUND);
+                                            }
                                         }
                                     } catch (MissingConfigException e) {
                                         sendException(exchange, e, StatusCodes.UNPROCESSABLE_ENTITY);
@@ -707,6 +748,27 @@ class Renderer {
                                         sendException(exchange, e, StatusCodes.BAD_REQUEST);
                                     } finally {
                                         exchange.endExchange();
+                                    }
+                                }
+
+                                private JsonElement toJsonElement(String statementFR) {
+                                    return Optional.ofNullable(statementFR)
+                                        .map(s -> (JsonElement) new JsonPrimitive(s))
+                                        .orElse(JsonNull.INSTANCE);
+                                }
+
+                                private boolean createFileIfNotExists(File statementFileFR, HttpServerExchange e) {
+                                    if (!statementFileFR.exists()) {
+                                        try {
+                                            statementFileFR.createNewFile();
+                                            return true;
+                                        } catch (IOException ex) {
+                                            sendException(e, ex, StatusCodes.INTERNAL_SERVER_ERROR);
+                                            // only return false in case of error
+                                            return false;
+                                        }
+                                    } else {
+                                        return true;
                                     }
                                 }
 

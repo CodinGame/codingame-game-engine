@@ -1,4 +1,4 @@
-function getPrismJsLanguage(language) {
+function getPrismJsLanguage (language) {
   switch (language) {
     case 'C#':
       return 'csharp'
@@ -16,11 +16,11 @@ function getPrismJsLanguage(language) {
   }
 }
 
-function getStubInput() {
+function getStubInput () {
   return document.getElementById('stubInput').value
 }
 
-function refreshStub() {
+function refreshStub () {
   const resultNode = document.getElementById('result')
   const errorNode = document.getElementById('error')
   const languageId = document.getElementById('language').value
@@ -42,7 +42,7 @@ function refreshStub() {
   }
 }
 
-async function load() {
+async function load () {
   const response = await fetch('/services/stub')
   stub = await response.text()
   document.getElementById('stubInput').value = stub
@@ -50,7 +50,7 @@ async function load() {
   refreshStub()
 }
 
-async function save() {
+async function save () {
   document.getElementById('save').disabled = true
   await fetch('/services/stub', {
     method: 'PUT',
@@ -59,7 +59,7 @@ async function save() {
   document.getElementById('save').innerText = 'Saved'
 }
 
-function handleChangeStubInput() {
+function handleChangeStubInput () {
   document.getElementById('save').disabled = false
   document.getElementById('save').innerText = 'Save'
   refreshStub()
