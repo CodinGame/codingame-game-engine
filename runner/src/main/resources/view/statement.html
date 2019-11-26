@@ -7,7 +7,7 @@
   <script src="statement.js"></script>
 </head>
 
-<body onload="load()">
+<body onload="init()">
   <meta charset="UTF-8">
     <div class="wrapper">
 
@@ -20,7 +20,7 @@
         <div class="edit">
           <div class="edit-title">HTML Source</div>
           <textarea id="statementInput" onkeyup="handleChangeStatementInput()" spellcheck="false"></textarea>
-          <button id="save" onclick="save()" disabled>Saved</button>
+          <button id="save" onclick="save()">Save</button>
         </div>
 
         <div class="preview">

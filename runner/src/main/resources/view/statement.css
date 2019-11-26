@@ -44,6 +44,7 @@ button {
 
 .tab-buttons button {
   height: 40px;
+  outline: none;
   background-color: #ffffff;
   float: left;
   padding: 0px 16px;
