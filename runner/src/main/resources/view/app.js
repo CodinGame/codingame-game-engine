@@ -126,6 +126,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
   }
 
   function onFrameChange (frame) {
+    // one frame in this method is one game turn, and contains subframes for each agent's actions
     for (let i in ctrl.data.ids) {
       $scope.agents[i].stdout = null
       $scope.agents[i].stderr = null
@@ -134,7 +135,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
     $scope.referee = {}
     const frameData = ctrl.parsedGameInfo.frames[frame]
     for (let i in ctrl.data.ids) {
-      const subframe = frameData.subframes[i]
+      const subframe = frameData.subframes.find(subframe => subframe.agentId === i)
       if (subframe) {
         if (subframe.stdout) {
           $scope.agents[i].stdout = subframe.stdout
@@ -148,9 +149,11 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
     $scope.referee.stdout = frameData.referee.stdout
     $scope.referee.stderr = frameData.referee.stderr
     $scope.summary = frameData.gameSummary
+    console.log(frameData)
   }
 
   function convertFrameFormat (data) {
+    // one frame in this method means one output, if in a single game turn two agents act, the two actions are put in separate frames
     const frames = data.views.map(v => {
       let f = v.split('\n')
       let header = f[0].split(' ')
@@ -168,12 +171,18 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
           frames[i].referee[newKey] = data[key].referee[i]
         }
       }
-
       for (let pi in data.ids) {
         frames[i].stderr = frames[i].stderr || data.errors[pi][i]
         frames[i].stdout = frames[i].stdout || data.outputs[pi][i]
+        for (let agentId in data.outputs) {
+          let output = data.outputs[agentId]
+          // check that at turn i, agent has output not null, so it is agent's turn
+          if (output[i] != null && agentId !== 'referee') {
+            frames[i].agentId = agentId
+            break
+          }
+        }
       }
-      frames[i].agentId = -1
     }
     const agents = data.agents.map(a => Object.assign(a, { avatarUrl: a.avatar }))
     const tooltips = data.tooltips.map(JSON.stringify)
