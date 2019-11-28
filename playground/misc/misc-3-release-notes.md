@@ -11,6 +11,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - Report malformed JSON error instead of crashing when there are invalid JSON files in assets folder
+- Fixed game replay where output always shown at player 0 for games in which not all players act each turn
 
 ## 3.9.0
 
