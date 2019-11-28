@@ -126,7 +126,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
   }
 
   function onFrameChange (frame) {
-    // one frame in this method is one game turn, and contians subframes for each agent's actions
+    // one frame in this method is one game turn, and contains subframes for each agent's actions
     for (let i in ctrl.data.ids) {
       $scope.agents[i].stdout = null
       $scope.agents[i].stderr = null
@@ -135,14 +135,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
     $scope.referee = {}
     const frameData = ctrl.parsedGameInfo.frames[frame]
     for (let i in ctrl.data.ids) {
-      let subframe
-      if (frameData.subframes.length > 1) {
-        subframe = frameData.subframes[i]
-      } else {
-        if (frameData.subframes[0].agentId === i) {
-          subframe = frameData.subframes[0]
-        }
-      }
+      const subframe = frameData.subframes.find(subframe => subframe.agentId === i)
       if (subframe) {
         if (subframe.stdout) {
           $scope.agents[i].stdout = subframe.stdout
@@ -186,6 +179,7 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
           // check that at turn i, agent has output not null, so it is agent's turn
           if (output[i] != null && agentId !== 'referee') {
             frames[i].agentId = agentId
+            break
           }
         }
       }
