@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## NEXT RELEASE
+
+### 🐞 Bug fix
+
+- Removed accidental console.log from app.js
+
 ## 3.10.0
 
 ### 🎁 Features
