@@ -38,8 +38,13 @@ export class SpriteAnimation extends TextureBasedEntity {
       const images = state.images.split(',')
 
       if (state.animationProgress >= 0) {
-        const animationIndex = Math.floor(images.length * state.animationProgress)
+        const currentDate = frame.date + frame.frameDuration * progress
+        const extrapolatedState = { ...state, date: currentDate }
+        this.computeAnimationProgressTime(state, extrapolatedState)
+
+        const animationIndex = Math.floor(images.length * extrapolatedState.animationProgress)
         const image = state.loop ? images[animationIndex % images.length] : (images[animationIndex] || images[images.length - 1])
+
         try {
           this.graphics.texture = PIXI.Texture.fromFrame(image)
         } catch (error) {

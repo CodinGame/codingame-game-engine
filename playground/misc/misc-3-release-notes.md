@@ -2,11 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## NEXT RELEASE
+## Next Release
 
 ### 🐞 Bug fix
 
 - Removed accidental console.log from app.js
+- Fixed `SpriteAnimation` that would sometimes not animate
 
 ## 3.10.0
 
