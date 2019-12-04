@@ -149,7 +149,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
     $scope.referee.stdout = frameData.referee.stdout
     $scope.referee.stderr = frameData.referee.stderr
     $scope.summary = frameData.gameSummary
-    console.log(frameData)
   }
 
   function convertFrameFormat (data) {
