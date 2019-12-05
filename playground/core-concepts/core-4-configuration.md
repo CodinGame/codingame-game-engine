@@ -35,9 +35,11 @@ max_players=2
 
 ### Code Stub
 
-You may add to the config/ folder a text file named `stub.txt`. If the contents of this file is a syntaxically valid **CodinGame Stub Generator** input, the IDE will be prefilled with input/output code.
+You may add to the config/ folder a text file named `stub.txt`. The code stub provides a simple way to create code templates for players of your puzzle in multiple programming languages. If the contents of this file is a syntaxically valid **CodinGame Stub Generator** input, when the player opens your puzzle the IDE will be prefilled with input/output code.
 
-See [Stub Generator Syntax](https://www.codingame.com/playgrounds/40701/contribute---help/stub-generator-syntax) for details.
+An editor with preview of your `stub.txt` is available on `localhost:8888/stub.html`. This page allows you to edit your code stub and see the would-be generated input/output code side by side.
+
+See [Stub Generator Syntax](https://www.codingame.com/playgrounds/40701/contribute---help/stub-generator-syntax) for details on how to write your code stub generator.
 
 ### Loading assets <a name="loading-assets"></a>
 
@@ -112,13 +114,11 @@ This doesn't have any effect in the local test page. It is used to store the vie
 
 ### Statement
 
-Place a file named `statement_en.html` in the `config/` directory and it will be used for as the statement of your game.
+All games need to have a description in the form of a game statement. A statement in English is mandatory, and one in French is optional. The `statement_en.html` already exists in the config/ folder, and you may create a `statement_fr.html` file if you wish. If the player has set French as his language on CodinGame, the French version of the statement will be displayed; otherwise the English version will be displayed.
 
-For a game with multiple leagues, you may place a file named `statement_en.html.tpl` in the `config/` directory and it will be used as a basis for the statement of each league when you click the export button.
+For a game with multiple leagues, you may place a file named `statement_en.html.tpl` in the `config/` directory and it will be used as a basis for the statement of each league when you click the export button. Within the `.tpl` file, you may place special comment blocks to indicate whether a block of html should be included for any specified league.
 
-Within the `.tpl` file, you may place special comment blocks to indicate whether a block of html should be included for any specified league.
-
-Optionally, you can tranlate your statements in French using `statement_fr.html` files.
+An editor with preview of your `statement_en.html` and `statement_fr.html` is available on `localhost:8888/statement.html`. This page allows you to edit your html files and see the would-be generated statement side by side.
 
 Learn more about how to write a statement for sdk games in the [CodinGame contribution documentation](https://www.codingame.com/playgrounds/40701/contribute---help/writing-the-statement#game-statement)
 
