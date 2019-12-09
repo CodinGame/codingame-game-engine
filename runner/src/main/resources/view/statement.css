@@ -161,10 +161,6 @@ button {
   font-size: 13px;
 }
 
-.statement-section {
-  padding-bottom: 30px;
-}
-
 .statement-body {
   color: #20252a;
   background-color: white;
@@ -174,14 +170,15 @@ button {
   line-height: 19px;
   width: 100%;
   padding: 20px;
+  font-family: "Open Sans", Lato, sans-serif;
 }
 
 .statement-body ol,
 .statement-body ul {
- 		padding-left: 20px;
- 		margin-top: 10px;
-		margin-bottom: 10px;
-	}
+  padding-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
 
 .statement-body action {
   display: inline-block;
@@ -222,24 +219,24 @@ button {
 
 .statement-body h1,
 .statement-body h2 {
-    color: #838891;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 15px;
-    margin-top: 0;
+  color: #838891;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  margin-top: 0;
 }
 
 .statement-body h3 {
-	font-size: 1.2em;
-	margin: .83em 0;
+  font-size: 1.2em;
+  margin: .83em 0;
 }
 .statement-body h4 {
-	margin: 1.12em 0;
+  margin: 1.12em 0;
 }
 .statement-body blockquote {
-	padding: 10px 20px;
-	margin: 0 0 20px 0;
-	border-left: 5px solid #e7e9eb;
+  padding: 10px 20px;
+  margin: 0 0 20px 0;
+  border-left: 5px solid #e7e9eb;
 }
 .statement-body blockquote p {
   color: #989898;
@@ -249,30 +246,61 @@ button {
 .statement-body a:visited,
 .statement-body a:active,
 .statement-body a:hover {
-	transition: color .2s ease-in-out;
-	border-bottom: none;
+  transition: color .2s ease-in-out;
+  border-bottom: none;
 }
 .statement-body a,
 .statement-body a:visited,
 .statement-body a:active {
-	color: #1a99aa;
+  color: #1a99aa;
 }
 .statement-body table {
-	border-collapse: collapse;
-	background: #f9f9f9;
-	width: 100%;
+  border-collapse: collapse;
+  background: #f9f9f9;
+  width: 100%;
 }
 .statement-body table,
 .statement-body th,
 .statement-body td {
-	border: 1px solid #dadada;
+  border: 1px solid #dadada;
 }
 .statement-body th,
 .statement-body td {
-	padding: 5px;
+  padding: 5px;
 }
 .statement-body pre {
-	margin-bottom: 20px;
+  font-family: monospace;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  color: inherit;
+  word-break: inherit;
+  word-wrap: inherit;
+  background-color: inherit;
+  border: none;
+}
+
+.statement-body #statement_back {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: calc(100%);
+  height: 100%;
+  padding-top: 56.25%;
+  z-index: 0;
+  background-size: cover;
+  background-position: 50% 0%;
+  background-repeat: no-repeat;
+}
+
+.statement-body .statement_back {
+  display:none;
+}
+
+.statement-body .statement-section {
+  padding-bottom: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .statement-body .statement-section .icon {
@@ -363,19 +391,19 @@ button {
   background-color: #e7e9eb;
 }
 .statement-protocol .title {
-    font-size: 14px;
-    font-weight: 700;
-    padding-top: 5px;
-    padding-bottom: 15px;
+  font-size: 14px;
+  font-weight: 700;
+  padding-top: 5px;
+  padding-bottom: 15px;
 }
 .statement-protocol .blk {
-    border-bottom: 1px solid #dadada;
-    padding-top: 15px;
-    padding-bottom: 15px;
+  border-bottom: 1px solid #dadada;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 .statement-protocol .blk:last-child {
-      border-bottom: none !important;
-      padding-bottom: 0px;
+  border-bottom: none !important;
+  padding-bottom: 0px;
 }
 .statement-protocol .blk:nth-of-type(1) {
   padding-top: 0px;
@@ -391,10 +419,15 @@ button {
   display: block;
 }
 .statement-body .statement-story-background .statement-story-cover {
-    background-size: cover;
-    opacity: 0.7;
+  background-size: cover;
+  opacity: 0.7;
 }
 .statement-body .statement-story-background .statement-story-cover .statement-story {
-    margin: 20px;
-    padding-top: 20px;
+  margin: 20px;
+  padding-top: 20px;
+}
+.statement-body .statement-story-background .statement-story-cover .statement-story h1 {
+  font-weight: 700;
+  margin-top: 0;
+  color: white;
 }
