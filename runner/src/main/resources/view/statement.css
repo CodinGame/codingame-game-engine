@@ -161,10 +161,6 @@ button {
   font-size: 13px;
 }
 
-.statement-section {
-  padding-bottom: 30px;
-}
-
 .statement-body {
   color: #20252a;
   background-color: white;
@@ -273,6 +269,29 @@ button {
 }
 .statement-body pre {
 	margin-bottom: 20px;
+}
+
+.statement-body #statement_back {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: calc(100%);
+  height: 100%;
+  padding-top: 56.25%;
+  z-index: 0;
+  background-size: cover;
+  background-position: 50% 0%;
+  background-repeat: no-repeat;
+}
+
+.statement-body .statement_back {
+  display:none;
+}
+
+.statement-body .statement-section {
+  padding-bottom: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
 
 .statement-body .statement-section .icon {
@@ -397,4 +416,9 @@ button {
 .statement-body .statement-story-background .statement-story-cover .statement-story {
     margin: 20px;
     padding-top: 20px;
+}
+.statement-body .statement-story-background .statement-story-cover .statement-story h1 {
+  font-weight: 700;
+  margin-top: 0;
+  color: white;
 }
