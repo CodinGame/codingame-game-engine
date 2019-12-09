@@ -170,6 +170,7 @@ button {
   line-height: 19px;
   width: 100%;
   padding: 20px;
+  font-family: "Open Sans", Lato, sans-serif;
 }
 
 .statement-body ol,
