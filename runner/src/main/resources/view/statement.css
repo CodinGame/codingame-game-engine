@@ -1,3 +1,7 @@
+:root {
+  --cg-grey-new: #838891;
+}
+
 html,
 body {
   height: 100%
@@ -152,8 +156,6 @@ button {
   margin-bottom: 9px;
 }
 
-/* statement css */
-
 .code {
   border: 1px solid #f2bb13;
   padding: 1px 2px;
@@ -161,16 +163,16 @@ button {
   font-size: 13px;
 }
 
+/* statement css */
+
 .statement-body {
   color: #20252a;
   background-color: white;
   padding-top: 15px;
   font-weight: 400;
   font-size: 14px;
-  line-height: 19px;
-  width: 100%;
-  padding: 20px;
-  font-family: "Open Sans", Lato, sans-serif;
+  line-height: 16px;
+  font-family: 'Open Sans', Lato, sans-serif;
 }
 
 .statement-body ol,
@@ -219,65 +221,11 @@ button {
 
 .statement-body h1,
 .statement-body h2 {
-  color: #838891;
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  margin-top: 0;
-}
-
-.statement-body h3 {
-  font-size: 1.2em;
-  margin: .83em 0;
-}
-.statement-body h4 {
-  margin: 1.12em 0;
-}
-.statement-body blockquote {
-  padding: 10px 20px;
-  margin: 0 0 20px 0;
-  border-left: 5px solid #e7e9eb;
-}
-.statement-body blockquote p {
-  color: #989898;
-  margin-bottom: 0;
-}
-.statement-body a,
-.statement-body a:visited,
-.statement-body a:active,
-.statement-body a:hover {
-  transition: color .2s ease-in-out;
-  border-bottom: none;
-}
-.statement-body a,
-.statement-body a:visited,
-.statement-body a:active {
-  color: #1a99aa;
-}
-.statement-body table {
-  border-collapse: collapse;
-  background: #f9f9f9;
-  width: 100%;
-}
-.statement-body table,
-.statement-body th,
-.statement-body td {
-  border: 1px solid #dadada;
-}
-.statement-body th,
-.statement-body td {
-  padding: 5px;
-}
-.statement-body pre {
-  font-family: monospace;
-  padding: 0;
-  margin: 0;
-  font-size: inherit;
-  color: inherit;
-  word-break: inherit;
-  word-wrap: inherit;
-  background-color: inherit;
-  border: none;
+	color: var(--cg-grey-new);
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: 15px;
+	margin-top: 0;
 }
 
 .statement-body #statement_back {
