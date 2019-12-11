@@ -81,6 +81,13 @@ export class LoadCommand {
   constructor ([assetName, sourceImage, imageWidth, imageHeight, origRow, origCol, imageCount, imagesPerRow], globalData) {
     this.loader = new PIXI.loaders.Loader()
 
+    if (imageWidth === '0') {
+      imageWidth = PIXI.utils.TextureCache[sourceImage].width
+    }
+    if (imageHeight === '0') {
+      imageHeight = PIXI.utils.TextureCache[sourceImage].height
+    }
+
     const _imagesPerRow = imagesPerRow > 0 ? imagesPerRow : imageCount
     const data = {
       frames: {},
