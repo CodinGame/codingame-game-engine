@@ -31,16 +31,16 @@ public class BitmapText extends TextBasedEntity<BitmapText> {
      * Only fonts available to the browser can be displayed.
      * 
      * 
-     * @param fontFamily
+     * @param font
      *            the size for the font of this <code>BitmapText</code>.
      * @return this <code>BitmapText</code>.
      * @exception NullPointerException
-     *                if fontFamily is null.
+     *                if font is null.
      */
-    public BitmapText setFont(String fontFamily) {
-        Objects.requireNonNull(fontFamily);
-        this.font = fontFamily;
-        set("fontFamily", fontFamily, null);
+    public BitmapText setFont(String font) {
+        Objects.requireNonNull(font);
+        this.font = font;
+        set("fontFamily", font, null);
         return this;
     }
 

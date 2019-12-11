@@ -50,6 +50,7 @@ class Serializer {
         keys.put("fontSize", "s");
         keys.put("fontWeight", "fw");
         keys.put("text", "T");
+        keys.put("textAlign", "ta");
         keys.put("children", "ch");
         keys.put("scaleX", "sx");
         keys.put("scaleY", "sy");

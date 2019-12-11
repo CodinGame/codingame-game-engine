@@ -26,6 +26,7 @@ const PROPERTY_KEY_MAP = {
   s: 'fontSize',
   fw: 'fontWeight',
   T: 'text',
+  ta: 'textAlign',
   ch: 'children',
   sx: 'scaleX',
   sy: 'scaleY',

@@ -4,6 +4,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ## Next release
 
+### 🎁 Features
+
+- Added text-align property to TextBasedEntity
+
 ### 🐞 Bug fix
 
 - Changed CSS of statement preview to match the codingame IDE
