@@ -6,8 +6,36 @@ import java.util.Objects;
  * @param <T> a subclass inheriting TextureBasedEntity, used in order to return <b>this</b> as a T instead of a <code>TextBasedEntity</code>.
  */
 public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends TextureBasedEntity<T> {
+    /**
+     * This is an enumeration that contains the three options for text alignment: left, center, and right.
+     */
+    public static enum TextAlign {
+        /**
+         * Align text left
+         */
+        LEFT(0),
+        /**
+         * Align text center
+         */
+        CENTER(1),
+        /**
+         * Align text right
+         */
+        RIGHT(2);
+
+        private int value;
+
+        private TextAlign(int value) {
+            this.value = value;
+        }
+
+        private int getValue() {
+            return value;
+        }
+    }
     protected String text = "";
     protected int fontSize = 26;
+    protected TextAlign textAlign;
     
     /**
      * Returns the string this <code>TextBasedEntity</code> displays.
@@ -34,6 +62,33 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
         Objects.requireNonNull(text);
         this.text = text;
         set("text", text, null);
+        return self();
+    }
+    /**
+     * Returns text alignment of this <code>TextBasedEntity</code>.
+     * <p>
+     * Default is TextAlign.LEFT (align left).
+     * 
+     * @return the text alignment of this <code>TextBasedEntity</code>.
+     */
+    public TextAlign getTextAlign() {
+        return textAlign;
+    }
+    
+
+    /**
+     * Sets the text alignment of this <code>TextBasedEntity</code>.
+     * 
+     * @param align
+     *            the text alignment of this <code>TextBasedEntity</code>.
+     * @return this <code>Text</code>.
+     * @exception NullPointerException
+     *                if align is null.
+     */
+    public T setTextAlign(TextAlign align) {
+        Objects.requireNonNull(align);
+        this.textAlign = align;
+        set("textAlign", align.getValue(), null);
         return self();
     }
     

@@ -7,6 +7,7 @@ export class Text extends TextureBasedEntity {
     super()
     Object.assign(this.defaultState, {
       text: '',
+      textAlign: 'left',
       strokeColor: 0,
       strokeThickness: 0,
       fillColor: 0,
@@ -20,6 +21,7 @@ export class Text extends TextureBasedEntity {
     super.initDisplay()
 
     this.graphics = new PIXI.Text(this.defaultState.text, {
+      align: this.defaultState.textAlign,
       fontSize: this.defaultState.fontSize + 'px',
       fontFamily: this.defaultState.fontFamily,
       fill: this.defaultState.fillColor
@@ -29,6 +31,7 @@ export class Text extends TextureBasedEntity {
   updateDisplay (state, changed, globalData) {
     super.updateDisplay(state, changed, globalData)
     this.graphics.text = state.text
+    this.graphics.style.align = state.textAlign
     this.graphics.style.stroke = state.strokeColor
     this.graphics.style.strokeThickness = globalData.atLeastOnePixel(state.strokeThickness)
     this.graphics.style.fill = state.fillColor

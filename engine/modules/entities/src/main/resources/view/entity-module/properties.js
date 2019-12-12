@@ -113,6 +113,16 @@ export const PROPERTIES = {
       return res
     }
   },
+  textAlign: {
+    ...stringOpts,
+    convert: (value) => (
+      {
+        0: 'left',
+        1: 'center',
+        2: 'right'
+      }[value]
+    )
+  },
   fontFamily: stringOpts,
   fontWeight: stringOpts,
   children: {

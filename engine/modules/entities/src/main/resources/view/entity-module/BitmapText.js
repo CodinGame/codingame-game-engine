@@ -10,6 +10,7 @@ export class BitmapText extends Entity {
     super()
     Object.assign(this.defaultState, {
       text: '',
+      textAlign: 'left',
       fontSize: 26,
       fontFamily: null,
       anchorX: TextureBasedEntity.defaultAnchor(),
@@ -41,6 +42,7 @@ export class BitmapText extends Entity {
         this.displayed.anchor.set(state.anchorX, state.anchorY)
         this.displayed.blendMode = state.blendMode
         this.displayed.tint = state.tint
+        this.displayed.align = state.textAlign
       } else {
         if (!this.missingFonts[state.fontFamily]) {
           this.missingFonts[state.fontFamily] = true
