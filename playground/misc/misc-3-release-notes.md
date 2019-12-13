@@ -7,6 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🎁 Features
 
 - Added text-align property to TextBasedEntity
+- SpriteSheetSplitter splits using full width and/or height of spritesheet when width and/or height not set.
 
 ### 🐞 Bug fix
 

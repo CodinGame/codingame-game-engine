@@ -221,9 +221,8 @@ class Serializer {
 
     private String serializeLoadSpriteSheet(SpriteSheetSplitter spriteSheet) {
         return join(
-            spriteSheet.getName(), spriteSheet.getSourceImage(),
-            spriteSheet.getWidth(), spriteSheet.getHeight(), spriteSheet.getOrigRow(), spriteSheet.getOrigCol(), spriteSheet.getImageCount(),
-            spriteSheet.getImagesPerRow()
+            spriteSheet.getName(), spriteSheet.getSourceImage(), spriteSheet.getWidth(), spriteSheet.getHeight(),
+            spriteSheet.getOrigRow(), spriteSheet.getOrigCol(), spriteSheet.getImageCount(), spriteSheet.getImagesPerRow()
         );
     }
 

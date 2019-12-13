@@ -14,8 +14,8 @@ import com.google.inject.Inject;
 public class SpriteSheetSplitter {
     private String name;
     private String sourceImage;
-    private Integer width;
-    private Integer height;
+    private Integer width = 0; // 0 means take full width of spritesheet
+    private Integer height = 0; // 0 means take full height of spritesheet
     private Integer origRow;
     private Integer origCol;
     private Integer imageCount;
@@ -120,20 +120,28 @@ public class SpriteSheetSplitter {
 
     /**
      * Sets the width of the subimages to extract
+     * Defaults to full width of spritesheet if not set
      * @param width the width of the subimages
      * @return this <code>SpriteSheetSplitter</code>
      */
     public SpriteSheetSplitter setWidth(int width) {
+        if (width <= 0) {
+            throw new IllegalStateException("invalid width");
+        }
         this.width = width;
         return this;
     }
     
     /**
      * Sets the height of the subimages to extract
+     * Defaults to full height of spritesheet if not set
      * @param height the height of the subimages
      * @return this <code>SpriteSheetSplitter</code>
      */
     public SpriteSheetSplitter setHeight(int height) {
+        if (height <= 0) {
+            throw new IllegalStateException("invalid height");
+        }
         this.height = height;
         return this;
     }
@@ -192,12 +200,6 @@ public class SpriteSheetSplitter {
         }
         if (sourceImage == null) {
             throw new IllegalStateException("invalid sourceImage");
-        }
-        if (width == null || width <= 0) {
-            throw new IllegalStateException("invalid width");
-        }
-        if (height == null || height <= 0) {
-            throw new IllegalStateException("invalid height");
         }
         if (imageCount == null || imageCount <= 0) {
             throw new IllegalStateException("invalid imageCount");
