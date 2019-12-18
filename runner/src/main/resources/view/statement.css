@@ -41,6 +41,11 @@ button {
   padding: 0;
 }
 
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+}
+
 .tab-buttons {
   padding: 10px 10px 0px 10px;
   height: 50px;

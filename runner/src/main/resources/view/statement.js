@@ -91,3 +91,14 @@ function changeLanguage (event, tabLanguage) {
   loadStatement()
   updateSaveButton()
 }
+
+function changeMode (event, mode) {
+  for (const child of document.getElementById('mode-buttons').childNodes) {
+    child.className = ''
+  }
+  event.currentTarget.className += ' active'
+
+  if (mode === 'tpl') {
+    debugger
+  }
+}

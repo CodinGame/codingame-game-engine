@@ -11,9 +11,16 @@
   <meta charset="UTF-8">
     <div class="wrapper">
 
-      <div id="tab-buttons" class="tab-buttons">
-        <button class="active" onclick="changeLanguage(event, 'EN')">English</button>
-        <button onclick="changeLanguage(event, 'FR')">Français</button>
+      <div class="buttons-container">
+        <div id="tab-buttons" class="tab-buttons">
+          <button class="active" onclick="changeLanguage(event, 'EN')">English</button>
+          <button onclick="changeLanguage(event, 'FR')">Français</button>
+        </div>
+
+        <div id="mode-buttons" class="tab-buttons">
+          <button class="active" onclick="changeMode(event, 'tpl')">Edit statement.tpl</button>
+          <button onclick="changeMode(event, 'html')">Edit statement.html</button>
+        </div>
       </div>
 
       <div class="tab-content">
