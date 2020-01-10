@@ -171,14 +171,21 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
         }
       }
       for (const pi in data.ids) {
-        frames[i].stderr = frames[i].stderr || data.errors[pi][i]
-        frames[i].stdout = frames[i].stdout || data.outputs[pi][i]
-        for (const agentId in data.outputs) {
-          const output = data.outputs[agentId]
-          // check that at turn i, agent has output not null, so it is agent's turn
-          if (output[i] != null && agentId !== 'referee') {
-            frames[i].agentId = agentId
-            break
+        const stdout = data.outputs[pi][i]
+        const stderr = data.errors[pi][i]
+
+        if (pi !== 'referee') {
+          // If this agent has output, it is the frame's only active agent
+          if (stdout || stderr) {
+            frames[i].agentId = pi
+          }
+          if (data.errors[pi][i]) {
+            // This frame's active agent has output this on stderr
+            frames[i].stderr = stderr
+          }
+          if (data.outputs[pi][i]) {
+            // This frame's active agent has output this on stdout
+            frames[i].stdout = stdout
           }
         }
       }
