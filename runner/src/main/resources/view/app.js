@@ -127,14 +127,14 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
 
   function onFrameChange (frame) {
     // one frame in this method is one game turn, and contains subframes for each agent's actions
-    for (let i in ctrl.data.ids) {
+    for (const i in ctrl.data.ids) {
       $scope.agents[i].stdout = null
       $scope.agents[i].stderr = null
     }
 
     $scope.referee = {}
     const frameData = ctrl.parsedGameInfo.frames[frame]
-    for (let i in ctrl.data.ids) {
+    for (const i in ctrl.data.ids) {
       const subframe = frameData.subframes.find(subframe => subframe.agentId === i)
       if (subframe) {
         if (subframe.stdout) {
@@ -154,12 +154,12 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
   function convertFrameFormat (data) {
     // one frame in this method means one output, if in a single game turn two agents act, the two actions are put in separate frames
     const frames = data.views.map(v => {
-      let f = v.split('\n')
-      let header = f[0].split(' ')
+      const f = v.split('\n')
+      const header = f[0].split(' ')
 
       return { view: v.replace(/^(KEY_FRAME)|(INTERMEDIATE_FRAME)/, ''), keyframe: header[0] === 'KEY_FRAME' }
     })
-    const refereeKeysMap = { 'errors': 'stderr', 'outputs': 'stdout' }
+    const refereeKeysMap = { errors: 'stderr', outputs: 'stdout' }
     for (let i = 0; i < frames.length; i++) {
       frames[i].gameSummary = data.summaries[i]
       frames[i].referee = {}
@@ -170,11 +170,11 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
           frames[i].referee[newKey] = data[key].referee[i]
         }
       }
-      for (let pi in data.ids) {
+      for (const pi in data.ids) {
         frames[i].stderr = frames[i].stderr || data.errors[pi][i]
         frames[i].stdout = frames[i].stdout || data.outputs[pi][i]
-        for (let agentId in data.outputs) {
-          let output = data.outputs[agentId]
+        for (const agentId in data.outputs) {
+          const output = data.outputs[agentId]
           // check that at turn i, agent has output not null, so it is agent's turn
           if (output[i] != null && agentId !== 'referee') {
             frames[i].agentId = agentId
@@ -217,8 +217,8 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
         $scope.selectProgress = 'inactive'
         $scope.reportItems = [
           {
-            'type': 'ERROR',
-            'message': error
+            type: 'ERROR',
+            message: error
           }
         ]
         $scope.showExportPopup = true
@@ -277,8 +277,8 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
       .catch(function (error) {
         $scope.reportItems = [
           {
-            'type': 'ERROR',
-            'message': error
+            type: 'ERROR',
+            message: error
           }
         ]
         $scope.showExportPopup = true
@@ -294,27 +294,27 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
       $scope.showConfigForm = true
     } else {
       const exportResponseString = await data.text()
-      let exportResponse = JSON.parse(exportResponseString)
+      const exportResponse = JSON.parse(exportResponseString)
 
-      for (let stub in exportResponse.stubs) {
+      for (const stub in exportResponse.stubs) {
         try {
           window.cginput.parseStubInput(exportResponse.stubs[stub], 0)
         } catch (e) {
           exportResponse.reportItems.push({
-            'type': 'WARNING',
-            'message': stub + ' Error in stub.txt',
-            'details': { 'name': e.name, 'params': e.params }
+            type: 'WARNING',
+            message: stub + ' Error in stub.txt',
+            details: { name: e.name, params: e.params }
           })
         }
       }
 
       if (exportResponse.exportStatus === 'SUCCESS') {
         exportResponse.reportItems.push({
-          'type': 'SUCCESS',
-          'message': 'Export success.'
+          type: 'SUCCESS',
+          message: 'Export success.'
         })
-        let url = exportResponse.dataUrl
-        let a = document.createElement('a')
+        const url = exportResponse.dataUrl
+        const a = document.createElement('a')
         a.href = url
         a.download = 'export.zip'
         document.body.appendChild(a)
@@ -322,8 +322,8 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
         document.body.removeChild(a)
       } else {
         exportResponse.reportItems.push({
-          'type': 'FAIL',
-          'message': 'Export fail.'
+          type: 'FAIL',
+          message: 'Export fail.'
         })
       }
       $scope.reportItems = exportResponse.reportItems
