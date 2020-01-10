@@ -13,6 +13,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - Changed CSS of statement preview to match the codingame IDE
 - Fixed bug where newline in Text entities would crash the game
+- Fixed missing display of the agent's standard error stream on crash
 
 ## 3.10.1
 
