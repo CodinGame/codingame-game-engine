@@ -25,7 +25,7 @@ export class Polygon extends Shape {
         this.graphics.beginFill(state.fillColor, state.fillAlpha)
       }
 
-      this.graphics.lineStyle(globalData.atLeastOnePixel(state.lineWidth), state.lineColor, state.lineAlpha)
+      this.graphics.lineStyle(state.lineWidth, state.lineColor, state.lineAlpha)
       this.graphics.drawPolygon(state.points.map(coord => coord * globalData.toWorldUnits))
       if (state.fillColor !== null) {
         this.graphics.endFill()

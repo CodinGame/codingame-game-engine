@@ -38,7 +38,7 @@ export class RoundedRectangle extends Shape {
         this.graphics.beginFill(state.fillColor, state.fillAlpha)
       }
 
-      this.graphics.lineStyle(globalData.atLeastOnePixel(state.lineWidth), state.lineColor, state.lineAlpha)
+      this.graphics.lineStyle(state.lineWidth, state.lineColor, state.lineAlpha)
       this.graphics.drawRoundedRect(0, 0,
         state.width * globalData.toWorldUnits,
         state.height * globalData.toWorldUnits,
