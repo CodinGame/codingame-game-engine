@@ -452,6 +452,8 @@ export class Drawer {
     if (!force && this.stepByStepAnimateSpeed && this.checkSteppedToNextFrame(scope, parsedFrame)) {
       this.startAsynchronousAnimation(scope, progress, parsedFrame)
       return
+    } else if (!force) {
+      scope.targetProgress = null
     }
 
     /** ************************************* */
