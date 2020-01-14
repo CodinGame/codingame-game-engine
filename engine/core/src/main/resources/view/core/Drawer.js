@@ -449,10 +449,15 @@ export class Drawer {
 
   updateScene (scope, question, frames, frameNumber, progress, speed, reason, demo, force) {
     const parsedFrame = frames[frameNumber]
-    if (!force && this.stepByStepAnimateSpeed && this.checkSteppedToNextFrame(scope, parsedFrame)) {
-      this.startAsynchronousAnimation(scope, progress, parsedFrame)
-      return
-    } else if (!force) {
+    if (!force && this.stepByStepAnimateSpeed) {
+      if (this.checkSteppedToNextFrame(scope, parsedFrame, progress)) {
+        this.startAsynchronousAnimation(scope, parsedFrame)
+        return
+      } else if (this.checkSteppedToPreviousFrame(scope, parsedFrame, progress)) {
+        const reversed = true
+        this.startAsynchronousAnimation(scope, scope.currentFrame, reversed)
+        return
+      }
       scope.targetProgress = null
     }
 
@@ -476,14 +481,27 @@ export class Drawer {
     }
   }
 
-  startAsynchronousAnimation (scope, progress, currentFrame) {
-    scope.targetProgress = progress
-    scope.currentProgress = 0
-    scope.currentFrame = currentFrame
+  startAsynchronousAnimation (scope, frameToAnimate, reversed = false) {
+    scope.targetProgress = reversed ? 0 : 1
+    if (!reversed && scope.currentProgress === 1) {
+      scope.currentProgress = 0
+    }
+    scope.currentFrame = frameToAnimate
+    scope.reverseAsynchronousAnimation = reversed
   }
 
-  checkSteppedToNextFrame (scope, parsedFrame) {
-    return scope.currentFrame && scope.currentFrame !== parsedFrame && scope.currentFrame === parsedFrame.previous && this.speed === 0
+  checkStepped (scope, selectedFrame, progress) {
+    return scope.currentFrame && this.speed === 0 && progress === 1
+  }
+
+  checkSteppedToNextFrame (scope, selectedFrame, progress) {
+    return this.checkStepped(scope, selectedFrame, progress) &&
+    (scope.currentFrame === selectedFrame.previous || (scope.currentFrame === selectedFrame && scope.currentProgress !== progress))
+  }
+
+  checkSteppedToPreviousFrame (scope, selectedFrame, progress) {
+    return this.checkStepped(scope, selectedFrame, progress) &&
+    scope.currentFrame.previous === selectedFrame
   }
 
   initEndScene (scope, failure) {
@@ -527,9 +545,27 @@ export class Drawer {
     }
 
     if (this.stepByStepAnimateSpeed && this.isAsynchronousAnimationOngoing(scope)) {
-      var p = scope.currentProgress + step / 200 * this.getFrameSpeed(this.currentFrame) * this.stepByStepAnimateSpeed
-      p = Math.min(scope.targetProgress, p)
-      this.updateScene(this.scope, this.question, this.frames, this.currentFrame, p, this.speed, this.reasons[this.currentFrame], false, true)
+      let frameToShow = this.currentFrame
+      let progressToShow
+
+      if (scope.reverseAsynchronousAnimation) {
+        frameToShow++
+      }
+
+      const progressDelta = step / 200 * this.getFrameSpeed(frameToShow) * this.stepByStepAnimateSpeed
+
+      if (scope.reverseAsynchronousAnimation) {
+        progressToShow = scope.currentProgress - progressDelta
+        if (progressToShow <= 0) {
+          frameToShow = this.currentFrame
+          progressToShow = 1
+          scope.targetProgress = 1
+        }
+      } else {
+        progressToShow = scope.currentProgress + progressDelta
+        progressToShow = Math.min(scope.targetProgress, progressToShow)
+      }
+      this.updateScene(this.scope, this.question, this.frames, frameToShow, progressToShow, this.speed, this.reasons[frameToShow], false, true)
     }
 
     for (const moduleName in this.modules) {
