@@ -2,6 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🐞 Bug fix
+
+- Fixed choppy animation when launching games with a `stepByStepAnimateSpeed`
+- Fixed situations in which stepping through a game with a `stepByStepAnimateSpeed` would not be animated.
+
 ## 3.11.0
 
 ### 🎁 Features
