@@ -9,8 +9,8 @@ package com.codingame.gameengine.module.entities;
  */
 public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntity<T> implements Mask {
 
-    private int lineColor = 0x0, lineWidth = 0, fillColor = 0xffffff;
-    private double fillAlpha = 1, lineAlpha = 1;
+    private int lineColor = 0x0, fillColor = 0xffffff;
+    private double fillAlpha = 1, lineAlpha = 1, lineWidth = 0;
 
     Shape() {
         super();
@@ -150,7 +150,7 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
      *            the width for the border of this <code>Shape</code>.
      * @return this <code>Shape</code>.
      */
-    public T setLineWidth(int lineWidth) {
+    public T setLineWidth(double lineWidth) {
         return setLineWidth(lineWidth, null);
     }
 
@@ -166,7 +166,7 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
      *            the transition to animate between values of this property.
      * @return this <code>Shape</code>.
      */
-    public T setLineWidth(int lineWidth, Curve curve) {
+    public T setLineWidth(double lineWidth, Curve curve) {
         this.lineWidth = lineWidth;
         set("lineWidth", lineWidth, curve);
         return self();
@@ -175,11 +175,11 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
     /**
      * Returns the width of the border of this <code>Shape</code> in world units.
      * <p>
-     * Default is 1.
+     * Default is 0.
      * 
      * @return the width of the border of this <code>Shape</code>.
      */
-    public int getLineWidth() {
+    public double getLineWidth() {
         return lineWidth;
     }
 
