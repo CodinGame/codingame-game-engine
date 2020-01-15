@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🐞 Bug fix
+
+- The `GraphicEntityModule` method `createText` no longer requires a text parameter
+
 ## 3.11.1
 
 ### 🐞 Bug fix
