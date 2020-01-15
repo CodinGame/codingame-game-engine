@@ -4,6 +4,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ## Next Release
 
+### 🎁 Features
+
+- It is now possible to limit the number of characters display given by `getNicknameToken`.
+
 ### 🐞 Bug fix
 
 - Fixed an issue where games with a `stepByStepAnimateSpeed` would sometimes try to animate frame 0, causing a black screen.

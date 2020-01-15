@@ -42,6 +42,21 @@ abstract public class AbstractPlayer {
     }
 
     /**
+     * Returns a string that will be converted into the real nickname by the viewer.
+     * 
+     * @param maxLength the maximum amount of characters of the nickname to display.
+     * If it is longer, an ellipsis will be appended ("...")
+     * 
+     * @return the player's nickname token.
+     */
+    public final String getNicknameToken(int maxLength) {
+        if (maxLength <= 0) {
+            throw new IllegalArgumentException("Invalid width: " + maxLength);
+        }
+        return "$" + this.index + "ε" + maxLength;
+    }
+
+    /**
      * Returns a string that will be converted into the real avatar by the viewer, if it exists.
      * 
      * @return the player's avatar token.
