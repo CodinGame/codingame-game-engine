@@ -99,13 +99,21 @@ export const PROPERTIES = {
     ...stringOpts,
     convert (value, globalData) {
       value = unescape(value)
-      const regexp = /\$(\d)/g
+      const regexp = /\$(\d)(?:ε(\d+))?/g
       let match = regexp.exec(value)
       let res = ''
       let prevIdx = 0
       while (match) {
         res += value.substring(prevIdx, match.index)
-        res += globalData.players[+match[1]].name
+        let name = globalData.players[+match[1]].name
+
+        if (match[2] != null) {
+          const maxChars = +match[2]
+          if (name.length > maxChars) {
+            name = name.substring(0, maxChars) + '...'
+          }
+        }
+        res += name
         prevIdx = match.index + match[0].length
         match = regexp.exec(value)
       }
