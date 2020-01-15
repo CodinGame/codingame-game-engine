@@ -300,7 +300,17 @@ public class GraphicEntityModule implements Module {
         e.setText(string);
         newEntity(e);
         return e;
-
+    }
+    
+    /**
+     * Creates a new Text entity, its graphical counterpart will be created on the frame currently being computed.
+     * 
+     * @return the entity. Modify its properties to animate the graphical counterpart.
+     */
+    public Text createText() {
+        Text e = new Text();
+        newEntity(e);
+        return e;
     }
 
     /**
