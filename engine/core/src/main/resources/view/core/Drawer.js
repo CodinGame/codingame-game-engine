@@ -496,12 +496,13 @@ export class Drawer {
 
   checkSteppedToNextFrame (scope, selectedFrame, progress) {
     return this.checkStepped(scope, selectedFrame, progress) &&
-    (scope.currentFrame === selectedFrame.previous || (scope.currentFrame === selectedFrame && scope.currentProgress !== progress))
+    ((scope.currentFrame === selectedFrame.previous && scope.currentFrame !== selectedFrame) || (scope.currentFrame === selectedFrame && scope.currentProgress !== progress))
   }
 
   checkSteppedToPreviousFrame (scope, selectedFrame, progress) {
     return this.checkStepped(scope, selectedFrame, progress) &&
-    scope.currentFrame.previous === selectedFrame
+    scope.currentFrame.previous === selectedFrame &&
+    scope.currentFrame !== selectedFrame
   }
 
   initEndScene (scope, failure) {
