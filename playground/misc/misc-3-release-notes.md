@@ -8,6 +8,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - Fixed choppy animation when launching games with a `stepByStepAnimateSpeed`
 - Fixed situations in which stepping through a game with a `stepByStepAnimateSpeed` would not be animated.
+- Remove faulty code that was supposed to ensure all lines were at least 1 pixel thick. User now has greater control over line thickness.
 
 ## 3.11.0
 

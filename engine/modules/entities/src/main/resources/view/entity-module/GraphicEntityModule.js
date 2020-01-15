@@ -19,13 +19,7 @@ export class GraphicEntityModule {
       maskUpdates: {},
       updatedBuffers: [],
       players: [],
-      instanceCount: 0,
-      atLeastOnePixel: function (width) {
-        if (width > 0 && width < this.toPixel) {
-          return this.toPixel
-        }
-        return width
-      }
+      instanceCount: 0
     }
 
     api.entities = this.entities
