@@ -6,6 +6,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🐞 Bug fix
 
+- Fixed an issue where games with a `stepByStepAnimateSpeed` would sometimes try to animate frame 0, causing a black screen.
 - The `GraphicEntityModule` method `createText` no longer requires a text parameter
 
 ## 3.11.1
