@@ -4,6 +4,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ## Next Release
 
+### 🎁 Features
+
+- It is now possible to set the maximum width of a Text or BitmapText. This will add an ellipsis to the string.
+
 ### 🐞 Bug fix
 
 - Fixed an issue where games with a `stepByStepAnimateSpeed` would sometimes try to animate frame 0, causing a black screen.

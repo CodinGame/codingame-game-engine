@@ -71,6 +71,7 @@ export const PROPERTIES = {
 
   animationProgressTime: timeOpts,
 
+  maxWidth: constOpts,
   mask: constOpts,
   baseWidth: constOpts,
   baseHeight: constOpts,
