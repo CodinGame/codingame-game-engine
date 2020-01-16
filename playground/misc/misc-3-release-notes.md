@@ -6,7 +6,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🎁 Features
 
-- It is now possible to set the maximum width of a Text or BitmapText. This will add an ellipsis to the string.
+- It is now possible to set the maximum width of a Text or BitmapText. If the string is too long, it will be shortened until it fits the given width and will include an ellipsis. This is useful when the text length is unknown during runtime, such as using the player's username token.
 
 ### 🐞 Bug fix
 
