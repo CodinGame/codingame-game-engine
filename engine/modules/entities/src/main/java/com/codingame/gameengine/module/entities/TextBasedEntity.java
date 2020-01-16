@@ -1,6 +1,7 @@
 package com.codingame.gameengine.module.entities;
 
 import java.util.Objects;
+
 /**
  * Generic type for entities containing text.
  * @param <T> a subclass inheriting TextureBasedEntity, used in order to return <b>this</b> as a T instead of a <code>TextBasedEntity</code>.
@@ -33,10 +34,12 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
             return value;
         }
     }
+
     protected String text = "";
     protected int fontSize = 26;
+    protected int maxWidth = 0;
     protected TextAlign textAlign;
-    
+
     /**
      * Returns the string this <code>TextBasedEntity</code> displays.
      * <p>
@@ -47,7 +50,6 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
     public String getText() {
         return text;
     }
-    
 
     /**
      * Sets the string for this <code>TextBasedEntity</code> to display.
@@ -64,6 +66,7 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
         set("text", text, null);
         return self();
     }
+
     /**
      * Returns text alignment of this <code>TextBasedEntity</code>.
      * <p>
@@ -74,7 +77,6 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
     public TextAlign getTextAlign() {
         return textAlign;
     }
-    
 
     /**
      * Sets the text alignment of this <code>TextBasedEntity</code>.
@@ -91,7 +93,7 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
         set("textAlign", align.getValue(), null);
         return self();
     }
-    
+
     /**
      * Returns the size of the font of this <code>TextBasedEntity</code> in px.
      * <p>
@@ -128,6 +130,43 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
     public T setFontSize(int fontSize, Curve curve) {
         this.fontSize = fontSize;
         set("fontSize", fontSize, curve);
+        return self();
+    }
+
+    /**
+     * Returns the maximum width of this <code>TextBasedEntity</code> in pixels, before it gets ellipsed. 
+     * <p>
+     * The ellipsis is applied before the entity is scaled. A max width of 0 means there is no maximum width.
+     * </p> 
+     * <p>
+     * Default is 0 (no max width).
+     * </p>
+     * @return the maximum width in pixels of this <code>TextBasedEntity</code>.
+     */
+    public int getMaxWidth() {
+        return maxWidth;
+    }
+
+    /**
+     * Sets the maximum width of this <code>TextBasedEntity</code> in pixels before it gets ellipsed.
+     * <p>
+     * The ellipsis is applied before the entity is scaled. A max width of 0 means there is no maximum width.
+     * </p>
+     * <p>
+     * Default is 0 (no max width).
+     * </p>
+     * 
+     * @param maxWidth
+     *            the maximum width in pixels of this <code>TextBasedEntity</code>.
+     * @return this <code>Text</code>.
+     */
+    public T setMaxWidth(int maxWidth) {
+        if (maxWidth < 0) {
+            throw new IllegalArgumentException("Invalid max width: " + maxWidth);
+        }
+
+        this.maxWidth = maxWidth;
+        set("maxWidth", maxWidth, null);
         return self();
     }
 }

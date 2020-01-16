@@ -1,4 +1,5 @@
 import { TextureBasedEntity } from './TextureBasedEntity.js'
+import { ellipsis } from './textUtils.js'
 
 /* global PIXI */
 
@@ -13,7 +14,8 @@ export class Text extends TextureBasedEntity {
       fillColor: 0,
       fontSize: 26,
       fontFamily: 'Lato',
-      fontWeight: 'normal'
+      fontWeight: 'normal',
+      maxWidth: 0
     })
   }
 
@@ -30,7 +32,7 @@ export class Text extends TextureBasedEntity {
 
   updateDisplay (state, changed, globalData) {
     super.updateDisplay(state, changed, globalData)
-    this.graphics.text = state.text
+
     this.graphics.style.align = state.textAlign
     this.graphics.style.stroke = state.strokeColor
     this.graphics.style.strokeThickness = state.strokeThickness
@@ -38,5 +40,14 @@ export class Text extends TextureBasedEntity {
     this.graphics.style.fontSize = state.fontSize || 1
     this.graphics.style.fontFamily = state.fontFamily
     this.graphics.style.fontWeight = state.fontWeight
+
+    if (changed.text || changed.strokeThickness || changed.fontSize ||
+        changed.fontFamily || changed.fontWeight || changed.maxWidth ||
+        changed.maxWidth) {
+      this.graphics.text = state.text
+      if (state.maxWidth) {
+        ellipsis(this.graphics, state.maxWidth)
+      }
+    }
   }
 }
