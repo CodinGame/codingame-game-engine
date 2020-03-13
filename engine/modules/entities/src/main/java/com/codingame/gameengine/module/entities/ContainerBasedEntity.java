@@ -8,17 +8,19 @@ import java.util.stream.Stream;
 /**
  * 
  *
- * @param <T> a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of a <code>ContainerBasedEntity</code>.
+ * @param <T>
+ *            a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of a <code>ContainerBasedEntity</code>.
  */
 public abstract class ContainerBasedEntity<T extends Entity<?>> extends Entity<T> {
 
     private Set<Entity<?>> entities;
-    
+
     ContainerBasedEntity() {
         super();
 
         entities = new HashSet<>();
     }
+
     /**
      * Separates the given entity from this <code>ContainerBasedEntity</code>.
      * 
@@ -56,8 +58,8 @@ public abstract class ContainerBasedEntity<T extends Entity<?>> extends Entity<T
 
     private String asString(Set<Entity<?>> entities) {
         return entities.stream()
-                .map(e -> String.valueOf(e.getId()))
-                .collect(Collectors.joining(","));
+            .map(e -> String.valueOf(e.getId()))
+            .collect(Collectors.joining(","));
     }
 
 }
