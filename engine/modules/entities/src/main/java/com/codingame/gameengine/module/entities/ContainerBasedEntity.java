@@ -51,6 +51,7 @@ public abstract class ContainerBasedEntity<T extends Entity<?>> extends Entity<T
                 throw new IllegalArgumentException();
             }
             this.entities.add(entity);
+            entity.parent = this;
         });
 
         set("children", asString(this.entities), null);
