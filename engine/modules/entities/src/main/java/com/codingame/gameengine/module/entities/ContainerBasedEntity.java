@@ -8,17 +8,19 @@ import java.util.stream.Stream;
 /**
  * 
  *
- * @param <T> a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of a <code>ContainerBasedEntity</code>.
+ * @param <T>
+ *            a subclass inheriting Entity, used in order to return <b>this</b> as a T instead of a <code>ContainerBasedEntity</code>.
  */
 public abstract class ContainerBasedEntity<T extends Entity<?>> extends Entity<T> {
 
     private Set<Entity<?>> entities;
-    
+
     ContainerBasedEntity() {
         super();
 
         entities = new HashSet<>();
     }
+
     /**
      * Separates the given entity from this <code>ContainerBasedEntity</code>.
      * 
@@ -45,10 +47,18 @@ public abstract class ContainerBasedEntity<T extends Entity<?>> extends Entity<T
      */
     public void add(Entity<?>... entities) {
         Stream.of(entities).forEach(entity -> {
-            if (entity.parent != null) {
-                throw new IllegalArgumentException();
+            if (entity.getParent().isPresent()) {
+                throw new IllegalArgumentException(
+                    String.format(
+                        "Cannot add entity %d to container %d: it is already in container %d",
+                        entity.getId(),
+                        getId(),
+                        entity.getParent().get().getId()
+                    )
+                );
             }
             this.entities.add(entity);
+            entity.parent = this;
         });
 
         set("children", asString(this.entities), null);
@@ -56,8 +66,8 @@ public abstract class ContainerBasedEntity<T extends Entity<?>> extends Entity<T
 
     private String asString(Set<Entity<?>> entities) {
         return entities.stream()
-                .map(e -> String.valueOf(e.getId()))
-                .collect(Collectors.joining(","));
+            .map(e -> String.valueOf(e.getId()))
+            .collect(Collectors.joining(","));
     }
 
 }

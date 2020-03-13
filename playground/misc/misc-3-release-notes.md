@@ -2,6 +2,17 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🎁 Features
+
+- `Entity` now exposes the `getParent` method to acces the container an entity has been added into
+
+### 🐞 Bug fix
+
+- An exception is now thrown when one tries to add the same entity to two different groups
+- `Group::remove` now functions correctly
+
 ## 3.12.0
 
 ### 🎁 Features
