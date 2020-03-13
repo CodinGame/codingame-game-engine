@@ -47,8 +47,15 @@ public abstract class ContainerBasedEntity<T extends Entity<?>> extends Entity<T
      */
     public void add(Entity<?>... entities) {
         Stream.of(entities).forEach(entity -> {
-            if (entity.parent != null) {
-                throw new IllegalArgumentException();
+            if (entity.getParent().isPresent()) {
+                throw new IllegalArgumentException(
+                    String.format(
+                        "Cannot add entity %d to container %d: it is already in container %d",
+                        entity.getId(),
+                        getId(),
+                        entity.getParent().get().getId()
+                    )
+                );
             }
             this.entities.add(entity);
             entity.parent = this;
