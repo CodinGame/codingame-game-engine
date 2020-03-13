@@ -12,6 +12,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - An exception is now thrown when one tries to add the same entity to two different groups
 - `Group::remove` now functions correctly
+- Fixed display errors when dragging the player cursor to the first frame of a game.
 
 ## 3.12.0
 
