@@ -516,4 +516,11 @@ public abstract class Entity<T extends Entity<?>> {
             throw new IllegalArgumentException(color + "is not a valid RGB integer.");
         }
     }
+    
+    /**
+     * @return the Group or BufferedGroup which contains this entity
+     */
+    public Optional<ContainerBasedEntity<?>> getParent() {
+        return Optional.ofNullable(parent);
+    }
 }
