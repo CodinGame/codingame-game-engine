@@ -285,7 +285,7 @@ button {
   display: flex;
   align-items: center;
 }
-.statement-victory-conditions .icon {
+.statement-body .statement-section .statement-victory-conditions .icon {
   vertical-align: middle;
   text-align: center;
   margin-left: 8px;
@@ -311,7 +311,7 @@ button {
   display: flex;
   align-items: center;
 }
-.statement-lose-conditions .icon {
+.statement-body .statement-section .statement-lose-conditions .icon {
   vertical-align: middle;
   text-align: center;
   margin-left: 8px;
