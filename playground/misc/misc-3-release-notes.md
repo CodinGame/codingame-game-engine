@@ -4,11 +4,11 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ## Next Release
 
-## 3.13.0
-
 ### 🐞 Bug fix
 
 - Fixed CSS issues in statement editor preview
+
+## 3.13.0
 
 ### 🎁 Features
 
