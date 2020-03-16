@@ -291,7 +291,7 @@ button {
   margin-left: 8px;
   margin-right: 25px;
   min-width: 25px;
-  background-image: url(images/icon_statement_victory_conditions.png);
+  background-image: url(images/statement/icon_statement_victory_conditions.png);
   width: 25px;
   height: 25px;
 }
@@ -317,7 +317,7 @@ button {
   margin-left: 8px;
   margin-right: 25px;
   min-width: 25px;
-  background-image: url(images/icon_statement_lose_conditions.png);
+  background-image: url(images/statement/icon_statement_lose_conditions.png);
   width: 25px;
   height: 25px;
 }
