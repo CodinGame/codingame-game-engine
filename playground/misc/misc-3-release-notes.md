@@ -7,6 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - Fixed CSS issues in statement editor preview
+- Fixed message boxes when a player tries to write $2, $3...
 
 ## 3.13.0
 
