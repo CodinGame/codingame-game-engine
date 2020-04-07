@@ -105,8 +105,10 @@ export const PROPERTIES = {
       let res = ''
       let prevIdx = 0
       while (match) {
-        res += value.substring(prevIdx, match.index)
-        res += globalData.players[+match[1]].name
+        if (match[1] < globalData.players.length) {
+          res += value.substring(prevIdx, match.index)
+          res += globalData.players[+match[1]].name
+        }
         prevIdx = match.index + match[0].length
         match = regexp.exec(value)
       }
