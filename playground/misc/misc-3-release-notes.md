@@ -7,6 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - Fixed CSS issues in statement editor preview
+- Texts no longer parse nickname tokens for player ids that are out of range
 
 ## 3.13.0
 
