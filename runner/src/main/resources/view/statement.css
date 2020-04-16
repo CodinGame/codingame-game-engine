@@ -16,19 +16,13 @@ body {
   line-height: 1.6;
 }
 
-textarea {
-  color: white;
-  background-color: #29323c;
-  border: solid 1px #363e48;
-  outline: none;
-}
-
 button {
-  border: none;
   font: inherit;
-  cursor: pointer;
+  border: none;
   margin: 0;
   padding: 0;
+  cursor: pointer;
+  outline: none;
 }
 
 *,
@@ -41,129 +35,119 @@ button {
   padding: 0;
 }
 
-.tab-buttons {
-  padding: 10px 10px 0px 10px;
-  height: 50px;
+.StatementMaker-languages {
+  padding: 15px;
+  padding-bottom: 0;
+  display: flex;
 }
 
-.tab-buttons button {
+.StatementMaker-languages button {
   height: 40px;
-  outline: none;
-  background-color: #ffffff;
-  float: left;
   padding: 0px 16px;
-  transition: 0.3s;
+  background-color: #ffffff;
   opacity: 0.8;
-  transition: opacity 0.2s, background-color: 0.2s;
-
 }
 
-.tab-buttons button:hover {
+.StatementMaker-languages button:hover {
   opacity: 0.64;
 }
 
-.tab-buttons button.active {
+.StatementMaker-languages button.active {
   background-color: #f2bb13;
   opacity: 1;
 }
 
-#statementInput {
-  width: 600px;
-  height: 100%;
-  display: flex;
-  flex: 1;
-  padding: 3px;
-}
-
-#save {
-  flex: none;
-  display: block;
-  width: 300px;
-  background-color: #f2bb13;
-  color: #252e38;
-  margin-top: 10px;
-  text-transform: uppercase;
-  font-size: 14px;
-  font-weight: 600;
-  min-height: 42px;
-}
-
-#save:hover {
-  opacity: 0.8;
-  transition: 0.2s;
-}
-
-#save:disabled {
-  opacity: 0.8;
-  cursor: default;
-}
-
-.wrapper {
+.StatementMaker {
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
-  padding: 10px;
 }
 
-.tab-content {
+.StatementMaker-content {
   display: flex;
   flex: 1;
   min-height: 0;
 }
 
-.preview {
-  overflow: auto;
-  padding-top: 20px;
-}
-
-.edit {
+.StatementMaker-editor {
+  width: 45%;
   background: #252e38;
-  margin: 10px;
-  padding: 20px;
-  flex: none;
+  margin: 15px;
+  padding: 15px;
   display: flex;
   flex-direction: column;
   min-height: 90vh;
 }
 
-.edit-title,
-.preview-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #f2bb13;
-  text-transform: uppercase;
+.StatementMaker-preview {
+  overflow: auto;
+  padding-top: 15px;
+}
+
+.StatementMaker-editor-title,
+.StatementMaker-preview-title {
   margin-bottom: 9px;
   flex: none;
   display: flex;
+  color: #f2bb13;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
 }
 
-#error,
-#result {
+#StatementMaker-input {
+  flex: 1;
+}
+
+#StatementMaker-save {
+  width: 300px;
+  height: 42px;
+  margin-top: 15px;
+  flex: none;
+  display: block;
+  background-color: #f2bb13;
+  color: #252e38;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+#StatementMaker-save:hover {
+  opacity: 0.8;
+}
+
+#StatementMaker-save:disabled {
+  opacity: 0.8;
+  cursor: default;
+}
+
+#StatementMaker-preview-error,
+#StatementMaker-preview-result {
   font-size: 13px;
 }
 
-#error {
-  color: red;
+#StatementMaker-preview-error {
   margin: 10px 0;
+  color: red;
 }
 
-.edit-title,
-.preview-title {
+.StatementMaker-editor-title,
+.StatementMaker-preview-title {
+  margin-bottom: 9px;
   font-size: 13px;
   font-weight: 600;
   color: #f2bb13;
   text-transform: uppercase;
-  margin-bottom: 9px;
 }
 
+
+/* statement css */
 .code {
   border: 1px solid #f2bb13;
   padding: 1px 2px;
   line-height: 21px;
   font-size: 13px;
 }
-
-/* statement css */
 
 .statement-body {
   color: #20252a;

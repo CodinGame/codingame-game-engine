@@ -8,34 +8,34 @@
   <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet" type="text/css">
   <link rel="stylesheet" type="text/css" href="./statement.css">
 
-  <script src="statement.js"></script>
+  <script src="https://unpkg.com/monaco-editor@0.20.0/min/vs/loader.js"></script>
 </head>
 
-<body onload="init()">
-  <meta charset="UTF-8">
-    <div class="wrapper">
+<body>
+  <div class="StatementMaker">
 
-      <div id="tab-buttons" class="tab-buttons">
-        <button class="active" onclick="changeLanguage(event, 'EN')">English</button>
-        <button onclick="changeLanguage(event, 'FR')">Français</button>
-      </div>
-
-      <div class="tab-content">
-        <div class="edit">
-          <div class="edit-title">HTML Source</div>
-          <textarea id="statementInput" onkeyup="handleChangeStatementInput()" spellcheck="false"></textarea>
-          <button id="save" onclick="save()">Save</button>
-        </div>
-
-        <div class="preview">
-          <div class="preview-title">Preview</div>
-          <div id="error"></div>
-          <code id="result"></code>
-        </div>
-      </div>
-
+    <div class="StatementMaker-languages">
+      <button class="active" onclick="changeLanguage(event, 'EN')">English</button>
+      <button onclick="changeLanguage(event, 'FR')">Français</button>
     </div>
-  </meta>
+
+    <div class="StatementMaker-content">
+      <div class="StatementMaker-editor">
+        <div class="StatementMaker-editor-title">HTML Source</div>
+        <code id="StatementMaker-input"></code>
+        <button id="StatementMaker-save" onclick="save()">Save</button>
+      </div>
+
+      <div class="StatementMaker-preview">
+        <div class="StatementMaker-preview-title">Preview</div>
+        <div id="StatementMaker-preview-error"></div>
+        <code id="StatementMaker-preview-result"></code>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="statement.js"></script>
 </body>
 
 </html>
