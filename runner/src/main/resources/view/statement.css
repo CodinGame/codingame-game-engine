@@ -70,13 +70,12 @@ button {
 }
 
 .StatementMaker-editor {
-  width: 45%;
+  min-width: 45%;
   background: #252e38;
   margin: 15px;
   padding: 15px;
   display: flex;
   flex-direction: column;
-  min-height: 90vh;
 }
 
 .StatementMaker-preview {
@@ -97,6 +96,7 @@ button {
 
 #StatementMaker-input {
   flex: 1;
+  min-height: 0;
 }
 
 #StatementMaker-save {

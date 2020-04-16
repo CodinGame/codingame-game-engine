@@ -63,6 +63,10 @@ function loadMonacoEditor () {
         wordWrap: 'on'
       })
 
+      window.addEventListener('resize', () => {
+        editor.layout()
+      })
+
       resolve(editor)
     })
   })
