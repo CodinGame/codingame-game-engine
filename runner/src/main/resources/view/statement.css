@@ -70,6 +70,7 @@ button {
 }
 
 .StatementMaker-editor {
+  width: 45%;
   min-width: 45%;
   background: #252e38;
   margin: 15px;
@@ -100,7 +101,8 @@ button {
 }
 
 #StatementMaker-save {
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   height: 42px;
   margin-top: 15px;
   flex: none;
