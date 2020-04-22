@@ -84,7 +84,16 @@ function setStatementInput (statement) {
   editor.getModel().detectIndentation(defaultInsertSpaces, defaultTabSize)
 }
 
-function refreshPreview () {
+async function refreshPreview () {
+  const response = await fetch('/services/preview-levels', {
+    method: 'POST',
+    body: JSON.stringify({
+      language: language,
+      statement: getStatementInput()
+    })
+  })
+  const preview = JSON.parse(await response.text())
+
   const resultNode = document.getElementById('StatementMaker-preview-result')
   const errorNode = document.getElementById('StatementMaker-preview-error')
 
@@ -96,6 +105,18 @@ function refreshPreview () {
   } catch (error) {
     errorNode.innerText = error.message
     resultNode.style.opacity = 0.2
+  }
+
+  for (let [level, statement] of Object.entries(preview)) {
+    const elementId = `StatementMaker-preview-result-${level}`
+    let result = document.getElementById(elementId)
+    if (!result) {
+      result = document.createElement("div")
+      result.id = elementId
+      result.style.marginTop = '50px'
+      resultNode.parentElement.appendChild(result)
+    }
+    result.innerHTML = statement
   }
 }
 
