@@ -21,6 +21,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -701,6 +702,23 @@ class Renderer {
                                             } else {
                                                 exchange.setStatusCode(StatusCodes.NOT_FOUND);
                                             }
+                                        } else if (exchange.getRelativePath().equals("/preview-levels")) {
+                                            JsonParser parser = new JsonParser();
+                                            ExportReport exportReport = new ExportReport();
+                                            exchange.getRequestReceiver().receiveFullString((e, data) -> {
+                                                JsonObject result = parser.parse(data).getAsJsonObject();
+                                                String statement = result.get("statement").getAsString();
+                                                List<String> lines = Arrays.asList(statement.split("\\\n"));
+
+                                                try {
+                                                    JsonObject statements = StatementSplitter.generateSplittedStatementInMemory(lines, exportReport);
+
+                                                    exchange.getResponseSender().send(statements.toString());
+                                                    exchange.setStatusCode(StatusCodes.OK);
+                                                } catch (IOException ex) {
+                                                    sendException(e, ex, StatusCodes.BAD_REQUEST);
+                                                }
+                                            });
                                         } else if (exchange.getRelativePath().equals("/statement")) {
                                             File statementFileEN = sourceFolderPath.resolve("config/statement_en.html").toFile();
                                             File statementFileFR = sourceFolderPath.resolve("config/statement_fr.html").toFile();
