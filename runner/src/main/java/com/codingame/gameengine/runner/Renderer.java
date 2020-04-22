@@ -718,7 +718,7 @@ class Renderer {
                                                 } catch (IOException ex) {
                                                     sendException(e, ex, StatusCodes.BAD_REQUEST);
                                                 }
-                                            });
+                                            }, StandardCharsets.UTF_8);
                                         } else if (exchange.getRelativePath().equals("/statement")) {
                                             File statementFileEN = sourceFolderPath.resolve("config/statement_en.html").toFile();
                                             File statementFileFR = sourceFolderPath.resolve("config/statement_fr.html").toFile();
