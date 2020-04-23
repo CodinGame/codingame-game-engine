@@ -203,7 +203,7 @@ Your Boss can be coded in any of the languages supported by CodinGame. Make sure
 | Scala      | .scala |
 | Java       | .java |
 | Javascript | .js, .jsm, .jsx |
-| Python3    | .py3 |
+| Python3    | .py .py3 |
 | PHP        | .php, .php3, .php4, .php5, .phps, .phpt |
 | Kotlin     | .kt |
 | Bash       | .sh |
