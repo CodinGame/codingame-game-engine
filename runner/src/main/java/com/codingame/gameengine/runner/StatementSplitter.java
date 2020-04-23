@@ -31,7 +31,7 @@ class StatementSplitter {
     private static final Pattern BEGIN_MARKER = Pattern.compile("\\s*<!--\\s+BEGIN\\s+(?<leagues>.+)\\s+-->\\s*");
     private static final Pattern END_MARKER = Pattern.compile("\\s*<!--\\s+END\\s+-->\\s*");
 
-    public static void generateSplittedStatement(Path sourceFolderPath, File statementFile, ExportReport exportReport) {
+    public static void generateSplitStatement(Path sourceFolderPath, File statementFile, ExportReport exportReport) {
         //Retrieve content from the file
         List<String> lines = getLines(statementFile);
 
@@ -52,7 +52,7 @@ class StatementSplitter {
         }
     }
 
-    public static JsonObject generateSplittedStatementInMemory(List<String> lines, ExportReport exportReport) throws IOException {
+    public static JsonObject generateSplitStatementInMemory(List<String> lines, ExportReport exportReport) throws IOException {
         List<String> leagues = getLeagues(lines);
 
         JsonObject result = new JsonObject();
