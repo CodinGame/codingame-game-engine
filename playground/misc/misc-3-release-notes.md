@@ -2,6 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🎁 Features
+
+- Improve statement editor
+- Preview statement for the various leagues, when available, in the statement editor
+
 ## 3.13.1
 
 ### 🐞 Bug fix
