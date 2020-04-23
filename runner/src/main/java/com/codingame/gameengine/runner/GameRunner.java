@@ -39,8 +39,8 @@ abstract class GameRunner {
     private final List<BlockingQueue<String>> queues = new ArrayList<>();
     private boolean gameEnded = false;
 
-    private String[] avatars = new String[] { "16085713250612", "16085756802960", "16085734516701", "16085746254929",
-        "16085763837151", "16085720641630", "16085846089817", "16085834521247" };
+    private String[] avatars = new String[] { "16085734516701", "16085846089817", "16085713250612", "16085756802960", "16085746254929",
+        "16085763837151", "16085720641630", "16085834521247" };
 
     private static enum OutputResult {
         OK, TIMEOUT, TOOLONG, TOOSHORT

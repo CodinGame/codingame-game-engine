@@ -8,6 +8,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - Improve statement editor
 - Preview statement for the various leagues, when available, in the statement editor
+- Player one and player two's default avatars are now the robot and the alien
 
 ## 3.13.1
 
