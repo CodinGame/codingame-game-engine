@@ -21,6 +21,7 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
@@ -599,10 +600,10 @@ class Renderer {
         return zipPath;
     }
 
-    private void generateSplittedStatements(Path sourceFolderPath, ExportReport exportReport) throws IOException {
+    private void generateSplitStatements(Path sourceFolderPath, ExportReport exportReport) throws IOException {
         Files.list(sourceFolderPath.resolve("config/"))
             .filter(p -> GEN_STATEMENT_MARKER.matcher(FilenameUtils.getName(p.toString())).matches() && p.toFile().isFile())
-            .forEach(p -> StatementSplitter.generateSplittedStatement(sourceFolderPath, p.toFile(), exportReport));
+            .forEach(p -> StatementSplitter.generateSplitStatement(sourceFolderPath, p.toFile(), exportReport));
     }
 
     private void serveHTTP(List<Path> path) {
@@ -631,7 +632,7 @@ class Renderer {
                                             Path zipPath = tmpdir.resolve("source.zip");
 
                                             ExportReport exportReport = new ExportReport();
-                                            generateSplittedStatements(sourceFolderPath, exportReport);
+                                            generateSplitStatements(sourceFolderPath, exportReport);
                                             checkConfig(sourceFolderPath, exportReport);
                                             if (exportReport.getExportStatus() == ExportStatus.SUCCESS) {
                                                 exportSourceCode(sourceFolderPath, zipPath);
@@ -701,6 +702,23 @@ class Renderer {
                                             } else {
                                                 exchange.setStatusCode(StatusCodes.NOT_FOUND);
                                             }
+                                        } else if (exchange.getRelativePath().equals("/preview-levels")) {
+                                            JsonParser parser = new JsonParser();
+                                            ExportReport exportReport = new ExportReport();
+                                            exchange.getRequestReceiver().receiveFullString((e, data) -> {
+                                                JsonObject result = parser.parse(data).getAsJsonObject();
+                                                String statement = result.get("statement").getAsString();
+                                                List<String> lines = Arrays.asList(statement.split("\\\n"));
+
+                                                try {
+                                                    JsonObject statements = StatementSplitter.generateSplitStatementInMemory(lines, exportReport);
+
+                                                    exchange.getResponseSender().send(statements.toString());
+                                                    exchange.setStatusCode(StatusCodes.OK);
+                                                } catch (IOException ex) {
+                                                    sendException(e, ex, StatusCodes.BAD_REQUEST);
+                                                }
+                                            }, StandardCharsets.UTF_8);
                                         } else if (exchange.getRelativePath().equals("/statement")) {
                                             File statementFileEN = sourceFolderPath.resolve("config/statement_en.html").toFile();
                                             File statementFileFR = sourceFolderPath.resolve("config/statement_fr.html").toFile();
