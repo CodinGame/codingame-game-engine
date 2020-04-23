@@ -600,10 +600,10 @@ class Renderer {
         return zipPath;
     }
 
-    private void generateSplittedStatements(Path sourceFolderPath, ExportReport exportReport) throws IOException {
+    private void generateSplitStatements(Path sourceFolderPath, ExportReport exportReport) throws IOException {
         Files.list(sourceFolderPath.resolve("config/"))
             .filter(p -> GEN_STATEMENT_MARKER.matcher(FilenameUtils.getName(p.toString())).matches() && p.toFile().isFile())
-            .forEach(p -> StatementSplitter.generateSplittedStatement(sourceFolderPath, p.toFile(), exportReport));
+            .forEach(p -> StatementSplitter.generateSplitStatement(sourceFolderPath, p.toFile(), exportReport));
     }
 
     private void serveHTTP(List<Path> path) {
@@ -632,7 +632,7 @@ class Renderer {
                                             Path zipPath = tmpdir.resolve("source.zip");
 
                                             ExportReport exportReport = new ExportReport();
-                                            generateSplittedStatements(sourceFolderPath, exportReport);
+                                            generateSplitStatements(sourceFolderPath, exportReport);
                                             checkConfig(sourceFolderPath, exportReport);
                                             if (exportReport.getExportStatus() == ExportStatus.SUCCESS) {
                                                 exportSourceCode(sourceFolderPath, zipPath);
@@ -711,7 +711,7 @@ class Renderer {
                                                 List<String> lines = Arrays.asList(statement.split("\\\n"));
 
                                                 try {
-                                                    JsonObject statements = StatementSplitter.generateSplittedStatementInMemory(lines, exportReport);
+                                                    JsonObject statements = StatementSplitter.generateSplitStatementInMemory(lines, exportReport);
 
                                                     exchange.getResponseSender().send(statements.toString());
                                                     exchange.setStatusCode(StatusCodes.OK);
