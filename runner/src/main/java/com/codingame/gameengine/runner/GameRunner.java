@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -240,7 +241,8 @@ abstract class GameRunner {
     }
 
     private void sendPlayerOutput(String output, int nbLines) {
-        Command command = new Command(OutputCommand.SET_PLAYER_OUTPUT, output.split("(\\n|\\r\\n)"));
+        String[] lines = output.split("(\\n|\\r\\n)", -1);
+        Command command = new Command(OutputCommand.SET_PLAYER_OUTPUT, Arrays.copyOfRange(lines, 0, nbLines));
         referee.sendInput(command.toString());
     }
 
