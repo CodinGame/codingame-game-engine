@@ -8,6 +8,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - Updated the stub generator library to version 2.23.1 (adds support of bool type)
 
+### 🐞 Bug fix
+
+- Fix player outputs size lower than expected number of lines when last lines are empty strings
+
 ## 3.14.0
 
 ### 🎁 Features
