@@ -73,6 +73,10 @@ button {
   flex: 1;
 }
 
+pre[class*="language-"].preview-code {
+  line-height: 0;
+}
+
 .edit,
 .preview {
   margin: 10px;
