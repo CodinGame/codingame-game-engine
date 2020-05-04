@@ -106,6 +106,10 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
     /**
      * Sets whether the animation loops. If false, the last image of the animation stays visible at the end.
      * 
+     * <p>
+     * Default is false.
+     * </p>
+     * 
      * @param loop
      *            true to make this animation loop.
      * @return this animation.
