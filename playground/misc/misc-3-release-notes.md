@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next release
+
+### 🐞 Bug fix
+
+- Lines were incorrectly drawn if only one of their two points were changed
+
 ## 3.15.0
 
 ### 🎁 Features

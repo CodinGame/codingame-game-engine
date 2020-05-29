@@ -22,7 +22,9 @@ export default class Line extends Shape {
       changed.lineColor ||
       changed.lineAlpha ||
       changed.x2 ||
-      changed.y2) {
+      changed.y2 ||
+      changed.x ||
+      changed.y) {
       this.graphics.clear()
       this.graphics.lineStyle(state.lineWidth, state.lineColor, state.lineAlpha)
       this.graphics.moveTo(0, 0)
