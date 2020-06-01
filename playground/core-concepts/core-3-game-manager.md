@@ -242,7 +242,7 @@ Validators are a specific kind of test case. Make sure you [configure them corre
 
 An Optimization game is a Solo game with a criteria score, such as `Points`, or `Fuel` as well as the normal validator score.
 
-To configure the optimization criteria, you'll need to track in yourself in the game's code and send it as metadata with the `GameRunner`'s `putMetadata()` method. [More information here](core-4-configuration.md#optimization-game-configuration) on the configuration of an optimization game.
+To configure the optimization criteria, you'll need to track it yourself in the game's code and send it as metadata with the `GameRunner`'s `putMetadata()` method. [More information here](core-4-configuration.md#optimization-game-configuration) on the configuration of an optimization game.
 
 Once your game is correctly configured, we advise you set the criteria score at the end of the game as below:
 ```java
