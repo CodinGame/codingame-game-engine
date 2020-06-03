@@ -2,6 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🐞 Bug fix
+
+- TooltipModule would sometimes show an empty tooltip block
+- Fixed TooltipModule taking up a lot of characters in the game result from the allowed quota
+
 ## 3.15.1
 
 ### 🐞 Bug fix
