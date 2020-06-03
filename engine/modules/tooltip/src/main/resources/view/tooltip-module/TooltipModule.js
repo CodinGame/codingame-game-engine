@@ -74,9 +74,10 @@ function getMouseMoveFunc (tooltip, container, module) {
           const entity = entityModule.entities.get(show)
           const state = getEntityState(entity, module.currentFrame.number)
           if (state !== null) {
-            tooltip.visible = true
             const text = module.currentFrame.registered[show]
+            
             if (text && text.length && String(text).valueOf() !== '0') {
+              tooltip.visible = true
               tooltipBlocks.push(text)
             }
           }
@@ -123,11 +124,8 @@ export class TooltipModule {
     this.currentProgress = progress
   }
 
-  handleFrameData (frameInfo, data) {
-    if (!data) {
-      return
-    }
-    const newRegistration = data[0]
+  handleFrameData (frameInfo, data=[]) {
+    const newRegistration = data[0] || []
     const registered = { ...this.previousFrame.registered, ...newRegistration }
 
     Object.keys(newRegistration).forEach(
