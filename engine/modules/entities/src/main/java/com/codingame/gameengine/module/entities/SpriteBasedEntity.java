@@ -87,6 +87,9 @@ public abstract class SpriteBasedEntity<T extends SpriteBasedEntity<?>> extends 
 
     /**
      * Sets the scale mode of this <code>TextureBasedEntity</code>.
+     * <p>
+     * Default is LINEAR.
+     * </p>
      * 
      * @param scaleMode
      *            the scale mode of this <code>TextureBasedEntity</code>.
@@ -102,6 +105,7 @@ public abstract class SpriteBasedEntity<T extends SpriteBasedEntity<?>> extends 
      * Returns the scale mode of this <code>TextureBasedEntity</code>.
      * <p>
      * Default is LINEAR.
+     * </p>
      * 
      * @return the scale mode of this <code>TextureBasedEntity</code>.
      */

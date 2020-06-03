@@ -2,7 +2,7 @@ package com.codingame.gameengine.module.entities;
 
 /**
  * <p>
- * A Circle specifies an area in a the <code>world</code> defined by the Circle's center point (x,y) and its radius. 
+ * A Circle specifies an area in a the <code>world</code> defined by the Circle's center point (x,y) and its radius.
  * </p>
  * The coordinates and radius are in world units.
  */
@@ -16,7 +16,9 @@ public class Circle extends Shape<Circle> {
 
     /**
      * Sets the radius of this <code>Circle</code> in world units.
-     * 
+     * <p>
+     * Default is 100.
+     * </p>
      * 
      * @param radius
      *            the radius for this <code>Circle</code>.
@@ -30,7 +32,9 @@ public class Circle extends Shape<Circle> {
 
     /**
      * Sets the radius of this <code>Circle</code> in world units.
-     * 
+     * <p>
+     * Default is 100.
+     * </p>
      * 
      * @param radius
      *            the radius for this <code>Circle</code>.
@@ -52,9 +56,11 @@ public class Circle extends Shape<Circle> {
 
     /**
      * <p>
-     * Returns the radius of this <code>Circle</code> in world units. 
+     * Returns the radius of this <code>Circle</code> in world units.
      * </p>
+     * <p>
      * Default is 100.
+     * </p>
      * 
      * @return the radius of this <code>Circle</code>.
      */

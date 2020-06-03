@@ -64,6 +64,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the X coordinate of this <code>Entity</code> in world units.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param x
      *            the X coordinate for this <code>Entity</code>.
@@ -75,6 +78,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the X coordinate of this <code>Entity</code> in world units.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param x
      *            the X coordinate for this <code>Entity</code>.
@@ -90,6 +96,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the Y coordinate of this <code>Entity</code> in world units.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param y
      *            the Y coordinate for this <code>Entity</code>.
@@ -101,6 +110,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the Y coordinate of this <code>Entity</code> in world units.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param y
      *            the Y coordinate for this <code>Entity</code>.
@@ -122,6 +134,9 @@ public abstract class Entity<T extends Entity<?>> {
      * An <code>Entity</code> with a higher z-index is displayed over one with a smaller z-index.
      * </p>
      * In case of equal values, the most recently created <code>Entity</code> will be on top.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param zIndex
      *            the z-index for this <code>Entity</code>.
@@ -135,6 +150,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the horizontal scale of this <code>Entity</code> as a percentage.
+     * <p>
+     * Default is 1.
+     * </p>
      * 
      * @param scaleX
      *            the horizontal scale for this <code>Entity</code>.
@@ -146,6 +164,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the horizontal scale of this <code>Entity</code> as a percentage.
+     * <p>
+     * Default is 1.
+     * </p>
      * 
      * @param scaleX
      *            the horizontal scale for this <code>Entity</code>.
@@ -161,6 +182,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the vertical scale of this <code>Entity</code> as a percentage.
+     * <p>
+     * Default is 1.
+     * </p>
      * 
      * @param scaleY
      *            the vertical scale for this <code>Entity</code>.
@@ -172,6 +196,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the vertical scale of this <code>Entity</code> as a percentage.
+     * <p>
+     * Default is 1.
+     * </p>
      * 
      * @param scaleY
      *            the vertical scale for this <code>Entity</code>.
@@ -187,6 +214,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the horizontal skew of this <code>Entity</code> in radians.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param skewX
      *            the horizontal skew for this <code>Entity</code>.
@@ -198,6 +228,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the horizontal skew of this <code>Entity</code> in radians.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param skewX
      *            the horizontal skew for this <code>Entity</code>.
@@ -213,6 +246,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the vertical skew of this <code>Entity</code> in radians.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param skewY
      *            the vertical skew for this <code>Entity</code>.
@@ -224,6 +260,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the vertical skew of this <code>Entity</code> in radians.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param skewY
      *            the vertical skew for this <code>Entity</code>.
@@ -242,6 +281,9 @@ public abstract class Entity<T extends Entity<?>> {
      * Sets the alpha of this <code>Entity</code> as a percentage.
      * </p>
      * 1 is opaque and 0 is invisible.
+     * <p>
+     * Default is 1.
+     * </p>
      * 
      * @param alpha
      *            the alpha for this <code>Entity</code>.
@@ -258,6 +300,9 @@ public abstract class Entity<T extends Entity<?>> {
      * Sets the alpha of this <code>Entity</code> as a percentage.
      * </p>
      * 1 is opaque and 0 is invisible.
+     * <p>
+     * Default is 1.
+     * </p>
      * 
      * @param alpha
      *            the alpha for this <code>Entity</code>.
@@ -304,6 +349,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the rotation of this <code>Entity</code> in radians.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param rotation
      *            the rotation for this <code>Entity</code>.
@@ -315,6 +363,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Sets the rotation of this <code>Entity</code> in radians.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param rotation
      *            the rotation for this <code>Entity</code>.
@@ -433,6 +484,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Returns the rotation of this <code>Entity</code> in radians.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @return the rotation coordinate of this <code>Entity</code>.
      */
@@ -442,6 +496,9 @@ public abstract class Entity<T extends Entity<?>> {
 
     /**
      * Returns whether this <code>Entity</code> is flagged to be drawn on screen.
+     * <p>
+     * Default is true.
+     * </p>
      * 
      * @return the value of the visible flag of this <code>Entity</code>.
      */
@@ -516,7 +573,7 @@ public abstract class Entity<T extends Entity<?>> {
             throw new IllegalArgumentException(color + "is not a valid RGB integer.");
         }
     }
-    
+
     /**
      * @return the Group or BufferedGroup which contains this entity
      */

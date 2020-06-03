@@ -18,6 +18,9 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
 
     /**
      * Sets the color of the fill of this <code>Shape</code> as an RGB integer. If the fill should not be drawn, use <code>setFillAlpha(0)</code>.
+     * <p>
+     * Default is 0xFFFFFF (white).
+     * </p>
      * 
      * @param color
      *            the color of the fill of this <code>Shape</code>.
@@ -31,6 +34,9 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
 
     /**
      * Sets the color of the fill of this <code>Shape</code> as an RGB integer. If the fill should not be drawn, use <code>setFillAlpha(0)</code>.
+     * <p>
+     * Default is 0xFFFFFF (white).
+     * </p>
      * 
      * @param color
      *            the color of the fill of this <code>Shape</code>.
@@ -61,6 +67,9 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
 
     /**
      * Sets the alpha of the fill of this <code>Shape</code> as a percentage.
+     * <p>
+     * Default is 1.
+     * </p>
      * 
      * @param alpha
      *            the alpha of the fill of this <code>Shape</code>.
@@ -74,6 +83,9 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
 
     /**
      * Sets the alpha of the fill of this <code>Shape</code> as a percentage.
+     * <p>
+     * Default is 1.
+     * </p>
      * 
      * @param alpha
      *            the alpha of the fill of this <code>Shape</code>.
@@ -103,6 +115,9 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
 
     /**
      * Sets the alpha of the border of this <code>Shape</code> as a percentage.
+     * <p>
+     * Default is 1.
+     * </p>
      * 
      * @param alpha
      *            the alpha for the border of this <code>Shape</code>.
@@ -116,6 +131,9 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
 
     /**
      * Sets the alpha of the border of this <code>Shape</code> as a percentage.
+     * <p>
+     * Default is 1.
+     * </p>
      * 
      * @param alpha
      *            the alpha for the border of this <code>Shape</code>.
@@ -145,6 +163,9 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
 
     /**
      * Sets the width of the border of this <code>Shape</code> in world units.
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param lineWidth
      *            the width for the border of this <code>Shape</code>.
@@ -185,6 +206,9 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
 
     /**
      * Sets the color of the border of this <code>Shape</code> as an RGB integer.
+     * <p>
+     * Default is 0xFFFFFF (white).
+     * </p>
      * 
      * @param lineColor
      *            the color for the border of this <code>Shape</code>.
@@ -198,6 +222,9 @@ public abstract class Shape<T extends BlendableEntity<?>> extends BlendableEntit
 
     /**
      * Sets the color of the border of this <code>Shape</code> as an RGB integer.
+     * <p>
+     * Default is 0xFFFFFF (white).
+     * </p>
      * 
      * @param lineColor
      *            the color for the border of this <code>Shape</code>.

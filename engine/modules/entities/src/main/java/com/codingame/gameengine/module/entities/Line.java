@@ -15,6 +15,7 @@ public class Line extends Shape<Line> {
      * Sets the X coordinate of the end point of this <code>Line</code>.
      * <p>
      * The starting point of this line is its position.
+     * </p>
      * 
      * @param x2
      *            the X coordinate for the end point of this <code>Line</code>.
@@ -28,6 +29,7 @@ public class Line extends Shape<Line> {
      * Sets the X coordinate of the end point of this <code>Line</code>.
      * <p>
      * The starting point of this line is its position.
+     * </p>
      * 
      * @param x2
      *            the X coordinate for the end point of this <code>Line</code>.
@@ -54,6 +56,7 @@ public class Line extends Shape<Line> {
      * Sets the y coordinate of the end point of this <code>Line</code>.
      * <p>
      * The starting point of this line is its position.
+     * </p>
      * 
      * @param y2
      *            the Y coordinate for the end point of this <code>Line</code>.
@@ -67,6 +70,7 @@ public class Line extends Shape<Line> {
      * Sets the y coordinate of the end point of this <code>Line</code>.
      * <p>
      * The starting point of this line is its position.
+     * </p>
      * 
      * @param y2
      *            the Y coordinate for the end point of this <code>Line</code>.

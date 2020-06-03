@@ -16,6 +16,9 @@ public class Rectangle extends Shape<Rectangle> {
 
     /**
      * Sets the width of this <code>Rectangle</code> in world units.
+     * <p>
+     * Default is 100.
+     * </p>
      * 
      * @param width
      *            the width for this <code>Rectangle</code>.
@@ -27,6 +30,9 @@ public class Rectangle extends Shape<Rectangle> {
 
     /**
      * Sets the width of this <code>Rectangle</code> in world units.
+     * <p>
+     * Default is 100.
+     * </p>
      * 
      * @param width
      *            the width for this <code>Rectangle</code>.
@@ -54,6 +60,9 @@ public class Rectangle extends Shape<Rectangle> {
 
     /**
      * Sets the height of this <code>Rectangle</code> in world units.
+     * <p>
+     * Default is 100.
+     * </p>
      * 
      * @param height
      *            the height for this <code>Rectangle</code>.
@@ -65,6 +74,9 @@ public class Rectangle extends Shape<Rectangle> {
 
     /**
      * Sets the height of this <code>Rectangle</code> in world units.
+     * <p>
+     * Default is 100.
+     * </p>
      * 
      * @param height
      *            the height for this <code>Rectangle</code>.

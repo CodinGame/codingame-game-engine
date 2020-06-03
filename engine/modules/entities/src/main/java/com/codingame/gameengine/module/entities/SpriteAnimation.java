@@ -50,7 +50,10 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
     }
 
     /**
-     * Plays or pause the animation
+     * Plays or pause the animation.
+     * <p>
+     * Default is playing (true).
+     * </p>
      * 
      * @param playing
      *            true to play animation, false to pause animation
@@ -135,6 +138,9 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
 
     /**
      * Sets the duration of the animation in milliseconds.
+     * <p>
+     * Default is 1000.
+     * </p>
      * 
      * @param duration
      *            the duration of the animation in milliseconds.
