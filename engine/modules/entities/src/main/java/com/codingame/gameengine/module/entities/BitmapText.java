@@ -8,7 +8,7 @@ import java.util.Objects;
 public class BitmapText extends TextBasedEntity<BitmapText> {
 
     private String font;
-    
+
     @Override
     Type getType() {
         return Entity.Type.BITMAPTEXT;
@@ -18,6 +18,7 @@ public class BitmapText extends TextBasedEntity<BitmapText> {
      * Returns the name of the font of this <code>BitmapText</code> in px.
      * <p>
      * Default is null.
+     * </p>
      * 
      * @return the size of the font of this <code>BitmapText</code>.
      */
@@ -29,6 +30,10 @@ public class BitmapText extends TextBasedEntity<BitmapText> {
      * Sets the name of the font of this <code>BitmapText</code>.
      * <p>
      * Only fonts available to the browser can be displayed.
+     * </p>
+     * <p>
+     * Default is null.
+     * </p>
      * 
      * 
      * @param font

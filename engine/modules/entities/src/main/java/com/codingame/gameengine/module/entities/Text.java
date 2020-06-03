@@ -6,9 +6,8 @@ package com.codingame.gameengine.module.entities;
 public class Text extends TextBasedEntity<Text> {
 
     /**
-     * The list of supported font weights. 
+     * The list of supported font weights.
      */
-    @SuppressWarnings("javadoc")
     public static enum FontWeight {
         NORMAL, BOLD, BOLDER, LIGHTER;
 
@@ -32,11 +31,11 @@ public class Text extends TextBasedEntity<Text> {
         return Entity.Type.TEXT;
     }
 
-
     /**
      * Returns the color of the stroke of this <code>Text</code> as an RGB integer.
      * <p>
      * Default is 0 (black).
+     * </p>
      * 
      * @return the string of this <code>Text</code>.
      */
@@ -46,6 +45,9 @@ public class Text extends TextBasedEntity<Text> {
 
     /**
      * Sets the color of the stroke of this <code>Text</code> as an RGB integer.
+     * <p>
+     * Default is 0 (black).
+     * </p>
      * 
      * @param strokeColor
      *            the color for the stroke of this <code>Text</code>.
@@ -59,6 +61,9 @@ public class Text extends TextBasedEntity<Text> {
 
     /**
      * Sets the color of the stroke of this <code>Text</code> as an RGB integer.
+     * <p>
+     * Default is 0 (black).
+     * </p>
      * 
      * @param strokeColor
      *            the color for the stroke of this <code>Text</code>.
@@ -79,6 +84,7 @@ public class Text extends TextBasedEntity<Text> {
      * Returns the name of the font of this <code>Text</code> in px.
      * <p>
      * Default is "Lato".
+     * </p>
      * 
      * @return the size of the font of this <code>Text</code>.
      */
@@ -90,6 +96,10 @@ public class Text extends TextBasedEntity<Text> {
      * Sets the name of the font of this <code>Text</code>.
      * <p>
      * Only fonts available to the browser can be displayed.
+     * </p>
+     * <p>
+     * Default is "Lato".
+     * </p>
      * 
      * 
      * @param fontFamily
@@ -104,6 +114,9 @@ public class Text extends TextBasedEntity<Text> {
 
     /**
      * Returns the thickness of the stroke of this <code>Text</code> in pixels.
+     * <p>
+     * Default is 0 (no stroke).
+     * </p>
      * 
      * @return the thickness of the stroke of this <code>Text</code>
      */
@@ -115,6 +128,7 @@ public class Text extends TextBasedEntity<Text> {
      * Returns the thickness of the stroke of this <code>Text</code> in pixels.
      * <p>
      * Default is 0 (no stroke).
+     * </p>
      * 
      * 
      * @param strokeThickness
@@ -129,6 +143,7 @@ public class Text extends TextBasedEntity<Text> {
      * Returns the thickness of the stroke of this <code>Text</code> in pixels.
      * <p>
      * Default is 0 (no stroke).
+     * </p>
      * 
      * 
      * @param strokeThickness
@@ -142,8 +157,12 @@ public class Text extends TextBasedEntity<Text> {
         set("strokeThickness", strokeThickness, curve);
         return this;
     }
+
     /**
      * Sets the weight of the font of this <code>Text</code>.
+     * <p>
+     * Default is NORMAL.
+     * </p>
      * 
      * @param weight
      *            the FontWeight of the <code>Text</code>.
@@ -159,6 +178,7 @@ public class Text extends TextBasedEntity<Text> {
      * Returns the weight of the font of this <code>Text</code>.
      * <p>
      * Default is NORMAL.
+     * </p>
      * 
      * @return the weight of the font of this <code>Text</code>.
      */
@@ -170,6 +190,7 @@ public class Text extends TextBasedEntity<Text> {
      * Returns the color of the fill of this <code>Text</code> as an RGB integer.
      * <p>
      * Default is 0 (black).
+     * </p>
      * 
      * @return the color of the fill of this <code>Text</code>
      */
@@ -179,7 +200,9 @@ public class Text extends TextBasedEntity<Text> {
 
     /**
      * Sets the color of the fill of this <code>Text</code> as an RGB integer.
-     * 
+     * <p>
+     * Default is 0 (black).
+     * </p>
      * 
      * @param fillColor
      *            the color for the fill of this <code>Text</code>.
@@ -194,6 +217,9 @@ public class Text extends TextBasedEntity<Text> {
 
     /**
      * Sets the color of the fill of this <code>Text</code> as an RGB integer.
+     * <p>
+     * Default is 0 (black).
+     * </p>
      * 
      * 
      * @param fillColor
