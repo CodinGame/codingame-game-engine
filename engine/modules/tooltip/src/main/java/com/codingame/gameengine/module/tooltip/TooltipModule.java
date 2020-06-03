@@ -41,13 +41,16 @@ public class TooltipModule implements Module {
     }
 
     @Override
-    public void onAfterOnEnd() {}
+    public void onAfterOnEnd() {
+    }
 
     private void sendFrameData() {
-        Object[] data = { newRegistration };
-        gameManager.setViewData("tooltips", data);
+        if (!newRegistration.isEmpty()) {
+            Object[] data = { newRegistration };
 
-        newRegistration.clear();
+            gameManager.setViewData("tooltips", data);
+            newRegistration.clear();
+        }
     }
 
     private boolean stringEquals(String a, String b) {
@@ -63,8 +66,10 @@ public class TooltipModule implements Module {
     /**
      * Sets a tooltip text linked to an entity
      * 
-     * @param entity the <code>Entity</code> to link the tooltip to 
-     * @param text is the tooltip text that will be displayed when hovering over the entity
+     * @param entity
+     *            the <code>Entity</code> to link the tooltip to
+     * @param text
+     *            is the tooltip text that will be displayed when hovering over the entity
      */
     public void setTooltipText(Entity<?> entity, String text) {
         int id = entity.getId();
@@ -76,7 +81,8 @@ public class TooltipModule implements Module {
 
     /**
      * 
-     * @param entity the <code>Entity</code> to get the associated tooltip text from
+     * @param entity
+     *            the <code>Entity</code> to get the associated tooltip text from
      * @return the tooltip text liked to the entity
      */
     public String getTooltipText(Entity<?> entity) {
@@ -85,7 +91,9 @@ public class TooltipModule implements Module {
 
     /**
      * Removes the tooltip text linked to the entity
-     * @param entity the <code>Entity</code> to remove a tooltip from
+     * 
+     * @param entity
+     *            the <code>Entity</code> to remove a tooltip from
      */
     public void removeTooltipText(Entity<?> entity) {
         newRegistration.put(entity.getId(), null);
