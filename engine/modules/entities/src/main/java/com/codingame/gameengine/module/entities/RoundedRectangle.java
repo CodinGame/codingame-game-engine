@@ -19,6 +19,9 @@ public class RoundedRectangle extends Shape<RoundedRectangle> {
 
     /**
      * Sets the width of this <code>RoundedRectangle</code> in world units.
+     * <p>
+     * Default is 100.
+     * </p>
      * 
      * @param width
      *            the width for this <code>RoundedRectangle</code>.
@@ -30,6 +33,9 @@ public class RoundedRectangle extends Shape<RoundedRectangle> {
 
     /**
      * Sets the width of this <code>RoundedRectangle</code> in world units.
+     * <p>
+     * Default is 100.
+     * </p>
      * 
      * @param width
      *            the width for this <code>RoundedRectangle</code>.
@@ -56,6 +62,9 @@ public class RoundedRectangle extends Shape<RoundedRectangle> {
 
     /**
      * Sets the height of this <code>RoundedRectangle</code> in world units.
+     * <p>
+     * Default is 100.
+     * </p>
      * 
      * @param height
      *            the height for this <code>RoundedRectangle</code>.
@@ -67,6 +76,9 @@ public class RoundedRectangle extends Shape<RoundedRectangle> {
 
     /**
      * Sets the height of this <code>RoundedRectangle</code> in world units.
+     * <p>
+     * Default is 100.
+     * </p>
      * 
      * @param height
      *            the height for this <code>RoundedRectangle</code>.
@@ -93,6 +105,9 @@ public class RoundedRectangle extends Shape<RoundedRectangle> {
 
     /**
      * Sets the radius of this <code>RoundedRectangle</code>'s corners in world units.
+     * <p>
+     * Default is 20.
+     * </p>
      * 
      * @param radius
      *            the radius for the corners of this <code>RoundedRectangle</code>.
@@ -105,16 +120,19 @@ public class RoundedRectangle extends Shape<RoundedRectangle> {
         set("radius", radius, curve);
         return this;
     }
-    
+
     /**
      * Sets the radius of this <code>RoundedRectangle</code>'s corners in world units.
+     * <p>
+     * Default is 20.
+     * </p>
      * 
      * @param radius
      *            the radius for the corners of this <code>RoundedRectangle</code>.
      * @return this <code>RoundedRectangle</code>
      */
     public RoundedRectangle setRadius(int radius) {
-        return setRadius(radius,null);
+        return setRadius(radius, null);
     }
 
     /**

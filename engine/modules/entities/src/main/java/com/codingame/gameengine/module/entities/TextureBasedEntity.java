@@ -19,6 +19,7 @@ public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends B
      * Sets both the X and Y anchors of this <code>TextureBasedEntity</code> as a percentage of its width and height.
      * <p>
      * The point calculated by the anchors times the size of this <code>TextureBasedEntity</code> will be the origin for any rotation or scale.
+     * </p>
      * 
      * @param anchor
      *            the percentage for both anchors of this <code>TextureBasedEntity</code>.
@@ -34,6 +35,7 @@ public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends B
      * Returns the X anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      * <p>
      * Default is 0.
+     * </p>
      * 
      * @return the X anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      */
@@ -45,6 +47,10 @@ public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends B
      * Sets the X anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      * <p>
      * The point calculated by the anchors times the size of this <code>TextureBasedEntity</code> will be the origin for any rotation or scale.
+     * </p>
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param anchorX
      *            the X anchor for this <code>TextureBasedEntity</code>.
@@ -58,6 +64,10 @@ public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends B
      * Sets the X anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      * <p>
      * The point calculated by the anchors times the size of this <code>TextureBasedEntity</code> will be the origin for any rotation or scale.
+     * </p>
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param anchorX
      *            the X anchor for this <code>TextureBasedEntity</code>.
@@ -75,6 +85,7 @@ public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends B
      * Returns the Y anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      * <p>
      * Default is 0.
+     * </p>
      * 
      * @return the Y anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      */
@@ -86,6 +97,10 @@ public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends B
      * Sets the Y anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      * <p>
      * The point calculated by the anchors times the size of this <code>TextureBasedEntity</code> will be the origin for any rotation or scale.
+     * </p>
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param anchorY
      *            the Y anchor for this <code>TextureBasedEntity</code>.
@@ -99,6 +114,10 @@ public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends B
      * Sets the Y anchor of this <code>TextureBasedEntity</code> as a percentage of its width.
      * <p>
      * The point calculated by the anchors times the size of this <code>TextureBasedEntity</code> will be the origin for any rotation or scale.
+     * </p>
+     * <p>
+     * Default is 0.
+     * </p>
      * 
      * @param anchorY
      *            the Y anchor for this <code>TextureBasedEntity</code>.
@@ -114,6 +133,9 @@ public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends B
 
     /**
      * Sets the tint of this <code>TextureBasedEntity</code> as an RGB integer.
+     * <p>
+     * Default is 0xFFFFFF (white)
+     * </p>
      * 
      * @param color
      *            the tint of this <code>TextureBasedEntity</code>.
@@ -127,6 +149,9 @@ public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends B
 
     /**
      * Sets the tint of this <code>TextureBasedEntity</code> as an RGB integer.
+     * <p>
+     * Default is 0xFFFFFF (white)
+     * </p>
      * 
      * @param color
      *            the tint of this <code>TextureBasedEntity</code>.
@@ -147,6 +172,7 @@ public abstract class TextureBasedEntity<T extends BlendableEntity<?>> extends B
      * Returns the tint of this <code>TextureBasedEntity</code> as an RGB integer.
      * <p>
      * Default is 0xFFFFFF (white)
+     * </p>
      * 
      * @return the tint of this <code>TextureBasedEntity</code>.
      */

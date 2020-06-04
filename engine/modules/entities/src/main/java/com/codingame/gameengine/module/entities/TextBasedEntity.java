@@ -4,7 +4,9 @@ import java.util.Objects;
 
 /**
  * Generic type for entities containing text.
- * @param <T> a subclass inheriting TextureBasedEntity, used in order to return <b>this</b> as a T instead of a <code>TextBasedEntity</code>.
+ * 
+ * @param <T>
+ *            a subclass inheriting TextureBasedEntity, used in order to return <b>this</b> as a T instead of a <code>TextBasedEntity</code>.
  */
 public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends TextureBasedEntity<T> {
     /**
@@ -44,6 +46,7 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
      * Returns the string this <code>TextBasedEntity</code> displays.
      * <p>
      * Default is "" (empty string).
+     * </p>
      * 
      * @return the string of this <code>TextBasedEntity</code>.
      */
@@ -53,6 +56,9 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
 
     /**
      * Sets the string for this <code>TextBasedEntity</code> to display.
+     * <p>
+     * Default is "" (empty string).
+     * </p>
      * 
      * @param text
      *            the string for this <code>TextBasedEntity</code> to display.
@@ -71,6 +77,7 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
      * Returns text alignment of this <code>TextBasedEntity</code>.
      * <p>
      * Default is TextAlign.LEFT (align left).
+     * </p>
      * 
      * @return the text alignment of this <code>TextBasedEntity</code>.
      */
@@ -80,6 +87,9 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
 
     /**
      * Sets the text alignment of this <code>TextBasedEntity</code>.
+     * <p>
+     * Default is TextAlign.LEFT (align left).
+     * </p>
      * 
      * @param align
      *            the text alignment of this <code>TextBasedEntity</code>.
@@ -98,6 +108,7 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
      * Returns the size of the font of this <code>TextBasedEntity</code> in px.
      * <p>
      * Default is 26.
+     * </p>
      * 
      * @return the size of the font of this <code>TextBasedEntity</code>.
      */
@@ -107,7 +118,9 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
 
     /**
      * Sets the size of the font of this <code>TextBasedEntity</code> in px.
-     * 
+     * <p>
+     * Default is 26.
+     * </p>
      * 
      * @param fontSize
      *            the size for the font of this <code>TextBasedEntity</code>.
@@ -119,7 +132,9 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
 
     /**
      * Sets the size of the font of this <code>TextBasedEntity</code> in px.
-     * 
+     * <p>
+     * Default is 26.
+     * </p>
      * 
      * @param fontSize
      *            the size for the font of this <code>TextBasedEntity</code>.
@@ -134,13 +149,14 @@ public abstract class TextBasedEntity<T extends TextureBasedEntity<?>> extends T
     }
 
     /**
-     * Returns the maximum width of this <code>TextBasedEntity</code> in pixels, before it gets ellipsed. 
+     * Returns the maximum width of this <code>TextBasedEntity</code> in pixels, before it gets ellipsed.
      * <p>
      * The ellipsis is applied before the entity is scaled. A max width of 0 means there is no maximum width.
-     * </p> 
+     * </p>
      * <p>
      * Default is 0 (no max width).
      * </p>
+     * 
      * @return the maximum width in pixels of this <code>TextBasedEntity</code>.
      */
     public int getMaxWidth() {
