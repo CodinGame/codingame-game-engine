@@ -55,7 +55,7 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
         for (Entry<Object, Object> t : gameParameters.entrySet()) {
             out.println(t.getKey() + "=" + t.getValue());
             log.info(t.getKey() + "=" + t.getValue());
-            
+
         }
     }
 
@@ -83,6 +83,11 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
     /**
      * <p>
      * The game parameters are used to get additional information from the Game Runner.
+     * <p>
+     * When running the game in the CodinGame IDE, this instance will be populated with data entered by the user in the Options section.
+     * </p>
+     * <p>
+     * When the game is over, any modification made to this instance will be written back to the Options section, including the <code>seed</code> property.
      * </p>
      * 
      * @return a <code>Properties</code> containing the given parameters.

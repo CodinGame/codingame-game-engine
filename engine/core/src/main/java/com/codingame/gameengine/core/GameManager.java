@@ -361,7 +361,14 @@ abstract public class GameManager<T extends AbstractPlayer> {
     //
 
     /**
-     * Puts a new metadata that will be sent to the CodinGame IDE.
+     * Puts a new metadata that will be included in the game's <code>GameResult</code>.
+     * <p>
+     * Can be used for: 
+     * </p>
+     * <ul>
+     * <li>Setting the value of an optimization criteria for OPTI games, used by the CodinGame IDE</li>
+     * <li>Dumping game statistics for local analysis after a batch run of GameRunner.simulate()</li>
+     * </ul>
      * 
      * @param key
      *            the property to send
