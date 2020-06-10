@@ -6,8 +6,9 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🐞 Bug fix
 
-- TooltipModule would sometimes show an empty tooltip block
-- Fixed TooltipModule taking up a lot of characters in the game result from the allowed quota
+- `TooltipModule` would sometimes show an empty tooltip block
+- Fixed `TooltipModule` taking up a lot of characters in the game result from the allowed quota
+- Improved documentation and usage of `GameRunner.simulate()` and `GameResult`
 
 ## 3.15.1
 
