@@ -398,7 +398,7 @@ abstract class GameRunner {
      *
      * @return game result of the game
      */
-    public com.codingame.gameengine.runner.simulate.GameResult simulate() {
+    public GameResult simulate() {
         runGame();
         GameResult simulateResult = new GameResult();
 
