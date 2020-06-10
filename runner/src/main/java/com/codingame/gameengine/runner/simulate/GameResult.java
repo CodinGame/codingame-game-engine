@@ -39,7 +39,7 @@ public class GameResult {
      * <b>after the game's end</b>.
      * </p>
      * 
-     * For solo games: the lines of text in the given testcase.</b>.
+     * For solo games: the lines of text in the given testcase.
      * 
      */
     public List<String> gameParameters = new ArrayList<>();
