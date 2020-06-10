@@ -6,3 +6,4 @@ com.codingame.gameengine.module.tooltip
 com.codingame.gameengine.module.viewport
 com.codingame.gameengine.runner
 com.codingame.gameengine.runner.dto
+com.codingame.gameengine.runner.simulate
