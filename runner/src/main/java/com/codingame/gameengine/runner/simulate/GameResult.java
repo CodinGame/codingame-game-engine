@@ -50,7 +50,7 @@ public class GameResult {
     /**
      * Any uncaught Exception that caused the game launch to crash. Includes stacktrace.
      */
-    public String failCause = null;
+    public String failCause;
     /**
      * The list of tooltips generated during this game launch.
      */
