@@ -1,7 +1,10 @@
 package com.codingame.gameengine.runner.dto;
 
 /**
- * A data class for level configuration data 
+ * A data transfer object for level configuration data.
+ * <p>
+ * Used internally.
+ * </p>
  */
 @SuppressWarnings("javadoc")
 public class ConfigResponseDto {

@@ -12,6 +12,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,8 +20,11 @@ import org.apache.commons.logging.LogFactory;
 import com.codingame.gameengine.runner.Command.InputCommand;
 import com.codingame.gameengine.runner.Command.OutputCommand;
 import com.codingame.gameengine.runner.dto.AgentDto;
-import com.codingame.gameengine.runner.dto.GameResult;
-import com.codingame.gameengine.runner.dto.Tooltip;
+import com.codingame.gameengine.runner.dto.GameResultDto;
+import com.codingame.gameengine.runner.dto.TooltipDto;
+import com.codingame.gameengine.runner.simulate.AgentData;
+import com.codingame.gameengine.runner.simulate.GameResult;
+import com.codingame.gameengine.runner.simulate.TooltipData;
 import com.google.gson.Gson;
 
 abstract class GameRunner {
@@ -30,7 +34,7 @@ abstract class GameRunner {
         .compile("\\[\\[(?<cmd>.+)\\] ?(?<lineCount>[0-9]+)\\]");
 
     protected static Log log = LogFactory.getLog(GameRunner.class);
-    GameResult gameResult = new GameResult();
+    GameResultDto gameResult = new GameResultDto();
     private ByteArrayOutputStream refereeStdout;
     private ByteArrayOutputStream refereeStderr;
 
@@ -174,7 +178,7 @@ abstract class GameRunner {
                     for (int i = 0; i < tooltipData.length / 2; ++i) {
                         String text = tooltipData[i * 2];
                         int eventId = Integer.valueOf(tooltipData[i * 2 + 1]);
-                        gameResult.tooltips.add(new Tooltip(text, eventId, currentRound));
+                        gameResult.tooltips.add(new TooltipDto(text, eventId, currentRound));
                     }
                 });
 
@@ -280,8 +284,10 @@ abstract class GameRunner {
         if ((playerOutput != null) && playerOutput.isEmpty() && (nextPlayerInfo.nbLinesNextOutput == 1)) {
             return "\n";
         }
-        if ((playerOutput != null) && (playerOutput.length() > 0)
-            && (playerOutput.charAt(playerOutput.length() - 1) != '\n')) {
+        if (
+            (playerOutput != null) && (playerOutput.length() > 0)
+                && (playerOutput.charAt(playerOutput.length() - 1) != '\n')
+        ) {
             return playerOutput + '\n';
         }
         return playerOutput;
@@ -394,8 +400,24 @@ abstract class GameRunner {
      */
     public GameResult simulate() {
         runGame();
-        addPlayerIds();
-        return gameResult;
+        GameResult simulateResult = new GameResult();
+
+        simulateResult.errors = gameResult.errors;
+        simulateResult.outputs = gameResult.outputs;
+        simulateResult.summaries = gameResult.summaries;
+        simulateResult.views = gameResult.views;
+        simulateResult.scores = gameResult.scores;
+        simulateResult.gameParameters = gameResult.uinput;
+        simulateResult.metadata = gameResult.metadata;
+        simulateResult.tooltips = gameResult.tooltips.stream()
+            .map(tooltipDto -> new TooltipData(tooltipDto.text, tooltipDto.event, tooltipDto.turn))
+            .collect(Collectors.toList());
+        simulateResult.agents = gameResult.agents.stream()
+            .map(agentDto -> new AgentData(agentDto.index, agentDto.name, agentDto.avatar))
+            .collect(Collectors.toList());
+        simulateResult.failCause = gameResult.failCause;
+
+        return simulateResult;
     }
 
     private void requireGameNotEnded() {
