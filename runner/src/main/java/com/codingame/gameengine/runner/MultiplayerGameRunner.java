@@ -23,6 +23,7 @@ public class MultiplayerGameRunner extends GameRunner {
      * <p>
      * The value can also be set by setting the environment variable <code>league.level</code>.
      * </p>
+     * The value is program-wide, and will <b>not</b> be reset for subsequent instances of <code>MultiplayerGameRunner</code>.
      * 
      * @param leagueLevel
      *            the league level. 1 is the lowest level and default value.

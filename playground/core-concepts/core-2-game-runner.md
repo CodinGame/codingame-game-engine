@@ -28,7 +28,7 @@ By default, you can access the game viewer for testing at [http://localhost:8888
 
 **Warning** ⚠ To use the game viewer locally, your browser must support ES6 JavaScript **modules**. For Chrome, that's version 61 or above. For Firefox, from version 54 this feature is behind the `dom.moduleScripts.enabled` preference. To change preferences in Firefox, visit `about:config`.
 
-The `MultiplayerGameRunner` also provides a `setLeagueLevel` method which you can use to test each league of your game. If left unspecified, the first level of the game will be run.
+The `MultiplayerGameRunner` also provides a `setLeagueLevel` method which you can use to test a specific league of your game. The league level is a system property, meaning that the value will be shared between all the instances of `MultiplayerGameRunner` you create. When left unspecified, the first level of the game will be run.
 
 
 # Examples
