@@ -98,8 +98,6 @@ async function refreshPreview () {
   const errorNode = document.getElementById('StatementMaker-preview-error')
 
   try {
-    resultNode.innerHTML = getStatementInput()
-
     errorNode.innerText = ''
     resultNode.style.opacity = 1
   } catch (error) {
@@ -113,7 +111,9 @@ async function refreshPreview () {
     if (!result) {
       result = document.createElement("div")
       result.id = elementId
-      result.style.marginTop = '50px'
+      if (level !== "level1") {
+        result.style.marginTop = '50px'
+      }
       resultNode.parentElement.appendChild(result)
     }
     result.innerHTML = statement

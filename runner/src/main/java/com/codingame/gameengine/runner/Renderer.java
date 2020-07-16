@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -39,6 +40,11 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.owasp.html.AttributePolicy;
+import org.owasp.html.ElementPolicy;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.Sanitizers;
 
 import com.codingame.gameengine.runner.ConfigHelper.GameConfig;
 import com.codingame.gameengine.runner.ConfigHelper.GameType;
@@ -711,10 +717,19 @@ class Renderer {
                                                 List<String> lines = Arrays.asList(statement.split("\\\n"));
 
                                                 try {
-                                                    JsonObject statements = StatementSplitter.generateSplitStatementInMemory(lines, exportReport);
-
-                                                    exchange.getResponseSender().send(statements.toString());
                                                     exchange.setStatusCode(StatusCodes.OK);
+                                                    JsonObject statements = StatementSplitter.generateSplitStatementInMemory(lines, exportReport);
+                                                    Iterator<String> keys = statements.keySet().iterator();
+                                                    if (keys.hasNext()) {
+                                                        while (keys.hasNext()) {
+                                                            String key = keys.next();
+                                                            statement = sanitizeHTML(statements.get(key).getAsString());
+                                                            statements.addProperty(key, statement);
+                                                        }
+                                                    } else {
+                                                        statements.add("level1", new JsonPrimitive(sanitizeHTML(statement)));
+                                                    }
+                                                    exchange.getResponseSender().send(statements.toString());
                                                 } catch (IOException ex) {
                                                     sendException(e, ex, StatusCodes.BAD_REQUEST);
                                                 }
@@ -839,5 +854,95 @@ class Renderer {
     public void render(int playerCount, String jsonResult) {
         List<Path> paths = generateView(jsonResult, null);
         serveHTTP(paths);
+    }
+
+    public static String sanitizeHTML(String html) {
+        PolicyFactory htmlSanitizer = Sanitizers.FORMATTING
+            .and(Sanitizers.LINKS)
+            .and(Sanitizers.BLOCKS)
+            .and(Sanitizers.IMAGES)
+            .and(Sanitizers.TABLES)
+            .and(new HtmlPolicyBuilder().allowElements(new ElementPolicy() {
+                public String apply(String elementName, List<String> attrs) {
+                    // force a target="_blank" on all links
+                    if ("a".equals(elementName)) {
+                        attrs.add("target");
+                        attrs.add("_blank");
+                    }
+                    return elementName;
+                }
+            }, "const", "var", "action", "keyword",
+                "a",
+                "track",
+                "article",
+                "aside",
+                "header",
+                "hgroup",
+                "hr",
+                "footer",
+                "nav",
+                "section",
+                "summary",
+                "details",
+                "base",
+                "basefont",
+                "span",
+                "title",
+                "button",
+                "datalist",
+                "form",
+                "keygen",
+                "label",
+                "input",
+                "legend",
+                "fieldset",
+                "meter",
+                "optgroup",
+                "option",
+                "select",
+                "textarea",
+                "abbr",
+                "acronym",
+                "address",
+                "bdi",
+                "bdo",
+                "center",
+                "cite",
+                "del",
+                "dfn",
+                "kbd",
+                "mark",
+                "output",
+                "progress",
+                "q",
+                "rp",
+                "rt",
+                "ruby",
+                "samp",
+                "wbr",
+                "dd",
+                "dir",
+                "dl",
+                "dt",
+                "menu",
+                "area",
+                "figcaption",
+                "figure",
+                "map",
+                "param",
+                "source",
+                "audio",
+                "time",
+                "video"
+            )
+                .allowWithoutAttributes("span")
+                .allowAttributes("class", "colspan").globally()
+                .allowStandardUrlProtocols()
+                .allowStyling()
+                .allowUrlsInStyles(AttributePolicy.IDENTITY_ATTRIBUTE_POLICY)
+                .requireRelNofollowOnLinks()
+                .toFactory()
+            );
+        return htmlSanitizer.sanitize(html);
     }
 }
