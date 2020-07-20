@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🐞 Bug fix
+
+- The statement preview page would present HTML as it would show in IDE
+
 ## 3.15.2
 
 ### 🐞 Bug fix
