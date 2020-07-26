@@ -13,9 +13,9 @@ import com.google.inject.Singleton;
 
 /**
  * @author Jean Porée
- * 
+ *
  *         This module allows you to display or hide elements of the GraphicEntityModule using the viewer's options menu.
- * 
+ *
  */
 @Singleton
 public class ToggleModule implements Module {
@@ -70,14 +70,19 @@ public class ToggleModule implements Module {
     public void onAfterOnEnd() {}
 
     private void sendFrameData() {
-        Object[] data = { newRegistration };
+        HashMap<String, String> data = new HashMap<>();
+        for (int d : newRegistration.keySet()) {
+            String key = newRegistration.get(d).name;
+            if (!data.containsKey(key)) data.put(key, "");
+            data.put(key, data.get(key) + d + (newRegistration.get(d).state ? "+" : "-"));
+        }
         gameManager.setViewData("toggles", data);
 
         newRegistration.clear();
     }
     /**
      * Will display the entity only when the toggle state matches the state you set
-     * 
+     *
      * @param entity which will be displayed
      * @param toggle the name of the toggle you want to use
      * @param state the state of the toggle where the entity will be displayed at
