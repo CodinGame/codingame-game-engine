@@ -58,7 +58,14 @@ export class ToggleModule {
     if (!data) {
       return
     }
-    const newRegistration = data[0]
+    var newRegistration = {}
+    Object.entries(data).forEach(([key, value]) => {
+        value.match(/\d+./g).forEach(m => {
+            var entityId = m.slice(0, -1)
+            var state = m.slice(-1) === "+"
+            newRegistration[entityId] = {"name":key, "state":state}
+        })
+    })
     const registered = { ...this.previousFrame.registered, ...newRegistration }
     const frame = { registered, number: frameInfo.number }
     this.previousFrame = frame
