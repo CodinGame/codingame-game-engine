@@ -76,7 +76,8 @@ public class ToggleModule implements Module {
             if (!data.containsKey(key)) data.put(key, "");
             data.put(key, data.get(key) + d + (newRegistration.get(d).state ? "+" : "-"));
         }
-        gameManager.setViewData("toggles", data);
+        if (newRegistration.size() > 0)
+            gameManager.setViewData("toggles", data);
 
         newRegistration.clear();
     }
