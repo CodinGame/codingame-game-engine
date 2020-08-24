@@ -72,17 +72,15 @@ public class ToggleModule implements Module {
     }
 
     private void sendFrameData() {
-        Map<String, String> data = new HashMap<>();
-        for (Entry<Integer, Toggle> entry : newRegistration.entrySet()) {
-            String toggleName = entry.getValue().name;
-            int entityId = entry.getKey();
-            data.put(toggleName, data.getOrDefault(toggleName, "") + entityId + (newRegistration.get(entityId).state ? "+" : "-"));
-        }
         if (newRegistration.size() > 0) {
+            Map<String, String> data = new HashMap<>();
+            newRegistration.forEach((entityId, toggle) -> {
+                String toggleName = toggle.name;
+                data.put(toggleName, data.getOrDefault(toggle.name, "") + entityId + (toggle.state ? "+" : "-"));
+            });
             gameManager.setViewData("toggles", data);
+            newRegistration.clear();
         }
-
-        newRegistration.clear();
     }
 
     /**
