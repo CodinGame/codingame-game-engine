@@ -2,6 +2,7 @@ package com.codingame.gameengine.module.toggle;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.codingame.gameengine.core.AbstractPlayer;
 import com.codingame.gameengine.core.GameManager;
@@ -67,26 +68,32 @@ public class ToggleModule implements Module {
     }
 
     @Override
-    public void onAfterOnEnd() {}
+    public void onAfterOnEnd() {
+    }
 
     private void sendFrameData() {
-        HashMap<String, String> data = new HashMap<>();
-        for (int d : newRegistration.keySet()) {
-            String key = newRegistration.get(d).name;
-            if (!data.containsKey(key)) data.put(key, "");
-            data.put(key, data.get(key) + d + (newRegistration.get(d).state ? "+" : "-"));
+        Map<String, String> data = new HashMap<>();
+        for (Entry<Integer, Toggle> e : newRegistration.entrySet()) {
+            String key = e.getValue().name;
+            int id = e.getKey();
+            data.put(key, data.getOrDefault(key, "") + id + (newRegistration.get(id).state ? "+" : "-"));
         }
-        if (newRegistration.size() > 0)
+        if (newRegistration.size() > 0) {
             gameManager.setViewData("toggles", data);
+        }
 
         newRegistration.clear();
     }
+
     /**
      * Will display the entity only when the toggle state matches the state you set
      *
-     * @param entity which will be displayed
-     * @param toggle the name of the toggle you want to use
-     * @param state the state of the toggle where the entity will be displayed at
+     * @param entity
+     *            which will be displayed
+     * @param toggle
+     *            the name of the toggle you want to use
+     * @param state
+     *            the state of the toggle where the entity will be displayed at
      */
     public void displayOnToggleState(Entity<?> entity, String toggle, boolean state) {
         int id = entity.getId();
