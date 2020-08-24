@@ -75,8 +75,7 @@ public class ToggleModule implements Module {
         if (newRegistration.size() > 0) {
             Map<String, String> data = new HashMap<>();
             newRegistration.forEach((entityId, toggle) -> {
-                String toggleName = toggle.name;
-                data.put(toggleName, data.getOrDefault(toggle.name, "") + entityId + (toggle.state ? "+" : "-"));
+                data.put(toggle.name, data.getOrDefault(toggle.name, "") + entityId + (toggle.state ? "+" : "-"));
             });
             gameManager.setViewData("toggles", data);
             newRegistration.clear();
