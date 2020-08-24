@@ -2,6 +2,7 @@ package com.codingame.gameengine.module.toggle;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.codingame.gameengine.core.AbstractPlayer;
 import com.codingame.gameengine.core.GameManager;
@@ -13,9 +14,9 @@ import com.google.inject.Singleton;
 
 /**
  * @author Jean Porée
- * 
+ *
  *         This module allows you to display or hide elements of the GraphicEntityModule using the viewer's options menu.
- * 
+ *
  */
 @Singleton
 public class ToggleModule implements Module {
@@ -67,20 +68,29 @@ public class ToggleModule implements Module {
     }
 
     @Override
-    public void onAfterOnEnd() {}
+    public void onAfterOnEnd() {
+    }
 
     private void sendFrameData() {
-        Object[] data = { newRegistration };
-        gameManager.setViewData("toggles", data);
-
-        newRegistration.clear();
+        if (newRegistration.size() > 0) {
+            Map<String, String> data = new HashMap<>();
+            newRegistration.forEach((entityId, toggle) -> {
+                data.put(toggle.name, data.getOrDefault(toggle.name, "") + entityId + (toggle.state ? "+" : "-"));
+            });
+            gameManager.setViewData("toggles", data);
+            newRegistration.clear();
+        }
     }
+
     /**
      * Will display the entity only when the toggle state matches the state you set
-     * 
-     * @param entity which will be displayed
-     * @param toggle the name of the toggle you want to use
-     * @param state the state of the toggle where the entity will be displayed at
+     *
+     * @param entity
+     *            which will be displayed
+     * @param toggle
+     *            the name of the toggle you want to use
+     * @param state
+     *            the state of the toggle where the entity will be displayed at
      */
     public void displayOnToggleState(Entity<?> entity, String toggle, boolean state) {
         int id = entity.getId();

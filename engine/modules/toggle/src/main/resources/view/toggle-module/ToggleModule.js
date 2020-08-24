@@ -55,10 +55,19 @@ export class ToggleModule {
   }
 
   handleFrameData (frameInfo, data) {
-    if (!data) {
-      return
+    const newRegistration = {}
+    if (data) {
+      Object.entries(data).forEach(([key, value]) => {
+        value.match(/\d+./g).forEach(m => {
+          const entityId = m.slice(0, -1)
+          const state = m.slice(-1) === '+'
+          newRegistration[entityId] = {
+            name: key,
+            state: state
+          }
+        })
+      })
     }
-    const newRegistration = data[0]
     const registered = { ...this.previousFrame.registered, ...newRegistration }
     const frame = { registered, number: frameInfo.number }
     this.previousFrame = frame
@@ -81,7 +90,7 @@ function checkDuplicates (option) {
     let matchedPair = ToggleModule.optionValues[option.toggle].find(elem => elem.value === value)
 
     if (!matchedPair) {
-      matchedPair = { keys: [ ], value }
+      matchedPair = { keys: [], value }
       ToggleModule.optionValues[option.toggle].push(matchedPair)
     }
 
