@@ -6,8 +6,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🐞 Bug fix
 
-- The statement preview page now presents HTML as it would show in the CodinGame IDE
+- The statement preview page now presents HTML as it would show in the CodinGame IDE.
+- The statement preview page now looks for both `.html` and `.html.tpl` files.
 - Fixed `ToggleModule` taking up a lot of characters in the game result from the allowed quota.
+
 
 ## 3.15.2
 
