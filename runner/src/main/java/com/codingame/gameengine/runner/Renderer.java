@@ -440,8 +440,10 @@ class Renderer {
     }
 
     private void checkLeaguePopups(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
-        if (!questionConfig.getWelcomeLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
-            || questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()) {
+        if (
+            !questionConfig.getWelcomeLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
+                || questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()
+        ) {
             exportReport.addItem(
                 ReportItemType.WARNING, tag + "Missing welcome_"
                     + Constants.LANGUAGE_CODE[Constants.LANGUAGE_ID_ENGLISH - 1] + ".html file."
@@ -449,9 +451,11 @@ class Renderer {
         } else {
             for (int languageId : questionConfig.getWelcomeLanguageMap().keySet()) {
                 //Avoid checking the same popup twice if duplicated
-                if (languageId != Constants.LANGUAGE_ID_ENGLISH
-                    && questionConfig.getWelcomeLanguageMap().get(languageId)
-                        .equals(questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH))) {
+                if (
+                    languageId != Constants.LANGUAGE_ID_ENGLISH
+                        && questionConfig.getWelcomeLanguageMap().get(languageId)
+                            .equals(questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH))
+                ) {
                     continue;
                 }
 
@@ -485,8 +489,10 @@ class Renderer {
     }
 
     private void checkStatement(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
-        if (!questionConfig.getStatementsLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
-            || questionConfig.getStatementsLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()) {
+        if (
+            !questionConfig.getStatementsLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
+                || questionConfig.getStatementsLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()
+        ) {
             exportReport.addItem(ReportItemType.ERROR, tag + "Missing statement_en.html file. An English statement is mandatory.");
         }
     }
@@ -536,10 +542,12 @@ class Renderer {
             }
             if (questionConfig.getSortingOrder() == null) {
                 throw new MissingConfigException("An optimization game must have a sorting_order property in config.ini.");
-            } else if (!"ASC".equalsIgnoreCase(questionConfig.getSortingOrder())
-                && !"DESC".equalsIgnoreCase(questionConfig.getSortingOrder())) {
-                    throw new MissingConfigException("The sorting order for an optimization game must be ASC (ascendant) or DESC (descendant)");
-                }
+            } else if (
+                !"ASC".equalsIgnoreCase(questionConfig.getSortingOrder())
+                    && !"DESC".equalsIgnoreCase(questionConfig.getSortingOrder())
+            ) {
+                throw new MissingConfigException("The sorting order for an optimization game must be ASC (ascendant) or DESC (descendant)");
+            }
         }
 
         switch (gameConfig.getGameType()) {
@@ -735,8 +743,9 @@ class Renderer {
                                                 }
                                             }, StandardCharsets.UTF_8);
                                         } else if (exchange.getRelativePath().equals("/statement")) {
-                                            File statementFileEN = sourceFolderPath.resolve("config/statement_en.html").toFile();
-                                            File statementFileFR = sourceFolderPath.resolve("config/statement_fr.html").toFile();
+                                            File statementFileEN = getStatementFile(sourceFolderPath, "en");
+                                            File statementFileFR = getStatementFile(sourceFolderPath, "fr");
+
                                             if (exchange.getRequestMethod().equalToString("GET")) {
                                                 JsonObject statements = new JsonObject();
                                                 String statementEN = FileUtils.readFileToString(statementFileEN, StandardCharsets.UTF_8);
@@ -782,6 +791,15 @@ class Renderer {
                                     } finally {
                                         exchange.endExchange();
                                     }
+                                }
+
+                                private File getStatementFile(Path sourceFolderPath, String langId) {
+                                    File file = sourceFolderPath.resolve("config/statement_" + langId + ".html").toFile();
+                                    if (!file.exists()) {
+                                        file = sourceFolderPath.resolve("config/statement_" + langId + ".html.tpl").toFile();
+                                    }
+                                    return file;
+
                                 }
 
                                 private JsonElement toJsonElement(String statementFR) {
