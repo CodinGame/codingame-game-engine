@@ -2,6 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 3.15.4
+
+### 🐞 Bug fix
+
+- Added a missing chunk of CSS from the statement preview page.
+
+
 ## 3.15.3
 
 ### 🐞 Bug fix
