@@ -6,8 +6,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ### 🐞 Bug fix
 
-- Fixed a bug causing reinit on a not fully loaded scene.
-
+- Fixed viewer sometimes crashing on startup.
 
 ## 3.15.4
 
