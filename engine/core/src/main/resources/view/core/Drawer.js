@@ -647,7 +647,7 @@ export class Drawer {
   }
 
   reinit (force) {
-    if (this.loaded >= 1) {
+    if (this.loaded >= 1 && !this.loading) {
       if (this.currentFrame >= 0 && !this.intro) {
         this.reinitScene()
       } else {
