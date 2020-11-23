@@ -14,7 +14,7 @@ export class BufferedGroup extends ContainerBasedEntity {
 
   postUpdate () {
     if (this.needsRender) {
-      if (this.gameTexture == null) {
+      if (this.gameTexture == null || this.gameTexture.width < this.buffer.width || this.gameTexture.height < this.buffer.height) {
         this.gameTexture = PIXI.RenderTexture.create(Math.min(this.buffer.width, 4096), Math.min(this.buffer.height, 4096))
         flagForDestructionOnReinit(this.gameTexture)
         this.graphics.texture = this.gameTexture
