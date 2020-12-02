@@ -60,7 +60,7 @@ function getMouseMoveFunc (tooltip, container, module) {
         if (tooltip.inside[id]) {
           const entity = entityModule.entities.get(id)
           const state = entity && getEntityState(entity, module.currentFrame.number)
-          if (!state) {
+          if (!state || (entity.container && !entity.container.visible)) {
             delete tooltip.inside[id]
           } else {
             showing.push(id)
