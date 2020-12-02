@@ -8,6 +8,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - Fixed a bug in the TooltipModule causing tooltips to stay visible permanently.
 - BufferedGroup will now dynamically resize to fit contents.
+- Fixed outstanding CSS issues in the statement preview page.
 
 ## 3.15.5
 
