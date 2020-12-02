@@ -110,6 +110,7 @@ async function refreshPreview () {
     let result = document.getElementById(elementId)
     if (!result) {
       result = document.createElement("div")
+      result.classList.add('cg-statement')
       result.id = elementId
       if (level !== "level1") {
         result.style.marginTop = '50px'
