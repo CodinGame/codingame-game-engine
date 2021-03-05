@@ -31,14 +31,16 @@ export class BitmapText extends Entity {
   updateDisplay (state, changed, globalData) {
     super.updateDisplay(state, changed, globalData)
     if (state.fontFamily !== null) {
-      if (PIXI.extras.BitmapText.fonts[state.fontFamily]) {
+      if (PIXI.BitmapFont.available[state.fontFamily]) {
         if (this.graphics.children.length === 0) {
-          this.displayed = new PIXI.extras.BitmapText('', {
-            font: { size: state.fontSize || 1, name: state.fontFamily }
+          this.displayed = new PIXI.BitmapText('', {
+             fontSize: state.fontSize || 1, 
+             fontName: state.fontFamily
           })
           this.graphics.addChild(this.displayed)
         } else {
-          this.displayed.font = { size: state.fontSize || 1, name: state.fontFamily }
+          this.displayed.fontName = state.fontFamily
+          this.displayed.fontSize = state.fontSize || 1
         }
         this.displayed.anchor.set(state.anchorX, state.anchorY)
         this.displayed.blendMode = state.blendMode

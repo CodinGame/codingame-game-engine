@@ -46,7 +46,7 @@ export class SpriteAnimation extends TextureBasedEntity {
         const image = state.loop ? images[animationIndex % images.length] : (images[animationIndex] || images[images.length - 1])
 
         try {
-          this.graphics.texture = PIXI.Texture.fromFrame(image)
+          this.graphics.texture = PIXI.Texture.from(image)
         } catch (error) {
           ErrorLog.push(new MissingImageError(image, error))
         }

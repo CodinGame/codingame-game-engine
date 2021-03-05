@@ -215,6 +215,8 @@ class Renderer {
 
             Path origAssetsPath = tmpdir.resolve("assets");
             try {
+                List<String> linkedImages = new ArrayList<>();
+
                 Files.find(origAssetsPath, 100, (p, bfa) -> bfa.isRegularFile()).forEach(
                     f -> {
                         try {
@@ -233,11 +235,13 @@ class Renderer {
                                     jsonToWriteTo = tmpdir.resolve("hashed_assets").resolve(newName).toString();
                                     Files.createDirectories(tmpdir.resolve("hashed_assets"));
                                     sprites.add(newName);
+                                    linkedImages.add(hashedImageName);
                                 } else {
                                     String relativeImagePath = tmpdir.relativize(imagePath).toString();
                                     jsonObject.getAsJsonObject("meta").add("image", new JsonPrimitive(relativeImagePath));
                                     jsonToWriteTo = f.toString();
                                     sprites.add(tmpdir.relativize(f).toString().replace("\\", "/"));
+                                    linkedImages.add(relativeImagePath);
                                 }
                                 try (FileWriter writer = new FileWriter(jsonToWriteTo)) {
                                     Gson gson = new GsonBuilder().create();
@@ -301,6 +305,14 @@ class Renderer {
                         }
                     }
                 );
+
+                // Don't load images that are also getting loaded by spritesheets
+                for (String imageName : linkedImages) {
+                    images.entrySet().removeIf(
+                        entry -> entry.getValue().getAsString().equals(imageName)
+                    );
+                }
+
             } catch (NoSuchFileException e) {
                 System.out.println("Directory src/main/resources/view/assets not found.");
             }
