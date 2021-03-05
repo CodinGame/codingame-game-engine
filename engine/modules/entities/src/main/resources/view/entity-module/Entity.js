@@ -140,9 +140,6 @@ export class Entity {
           globalData.updatedBuffers.push(this)
         }
       }
-      if (changed.zIndex) {
-        globalData.mustResort = true
-      }
       if (changed.mask) {
         globalData.maskUpdates[this.id] = state.mask
       }

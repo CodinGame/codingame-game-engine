@@ -21,7 +21,7 @@ export class SpriteBasedEntity extends TextureBasedEntity {
     if (changed.image) {
       try {
         if (state.image !== null) {
-          this.graphics.texture = PIXI.Texture.fromFrame(state.image)
+          this.graphics.texture = PIXI.Texture.from(state.image)
         } else {
           this.graphics.texture = PIXI.Texture.EMPTY
         }

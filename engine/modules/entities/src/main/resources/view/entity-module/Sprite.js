@@ -8,7 +8,7 @@ export class Sprite extends SpriteBasedEntity {
     if (this.defaultState.image === null) {
       this.graphics = new PIXI.Sprite(PIXI.Texture.EMPTY)
     } else {
-      this.graphics = PIXI.Sprite.fromFrame(this.defaultState.image)
+      this.graphics = PIXI.Sprite.from(this.defaultState.image)
     }
   }
 }
