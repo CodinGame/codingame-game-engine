@@ -79,7 +79,7 @@ export class CreateCommands {
 
 export class LoadCommand {
   constructor ([assetName, sourceImage, imageWidth, imageHeight, origRow, origCol, imageCount, imagesPerRow], globalData) {
-    this.loader = new PIXI.loaders.Loader()
+    this.loader = new PIXI.Loader()
 
     if (imageWidth === '0') {
       imageWidth = PIXI.utils.TextureCache[sourceImage].width
@@ -122,7 +122,7 @@ export class LoadCommand {
     if (Object.keys(this.loader.resources).length > 0) {
       return new Promise((resolve) => {
         this.loader.load()
-        this.loader.on('complete', resolve)
+        this.loader.onComplete.add(resolve)
       })
     }
   }

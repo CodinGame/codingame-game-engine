@@ -39,7 +39,7 @@ export class Drawer {
 
   static get requirements () {
     return {
-      PIXI: 'PIXI4'
+      PIXI: 'PIXI5'
     }
   }
 
@@ -206,7 +206,7 @@ export class Drawer {
     if (this.demo) {
       if (this.demo.logo) {
         try {
-          const logo = PIXI.Sprite.fromFrame(this.demo.logo)
+          const logo = PIXI.Sprite.from(this.demo.logo)
           logo.position.set(Drawer.WIDTH / 2, Drawer.HEIGHT / 2)
           logo.anchor.set(0.5)
           logo.baseScale = fitAspectRatio(logo.texture.width, logo.texture.height, 2 * Drawer.WIDTH / 3, Drawer.HEIGHT / 2, 0)
@@ -747,7 +747,7 @@ export class Drawer {
 
     var drawer = this
 
-    var loader = new PIXI.loaders.Loader(window.location.origin)
+    var loader = new PIXI.Loader(window.location.origin)
     this.playerInfo = agents.map(function (agent, index) {
       var agentData = {
         name: agent.name || 'Anonymous',
@@ -777,8 +777,8 @@ export class Drawer {
       completed = true
     }
 
-    loader.on('complete', onComplete)
-    loader.on('error', function (e) {
+    loader.onComplete.add(onComplete)
+    loader.onError.add(function (e) {
       console.warn(e)
       // The loader won't complete now, let's just go ahead and see what happens
       if (!completed) {
@@ -860,7 +860,7 @@ export class Drawer {
       var resources = this.getResources()
       this.renderer = this.createRenderer(this.initWidth, this.initHeight, canvas)
       setRenderer(this.renderer)
-      var loader = new PIXI.loaders.Loader(resources.baseUrl)
+      var loader = new PIXI.Loader(resources.baseUrl)
       for (key in resources.images) {
         loader.add(key, resources.images[key], { crossOrigin: true })
       }
@@ -893,8 +893,8 @@ export class Drawer {
         requestAnimationFrame(self.animate.bind(self))
         self.initPreload(self.scope, self.container, self.loaded = 0, self.initWidth, self.initHeight)
       }
-      loader.on('start', onStart)
-      loader.on('progress', function (loader, resource) {
+      loader.onStart.add(onStart)
+      loader.onProgress.add(function (loader, resource) {
         if (loader.progress < 100) {
           self.preload(self.scope, self.container, self.loaded = loader.progress / 100, self.initWidth, self.initHeight, resource)
         }
@@ -902,11 +902,6 @@ export class Drawer {
 
       const onComplete = function () {
         var key
-        for (key in resources.images) {
-          if (resources.images.hasOwnProperty(key) && loader.resources[key].texture) {
-            PIXI.Texture.addToCache(loader.resources[key].texture, key)
-          }
-        }
         for (key in resources.spines) {
           if (resources.spines.hasOwnProperty(key)) {
             PIXI.AnimCache[key] = PIXI.AnimCache[resources.baseUrl + resources.spines[key]]
@@ -917,8 +912,8 @@ export class Drawer {
         self.changed = true
       }
 
-      loader.on('complete', onComplete)
-      loader.on('error', function (e) {
+      loader.onComplete.add(onComplete)
+      loader.onError.add(function (e) {
         console.warn(e)
       })
 
@@ -937,7 +932,9 @@ export class Drawer {
   }
 
   createRenderer (width, height, canvas) {
-    return PIXI.autoDetectRenderer(width, height, {
+    return PIXI.autoDetectRenderer({
+      width, 
+      height,
       view: canvas,
       clearBeforeRender: true,
       preserveDrawingBuffer: false

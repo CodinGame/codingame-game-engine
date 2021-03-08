@@ -231,7 +231,7 @@ export class EndScreenModule {
     let sprite = this.spriteName
     var titleRanking
     if (PIXI.utils.TextureCache[sprite]) {
-      titleRanking = PIXI.Sprite.fromFrame(sprite)
+      titleRanking = PIXI.Sprite.from(sprite)
     } else {
       ErrorLog.push(new MissingImageError(sprite))
       titleRanking = new PIXI.Sprite(PIXI.Texture.EMPTY)

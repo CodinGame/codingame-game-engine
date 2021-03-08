@@ -15,7 +15,6 @@ export class GraphicEntityModule {
     this.globalData = {
       toWorldUnits: 1,
       mustResetTree: true,
-      mustResort: true,
       maskUpdates: {},
       updatedBuffers: [],
       players: [],
@@ -118,18 +117,9 @@ export class GraphicEntityModule {
     this.globalData.toPixel = (WIDTH / canvasData.width) * canvasData.oversampling
     this.globalData.mustResetTree = true
     api.container = this.container = container
+    container.sortableChildren = true
     this.entities.forEach((e) => {
       e.init()
-    })
-  }
-
-  sortChildren (container) {
-    container.children.sort((a, b) => {
-      if (a.zIndex === b.zIndex) {
-        return a.id - b.id
-      } else {
-        return a.zIndex - b.zIndex
-      }
     })
   }
 
@@ -144,15 +134,10 @@ export class GraphicEntityModule {
 
     this.entities.forEach(e => e.render(progress, currentData, this.globalData))
 
-    // Flags are set by Entity when a zIndex changes, or a group has different children
+    // Flags are set by Entity when a group has different children
     if (this.globalData.mustResetTree) {
       this.reconstructTree()
       this.globalData.mustResetTree = false
-      this.globalData.mustResort = true
-    }
-    if (this.globalData.mustResort) {
-      this.resortTree()
-      this.globalData.mustResort = false
     }
     for (const entityId in this.globalData.maskUpdates) {
       const entity = this.entities.get(+entityId)
@@ -169,17 +154,7 @@ export class GraphicEntityModule {
     this.globalData.maskUpdates = {}
   }
 
-  resortTree () {
-    // Groups
-    this.entities.forEach(e => {
-      if (e instanceof ContainerBasedEntity) {
-        this.sortChildren(e.childrenContainer)
-      }
-    })
-    // Parent
-    this.sortChildren(this.container)
-  }
-
+  
   reconstructTree () {
     this.container.removeChildren()
 
