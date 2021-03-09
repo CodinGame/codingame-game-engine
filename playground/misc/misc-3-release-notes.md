@@ -2,6 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+
+## 4.0.1
+
+### 🐞 Bug fix
+
+- When exporting a game, folders named "node_modules" are now ignored.
+- Renamed viewer modules' `name` variable to `moduleName` for consistency and future-proofing.
 ## 4.0.0
 
 ### 🎁 Features
