@@ -92,7 +92,7 @@ export class MyModule {
   /**
    * Corresponds to the moduleName variable used in the Java module.
    */
-  static get name () {
+  static get moduleName () {
     return 'myModuleName'
   }
 
