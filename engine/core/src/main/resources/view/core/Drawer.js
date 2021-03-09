@@ -93,9 +93,9 @@ export class Drawer {
     this.modules = {}
     for (const Module of config.modules) {
       try {
-        this.modules[Module.name] = new Module(assets)
+        this.modules[Module.moduleName || Module.name] = new Module(assets)
       } catch (error) {
-        this.handleModuleError(Module.name, error)
+        this.handleModuleError(Module.moduleName || Module.name, error)
       }
     }
   }
