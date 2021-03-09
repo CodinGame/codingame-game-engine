@@ -612,12 +612,23 @@ class Renderer {
                     @Override
                     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                         String relativePath = sourceFolderPath.relativize(file).toString();
-                        if (relativePath.startsWith("config") || relativePath.startsWith("src") || relativePath.equals("pom.xml")) {
+
+                        if (whiteListed(relativePath) && !blacklisted(relativePath)) {
                             zos.putNextEntry(new ZipEntry(sourceFolderPath.relativize(file).toString().replace('\\', '/')));
                             Files.copy(file, zos);
                             zos.closeEntry();
                         }
                         return FileVisitResult.CONTINUE;
+                    }
+
+                    private boolean blacklisted(String relativePath) {
+                        return relativePath.contains("/node_modules/");
+                    }
+
+                    private boolean whiteListed(String relativePath) {
+                        return relativePath.startsWith("config")
+                            || relativePath.startsWith("src")
+                            || relativePath.equals("pom.xml");
                     }
                 }
             );
