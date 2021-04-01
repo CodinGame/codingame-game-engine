@@ -4,6 +4,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ## Next Release
 
+### 🐞 Bug fix
+
+- Fixed missing texture errors no longer being caught
+
 ### 📝 Refactoring
 
 - Removed unused code
@@ -14,6 +18,11 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - When exporting a game, folders named "node_modules" are now ignored.
 - Renamed viewer modules' `name` variable to `moduleName` for consistency and future-proofing.
+
+### ⚠️ Known issues
+
+- Missing texture errors are no longer reported
+
 
 ## 4.0.1
 

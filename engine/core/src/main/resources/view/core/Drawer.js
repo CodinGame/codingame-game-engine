@@ -10,6 +10,7 @@ import { ModuleError } from './ModuleError.js'
 
 export class Drawer {
   constructor (customDemo) {
+    PIXI.settings.STRICT_TEXTURE_CACHE = true
     this.toDestroy = []
     this.stepByStepAnimateSpeed = config.stepByStepAnimateSpeed || null
 
