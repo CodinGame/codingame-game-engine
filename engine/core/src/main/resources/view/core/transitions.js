@@ -41,7 +41,3 @@ export function ease (t) {
 export const easeIn = t => t**3
 
 export const easeOut = t => 1 + (t - 1)**3
-
-export const easeInOut = t => t < 0.5
-  ? 4 * t**3
-  : 4 * (t-1)**3 + 1
