@@ -35,5 +35,5 @@ graphicEntityModule.createBitmapText()
 ![Example](resources/text-2.png)
 
 Extra tips :
-- A little help to turn fonts into bitmap fonts : http://kvazars.com/littera/
+- A tool to turn fonts into bitmap fonts : https://github.com/andryblack/fontbuilder (export in Sparrow format)
 - You can put your font in a sub folder of the assets repository whithout modifying any code

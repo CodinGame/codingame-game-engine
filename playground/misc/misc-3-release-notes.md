@@ -11,6 +11,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 📝 Refactoring
 
 - Removed unused code
+- Removed link to littera tool from docs
 
 ## 4.0.2
 
