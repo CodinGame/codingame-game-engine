@@ -40,7 +40,7 @@ export class Drawer {
 
   static get requirements () {
     return {
-      PIXI: 'PIXI5'
+      PIXI: 'PIXI6'
     }
   }
 

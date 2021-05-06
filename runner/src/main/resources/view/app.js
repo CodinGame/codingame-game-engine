@@ -9,7 +9,7 @@ const createCGPlayer = (opts) => {
     localStorageKey: 'ngStorage-gameParams',
     src: './player.html',
     libraries: {
-      PIXI5: './lib/pixi5.js'
+      PIXI6: './lib/pixi6.js'
     }
   })
 }
