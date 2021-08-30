@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next version
+
+### 🐞 Bug fix
+
+- Updated statement html sanitizer for a more recent css property whitelist.
+
 ## 4.1.2
 
 ### 🎁 Features
