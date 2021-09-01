@@ -83,7 +83,7 @@ public class TooltipModule implements Module {
      * 
      * @param entity
      *            the <code>Entity</code> to get the associated tooltip text from
-     * @return the tooltip text liked to the entity
+     * @return the tooltip text linked to the entity
      */
     public String getTooltipText(Entity<?> entity) {
         return registered.get(entity.getId());
