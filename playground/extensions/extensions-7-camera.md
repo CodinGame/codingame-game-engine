@@ -32,7 +32,7 @@ Then setup the module (and the toggle) in your `config.js`.
 import { GraphicEntityModule } from './entity-module/GraphicEntityModule.js'
 import { CameraModule } from './camera-module/CameraModule.js'
 
-import { CameraToggleModule } from './camera-toggle-module/CameraToggleModule' 
+import { CameraToggleModule } from './cameratoggle-module/CameraToggleModule' 
 // Only if you want the toggle
 
 // List of viewer modules that you want to use in your game
