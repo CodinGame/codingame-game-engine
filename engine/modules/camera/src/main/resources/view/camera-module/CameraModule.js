@@ -161,6 +161,10 @@ export class CameraModule {
     }
 
     reinitScene() {
+        if (this.currentUpdateProgress !== undefined) {
+            this.lastFrame = -1
+            this.updateScene(this.previousUpdateData, this.currentUpdateFrame, this.currentUpdateProgress)
+        }
 
     }
 
