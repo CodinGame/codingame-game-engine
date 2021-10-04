@@ -75,7 +75,6 @@ export class CameraModule {
                     entity => {
 
                         if (currentData.registered.get(entity.id + "")) {
-                            //console.log(`added entity ${entity.id} which is at x = ${entity.currentState.x}, y = ${entity.currentState.y}`)
                             const relativePos = this.getRelativePosFromContainer(entity, currentData.container.entity.id)
                             if (first) {
                                 minX = maxX = relativePos.x
@@ -93,18 +92,11 @@ export class CameraModule {
                 )
                 const averagePoint = {x: (maxX + minX) / 2, y: (maxY + minY) / 2}
                 const boundSize = {x: maxX - minX, y: maxY - minY}
-                // if (this.oldCameraState.scale.x !== -1 && progress !== 1) {
-                //     currentData.container.entity.graphics.position = this.oldCameraState.position
-                //     currentData.container.entity.graphics.scale = this.oldCameraState.scale
-                //
-                // }
                 const containerState = currentData.container.entity.currentState
                 const scale2 = Math.min(HEIGHT / (boundSize.y + currentData.cameraOffset), WIDTH / (boundSize.x + currentData.cameraOffset))
                 const scale = {x: scale2 / containerState.scaleX, y: scale2 / containerState.scaleY}
-                //const scale = 1
                 this.cameraEndScale = scale
 
-                // if position is not relative del container.entity.x
                 const newX = ((currentData.container.sizeX / 2 - averagePoint.x) * scale2
                     - (scale2 - 1) * currentData.container.sizeX / 2
                     + (WIDTH / 2 - (containerState.x + currentData.container.sizeX / 2))) / containerState.scaleX
@@ -113,9 +105,7 @@ export class CameraModule {
                     - (scale2 - 1) * currentData.container.sizeY / 2
                     + (HEIGHT / 2 - (containerState.y + currentData.container.sizeY / 2))) / containerState.scaleY
 
-                // currentData.container.entity.graphics.scale.x = currentData.container.entity.graphics.scale.y = 0.5
                 this.cameraEndPosition = {x: newX, y: newY}
-                //console.log(`frame ${currentData.number}, ${Math.round(progress*100)/100}%,container to x : ${newX}, y : ${newY}, scale : ${scale}`)
                 const position = averagePoint
                 this.cameraCurve = (position.x - this.oldZoomState.position.x) ** 2 +
                 (position.y - this.oldZoomState.position.y) ** 2 >= currentData.cameraOffset ** 2
@@ -130,7 +120,6 @@ export class CameraModule {
             currentData.container.entity.graphics.position = currentPoint
             const currentScale = lerpPosition(this.oldCameraState.scale, this.cameraEndScale, this.cameraCurve(progress))
             currentData.container.entity.graphics.scale = currentScale
-            console.log(`frame ${currentData.number}, ${Math.round(progress * 100) / 100}%,container to x : ${currentPoint.x}, y : ${currentPoint.y}, scale : ${currentScale.x}`)
             this.currentCameraState = {scale: currentScale, position: currentPoint}
 
         }
@@ -149,7 +138,6 @@ export class CameraModule {
             this.previousFrame = frame
             return frame
         }
-        // const newRegistration = data[0] === undefined ? new Map() : data[0]
         const newRegistration = data[0] || new Map()
         const registered = new Map(this.previousFrame.registered)
         Object.keys(newRegistration).forEach(
