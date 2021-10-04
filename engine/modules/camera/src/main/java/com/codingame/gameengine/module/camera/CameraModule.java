@@ -62,7 +62,6 @@ public class CameraModule implements Module {
         Object[] empty = {null, null, null, null};
         if (!newRegistration.isEmpty()) {
             data[0] = new HashMap<>(newRegistration);
-            System.out.printf("added size : %d\n", newRegistration.size());
             newRegistration.clear();
         }
         if (cameraOffset != previousOffset) {
@@ -104,7 +103,6 @@ public class CameraModule implements Module {
             if (!registered.getOrDefault(id, false)) {
                 newRegistration.put(id, true);
                 registered.put(id, true);
-                System.out.printf("registered %d\n", id);
             }
         } else {
             throw new RuntimeException("The entity given can't be track because it's not the child of " +
