@@ -72,8 +72,8 @@ CameraModule cameraModule;
 @Override
 public void init() {
     cameraModule.setContainer(myEntityContainer, 1920, 1080);
-    // `
+    // `myEntityContainer` has to be a predecessor of every tracked entities
     cameraModule.addTrackedEntity(myEntity);
-    // `myEntityContainer` has to be an ancestor of `myEntity`    
+    // `myEntity` has to be a successor of `myEntityContainer` 
 }
 ```
