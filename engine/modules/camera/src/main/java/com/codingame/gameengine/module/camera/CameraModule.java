@@ -105,8 +105,7 @@ public class CameraModule implements Module {
                 registered.put(id, true);
             }
         } else {
-            throw new RuntimeException("The entity given can't be track because it's not the child of " +
-                    "the container / on of the container child !\n" +
+            throw new RuntimeException("The entity given can't be tracked because it's not a child/successor of the tracked container!\n" +
                     "Don't forget to init the camera with the setContainer method");
         }
     }
