@@ -4,6 +4,10 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ## Next version
 
+### 🎁 Features
+
+- First community-made module: `CameraModule`.
+
 ### 🐞 Bug fix
 
 - Updated statement html sanitizer for a more recent css property whitelist.
