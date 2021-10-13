@@ -1,5 +1,7 @@
 # CameraModule
 
+Contributed by [Butanium](https://github.com/Butanium).
+
 This module allows you to have a camera following some of your entities during the replay.
 <br> It comes with the CameraToggleModule which allows the user to enable or disable the camera.
 
