@@ -22,6 +22,7 @@
 		<module>engine/modules/toggle</module>
 		<module>engine/modules/tooltip</module>
 		<module>engine/modules/viewport</module>
+        <module>engine/community-modules/camera</module>
 		<module>runner</module>
 	</modules>
 
