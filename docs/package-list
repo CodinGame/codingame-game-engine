@@ -1,4 +1,5 @@
 com.codingame.gameengine.core
+com.codingame.gameengine.module.camera
 com.codingame.gameengine.module.endscreen
 com.codingame.gameengine.module.entities
 com.codingame.gameengine.module.toggle
