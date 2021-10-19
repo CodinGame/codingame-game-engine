@@ -1,6 +1,6 @@
 import { CameraModule } from './CameraModule.js';
 import { ErrorLog } from '../core/ErrorLog.js'
-import { DuplicateToggleValueError } from "./errors/DuplicateToggleValueError";
+import { DuplicateToggleValueError } from "./errors/DuplicateToggleValueError.js";
 
 export class CameraToggleModule {
 
