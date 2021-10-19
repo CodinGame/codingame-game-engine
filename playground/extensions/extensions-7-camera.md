@@ -6,7 +6,7 @@ This module allows you to have a camera following some of your entities during t
 <br> It comes with the CameraToggleModule which allows the user to enable or disable the camera.
 
 ## Showcase
-Here is a usage example
+Here is a usage example <br>
 <a href="https://imgur.com/BAe8M9d"><img src="https://i.imgur.com/BAe8M9d.gif" title="source: imgur.com" /></a>
 ## Setup
 ⚠ This module requires the [GraphicEntityModule](https://github.com/CodinGame/codingame-game-engine/tree/master/engine/modules/entities) to work.
@@ -16,7 +16,7 @@ Add the dependency in the `pom.xml` of your project.
 <dependency>
     <groupId>com.codingame.gameengine</groupId>
     <artifactId>module-camera</artifactId>
-    <version>3.15.0</version>
+    <version>4.1.3</version>
 </dependency>
 ```
 
