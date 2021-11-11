@@ -15,7 +15,7 @@ export class TilingSprite extends SpriteBasedEntity {
 
   initDisplay () {
     super.initDisplay()
-    this.graphics = new PIXI.extras.TilingSprite(PIXI.Texture.EMPTY)
+    this.graphics = new PIXI.TilingSprite(PIXI.Texture.EMPTY)
   }
 
   updateDisplay (state, changed, globalData) {
