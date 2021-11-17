@@ -7,7 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - Fixed `TilingSprite` _Contributed by [Butanium](https://github.com/Butanium)_
-- Fixed `CameraModule` not updating on first toggle switch. _Contributed by [Butanium](https://github.com/Butanium)_
+- Fixed `CameraModule` bug. _Contributed by [Butanium](https://github.com/Butanium)_
 
 ## 4.1.4
 
