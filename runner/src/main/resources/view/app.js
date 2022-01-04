@@ -1,5 +1,4 @@
 import * as config from '../config.js'
-import { demo as defaultDemo } from '../demo.js'
 import './lib/cginput.js'
 import './player.js'
 

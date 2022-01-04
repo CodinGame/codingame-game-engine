@@ -368,17 +368,6 @@ class Renderer {
             throw new RuntimeException("No resources folder found");
         }
 
-        // Create empty demo.js if needed
-        Path sourceFolderPath = new File(System.getProperty("user.dir")).toPath();
-        File demoFile = sourceFolderPath.resolve("src/main/resources/view/demo.js").toFile();
-        if (!demoFile.exists()) {
-            try (PrintWriter out = new PrintWriter(demoFile)) {
-                out.println("export const demo = null;");
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
         return paths;
     }
 
@@ -663,66 +652,7 @@ class Renderer {
                                 public void handleRequest(HttpServerExchange exchange) throws Exception {
                                     Path sourceFolderPath = new File(System.getProperty("user.dir")).toPath();
                                     try {
-                                        if (exchange.getRelativePath().equals("/export")) {
-                                            Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
-
-                                            Path zipPath = tmpdir.resolve("source.zip");
-
-                                            ExportReport exportReport = new ExportReport();
-                                            generateSplitStatements(sourceFolderPath, exportReport);
-                                            checkConfig(sourceFolderPath, exportReport);
-                                            if (exportReport.getExportStatus() == ExportStatus.SUCCESS) {
-                                                exportSourceCode(sourceFolderPath, zipPath);
-                                                exportReport.setDataUrl(zipPath.getFileName().toString());
-                                            }
-
-                                            String jsonExportReport = new Gson().toJson(exportReport);
-                                            exchange.getResponseSender().send(jsonExportReport);
-                                        } else if (exchange.getRelativePath().equals("/init-config")) {
-                                            if (!sourceFolderPath.resolve("config").toFile().isDirectory()) {
-                                                sourceFolderPath.resolve("config").toFile().mkdir();
-                                            }
-                                            File configFile = sourceFolderPath.resolve("config/config.ini").toFile();
-                                            if (!configFile.exists()) {
-                                                configFile.createNewFile();
-                                            }
-                                            FileOutputStream configOutput = new FileOutputStream(configFile);
-                                            Properties config = new Properties();
-
-                                            exchange.getRequestReceiver().receiveFullString((e, data) -> {
-                                                ConfigResponseDto configResponseDto = new Gson().fromJson(data, ConfigResponseDto.class);
-                                                config.put("min_players", String.valueOf(configResponseDto.minPlayers));
-                                                config.put("max_players", String.valueOf(configResponseDto.maxPlayers));
-                                                config.put("type", configResponseDto.type);
-                                                if (configResponseDto.criteria != null) {
-                                                    config.put("criteria", configResponseDto.criteria);
-                                                }
-                                                if (configResponseDto.sortingOrder != null) {
-                                                    config.put("sorting_order", configResponseDto.sortingOrder);
-                                                }
-                                                if (configResponseDto.criteriaFr != null) {
-                                                    config.put("criteria_fr", configResponseDto.criteriaFr);
-                                                }
-                                                if (configResponseDto.criteriaEn != null) {
-                                                    config.put("criteria_en", configResponseDto.criteriaEn);
-                                                }
-                                            });
-
-                                            config.store(configOutput, null);
-                                            exchange.setStatusCode(StatusCodes.FOUND);
-                                        } else if (exchange.getRelativePath().equals("/save-replay")) {
-                                            Path tmpdir = Paths.get(System.getProperty("java.io.tmpdir")).resolve("codingame");
-                                            File demoFile = sourceFolderPath.resolve("src/main/resources/view/demo.js").toFile();
-                                            File gameFile = tmpdir.resolve("game.json").toFile();
-
-                                            try (PrintWriter out = new PrintWriter(demoFile)) {
-                                                out.println("export const demo = ");
-                                                out.print(extractDemoFromGameJson(gameFile).toString());
-                                                out.println(";");
-                                            }
-
-                                            exchange.setStatusCode(StatusCodes.OK);
-                                        } else if (exchange.getRelativePath().equals("/stub")) {
+                                        if (exchange.getRelativePath().equals("/stub")) {
                                             File stubFile = sourceFolderPath.resolve("config/stub.txt").toFile();
                                             if (exchange.getRequestMethod().equalToString("GET")) {
                                                 String stub = FileUtils.readFileToString(stubFile, StandardCharsets.UTF_8);
@@ -807,8 +737,6 @@ class Renderer {
                                                 exchange.setStatusCode(StatusCodes.NOT_FOUND);
                                             }
                                         }
-                                    } catch (MissingConfigException e) {
-                                        sendException(exchange, e, StatusCodes.UNPROCESSABLE_ENTITY);
                                     } catch (Exception e) {
                                         sendException(exchange, e, StatusCodes.BAD_REQUEST);
                                     } finally {
