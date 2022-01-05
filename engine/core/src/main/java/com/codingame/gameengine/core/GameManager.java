@@ -1,6 +1,9 @@
 package com.codingame.gameengine.core;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -26,6 +29,10 @@ import com.google.inject.Provider;
  *            Your implementation of AbstractPlayer
  */
 abstract public class GameManager<T extends AbstractPlayer> {
+    // this should be the most "original" possible stdout when the application is launched
+    public static PrintStream stdout = System.out;
+    public static PrintStream stderr = System.err;
+
     @Inject private Provider<T> playerProvider;
     @Inject private Provider<AbstractReferee> refereeProvider;
     @Inject private Gson gson;
@@ -51,6 +58,14 @@ abstract public class GameManager<T extends AbstractPlayer> {
     protected PrintStream out;
     private AbstractReferee referee;
     private boolean newTurn;
+
+    private PrintStream refereeStdout, refereeStderr;
+
+    private ByteArrayOutputStream currentRefereeOut = new ByteArrayOutputStream();
+    private String prevRefereeOut = "";
+
+    private ByteArrayOutputStream currentRefereeErr = new ByteArrayOutputStream();
+    private String prevRefereeErr = "";
 
     private List<Tooltip> currentTooltips = new ArrayList<>();
     private List<Tooltip> prevTooltips;
@@ -85,6 +100,23 @@ abstract public class GameManager<T extends AbstractPlayer> {
      *            print stream used to issue commands to Game
      */
     void start(InputStream is, PrintStream out) {
+        // wrap and buffer stdout & stderr
+        refereeStdout = System.out; refereeStderr = System.err;
+        System.setOut(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                stdout.write(b);
+                currentRefereeOut.write(b);
+            }
+        }));
+        System.setErr(new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+                stderr.write(b);
+                currentRefereeErr.write(b);
+            }
+        }));
+
         s = new Scanner(is);
         try {
             this.out = out;
@@ -233,6 +265,12 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * gameTurn instead of the middle of the gameTurn.
      */
     private void swapInfoAndViewData() {
+        prevRefereeOut = currentRefereeOut.toString();
+        currentRefereeOut.reset();
+
+        prevRefereeErr = currentRefereeErr.toString();
+        currentRefereeErr.reset();
+
         prevViewData = currentViewData;
         currentViewData = new JsonObject();
 
@@ -308,6 +346,16 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private void dumpInfos() {
         OutputData data = new OutputData(OutputCommand.INFOS);
         out.println(data);
+
+        if (newTurn && !prevRefereeOut.isEmpty()) {
+            refereeStdout.print(prevRefereeOut);
+            refereeStdout.flush();
+        }
+
+        if (newTurn && !prevRefereeErr.isEmpty()) {
+            refereeStderr.print(prevRefereeErr);
+            refereeStderr.flush();
+        }
 
         if (newTurn && prevGameSummary != null) {
             OutputData summary = new OutputData(getGameSummaryOutputCommand());

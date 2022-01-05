@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import com.codingame.gameengine.core.GameManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -430,19 +431,17 @@ abstract class GameRunner {
      * Simulates the game and gathers game results
      */
     private void runGame() {
-        PrintStream out = System.out;
+        GameManager.stdout = System.out;
         System.setOut(new PrintStream(new OutputStream() {
             @Override
             public void write(int b) throws IOException {
-                out.write(b);
                 refereeStdout.write(b);
             }
         }));
-        PrintStream err = System.err;
+        GameManager.stderr = System.err;
         System.setErr(new PrintStream(new OutputStream() {
             @Override
             public void write(int b) throws IOException {
-                err.write(b);
                 refereeStderr.write(b);
             }
         }));
@@ -455,8 +454,8 @@ abstract class GameRunner {
         referee.destroy();
         destroyPlayers();
         gameEnded = true;
-        System.setOut(out);
-        System.setErr(err);
+        System.setOut(GameManager.stdout);
+        System.setErr(GameManager.stderr);
     }
 
     /**
