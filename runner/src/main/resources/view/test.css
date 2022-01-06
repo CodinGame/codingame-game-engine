@@ -219,12 +219,12 @@ button {
     display: flex;
     flex: 1 0 auto;
     max-height: 50%;
+    margin-bottom: 20px;
 }
 
 .game-outputs-down {
     flex: 1;
     display: flex;
-    margin-top: 20px;
     flex-basis: 60%;
 }
 
