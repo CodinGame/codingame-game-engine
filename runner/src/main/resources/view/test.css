@@ -116,6 +116,7 @@ button {
 }
 
 .console-outputs {
+    font-family: monospace;
     margin: 10px 0px 5px;
     color: white;
     font-size: 13px;
@@ -235,16 +236,11 @@ button {
     font-weight: 600;
 }
 
-.game-outputs-up-uinput, .game-outputs-up-log, .game-outputs-down-summary {
+.game-outputs-up-log, .game-outputs-down-summary {
     flex: 1;
     display: flex;
     overflow: auto;
 }
-
-.game-outputs-up-log {
-    margin-right: 20px;
-}
-
 
 .game-outputs-down-referee {
     flex: 1;
