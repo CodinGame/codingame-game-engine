@@ -47,6 +47,10 @@ button {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+::-webkit-scrollbar-corner {
+    background-color: #252e38;
+}
+
 .pre-wrap {
     white-space: pre-wrap;
 }
@@ -213,6 +217,7 @@ button {
     background-color: #252e38;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 .game-outputs-up {  
@@ -226,6 +231,7 @@ button {
     flex: 1;
     display: flex;
     flex-basis: 60%;
+    overflow: auto;
 }
 
 .game-outputs-title {
@@ -269,7 +275,6 @@ button {
 .players-outputs-frame {
     display: flex; 
     flex-direction: row;
-    flex-wrap: wrap;
     margin: -10px;
     flex: 1;
     overflow: auto;
