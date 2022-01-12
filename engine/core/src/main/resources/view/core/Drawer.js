@@ -3,7 +3,6 @@ import * as config from '../config.js'
 import { unlerp, fitAspectRatio } from './utils.js'
 import { WIDTH, HEIGHT, BASE_FRAME_DURATION } from './constants.js'
 import { ErrorLog } from './ErrorLog.js'
-import { demo as defaultDemo } from '../demo.js'
 import { setRenderer, destroyFlagged } from './rendering.js'
 import { ModuleError } from './ModuleError.js'
 /* global PIXI requestAnimationFrame $ */
@@ -14,7 +13,7 @@ export class Drawer {
     this.toDestroy = []
     this.stepByStepAnimateSpeed = config.stepByStepAnimateSpeed || null
 
-    const demo = customDemo || defaultDemo
+    const demo = customDemo
 
     if (demo) {
       const frames = demo.views
