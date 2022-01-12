@@ -6,3 +6,4 @@ target/
 .vscode
 /bin
 *.iml
+.idea

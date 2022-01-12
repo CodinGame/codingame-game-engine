@@ -21,6 +21,7 @@ import com.codingame.gameengine.runner.Command.InputCommand;
 import com.codingame.gameengine.runner.Command.OutputCommand;
 import com.codingame.gameengine.runner.dto.AgentDto;
 import com.codingame.gameengine.runner.dto.GameResultDto;
+import com.codingame.gameengine.runner.dto.PlayerOutputDto;
 import com.codingame.gameengine.runner.dto.TooltipDto;
 import com.codingame.gameengine.runner.simulate.AgentData;
 import com.codingame.gameengine.runner.simulate.GameResult;
@@ -139,18 +140,18 @@ abstract class GameRunner {
                 NextPlayerInfo nextPlayerInfo = new NextPlayerInfo(
                     turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null)
                 );
-                String nextPlayerOutput = getNextPlayerOutput(
+                PlayerOutputDto nextPlayerOutput = getNextPlayerOutput(
                     nextPlayerInfo,
                     turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null)
                 );
 
                 for (Agent a : players) {
-                    gameResult.outputs.get(String.valueOf(a.getAgentId())).add(a.getAgentId() == nextPlayerInfo.nextPlayer ? nextPlayerOutput : null);
+                    gameResult.outputs.get(String.valueOf(a.getAgentId())).add(a.getAgentId() == nextPlayerInfo.nextPlayer ? nextPlayerOutput.output : null);
                 }
 
-                if (nextPlayerOutput != null) {
+                if (nextPlayerOutput.output != null) {
                     log.info("\t=== Read from player");
-                    log.info(nextPlayerOutput);
+                    log.info(nextPlayerOutput.output);
                     log.info("\t=== End Player");
                     sendPlayerOutput(nextPlayerOutput, nextPlayerInfo.nbLinesNextOutput);
                 } else {
@@ -244,9 +245,9 @@ abstract class GameRunner {
         }
     }
 
-    private void sendPlayerOutput(String output, int nbLines) {
-        String[] lines = output.split("(\\n|\\r\\n)", -1);
-        Command command = new Command(OutputCommand.SET_PLAYER_OUTPUT, Arrays.copyOfRange(lines, 0, nbLines));
+    private void sendPlayerOutput(PlayerOutputDto outputDto, int nbLines) {
+        String[] lines = (outputDto.timeSpent + "\n" + outputDto.output).split("(\\n|\\r\\n)", -1);
+        Command command = new Command(OutputCommand.SET_PLAYER_OUTPUT, Arrays.copyOfRange(lines, 0, nbLines + 1));
         referee.sendInput(command.toString());
     }
 
@@ -255,14 +256,16 @@ abstract class GameRunner {
         referee.sendInput(command.toString());
     }
 
-    private String getNextPlayerOutput(NextPlayerInfo nextPlayerInfo, String nextPlayerInput) {
+    private PlayerOutputDto getNextPlayerOutput(NextPlayerInfo nextPlayerInfo, String nextPlayerInput) {
         Agent player = players.get(nextPlayerInfo.nextPlayer);
 
         // Send player input to input queue
         queues.get(nextPlayerInfo.nextPlayer).offer(nextPlayerInput);
 
         // Wait for player output then read error
+        long timeSpent = System.nanoTime();
         String playerOutput = player.getOutput(nextPlayerInfo.nbLinesNextOutput, nextPlayerInfo.timeout);
+        timeSpent = System.nanoTime() - timeSpent;
         if (playerOutput != null)
             playerOutput = playerOutput.replace('\r', '\n');
 
@@ -278,19 +281,19 @@ abstract class GameRunner {
             }
             // Read this turns stderr and the crash output
             readError(player);
-            return null;
+            return new PlayerOutputDto(null, timeSpent); // ==> timeout
         }
 
         if ((playerOutput != null) && playerOutput.isEmpty() && (nextPlayerInfo.nbLinesNextOutput == 1)) {
-            return "\n";
+            return new PlayerOutputDto("\n", timeSpent);
         }
         if (
             (playerOutput != null) && (playerOutput.length() > 0)
                 && (playerOutput.charAt(playerOutput.length() - 1) != '\n')
         ) {
-            return playerOutput + '\n';
+            return new PlayerOutputDto(playerOutput + '\n', timeSpent);
         }
-        return playerOutput;
+        return new PlayerOutputDto(playerOutput, timeSpent); // ==> timeout if `playerOutput` is null
     }
 
     private GameTurnInfo readGameInfo(int round) {

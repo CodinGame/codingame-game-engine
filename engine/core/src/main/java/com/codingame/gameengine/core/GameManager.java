@@ -35,15 +35,10 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private static final int VIEW_DATA_TOTAL_HARD_QUOTA = 1024 * 1024;
     private static final int GAME_SUMMARY_TOTAL_HARD_QUOTA = 512 * 1024;
     private static final int GAME_SUMMARY_PER_TURN_HARD_QUOTA = 800;
-    private static final int GAME_DURATION_HARD_QUOTA = 30_000;
-    private static final int GAME_DURATION_SOFT_QUOTA = 25_000;
-    private static final int MAX_TURN_TIME = GAME_DURATION_SOFT_QUOTA;
-    private static final int MIN_TURN_TIME = 50;
 
     protected List<T> players;
     private int maxTurns = 200;
-    private int turnMaxTime = 50;
-    private int firstTurnMaxTime = 1000;
+    private final TimeoutSettings timeoutSettings = new TimeoutSettings();
     private Integer turn = null;
     private int frame = 0;
     private boolean gameEnd = false;
@@ -72,7 +67,6 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private boolean outputsRead = false;
     private int totalViewDataBytesSent = 0;
     private int totalGameSummaryBytes = 0;
-    private int totalTurnTime = 0;
 
     private boolean viewWarning, summaryWarning;
 
@@ -188,18 +182,17 @@ abstract public class GameManager<T extends AbstractPlayer> {
             dumpView();
             dumpInfos();
             dumpNextPlayerInput(player.getInputs().toArray(new String[0]));
-            if (nbrOutputLines > 0) {
-                addTurnTime();
-            }
-            dumpNextPlayerInfos(player.getIndex(), nbrOutputLines, player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime);
+            dumpNextPlayerInfos(player.getIndex(), nbrOutputLines, timeoutSettings.getMaxTurnTime(player));
 
             // READ PLAYER OUTPUTS
             iCmd = InputCommand.parse(s.nextLine());
             if (iCmd.cmd == InputCommand.Command.SET_PLAYER_OUTPUT) {
-                List<String> output = new ArrayList<>(iCmd.lineCount);
-                for (int i = 0; i < iCmd.lineCount; i++) {
+                final long timeSpent = Long.parseLong(s.nextLine());
+                List<String> output = new ArrayList<>(iCmd.lineCount - 1);
+                for (int i = 0; i < iCmd.lineCount - 1; i++) {
                     output.add(s.nextLine());
                 }
+                player.addTimeSpent(timeSpent);
                 player.setOutputs(output);
             } else if (iCmd.cmd == InputCommand.Command.SET_PLAYER_TIMEOUT) {
                 player.setTimeout(true);
@@ -445,56 +438,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
         return maxTurns;
     }
 
-    /**
-     * Set the timeout delay for every player. This value can be updated during a game and will be used by execute(). Default is 50ms.
-     * 
-     * @param turnMaxTime
-     *            Duration in milliseconds.
-     * @throws IllegalArgumentException
-     *             if turnMaxTime &lt; 50 or &gt; 25000
-     */
-    public void setTurnMaxTime(int turnMaxTime) throws IllegalArgumentException {
-        if (turnMaxTime < MIN_TURN_TIME) {
-            throw new IllegalArgumentException("Invalid turn max time : stay above 50ms");
-        } else if (turnMaxTime > MAX_TURN_TIME) {
-            throw new IllegalArgumentException("Invalid turn max time : stay under 25s");
-        }
-        this.turnMaxTime = turnMaxTime;
-    }
-    
-    /**
-     * Set the timeout delay of the first turn for every player. Default is 1000ms.
-     * 
-     * @param firstTurnMaxTime
-     *            Duration in milliseconds.
-     * @throws IllegalArgumentException
-     *             if firstTurnMaxTime &lt; 50 or &gt; 25000
-     */
-    public void setFirstTurnMaxTime(int firstTurnMaxTime) throws IllegalArgumentException {
-        if (firstTurnMaxTime < MIN_TURN_TIME) {
-            throw new IllegalArgumentException("Invalid turn max time : stay above 50ms");
-        } else if (firstTurnMaxTime > MAX_TURN_TIME) {
-            throw new IllegalArgumentException("Invalid turn max time : stay under 25s");
-        }
-        this.firstTurnMaxTime = firstTurnMaxTime;
-    }
-
-    /**
-     * Get the timeout delay for every player.
-     * 
-     * @return the current timeout duration in milliseconds.
-     */
-    public int getTurnMaxTime() {
-        return turnMaxTime;
-    }
-    
-    /**
-     * Get the timeout delay of the first turn for every player.
-     * 
-     * @return the first turn timeout duration in milliseconds.
-     */
-    public int getFirstTurnMaxTime() {
-        return firstTurnMaxTime;
+    public TimeoutSettings getTimeoutSettings() {
+        return timeoutSettings;
     }
 
     /**
@@ -573,20 +518,6 @@ abstract public class GameManager<T extends AbstractPlayer> {
         } else if (!summaryWarning) {
             log.warn("Warning: the game summary is full. Please try to send less data.");
             summaryWarning = true;
-        }
-    }
-
-    private void addTurnTime() {
-        totalTurnTime += turnMaxTime;
-        if (totalTurnTime > GAME_DURATION_HARD_QUOTA) {
-            throw new RuntimeException(String.format("Total game duration too long (>%dms)", GAME_DURATION_HARD_QUOTA));
-        } else if (totalTurnTime > GAME_DURATION_SOFT_QUOTA) {
-            log.warn(
-                String.format(
-                    "Warning: too many turns and/or too much time allocated to players per turn (%dms/%dms)",
-                    totalTurnTime, GAME_DURATION_HARD_QUOTA
-                )
-            );
         }
     }
 

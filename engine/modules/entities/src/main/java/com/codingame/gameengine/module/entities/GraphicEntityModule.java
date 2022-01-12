@@ -26,8 +26,6 @@ import com.google.inject.Singleton;
 @Singleton
 public class GraphicEntityModule implements Module {
 
-    //TODO: extra properties for Texts (text wrapping, alignment, ...)
-
     static int ENTITY_COUNT = 0;
 
     private List<SpriteSheetSplitter> newSpriteSheetSplitters;

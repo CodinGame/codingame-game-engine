@@ -93,13 +93,10 @@ public class JavaPlayerAgent extends Agent {
             javaRunnerThread.interrupt();
             try {
                 javaRunnerThread.join(100);
-            } catch (InterruptedException ie) {
-                // TODO
-            }
+            } catch (InterruptedException ignored) {}
             if (javaRunnerThread.isAlive()) {
-                // TODO
                 javaRunnerThread.interrupt();
-//                 javaRunnerThread.destroy();
+             // javaRunnerThread.destroy();
                 javaRunnerThread.stop();
             }
         }

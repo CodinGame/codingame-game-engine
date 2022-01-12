@@ -111,7 +111,6 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
      * @return the list of active players.
      */
     public List<T> getActivePlayers() {
-        // TODO: could be optimized with a list of active players updated on player.deactivate().
         return players.stream().filter(p -> p.isActive()).collect(Collectors.toList());
     }
 

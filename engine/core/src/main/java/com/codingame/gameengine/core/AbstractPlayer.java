@@ -27,6 +27,7 @@ abstract public class AbstractPlayer {
     protected int index;
     private List<String> inputs = new ArrayList<>();
     private List<String> outputs;
+    private long totalTimeSpent; // in nanoseconds
     private boolean timeout;
     private int score;
     private boolean hasBeenExecuted;
@@ -153,6 +154,14 @@ abstract public class AbstractPlayer {
 
     final void setOutputs(List<String> outputs) {
         this.outputs = outputs;
+    }
+
+    public final int getTotalTimeSpentMs() {
+        return (int) Math.round(totalTimeSpent / 1e6);
+    }
+
+    final void addTimeSpent(long time) {
+        totalTimeSpent += time;
     }
 
     final void setTimeout(boolean timeout) {
