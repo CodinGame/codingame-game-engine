@@ -99,7 +99,6 @@ function PlayerCtrl ($scope, $timeout, $interval, $element) {
       return
     }
 
-    $scope.uinput = ctrl.data.uinput
     ctrl.gameInfo = convertFrameFormat(ctrl.data)
     $scope.agents = { ...ctrl.data.agents }
 

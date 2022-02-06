@@ -47,6 +47,10 @@ button {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+::-webkit-scrollbar-corner {
+    background-color: #252e38;
+}
+
 .pre-wrap {
     white-space: pre-wrap;
 }
@@ -116,6 +120,7 @@ button {
 }
 
 .console-outputs {
+    font-family: monospace;
     margin: 10px 0px 5px;
     color: white;
     font-size: 13px;
@@ -212,19 +217,21 @@ button {
     background-color: #252e38;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 .game-outputs-up {  
     display: flex;
     flex: 1 0 auto;
     max-height: 50%;
+    margin-bottom: 20px;
 }
 
 .game-outputs-down {
     flex: 1;
     display: flex;
-    margin-top: 20px;
     flex-basis: 60%;
+    overflow: auto;
 }
 
 .game-outputs-title {
@@ -235,16 +242,11 @@ button {
     font-weight: 600;
 }
 
-.game-outputs-up-uinput, .game-outputs-up-log, .game-outputs-down-summary {
+.game-outputs-up-log, .game-outputs-down-summary {
     flex: 1;
     display: flex;
     overflow: auto;
 }
-
-.game-outputs-up-uinput, .game-outputs-up-log {
-    margin-right: 20px;
-}
-
 
 .game-outputs-down-referee {
     flex: 1;
@@ -273,7 +275,6 @@ button {
 .players-outputs-frame {
     display: flex; 
     flex-direction: row;
-    flex-wrap: wrap;
     margin: -10px;
     flex: 1;
     overflow: auto;
