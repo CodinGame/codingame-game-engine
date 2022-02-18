@@ -420,6 +420,7 @@ abstract class GameRunner {
             .map(agentDto -> new AgentData(agentDto.index, agentDto.name, agentDto.avatar))
             .collect(Collectors.toList());
         simulateResult.failCause = gameResult.failCause;
+        simulateResult.json = getJSONResult();
 
         return simulateResult;
     }

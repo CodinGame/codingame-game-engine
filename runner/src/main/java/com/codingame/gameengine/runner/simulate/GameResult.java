@@ -59,5 +59,8 @@ public class GameResult {
      * The list of player agents used for this game launch.
      */
     public List<AgentData> agents = new ArrayList<>();
-
+    /**
+     * This object in JSON format.
+     */
+    public String json;
 }
