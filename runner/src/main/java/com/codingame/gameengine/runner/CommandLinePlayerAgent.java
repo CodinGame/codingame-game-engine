@@ -58,7 +58,7 @@ public class CommandLinePlayerAgent extends Agent {
         try {
             this.process = Runtime.getRuntime().exec(commandArray);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to launch " + String.join(" ", commandArray));
+            throw new RuntimeException("Failed to launch " + String.join(" ", commandArray), e);
         }
         processStdin = process.getOutputStream();
         processStdout = process.getInputStream();
