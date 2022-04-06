@@ -27,7 +27,7 @@ String[] seaweedSprites = graphicEntityModule.createSpriteSheetSplitter()
     .setName("seaweed")
     .split();
 
-//Creating an animation from the splitted spritesheet
+//Creating an animation from the split spritesheet
 graphicEntityModule.createSpriteAnimation()
     .setImages(seaweedSprites)
     .setX(50)
@@ -103,4 +103,4 @@ Your file should look like this.
 ```
 :::
 
-Place this file in the assets folder, you can now use each image with their name as if they were splitted in different files.
+Place this file in the assets folder, you can now use each image with their name as if they were split in different files.
