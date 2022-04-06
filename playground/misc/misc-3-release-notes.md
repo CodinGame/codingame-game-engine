@@ -2,6 +2,15 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 4.1.6
+
+### 🐞 Bug fix
+
+- `.gif` images are now supported in welcome messages.
+- `CommandLinePlayerAgent` now reports the IOException message when execution fails.
+- Fixed typo in the docs.
+
+
 ## 4.1.5
 
 ### 🐞 Bug fix
