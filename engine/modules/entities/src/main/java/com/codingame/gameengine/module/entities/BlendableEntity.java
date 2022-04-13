@@ -9,7 +9,7 @@ public abstract class BlendableEntity<T extends Entity<?>> extends Entity<T> {
     /**
      * The list of supported PIXI blend modes and their associated constant.
      * 
-     * @see <a href="http://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES">PIXI BLEND_MODES</a>
+     * @see <a href="https://pixijs.download/v6.0.2/docs/PIXI.html#BLEND_MODES">PIXI BLEND_MODES</a>
      */
     public static enum BlendMode {
         /**
@@ -44,7 +44,7 @@ public abstract class BlendableEntity<T extends Entity<?>> extends Entity<T> {
     /**
      * Returns the <code>BlendMode</code> this <code>TextureBasedEntity</code> is to be drawn with.
      * 
-     * @see <a href="http://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES">PIXI BLEND_MODES</a>
+     * @see <a href="https://pixijs.download/v6.0.2/docs/PIXI.html#BLEND_MODES">PIXI BLEND_MODES</a>
      * @return the <code>BlendMode</code> this <code>TextureBasedEntity</code> is to be drawn with.
      */
     public BlendMode getBlendMode() {
@@ -57,7 +57,7 @@ public abstract class BlendableEntity<T extends Entity<?>> extends Entity<T> {
      * </p>
      * The possible values are found in <code>BlendMode</code>.
      * 
-     * @see <a href="http://pixijs.download/dev/docs/PIXI.html#.BLEND_MODES">PIXI BLEND_MODES</a>
+     * @see <a href="https://pixijs.download/v6.0.2/docs/PIXI.html#BLEND_MODES">PIXI BLEND_MODES</a>
      * @param blendMode the <code>BlendMode</code> to use.
      * @return this <code>TextureBasedEntity</code>.
      */
