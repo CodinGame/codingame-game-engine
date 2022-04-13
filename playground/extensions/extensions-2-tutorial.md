@@ -151,7 +151,7 @@ export class MyModule {
 }
 ```
 
-You can now customize the viewer with [PixiJS](http://www.pixijs.com/)! To get started with this lib, we suggest you check the [PIXI.Container documentation](http://pixijs.download/release/docs/PIXI.Container.html) as you will need to add your objects to one.
+You can now customize the viewer with [PixiJS](http://www.pixijs.com/)! To get started with this lib, we suggest you check the [PIXI.Container documentation](https://pixijs.download/v6.0.2/docs/PIXI.Container.html) as you will need to add your objects to one.
 
 ## Reference API
 
