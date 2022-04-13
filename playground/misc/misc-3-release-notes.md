@@ -7,6 +7,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 ### 🐞 Bug fix
 
 - Updated links to pixi docs
+- Updated log4j dependency
 
 ## 4.1.6
 
@@ -15,7 +16,6 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 - `.gif` images are now supported in welcome messages.
 - `CommandLinePlayerAgent` now reports the IOException message when execution fails.
 - Fixed typo in the docs.
-
 
 ## 4.1.5
 
