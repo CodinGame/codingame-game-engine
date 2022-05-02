@@ -2,7 +2,11 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next Release
+## 4.2.0
+
+### 🎁 Features
+
+- Provide a `getRandom` function to an instance of `SecureRandom`, please use this instead of creating your own `Random`
 
 ### 🎁 Features
 
