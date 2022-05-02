@@ -2,8 +2,11 @@ package com.codingame.gameengine.core;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
@@ -21,8 +24,11 @@ import com.google.inject.Singleton;
 @Singleton
 public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> extends GameManager<T> {
 
+    private static final String RANDOM_SECURE_SHA1PRNG_ALGORITHM = "SHA1PRNG";
+
     private Properties gameParameters;
     private long seed;
+    private Random random;
 
     @Override
     protected void readGameProperties(InputCommand iCmd, Scanner s) {
@@ -46,6 +52,15 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
             }
         }
         gameParameters.setProperty("seed", String.valueOf(seed));
+
+		try {
+			// This random generator is reproducible whereas default one (native PRNG is not)
+			random = SecureRandom.getInstance(RANDOM_SECURE_SHA1PRNG_ALGORITHM);
+			random.setSeed(seed);
+		} catch (NoSuchAlgorithmException e1) {
+			log.error("Error while creating secure random number generator. Default to non-secure random generator", e1);
+			random = new Random(seed);
+		}
     }
 
     @Override
@@ -76,8 +91,13 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
      * 
      * @return an <code>long</code> containing a given or generated seed.
      */
+    @Deprecated
     public long getSeed() {
         return seed;
+    }
+    
+    public Random getRandom() {
+        return random;
     }
 
     /**
