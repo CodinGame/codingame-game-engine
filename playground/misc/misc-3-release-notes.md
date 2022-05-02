@@ -8,10 +8,6 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - Provide a `getRandom` function to an instance of `SecureRandom`, please use this instead of creating your own `Random`
 
-### 🎁 Features
-
-- Provide a `getRandom` function to an instance of `SecureRandom`, please use this instead of creating your own `Random`
-
 ### 🐞 Bug fix
 
 - Updated links to pixi docs
