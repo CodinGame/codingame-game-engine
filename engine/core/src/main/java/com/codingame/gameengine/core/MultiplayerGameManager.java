@@ -85,17 +85,26 @@ public final class MultiplayerGameManager<T extends AbstractMultiplayerPlayer> e
 
     /**
      * <p>
-     * The seed is used to generated parameters such as width and height.<br>
-     * If a seed is present in the given input, the input value should override the generated values.
+     * The seed is used to initialize the Random number generator.<br>
+     * If a seed is present in the given input, the input value should override the generated values.<br>
+     * 
+     * The seed should NOT be used directly in referee but through the random number generator provided by @method getRandom
      * </p>
      * 
      * @return an <code>long</code> containing a given or generated seed.
      */
-    @Deprecated
     public long getSeed() {
         return seed;
     }
     
+    /**
+     * <p>
+     * The random generator is used to generated parameters such as width and height.<br>
+     * The provided random generator is a SecureRandom using the SHAPRNG algorithm.<br>
+     * </p>
+     * 
+     * @return an <code>Random</code> containing a given or generated seed.
+     */
     public Random getRandom() {
         return random;
     }
