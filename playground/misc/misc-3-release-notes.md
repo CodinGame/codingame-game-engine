@@ -8,6 +8,7 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 - Updated links to pixi docs
 - Updated log4j dependency
+- Use secure random
 
 ## 4.1.6
 
