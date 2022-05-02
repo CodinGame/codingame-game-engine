@@ -4,11 +4,14 @@ The CodinGame SDK is regularly updated and improved. This document lets you know
 
 ## Next Release
 
+### 🎁 Features
+
+- Provide a `getRandom` function to an instance of `SecureRandom`, please use this instead of creating your own `Random`
+
 ### 🐞 Bug fix
 
 - Updated links to pixi docs
 - Updated log4j dependency
-- Use secure random
 
 ## 4.1.6
 
