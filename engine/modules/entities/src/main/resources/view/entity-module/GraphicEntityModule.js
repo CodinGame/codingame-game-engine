@@ -167,6 +167,7 @@ export class GraphicEntityModule {
           e.childrenContainer.addChild(child.container)
           child.parent = e
         })
+        e.notifyChange()
       }
     })
 

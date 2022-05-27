@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🐞 Bug fix
+
+- Fixed zIndexing in `BufferedGroups`.
+
 ## 4.2.0
 
 ### 🎁 Features
