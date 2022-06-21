@@ -6,6 +6,7 @@ export const api = {}
 
 export class GraphicEntityModule {
   constructor (assets) {
+    window.entityModule = this
     this.entities = new Map()
     this.frames = []
     this.loadingAssets = 0
