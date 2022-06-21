@@ -13,7 +13,6 @@ export class ContainerBasedEntity extends Entity {
   initDisplay () {
     super.initDisplay()
     this.graphics = new PIXI.Container()
-    this.graphics.sortableChildren = true
   }
 
   updateDisplay (state, changed, globalData) {

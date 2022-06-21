@@ -7,7 +7,6 @@ export class BufferedGroup extends ContainerBasedEntity {
   initDisplay () {
     super.initDisplay()
     this.buffer = new PIXI.Container()
-    this.buffer.sortableChildren = true
     this.gameTexture = null
     this.graphics = new PIXI.Sprite()
     this.needsRender = true
