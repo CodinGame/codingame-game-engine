@@ -2,6 +2,16 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🎁 Features
+
+- `BufferedGroups` can now be used as masks.
+
+### 🐞 Bug fix
+
+- Children with equal `zIndices` are now rendered by order of insertion in `Groups` and `BufferedGroups`.
+
 ## 4.2.1
 
 ### 🐞 Bug fix

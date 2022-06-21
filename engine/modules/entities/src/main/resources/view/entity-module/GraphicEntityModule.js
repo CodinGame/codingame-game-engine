@@ -117,7 +117,6 @@ export class GraphicEntityModule {
     this.globalData.toPixel = (WIDTH / canvasData.width) * canvasData.oversampling
     this.globalData.mustResetTree = true
     api.container = this.container = container
-    container.sortableChildren = true
     this.entities.forEach((e) => {
       e.init()
     })
@@ -167,6 +166,7 @@ export class GraphicEntityModule {
           e.childrenContainer.addChild(child.container)
           child.parent = e
         })
+        this.sortContainerChildren(e.childrenContainer)
         e.notifyChange()
       }
     })
@@ -177,6 +177,13 @@ export class GraphicEntityModule {
         this.container.addChild(e.container)
       }
     })
+    this.sortContainerChildren(this.container)
+  }
+  
+  sortContainerChildren(container) {
+    container.children.sort(
+      (a,b) => a.zIndex === b.zIndex ? a.id - b.id : a.zIndex - b.zIndex
+    )
   }
 
   handleGlobalData (players, globalData) {
