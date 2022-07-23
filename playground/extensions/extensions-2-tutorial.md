@@ -1,4 +1,7 @@
 # Create your own modules
+If you make a module that could be used in other project, don't hesitate to make a pull request to the
+[CodinGame game engine repository](https://github.com/CodinGame/codingame-game-engine) to make it available for everyone.
+
 
 To create a module, you will need a minimum of two files:
 - A Java file containing a class implementing `Module`. Its purpose is to send data to the view.
