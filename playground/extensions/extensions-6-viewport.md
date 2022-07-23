@@ -12,7 +12,8 @@ Add this dependency in the `pom.xml` of your project:
 <dependency>
   <groupId>com.codingame.gameengine</groupId>
   <artifactId>module-viewport</artifactId>
-  <version>3.7.0</version>
+  <version>4.3.0</version>
+    <!-- Or any version > 3.7.0 -->
 </dependency>
 ```
 
