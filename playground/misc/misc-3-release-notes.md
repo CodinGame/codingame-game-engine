@@ -2,6 +2,55 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 4.3.0
+
+### 🎁 Features
+
+- `BufferedGroups` can now be used as masks.
+
+### 🐞 Bug fix
+
+- Children with equal `zIndices` are now rendered by order of insertion in `Groups` and `BufferedGroups`.
+
+## 4.2.1
+
+### 🐞 Bug fix
+
+- Fixed zIndexing in `BufferedGroups`.
+
+## 4.2.0
+
+### 🎁 Features
+
+- Provide a `getRandom` function to an instance of `SecureRandom`, please use this instead of creating your own `Random`
+
+### 🐞 Bug fix
+
+- Updated links to pixi docs
+- Updated log4j dependency
+
+## 4.1.6
+
+### 🐞 Bug fix
+
+- `.gif` images are now supported in welcome messages.
+- `CommandLinePlayerAgent` now reports the IOException message when execution fails.
+- Fixed typo in the docs.
+
+## 4.1.5
+
+### 🐞 Bug fix
+
+- Fixed `TilingSprite` _Contributed by [Butanium](https://github.com/Butanium)_
+- Fixed `CameraModule` bug. _Contributed by [Butanium](https://github.com/Butanium)_
+
+## 4.1.4
+
+### 🐞 Bug fix
+
+- Updated statement html sanitizer.
+- Various fixes on the `CameraModule`. _Contributed by [Butanium](https://github.com/Butanium)_
+
 ## 4.1.3
 
 ### 🎁 Features

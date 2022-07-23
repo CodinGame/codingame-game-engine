@@ -91,7 +91,7 @@ public class Referee extends AbstractReferee {
     @Override
     public void init() {
       // Map size can be 5,6,7 or 8
-      int mapSize = 5 + new Random(gameManager.getSeed()).nextInt(4)
+      int mapSize = 5 + gameManager.getRandom().nextInt(4)
       gridMaker.init(mapSize);
     }
 }

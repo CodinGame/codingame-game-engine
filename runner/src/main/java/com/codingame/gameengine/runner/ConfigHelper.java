@@ -30,7 +30,7 @@ import com.google.gson.JsonSyntaxException;
 class ConfigHelper {
     private static final Pattern STATEMENT_FILE_PATTERN = Pattern.compile("statement_(?<language>.*?)\\.html?");
     private static final Pattern WELCOME_FILE_PATTERN = Pattern.compile("welcome_(?<language>.*?)\\.html?");
-    private static final Pattern WELCOME_IMG_PATTERN = Pattern.compile(".*\\.(png|jpe?g)");
+    private static final Pattern WELCOME_IMG_PATTERN = Pattern.compile(".*\\.(png|jpe?g|gif)");
     private static final Pattern BOSS_FILE_PATTERN = Pattern.compile("Boss\\.(?<extension>.*)");
     private static final Pattern LEVEL_DIR_PATTERN = Pattern.compile("level(?<level>\\d+)");
     private static final Pattern TEST_FILE_PATTERN = Pattern.compile("test(?<num>\\d+)\\.(?:json|yaml)");
