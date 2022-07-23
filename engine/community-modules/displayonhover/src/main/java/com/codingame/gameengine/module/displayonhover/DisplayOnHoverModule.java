@@ -1,4 +1,4 @@
-package view.modules;
+package com.codingame.gameengine.module.displayonhover;
 
 import com.codingame.gameengine.core.AbstractPlayer;
 import com.codingame.gameengine.core.GameManager;
