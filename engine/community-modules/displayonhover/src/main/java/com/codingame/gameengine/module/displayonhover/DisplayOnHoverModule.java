@@ -59,7 +59,7 @@ public class DisplayOnHoverModule implements Module {
      * @param displayEntity the entity to display when the mouse is over <code>entity</code>
      */
     public void setDisplayHover(Entity<?> entity, Entity<?> displayEntity) {
-        setDisplayHover(entity.getId(), new Integer[](displayEntity.getId()));
+        newRegistration.put(entity.getId(), new Integer[]{displayEntity.getId()});
     }
 
     /**
@@ -69,7 +69,7 @@ public class DisplayOnHoverModule implements Module {
      * @param displayEntities the entities to display when the mouse is over <code>entity</code>
      */
     public void setDisplayHover(Entity<?> entity, Entity<?>[] displayEntities) {
-        setDisplayHover(entity, Arrays.stream(displayEntities).map(Entity::getId).toArray(Integer[]::new));
+        newRegistration.put(entity.getId(), Arrays.stream(displayEntities).map(Entity::getId).toArray(Integer[]::new));
     }
 
     /**
