@@ -41,7 +41,7 @@ export const modules = [
 `Referee.java`
 ```java
 @Inject
-CameraModule displayOnHoverModule;
+DisplayOnHoverModule displayOnHoverModule;
 
 @Override
 public void init() {
