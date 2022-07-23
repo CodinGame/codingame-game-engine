@@ -56,7 +56,6 @@ function getMouseMoveFunc(module) {
     return function (ev) {
         const showing = []
         const ids = Object.keys(module.inside).map(n => +n)
-        // console.log("ids : ", ids, "inside : ", module.inside)
         for (let id of ids) {
             if (module.inside[id]) {
                 const entity = entityModule.entities.get(id)
@@ -73,7 +72,7 @@ function getMouseMoveFunc(module) {
                 for (let show of showing) {
                     const entity = entityModule.entities.get(show)
                     const state = getEntityState(entity, module.currentFrame.number)
-                    if (state !== null && module.currentFrame.registered[id] !== null) {
+                    if (state !== null && module.currentFrame.registered[show] !== null) {
                         module.currently_displayed.add(show)
                         for (let display_id of module.currentFrame.registered[show]) {
                             const display_entity = entityModule.entities.get(display_id)
