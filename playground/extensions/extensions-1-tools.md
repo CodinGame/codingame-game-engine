@@ -20,12 +20,12 @@ Example of a project using the Graphic Entity Module and the End Screen Module:
 <dependency>
 	<groupId>com.codingame.gameengine</groupId>
 	<artifactId>module-entities</artifactId>
-	<version>3.4.1</version>
+	<version>${gamengine.version}</version>
 </dependency>
 <dependency>
 	<groupId>com.codingame.gameengine</groupId>
 	<artifactId>module-endscreen</artifactId>
-	<version>3.4.1</version>
+	<version>${gamengine.version}</version>
 </dependency>
 ```
 `config.js`

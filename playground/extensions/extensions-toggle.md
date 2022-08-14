@@ -11,7 +11,7 @@ Add the dependency in the `pom.xml` of your project.
 <dependency>
 	<groupId>com.codingame.gameengine</groupId>
 	<artifactId>module-toggle</artifactId>
-	<version>3.4.7</version>
+	<version>${gamengine.version}</version>
 </dependency>
 ```
 
