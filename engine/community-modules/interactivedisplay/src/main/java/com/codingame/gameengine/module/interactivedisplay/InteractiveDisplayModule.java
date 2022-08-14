@@ -1,4 +1,4 @@
-package com.codingame.gameengine.module.displayonhover;
+package com.codingame.gameengine.module.interactivedisplay;
 
 import com.codingame.gameengine.core.AbstractPlayer;
 import com.codingame.gameengine.core.GameManager;
@@ -12,18 +12,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The DisplayOnHoverModule allows you to display entities when the mouse is over an entity. It's the
- * same as the TooltipModule, but with custom entities instead of text.
+ * The InteractiveDisplayModule allows you to display entities when the mouse is over an entity or when an entity is
+ * clicked.
  */
 @Singleton
-public class DisplayOnHoverModule implements Module {
+public class InteractiveDisplayModule implements Module {
 
     GameManager<AbstractPlayer> gameManager;
     Map<Integer, Integer[]> newRegistration;
 
 
     @Inject
-    DisplayOnHoverModule(GameManager<AbstractPlayer> gameManager) {
+    InteractiveDisplayModule(GameManager<AbstractPlayer> gameManager) {
         this.gameManager = gameManager;
         gameManager.registerModule(this);
         newRegistration = new HashMap<>();
