@@ -2,11 +2,12 @@
 
 Contributed by [Butanium](https://github.com/Butanium).
 
-This module allows you to display entities when the mouse is over an entity or when
+The InteractiveDisplayModule allows you to display entities when the mouse is over an entity or
+when the user clicks an entity.
 
 ## Showcase
 
-Here is a usage example <br>
+Here is an usage example <br>
 <a href="https://live.staticflickr.com/65535/52235500282_9e6dfdbe65_o.gif"><img src="https://live.staticflickr.com/65535/52235500282_9e6dfdbe65_o.gif"/></a>
 
 ## Setup
@@ -62,7 +63,7 @@ InteractiveDisplayModule.enable_display_on_click = false
 ```
 
 - Add this line if you want to limit the number of clicked entities. If the limit is exceeded,
-  the first clicked entities will be hide
+  the oldest clicked entities will be hidden
 
 ```js
 InteractiveDisplayModule.max_clicked_entities = 3
