@@ -37,13 +37,14 @@ import {InteractiveDisplayModule} from './interactivedisplay-module/InteractiveD
 // List of viewer modules that you want to use in your game
 export const modules = [
     GraphicEntityModule,
-    InteractiveDisplayModule,
+    InteractiveDisplayModule
 ]
 ```
 
 ### Optional arguments
 
-You can modify the behavior of the module by adding some lines in the `config.js` (after `export const modules`).
+You can modify the behavior of the module by adding some lines in the `config.js` (after `export const modules = [...]`)
+.
 
 - Add this line to disable displaying entities when the mouse hover it
 
