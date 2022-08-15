@@ -3,12 +3,13 @@
 Contributed by [Butanium](https://github.com/Butanium).
 
 The InteractiveDisplayModule allows you to display entities when the mouse is over an entity or
-when the user clicks an entity.
+when the user clicks an entity. If an entity is clicked, the associated entity will be displayed until
+the entity is clicked again. The user can hide all entities displayed by the module with `ALT + LEFT CLICK`.
 
 ## Showcase
 
 Here is an usage example <br>
-<a href="https://live.staticflickr.com/65535/52235500282_9e6dfdbe65_o.gif"><img src="https://live.staticflickr.com/65535/52235500282_9e6dfdbe65_o.gif"/></a>
+<a href="https://live.staticflickr.com/65535/52286823977_3c42caeb32_o.gif"><img src="https://live.staticflickr.com/65535/52286823977_3c42caeb32_o.gif"/></a>
 
 ## Setup
 
@@ -42,7 +43,7 @@ export const modules = [
 
 ### Optional arguments
 
-You can modify the module behavior by adding some lines in the `config.js`.
+You can modify the behavior of the module by adding some lines in the `config.js` (after `export const modules`).
 
 - Add this line to disable displaying entities when the mouse hover it
 
