@@ -1,5 +1,8 @@
 import {api as entityModule} from '../entity-module/GraphicEntityModule.js'
 
+const BOTH = 3;
+const HOVER_ONLY = 2;
+const CLICK_ONLY = 1;
 
 /**********************************
  Legacy from the tooltip module
@@ -33,34 +36,41 @@ function getEntityState(entity, frame) {
  * Hide all entities associated to an entity
  * @param id the id of the entity
  * @param module a reference to the InteractiveDisplayModule
+ * @param only set to a number to hide only entities that have a specific display mode
  */
-function hideAssociated(id, module) {
-    for (let debug_id of module.currentFrame.registered[id]) {
-        const debug_entity = entityModule.entities.get(debug_id)
-        debug_entity.container.visible = false
-    }
+function hideAssociated(id, module, only) {
+    const to_hide = module.currentFrame.registered[id]
+    Object.keys(to_hide).map(id2 => +id2).forEach(hide_id => {
+        if (!only || to_hide[hide_id] === only) {
+            entityModule.entities.get(hide_id).container.visible = false
+        }
+    })
 }
 
 /**
  * Show all entities associated to an entity
  * @param id the id of the entity
  * @param module a reference to the InteractiveDisplayModule
+ * @param unless the entity should not be displayed if its display mode is equal to unless
  */
-function showAssociated(id, module) {
-    for (let debug_id of module.currentFrame.registered[id]) {
-        const debug_entity = entityModule.entities.get(debug_id)
-        debug_entity.container.visible = true
-    }
+function showAssociated(id, module, unless = -1) {
+    const to_display = module.currentFrame.registered[id]
+    Object.keys(to_display).map(id2 => +id2).forEach(display_id => {
+        if (to_display[display_id] !== unless) {
+            entityModule.entities.get(display_id).container.visible = true
+        }
+    })
 }
 
 /**
  * Show all entities associated to a set of entities
  * @param ids the ids of the entities
  * @param module a reference to the InteractiveDisplayModule
+ * @param unless the entity should not be displayed if its display mode is equal to unless
  */
-function showAllAssociated(ids, module) {
+function showAllAssociated(ids, module, unless = -1) {
     for (let id of ids) {
-        showAssociated(id, module)
+        showAssociated(id, module, unless)
     }
 }
 
@@ -85,9 +95,7 @@ function getMouseOutFunc(id, module) {
         delete module.inside[id]
         if (module.hovered_entities.has(id)) {
             module.removeHovered(id)
-            if (!module.clicked_entities.includes(id)) {
-                hideAssociated(id, module)
-            }
+            hideAssociated(id, module, module.clicked_entities.includes(id) ? HOVER_ONLY : undefined)
         }
     }
 }
@@ -101,7 +109,7 @@ function getMouseClickFunc(id, module) {
     return function (ev) {
         const mouseEvent = ev.data.originalEvent
         if (mouseEvent instanceof MouseEvent && InteractiveDisplayModule.enable_display_on_click) {
-            if (mouseEvent.button === 0) {
+            if (mouseEvent.button === 0 && module.currentFrame.registered[id][0] !== HOVER_ONLY) {
                 if (module.clicked_entities.includes(id)) {
                     module.removeClicked(id)
                     hideAssociated(id, module)
@@ -113,7 +121,7 @@ function getMouseClickFunc(id, module) {
                             hideAssociated(removed_id, module)
                         }
                     }
-                    showAssociated(id, module)
+                    showAssociated(id, module, HOVER_ONLY)
                 }
             }
         }
@@ -160,13 +168,14 @@ function getMouseMoveFunc(module) {
             }
         }
         if (showing.length) {
+            const isPossible = id => getEntityState(entityModule.entities.get(id), module.currentFrame.number) !== null
+                && module.currentFrame.registered[id] !== null
+                && module.currentFrame.registered[id][0] !== CLICK_ONLY
             if (InteractiveDisplayModule.allow_multiple_hover_display) {
                 for (let show of showing) {
-                    const entity = entityModule.entities.get(show)
-                    const state = getEntityState(entity, module.currentFrame.number)
-                    if (state !== null && module.currentFrame.registered[show] !== null) {
+                    if (isPossible(show)) {
                         module.hovered_entities.add(show)
-                        showAssociated(show, module)
+                        showAssociated(show, module, CLICK_ONLY)
                     }
                 }
             } else {
@@ -182,13 +191,11 @@ function getMouseMoveFunc(module) {
                     module.removeHovered(id)
                 }
                 if (module.hovered_entities.size === 0) {
-                    const available = showing.filter(id =>
-                        getEntityState(entityModule.entities.get(id), module.currentFrame.number) !== null
-                        && module.currentFrame.registered[id] !== null)
+                    const available = showing.filter(isPossible)
                     if (available.length) {
                         const min = Math.min(...available)
                         module.hovered_entities.add(min)
-                        showAssociated(min, module)
+                        showAssociated(min, module, CLICK_ONLY)
                     }
                 }
             }
@@ -226,8 +233,8 @@ export class InteractiveDisplayModule {
     updateScene(previousData, currentData, progress) {
         this.currentFrame = currentData
         this.currentProgress = progress
-        showAllAssociated(this.hovered_entities, this)
-        showAllAssociated(this.clicked_entities, this)
+        showAllAssociated(this.hovered_entities, this, CLICK_ONLY)
+        showAllAssociated(this.clicked_entities, this, HOVER_ONLY)
     }
 
     handleFrameData(frameInfo, data = []) {
@@ -266,10 +273,6 @@ export class InteractiveDisplayModule {
             // getResetOnClick will be triggered everytime the user click on the player
             entityContainer.click = getResetOnClickFunc(this)
         }
-    }
-
-    test () {
-        console.log("test")
     }
 
 

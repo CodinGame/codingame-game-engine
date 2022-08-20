@@ -82,8 +82,12 @@ InteractiveDisplayModule interactiveDisplayModule;
 @Override
 public void init(){
         // Add enities to display when the mouse is over entity
-        interactiveDisplayModule.setDisplayHover(entity,entitiesToDisplay);
+        interactiveDisplayModule.addDisplay(entity, entitiesToDisplay);
+        // You can use HOVER_ONLY and CLICK_ONLY options to display some entities only for a specific user action
+        interactiveDisplayModule.addDisplay(entity, entitiesToDisplay, interactiveDisplayModule.HOVER_ONLY);
         // When you hide an entity that is registered in the module, untrack it to avoid visual bugs
         interactiveDisplayModule.untrack(entity);
+        // If you want to remove an displayedEntity
+        interactiveDisplayModule.removeDisplay(entity, notDisplayedAnymoreEntity)
         }
 ```
