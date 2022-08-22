@@ -16,12 +16,16 @@ import java.util.Map;
  */
 @Singleton
 public class InteractiveDisplayModule implements Module {
-    public static final int BOTH = 3;
-    public static final int HOVER_ONLY = 2;
-    public static final int CLICK_ONLY = 1;
+    public static final String BOTH = "B";
+    public static final String HOVER_ONLY = "H";
+    public static final String CLICK_ONLY = "C";
+
+    private static final String DISPLAY = "D";
+    private static final String RESIZE = "R";
+
     GameManager<AbstractPlayer> gameManager;
-    Map<Integer, Map<Integer, Integer>> newRegistration;
-    Map<Integer, Map<Integer, Integer>> registration;
+    Map<Integer, Map<Integer, String>> newRegistration;
+    Map<Integer, Map<Integer, String>> registration;
 
 
     @Inject
@@ -62,23 +66,11 @@ public class InteractiveDisplayModule implements Module {
      * @param displayEntity the entity to display when the mouse is over <code>entity</code>
      * @param mode          when the displayEntity has to be displayed (HOVER_ONLY, CLICK_ONLY or BOTH)
      */
-    public void addDisplay(Entity<?> entity, Entity<?> displayEntity, int mode) {
-        Map<Integer, Integer> displays = registration.getOrDefault(entity.getId(), new HashMap<>());
-        displays.put(displayEntity.getId(), mode);
+    public void addDisplay(Entity<?> entity, Entity<?> displayEntity, String mode) {
+        Map<Integer, String> displays = registration.getOrDefault(entity.getId(), new HashMap<>());
+        displays.put(displayEntity.getId(), DISPLAY + "," + mode);
         registration.put(entity.getId(), displays);
         newRegistration.put(entity.getId(), displays);
-    }
-
-    /**
-     * Make <code>displayEntities</code> appear when the mouse is over <code>entity</code>.
-     *
-     * @param entity          the entity to track
-     * @param displayEntities the entities to display when the mouse is over <code>entity</code>
-     */
-    public void addDisplay(Entity<?> entity, Entity<?>[] displayEntities, int mode) {
-        for (Entity<?> displayEntity : displayEntities) {
-            addDisplay(entity, displayEntity, mode);
-        }
     }
 
     /**
@@ -91,18 +83,9 @@ public class InteractiveDisplayModule implements Module {
         addDisplay(entity, displayEntity, BOTH);
     }
 
-    /**
-     * Make <code>displayEntities</code> appear when the mouse is over <code>entity</code>.
-     *
-     * @param entity          the entity to track
-     * @param displayEntities the entities to display when the mouse is over <code>entity</code>
-     */
-    public void addDisplay(Entity<?> entity, Entity<?>[] displayEntities) {
-        addDisplay(entity, displayEntities, BOTH);
-    }
 
     /**
-     * Stop displaying entities when <code>entity</code> is hovered
+     * Stop displaying/resizing entities when <code>entity</code> is hovered/clicked
      *
      * @param entity the entity to stop tracking
      */
@@ -111,16 +94,62 @@ public class InteractiveDisplayModule implements Module {
     }
 
     /**
-     * Stop displaying displayEntity when entity is clicked/Hovered
+     * Stop transforming associatedEntity when entity is clicked/Hovered
      *
-     * @param entity        the interactive entity
-     * @param displayEntity the entity that won't be displayed anymore
+     * @param entity           the interactive entity
+     * @param associatedEntity the entity that won't be transformed anymore
      */
-    public void removeDisplay(Entity<?> entity, Entity<?> displayEntity) {
-        Map<Integer, Integer> displays = registration.getOrDefault(entity.getId(), new HashMap<>());
-        if (displays.remove(displayEntity.getId()) != null) {
+    public void removeTransformation(Entity<?> entity, Entity<?> associatedEntity) {
+        Map<Integer, String> displays = registration.getOrDefault(entity.getId(), new HashMap<>());
+        if (displays.remove(associatedEntity.getId()) != null) {
             newRegistration.put(entity.getId(), displays);
         }
+    }
+
+
+    /**
+     * Make <code>associatedEntity</code> bigger when <code>entity</code> is hovered/clicked depending on <code>mode</code>
+     *
+     * @param entity           the entity to track
+     * @param associatedEntity the entity to resize
+     * @param factor           the factor by which the associatedEntity has to be resized
+     * @param mode             when the associatedEntity has to be resized (HOVER_ONLY, CLICK_ONLY or BOTH)
+     */
+    public void addResize(Entity<?> entity, Entity<?> associatedEntity, double factor, String mode) {
+        Map<Integer, String> resizes = registration.getOrDefault(entity.getId(), new HashMap<>());
+        resizes.put(associatedEntity.getId(), RESIZE + "," + mode + "," + factor);
+        registration.put(entity.getId(), resizes);
+        newRegistration.put(entity.getId(), resizes);
+    }
+
+    /**
+     * Make <code>associatedEntity</code> <code>factor</code> times bigger when <code>entity</code> is hovered or clicked
+     *
+     * @param entity           the entity to track
+     * @param associatedEntity the entity to resize
+     * @param factor           the factor by which the associatedEntities have to be resized
+     */
+    public void addResize(Entity<?> entity, Entity<?> associatedEntity, double factor) {
+        addResize(entity, associatedEntity, factor, BOTH);
+    }
+
+    /**
+     * Make <code>entity</code> <code>factor</code> times bigger when it is hovered or clicked depending on <code>mode</code>
+     *
+     * @param entity the entity to resize
+     * @param mode   when the entity has to be resized (HOVER_ONLY, CLICK_ONLY or BOTH)
+     */
+    public void addResize(Entity<?> entity, double factor, String mode) {
+        addResize(entity, entity, factor, mode);
+    }
+
+    /**
+     * Make <code>entity</code> <code>factor</code> times bigger when it is hovered or clicked
+     *
+     * @param entity the entity to resize
+     */
+    public void addResize(Entity<?> entity, double factor) {
+        addResize(entity, entity, factor, BOTH);
     }
 
 

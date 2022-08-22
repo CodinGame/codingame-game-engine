@@ -1,8 +1,11 @@
 import {api as entityModule} from '../entity-module/GraphicEntityModule.js'
 
-const BOTH = 3;
-const HOVER_ONLY = 2;
-const CLICK_ONLY = 1;
+const BOTH = "B";
+const HOVER_ONLY = "H";
+const CLICK_ONLY = "C";
+
+const DISPLAY = "D"
+const RESIZE = "R"
 
 /**********************************
  Legacy from the tooltip module
@@ -31,21 +34,74 @@ function getEntityState(entity, frame) {
     return null
 }
 
+/**
+ * Multiply scale of an entity
+ * @param entity the entity to scale
+ * @param factor the factor to multiply the scale by
+ */
+function multiplyScale(entity, factor) {
+    entity.container.scale.x = entity.currentState.scaleX * factor
+    entity.container.scale.y = entity.currentState.scaleY * factor
+}
 
 /**
- * Hide all entities associated to an entity
- * @param id the id of the entity
- * @param module a reference to the InteractiveDisplayModule
- * @param only set to a number to hide only entities that have a specific display mode
+ * Reset the scale of an entity
+ * @param entity the entity to reset
  */
-function hideAssociated(id, module, only) {
-    const to_hide = module.currentFrame.registered[id]
-    Object.keys(to_hide).map(id2 => +id2).forEach(hide_id => {
-        if (!only || to_hide[hide_id] === only) {
-            entityModule.entities.get(hide_id).container.visible = false
-        }
-    })
+function resetScale(entity) {
+    entity.container.scale.x = entity.currentState.scaleX
+    entity.container.scale.y = entity.currentState.scaleY
 }
+
+/**
+ * Perform the transformation for an entity
+ * @param entity the entity to transform
+ * @param parameters the parameters of the transformation
+ */
+function performTransformation(entity, parameters) {
+    const infos = parameters.split(',')
+    const interaction = infos[0]
+    const params = infos[2]
+    switch (interaction) {
+        case DISPLAY:
+            entity.container.visible = true
+            return
+        case RESIZE:
+            multiplyScale(entity, parseFloat(params))
+            return
+        default:
+            console.warn('[WARNING InteractiveDisplayModule] Unknown interaction: ' + interaction)
+    }
+}
+
+/**
+ * Revert the transformation of an entity
+ * @param entity the entity to revert
+ * @param parameters the parameters of the transformation
+ */
+function revertTransformation(entity, parameters) {
+    const infos = parameters.split(',')
+    const interaction = infos[0]
+    switch (interaction) {
+        case DISPLAY:
+            entity.container.visible = entity.currentState.visible
+            return
+        case RESIZE:
+            resetScale(entity)
+            return
+        default:
+            console.warn('[WARNING InteractiveDisplayModule] Unknown interaction: ' + interaction)
+    }
+}
+
+function getInteractionMode(params) {
+    if (typeof params.split === 'function') {
+        return params.split(",")[1]
+    } else {
+        return undefined
+    }
+}
+
 
 /**
  * Show all entities associated to an entity
@@ -53,11 +109,26 @@ function hideAssociated(id, module, only) {
  * @param module a reference to the InteractiveDisplayModule
  * @param unless the entity should not be displayed if its display mode is equal to unless
  */
-function showAssociated(id, module, unless = -1) {
+function transformAssociated(id, module, unless = -1) {
     const to_display = module.currentFrame.registered[id]
     Object.keys(to_display).map(id2 => +id2).forEach(display_id => {
-        if (to_display[display_id] !== unless) {
-            entityModule.entities.get(display_id).container.visible = true
+        if (getInteractionMode(to_display[display_id]) !== unless) {
+            performTransformation(entityModule.entities.get(display_id), to_display[display_id])
+        }
+    })
+}
+
+/**
+ * Hide all entities associated to an entity
+ * @param id the id of the entity
+ * @param module a reference to the InteractiveDisplayModule
+ * @param only set to a number to hide only entities that have a specific display mode
+ */
+function revertAssociated(id, module, only) {
+    const to_hide = module.currentFrame.registered[id]
+    Object.keys(to_hide).map(id2 => +id2).forEach(hide_id => {
+        if (!only || getInteractionMode(to_hide[hide_id]) === only) {
+            revertTransformation(entityModule.entities.get(hide_id), to_hide[hide_id])
         }
     })
 }
@@ -68,9 +139,9 @@ function showAssociated(id, module, unless = -1) {
  * @param module a reference to the InteractiveDisplayModule
  * @param unless the entity should not be displayed if its display mode is equal to unless
  */
-function showAllAssociated(ids, module, unless = -1) {
+function transformAllAssociated(ids, module, unless = -1) {
     for (let id of ids) {
-        showAssociated(id, module, unless)
+        transformAssociated(id, module, unless)
     }
 }
 
@@ -95,7 +166,7 @@ function getMouseOutFunc(id, module) {
         delete module.inside[id]
         if (module.hovered_entities.has(id)) {
             module.removeHovered(id)
-            hideAssociated(id, module, module.clicked_entities.includes(id) ? HOVER_ONLY : undefined)
+            revertAssociated(id, module, module.clicked_entities.includes(id) ? HOVER_ONLY : undefined)
         }
     }
 }
@@ -112,16 +183,16 @@ function getMouseClickFunc(id, module) {
             if (mouseEvent.button === 0 && module.currentFrame.registered[id][0] !== HOVER_ONLY) {
                 if (module.clicked_entities.includes(id)) {
                     module.removeClicked(id)
-                    hideAssociated(id, module)
+                    revertAssociated(id, module)
                 } else if (!mouseEvent.altKey) {
                     // remove the first added entity if too many entities are clicked
                     if (module.clicked_entities.push(id) > InteractiveDisplayModule.max_clicked_entities) {
                         const removed_id = module.clicked_entities.shift()
                         if (!module.hovered_entities.has(removed_id)) {
-                            hideAssociated(removed_id, module)
+                            revertAssociated(removed_id, module)
                         }
                     }
-                    showAssociated(id, module, HOVER_ONLY)
+                    transformAssociated(id, module, HOVER_ONLY)
                 }
             }
         }
@@ -138,7 +209,7 @@ function getResetOnClickFunc(module) {
         if (mouseEvent instanceof MouseEvent) {
             if (mouseEvent.altKey) {
                 for (let permanent_id of module.clicked_entities) {
-                    hideAssociated(permanent_id, module)
+                    revertAssociated(permanent_id, module)
                 }
                 module.clicked_entities = []
             }
@@ -175,7 +246,7 @@ function getMouseMoveFunc(module) {
                 for (let show of showing) {
                     if (isPossible(show)) {
                         module.hovered_entities.add(show)
-                        showAssociated(show, module, CLICK_ONLY)
+                        transformAssociated(show, module, CLICK_ONLY)
                     }
                 }
             } else {
@@ -195,7 +266,7 @@ function getMouseMoveFunc(module) {
                     if (available.length) {
                         const min = Math.min(...available)
                         module.hovered_entities.add(min)
-                        showAssociated(min, module, CLICK_ONLY)
+                        transformAssociated(min, module, CLICK_ONLY)
                     }
                 }
             }
@@ -233,8 +304,8 @@ export class InteractiveDisplayModule {
     updateScene(previousData, currentData, progress) {
         this.currentFrame = currentData
         this.currentProgress = progress
-        showAllAssociated(this.hovered_entities, this, CLICK_ONLY)
-        showAllAssociated(this.clicked_entities, this, HOVER_ONLY)
+        transformAllAssociated(this.hovered_entities, this, CLICK_ONLY)
+        transformAllAssociated(this.clicked_entities, this, HOVER_ONLY)
     }
 
     handleFrameData(frameInfo, data = []) {
