@@ -59,6 +59,9 @@ function resetScale(entity) {
  * @param parameters the parameters of the transformation
  */
 function performTransformation(entity, parameters) {
+    if (typeof parameters.split !== 'function') {
+        return;
+    }
     const infos = parameters.split(',')
     const interaction = infos[0]
     const params = infos[2]
@@ -80,6 +83,9 @@ function performTransformation(entity, parameters) {
  * @param parameters the parameters of the transformation
  */
 function revertTransformation(entity, parameters) {
+    if (typeof parameters.split !== 'function') {
+        return;
+    }
     const infos = parameters.split(',')
     const interaction = infos[0]
     switch (interaction) {
