@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🐞 Bug fix
+
+- Fixed `CameraModule` issues. _Contributed by [Butanium](https://github.com/Butanium)_
+
 ## 4.3.0
 
 ### 🎁 Features
