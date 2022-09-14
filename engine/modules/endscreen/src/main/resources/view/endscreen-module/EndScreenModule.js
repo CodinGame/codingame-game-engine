@@ -1,5 +1,5 @@
 import { WIDTH, HEIGHT } from '../core/constants.js'
-import { lerp, unlerp } from '../core/utils.js'
+import { lerp, unlerp, fitAspectRatio } from '../core/utils.js'
 import { ErrorLog } from '../core/ErrorLog.js'
 import { MissingImageError } from './errors/MissingImageError.js'
 
@@ -101,7 +101,8 @@ export class EndScreenModule {
     var logoS = 400
     var logoD = 600
     var logoP = unlerp(logoS, logoS + logoD, this.endTime)
-    this.endLayer.titleRanking.scale.x = this.endLayer.titleRanking.scale.y = 0.001 + lerp(10, 0.8, logoP)
+
+    this.endLayer.titleRanking.scale.set(lerp(this.targetTitleScale * 10, this.targetTitleScale, logoP))
     this.endLayer.titleRanking.visible = !!logoP
 
     var rankS = 1000
@@ -236,6 +237,7 @@ export class EndScreenModule {
       ErrorLog.push(new MissingImageError(sprite))
       titleRanking = new PIXI.Sprite(PIXI.Texture.EMPTY)
     }
+    this.targetTitleScale = fitAspectRatio(titleRanking.texture.width, titleRanking.texture.height, 2 * WIDTH / 3, HEIGHT / 4)
     titleRanking.anchor.x = titleRanking.anchor.y = 0.5
     layer.titleRanking = titleRanking
 
