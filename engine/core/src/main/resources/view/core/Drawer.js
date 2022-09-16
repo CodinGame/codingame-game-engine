@@ -92,15 +92,12 @@ export class Drawer {
 
   instantiateModules () {
     this.modules = {}
-
-    const moduleNames = config.modules.map(Module => Module.moduleName ?? Module.name)
-
     
-    config.modules.forEach((Module, idx) => {
+    for (const Module of config.modules) {
       try {
         const dependencies = Module.dependencies ?? []
         for (let dep of dependencies) {
-          if (!moduleNames.slice(0, idx).includes(dep)) {
+          if (this.modules[dep] == null) {
             throw new Error(`Required module "${dep}" not yet loaded. Make sure it comes first in your config.js "modules" array`)
           }
         }
@@ -109,7 +106,7 @@ export class Drawer {
       } catch (error) {
         this.handleModuleError(Module.moduleName ?? Module.name, error)
       }
-    })
+    }
   }
 
   destroy () {
