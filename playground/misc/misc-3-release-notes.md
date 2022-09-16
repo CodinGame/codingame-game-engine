@@ -2,6 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## ## 4.3.1
+
+### 🐞 Bug fix
+
+- Fixed `EndScreenModule` issue with logo size.
+- Fixed `CameraModule` issues. _Contributed by [Butanium](https://github.com/Butanium)_
+
 ## 4.3.0
 
 ### 🎁 Features

@@ -51,12 +51,12 @@ plan:
     statement: playground/extensions/extensions-5-animmodule.md
   - title: Viewport Module
     statement: playground/extensions/extensions-6-viewport.md
-  - title: Community modules
-    plan:
-    - title: Camera Module
-      statement: playground/extensions/community-modules/community-camera.md
-    - title: Interactive Display Module
-      statement: playground/extensions/community-modules/community-interactivedisplay.md
+ - title: Community extensions
+   plan:
+   - title: Camera Module
+     statement: playground/extensions/community-modules/community-camera.md
+   - title: Interactive Display Module
+     statement: playground/extensions/community-modules/community-interactivedisplay.md
   - title: Create your own modules
     statement: playground/extensions/extensions-2-tutorial.md
 - title: One more thing
