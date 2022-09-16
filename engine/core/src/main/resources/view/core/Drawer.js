@@ -226,7 +226,6 @@ export class Drawer {
           scope.logo = logo
         } catch (error) {
           ErrorLog.push({
-            cause: error,
             message: 'Missing "logo.png" to complete replay.'
           })
           scope.logo = new PIXI.Container()
