@@ -307,6 +307,10 @@ export class InteractiveDisplayModule {
         return 'intDisplay'
     }
 
+    static get dependencies () {
+        return ['entitymodule']
+    }
+
     updateScene(previousData, currentData, progress) {
         this.currentFrame = currentData
         this.currentProgress = progress
