@@ -95,8 +95,8 @@ export class Drawer {
 
     const moduleNames = config.modules.map(Module => Module.moduleName ?? Module.name)
 
-    for (let idx = 0; idx < config.modules.length; ++idx) {
-      const Module = config.modules[idx]
+    
+    config.modules.forEach((Module, idx) => {
       try {
         const dependencies = Module.dependencies ?? []
         for (let dep of dependencies) {
@@ -109,7 +109,7 @@ export class Drawer {
       } catch (error) {
         this.handleModuleError(Module.moduleName ?? Module.name, error)
       }
-    }
+    })
   }
 
   destroy () {
