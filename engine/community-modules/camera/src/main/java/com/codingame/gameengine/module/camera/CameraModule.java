@@ -77,7 +77,7 @@ public class CameraModule implements Module {
             data[3] = active;
         }
         if (!Arrays.equals(data, empty)) {
-            gameManager.setViewData("c", data);
+            gameManager.setViewData("camera", data);
         }
     }
 

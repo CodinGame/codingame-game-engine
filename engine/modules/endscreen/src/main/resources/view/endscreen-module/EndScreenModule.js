@@ -13,7 +13,7 @@ export class EndScreenModule {
     this.atEnd = false
   }
 
-  static get name () {
+  static get moduleName () {
     return 'endScreen'
   }
 

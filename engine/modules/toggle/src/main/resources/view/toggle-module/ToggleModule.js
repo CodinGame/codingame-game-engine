@@ -44,8 +44,12 @@ export class ToggleModule {
     return option
   }
 
-  static get name () {
+  static get moduleName () {
     return 'toggles'
+  }
+
+  static get dependencies () {
+    return ['entitymodule']
   }
 
   updateScene (previousData, currentData, progress) {

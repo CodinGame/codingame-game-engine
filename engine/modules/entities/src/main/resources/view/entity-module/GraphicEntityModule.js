@@ -25,7 +25,7 @@ export class GraphicEntityModule {
     api.entities = this.entities
   }
 
-  static get name () {
+  static get moduleName () {
     return 'entitymodule'
   }
 
