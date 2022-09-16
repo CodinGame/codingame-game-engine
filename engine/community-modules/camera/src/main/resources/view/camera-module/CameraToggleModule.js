@@ -38,9 +38,14 @@ export class CameraToggleModule {
         return option
     }
 
-    static get name() {
-        return 'toggles'
+    static get moduleName () {
+        return 'camera-toggle'
     }
+
+    static get dependencies () {
+        return ['camera']
+    }
+    
 
     updateScene(previousData, currentData, progress) {
         this.currentFrame = currentData

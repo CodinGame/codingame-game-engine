@@ -5,8 +5,11 @@ import vp from './lib/viewport.es.js'
 
 export class ViewportModule {
 
-  static get name() {
+  static get moduleName () {
     return 'viewport'
+  }
+  static get dependencies () {
+    return ['entitymodule']
   }
 
   entityIds = []
