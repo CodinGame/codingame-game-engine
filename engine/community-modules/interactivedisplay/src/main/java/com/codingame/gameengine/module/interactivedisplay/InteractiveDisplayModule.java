@@ -54,7 +54,7 @@ public class InteractiveDisplayModule implements Module {
         if (!newRegistration.isEmpty()) {
             Object data = new HashMap[]{new HashMap<>(newRegistration)};
             newRegistration.clear();
-            gameManager.setViewData("h", data);
+            gameManager.setViewData("intDisplay", data);
         }
     }
 

@@ -303,8 +303,8 @@ export class InteractiveDisplayModule {
     }
 
 
-    static get name() {
-        return 'h'
+    static get moduleName() {
+        return 'intDisplay'
     }
 
     updateScene(previousData, currentData, progress) {
