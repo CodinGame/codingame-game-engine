@@ -2,7 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## ## 4.3.1
+## Next Release
+
+### 🐞 Bug fix
+
+- Enforce dependencies between certain viewer modules.
+
+## 4.3.1
 
 ### 🐞 Bug fix
 

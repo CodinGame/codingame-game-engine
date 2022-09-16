@@ -115,9 +115,13 @@ export class TooltipModule {
     this.lastFrame = 0
   }
 
-  static get name () {
+  static get moduleName () {
     return 'tooltips'
   }
+  static get dependencies () {
+    return ['entitymodule']
+  }
+
 
   updateScene (previousData, currentData, progress) {
     this.currentFrame = currentData

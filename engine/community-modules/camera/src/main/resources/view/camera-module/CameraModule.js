@@ -23,8 +23,12 @@ export class CameraModule {
 
     }
 
-    static get name() {
-        return 'c'
+    static get moduleName() {
+        return 'camera'
+    }
+
+    static get dependencies () {
+        return ['entitymodule']
     }
 
     static setActive(active) {

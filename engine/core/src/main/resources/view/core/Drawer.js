@@ -92,11 +92,19 @@ export class Drawer {
 
   instantiateModules () {
     this.modules = {}
+    
     for (const Module of config.modules) {
       try {
-        this.modules[Module.moduleName || Module.name] = new Module(assets)
+        const dependencies = Module.dependencies ?? []
+        for (let dep of dependencies) {
+          if (this.modules[dep] == null) {
+            throw new Error(`Required module "${dep}" not yet loaded. Make sure it comes first in your config.js "modules" array`)
+          }
+        }
+
+        this.modules[Module.moduleName ?? Module.name] = new Module(assets)
       } catch (error) {
-        this.handleModuleError(Module.moduleName || Module.name, error)
+        this.handleModuleError(Module.moduleName ?? Module.name, error)
       }
     }
   }
@@ -215,7 +223,6 @@ export class Drawer {
           scope.logo = logo
         } catch (error) {
           ErrorLog.push({
-            cause: error,
             message: 'Missing "logo.png" to complete replay.'
           })
           scope.logo = new PIXI.Container()
