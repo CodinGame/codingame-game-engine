@@ -2,6 +2,16 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next version
+
+### 🎁 Features
+
+- `PIXI.js` updated to v6.5.3
+
+### 🐞 Bug fix
+
+- Fixed canvas mode fallback
+
 ## 4.3.2
 
 ### 🐞 Bug fix
