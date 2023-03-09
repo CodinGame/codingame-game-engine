@@ -63,7 +63,7 @@ public abstract class BlendableEntity<T extends Entity<?>> extends Entity<T> {
      */
     public T setBlendMode(BlendMode blendMode) {
         this.blendMode = blendMode;
-        set("blendMode", blendMode.getValue(), null);
+        set("blendMode", blendMode != null ? blendMode.getValue() : null, null);
         return self();
     }
 }
