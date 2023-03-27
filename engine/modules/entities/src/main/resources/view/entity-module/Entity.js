@@ -134,11 +134,13 @@ export class Entity {
       this.updateDisplay(state, changed, globalData, data, progress)
       Object.assign(this.currentState, state)
       this.container.visible = this.container._visible
-      if (changed.children) {
+      
+      if (changed.children != null || changed.zIndex != null) {
         globalData.mustResetTree = true
-        if (typeof this.postUpdate === 'function') {
+      }
+
+      if (changed.children && typeof this.postUpdate === 'function') {
           globalData.updatedBuffers.push(this)
-        }
       }
       if (changed.mask) {
         globalData.maskUpdates[this.id] = state.mask
