@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 4.4.2
+
+### 🐞 Bug fix
+
+- Fixed `BufferedGroup` width calculation when no children occupy coordinates 0,0
+
 ## 4.4.1
 
 ### 🐞 Bug fix
