@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 4.4.3
+
+### 🐞 Bug fix
+
+- Included more information in Buffer capacity reached erro log.
+
 ## 4.4.2
 
 ### 🐞 Bug fix
