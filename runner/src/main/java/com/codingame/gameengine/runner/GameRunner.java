@@ -331,8 +331,10 @@ abstract class GameRunner {
                 }
                 if (checkOutput(output, nbLinesToRead) != OutputResult.OK) {
                     throw new RuntimeException(
-                        "Error reading Referee command. Buffer capacity: " + output.length() + " / "
-                            + (round == 0 ? RefereeAgent.REFEREE_MAX_BUFFER_SIZE_EXTRA : RefereeAgent.REFEREE_MAX_BUFFER_SIZE)
+                        String.format(
+                            "Error reading Referee %s command. Buffer capacity: %d / %d",
+                            command, output.length(), (round == 0 ? RefereeAgent.REFEREE_MAX_BUFFER_SIZE_EXTRA : RefereeAgent.REFEREE_MAX_BUFFER_SIZE)
+                        )
                     );
                 }
                 return new Command(InputCommand.valueOf(command), output);
