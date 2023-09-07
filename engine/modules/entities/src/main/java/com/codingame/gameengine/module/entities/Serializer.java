@@ -150,11 +150,11 @@ class Serializer {
     }
 
     static String escape(String text) {
-        String escaped = text.replaceAll("\\'", "\\\\'");
-        if (escaped.contains(" ") || escaped.contains(";") || escaped.contains("\n")) {
+        if (text.contains(" ") || text.contains(";") || text.contains("\n") || text.contains("'")) {
+            String escaped = text.replaceAll("\\'", "\\\\'");
             return "'" + escaped + "'";
         }
-        return escaped;
+        return text;
     }
 
     private String serializeEntitiesStateDiff(Entity<?> entity, EntityState diff, String frameInstant) {

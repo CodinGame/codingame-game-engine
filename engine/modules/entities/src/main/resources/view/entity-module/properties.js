@@ -153,12 +153,10 @@ export const PROPERTIES = {
 }
 
 function unescape (text) {
-  // replace \' by '
-  const unescaped = text.split("\\'").join("'")
-
-  if (unescaped.includes(' ') || unescaped.includes(';') || unescaped.includes('\n')) {
-    return unescaped.slice(1, unescaped.length - 1)
-  } else {
-    return unescaped
+  if (text.length >= 2 && text[0] === "'" && text[text.length - 1] === "'") {
+    const unescaped = text.slice(1, text.length - 1)
+    // replace \' by '
+    return unescaped.split("\\'").join("'")  
   }
+  return text
 }
