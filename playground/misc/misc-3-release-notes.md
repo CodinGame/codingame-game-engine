@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 4.4.4
+
+### 🐞 Bug fix
+
+- Fixed `Text` not displaying or duplicating backslash characters in the viewer
+
 ## 4.4.3
 
 ### 🐞 Bug fix
