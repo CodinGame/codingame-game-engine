@@ -10,8 +10,9 @@ function splitOnCharOutsideQuotes (text, charParam) {
   const res = []
   let current = ''
   let idx = 0
-  let lastChar = ''
+  let isEscaped = false
   let inQuotes = false
+
 
   while (idx < text.length) {
     const char = text[idx++]
@@ -20,21 +21,26 @@ function splitOnCharOutsideQuotes (text, charParam) {
         res.push(current)
         current = ''
       } else {
+        if (isEscaped) {
+          current += '\\'
+          isEscaped = false
+        }
         current += char
       }
-    } else if (char === "'" && lastChar !== '\\') {
+    } else if (char === "'" && !isEscaped) {
       inQuotes = !inQuotes
       current += char
-    } else if (lastChar === '\\') {
-      if (char === "'") {
-        current += "\\'"
-      } else {
+    } else if (isEscaped) {
         current += '\\' + char
-      }
-    } else if (char !== '\\') {
+        isEscaped = false
+    } else if (!isEscaped && char === '\\') {
+      isEscaped = true
+    } else {
       current += char
     }
-    lastChar = char
+  }
+  if (isEscaped) {
+    current += '\\'
   }
   res.push(current)
   return res
