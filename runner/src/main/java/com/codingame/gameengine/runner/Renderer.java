@@ -453,11 +453,11 @@ class Renderer {
 
     private void checkLeaguePopups(QuestionConfig questionConfig, String tag, ExportReport exportReport) {
         if (
-            !questionConfig.getWelcomeLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
-                || questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()
+            questionConfig.getWelcomeLanguageMap().containsKey(Constants.LANGUAGE_ID_ENGLISH)
+                && questionConfig.getWelcomeLanguageMap().get(Constants.LANGUAGE_ID_ENGLISH).isEmpty()
         ) {
             exportReport.addItem(
-                ReportItemType.WARNING, tag + "Missing welcome_"
+                ReportItemType.WARNING, tag + "Empty welcome_"
                     + Constants.LANGUAGE_CODE[Constants.LANGUAGE_ID_ENGLISH - 1] + ".html file."
             );
         } else {
