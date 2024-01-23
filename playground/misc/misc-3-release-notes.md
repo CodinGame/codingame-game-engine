@@ -2,6 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next version
+
+### 🐞 Bug fix
+
+- Removed "missing welcome_en.html file" warning.
+- Fixed the `putMetadata` function's signature
+
 ## 4.4.4
 
 ### 🐞 Bug fix
