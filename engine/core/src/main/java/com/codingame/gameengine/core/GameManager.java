@@ -375,8 +375,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * @param value
      *            the property's value
      */
-    public final void putMetadata(String key, String value) {
-        metadata.put(key, value);
+    public final void putMetadata(String key, double value) {
+        metadata.put(key, String.valueOf(value));
     }
 
     /**
