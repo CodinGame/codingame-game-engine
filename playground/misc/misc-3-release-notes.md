@@ -2,7 +2,11 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next version
+## 4.5.0
+
+### 🎁 Features
+
+- Upgraded configuration to use Java 17
 
 ### 🐞 Bug fix
 
