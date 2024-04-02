@@ -404,7 +404,7 @@ class ConfigHelper {
                             }
                         }
                     }
-                } else if ("stub.txt".equals(fileName)) {
+                } else if ("stub.txt".equals(fileName) || "stub.json".equals(fileName)) {
                     questionConfig.setStubGenerator(FileUtils.readFileToString(p.toFile(), StandardCharsets.UTF_8));
                 } else if (statementMatcher.matches()) {
                     String content = FileUtils.readFileToString(p.toFile(), StandardCharsets.UTF_8);
