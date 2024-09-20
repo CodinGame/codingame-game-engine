@@ -2,6 +2,16 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 4.5.1
+
+### 🎁 Features
+
+- Updated to PIXI 8.4.1
+
+### 🐞 Bug fix
+
+- Fixed fitAspectRatio's padding in utils.js
+
 ## 4.5.0
 
 ### 🎁 Features
