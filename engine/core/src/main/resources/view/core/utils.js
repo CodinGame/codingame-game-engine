@@ -102,5 +102,5 @@ export function pushAll (self, arr) {
  */
 export function fitAspectRatio (srcWidth, srcHeight, maxWidth, maxHeight, padding) {
   padding = padding || 0
-  return Math.min(maxWidth / (srcWidth + padding), maxHeight / (srcHeight + padding))
+  return Math.min((maxWidth + padding) / srcWidth, (maxHeight + padding) / srcHeight)
 }
