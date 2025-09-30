@@ -75,6 +75,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private int totalTurnTime = 0;
 
     private boolean viewWarning, summaryWarning;
+    private boolean monitoringRequested;
 
     /**
      * GameManager main loop.
@@ -110,6 +111,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
 
             referee.init();
             registeredModules.forEach(Module::onGameInit);
+            monitoringRequested = false;
             initDone = true;
 
             // Game Loop ----------------------------------------------------------
@@ -186,6 +188,9 @@ abstract public class GameManager<T extends AbstractPlayer> {
             }
 
             dumpView();
+            if (!monitoringRequested) {
+                requestMonitoring();
+            }
             dumpInfos();
             dumpNextPlayerInput(player.getInputs().toArray(new String[0]));
             if (nbrOutputLines > 0) {
@@ -196,8 +201,16 @@ abstract public class GameManager<T extends AbstractPlayer> {
             // READ PLAYER OUTPUTS
             iCmd = InputCommand.parse(s.nextLine());
             if (iCmd.cmd == InputCommand.Command.SET_PLAYER_OUTPUT) {
-                List<String> output = new ArrayList<>(iCmd.lineCount);
-                for (int i = 0; i < iCmd.lineCount; i++) {
+                int lineCount = iCmd.lineCount;
+                List<String> output = new ArrayList<>(lineCount);
+
+                if (monitoringRequested) {
+                    String exectionTime = s.nextLine();
+                    long ms = Long.valueOf(exectionTime);
+                    player.setLastExecutionTimeMs(ms);
+                    lineCount--;
+                }
+                for (int i = 0; i < lineCount; i++) {
                     output.add(s.nextLine());
                 }
                 player.setOutputs(output);
@@ -214,6 +227,13 @@ abstract public class GameManager<T extends AbstractPlayer> {
             dumpFail(e);
             throw e;
         }
+    }
+
+    private void requestMonitoring() {
+        OutputData data = new OutputData(OutputCommand.MONITORING);
+        out.println(data);
+        log.info(data);
+        monitoringRequested = true;
     }
 
     /**
@@ -363,7 +383,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     /**
      * Puts a new metadata that will be included in the game's <code>GameResult</code>.
      * <p>
-     * Can be used for: 
+     * Can be used for:
      * </p>
      * <ul>
      * <li>Setting the value of an optimization criteria for OPTI games, used by the CodinGame IDE</li>
@@ -461,7 +481,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
         }
         this.turnMaxTime = turnMaxTime;
     }
-    
+
     /**
      * Set the timeout delay of the first turn for every player. Default is 1000ms.
      * 
@@ -487,7 +507,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     public int getTurnMaxTime() {
         return turnMaxTime;
     }
-    
+
     /**
      * Get the timeout delay of the first turn for every player.
      * 

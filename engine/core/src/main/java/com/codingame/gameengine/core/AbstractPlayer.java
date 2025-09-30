@@ -31,6 +31,7 @@ abstract public class AbstractPlayer {
     private int score;
     private boolean hasBeenExecuted;
     private boolean hasNeverBeenExecuted = true;
+    private long lastExecutionTimeMs = -1;
 
     /**
      * Returns a string that will be converted into the real nickname by the viewer.
@@ -173,5 +174,13 @@ abstract public class AbstractPlayer {
 
     final boolean hasNeverBeenExecuted() {
         return hasNeverBeenExecuted;
+    }
+
+    final public void setLastExecutionTimeMs(long ms) {
+        this.lastExecutionTimeMs = ms;
+    }
+    
+    public long getLastExectionTimeMs() {
+        return lastExecutionTimeMs;
     }
 }

@@ -28,6 +28,7 @@ abstract class Agent {
     private String nickname;
     private String avatar;
 
+    public long lastExecutionTimeMs;
     public Agent() {
     }
 
@@ -44,6 +45,7 @@ abstract class Agent {
      *            Global configuration
      */
     public void initialize(Properties conf) {
+        this.lastExecutionTimeMs = 0;
     }
 
     /**

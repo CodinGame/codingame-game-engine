@@ -60,4 +60,8 @@ class GameTurnInfo {
         }
         return Optional.of(lines.get(0));
     }
+
+    public boolean requestedMonitoring() {
+        return received.containsKey(InputCommand.MONITORING);
+    }
 }
