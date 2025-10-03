@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🎁 Features
+
+- Added a method to Player to get execution time for current frame.
+
 ## 4.5.0
 
 ### 🎁 Features

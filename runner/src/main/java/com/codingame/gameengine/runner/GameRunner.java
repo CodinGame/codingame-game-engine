@@ -46,6 +46,7 @@ abstract class GameRunner {
 
     private String[] avatars = new String[] { "16085734516701", "16085846089817", "16085713250612", "16085756802960", "16085746254929",
         "16085763837151", "16085720641630", "16085834521247" };
+    private boolean monitoringRequested;
 
     private static enum OutputResult {
         OK, TIMEOUT, TOOLONG, TOOSHORT
@@ -86,6 +87,7 @@ abstract class GameRunner {
             agent.name = player.getNickname() != null ? player.getNickname() : "Player " + i;
             gameResult.agents.add(agent);
         }
+        monitoringRequested = false;
     }
 
     private void bootstrapPlayers() {
@@ -127,6 +129,10 @@ abstract class GameRunner {
             GameTurnInfo turnInfo = readGameInfo(round);
             boolean validTurn = turnInfo.isComplete();
 
+            if (turnInfo.requestedMonitoring()) {
+                monitoringRequested = true;
+            }
+
             gameResult.failCause = turnInfo.get(InputCommand.FAIL).orElse(null);
 
             if (validTurn) {
@@ -139,6 +145,7 @@ abstract class GameRunner {
                 NextPlayerInfo nextPlayerInfo = new NextPlayerInfo(
                     turnInfo.get(InputCommand.NEXT_PLAYER_INFO).orElse(null)
                 );
+
                 String nextPlayerOutput = getNextPlayerOutput(
                     nextPlayerInfo,
                     turnInfo.get(InputCommand.NEXT_PLAYER_INPUT).orElse(null)
@@ -152,7 +159,8 @@ abstract class GameRunner {
                     log.info("\t=== Read from player");
                     log.info(nextPlayerOutput);
                     log.info("\t=== End Player");
-                    sendPlayerOutput(nextPlayerOutput, nextPlayerInfo.nbLinesNextOutput);
+                    Agent player = players.get(nextPlayerInfo.nextPlayer);
+                    sendPlayerOutput(nextPlayerOutput, nextPlayerInfo.nbLinesNextOutput, player);
                 } else {
                     sendTimeOut();
                 }
@@ -244,10 +252,25 @@ abstract class GameRunner {
         }
     }
 
-    private void sendPlayerOutput(String output, int nbLines) {
+    private void sendPlayerOutput(String output, int nbLines, Agent player) {
         String[] lines = output.split("(\\n|\\r\\n)", -1);
+
+        if (monitoringRequested) {
+            long time = player.lastExecutionTimeMs;
+            lines = unshiftIntoArray(String.valueOf(time), lines, nbLines);
+            nbLines++;
+        }
+
         Command command = new Command(OutputCommand.SET_PLAYER_OUTPUT, Arrays.copyOfRange(lines, 0, nbLines));
         referee.sendInput(command.toString());
+        log.info(command.toString());
+    }
+
+    private String[] unshiftIntoArray(String string, String[] lines, int length) {
+        String[] newLines = new String[length + 1];
+        newLines[0] = string;
+        System.arraycopy(lines, 0, newLines, 1, length);
+        return newLines;
     }
 
     private void sendTimeOut() {
@@ -260,9 +283,13 @@ abstract class GameRunner {
 
         // Send player input to input queue
         queues.get(nextPlayerInfo.nextPlayer).offer(nextPlayerInput);
-
+        long start = System.nanoTime();
         // Wait for player output then read error
         String playerOutput = player.getOutput(nextPlayerInfo.nbLinesNextOutput, nextPlayerInfo.timeout);
+        long end = System.nanoTime();
+
+        player.lastExecutionTimeMs = (end - start) / 1_000_000;
+
         if (playerOutput != null)
             playerOutput = playerOutput.replace('\r', '\n');
 

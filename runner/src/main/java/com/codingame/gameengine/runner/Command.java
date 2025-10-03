@@ -15,7 +15,7 @@ class Command {
     }
 
     static enum InputCommand implements CommandKey {
-        VIEW, INFOS, NEXT_PLAYER_INPUT, NEXT_PLAYER_INFO, SCORES, UINPUT, TOOLTIP, SUMMARY, METADATA, FAIL;
+        VIEW, INFOS, NEXT_PLAYER_INPUT, NEXT_PLAYER_INFO, SCORES, UINPUT, TOOLTIP, SUMMARY, METADATA, FAIL, MONITORING;
     }
 
     private List<String> lines;
