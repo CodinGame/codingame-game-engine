@@ -4,7 +4,6 @@ stages:
 build_and_deploy:
   stage: build_and_deploy
   when: manual
-  tags: [build]
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
