@@ -1,0 +1,41 @@
+stages: 
+  - build_and_deploy
+
+build_and_deploy:
+  stage: build_and_deploy
+  when: manual
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  image:
+    name: gitlab.codingame.com:5050/codingame/tools/build-release:master
+    entrypoint: [""]
+  variables:
+    - VERSION
+    - AUTO_RELEASE_NOTES
+    - MAVEN_OPTS: "-Xms4096M -Xmx4096M -XX:MaxMetaspaceSize=1024M"
+  script: |
+    set -e  # fail on 1st error
+
+    rm -rf docs
+    find . -type f -name pom.xml | xargs sed -i "s/master\\-SNAPSHOT/$VERSION/g"
+    mvn -amd -B -U clean deploy
+    mvn javadoc:aggregate
+    rm -rf docs
+    mkdir docs
+    cp -R target/site/apidocs/* docs/
+    git add docs
+    if [ -z $(git tag -l $VERSION) ]
+    then
+      git commit -m "javadoc v$VERSION"
+      git tag "v$VERSION" -m ""
+      git push origin "v$VERSION"
+      git push origin master
+    fi
+
+    if $AUTO_RELEASE_NOTES ; then
+      RELEASE_NOTES=$(.gitlab/extract_release_notes.js playground/misc/misc-3-release-notes.md $VERSION)
+      DATA=$(jq -n --arg body "$RELEASE_NOTES" --arg version "v$VERSION" '{body:$body, tag_name:$version, name:$version, draft:true}')
+      curl -i -H "Authorization: token $GITHUB_TOKEN" \
+        -d "$DATA" https://api.github.com/repos/CodinGame/codingame-game-engine/releases
+    fi
