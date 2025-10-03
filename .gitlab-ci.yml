@@ -25,8 +25,8 @@ build_and_deploy:
 
     rm -rf docs
     find . -type f -name pom.xml | xargs sed -i "s/master\\-SNAPSHOT/$VERSION/g"
-    mvn -amd -s $MVN_SETTINGS_FILE -B -U clean deploy
-    mvn -s $MVN_SETTINGS_FILE javadoc:aggregate
+    mvn -amd -s $MVN_SETTINGS_FILE -Dmaven.repo.local=/m2/repository -B -U clean deploy
+    mvn -s $MVN_SETTINGS_FILE -Dmaven.repo.local=/m2/repository javadoc:aggregate
     rm -rf docs
     mkdir docs
     cp -R target/site/apidocs/* docs/
