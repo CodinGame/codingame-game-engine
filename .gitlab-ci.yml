@@ -24,18 +24,20 @@ build_and_deploy:
 
     rm -rf docs
     find . -type f -name pom.xml | xargs sed -i "s/master\\-SNAPSHOT/$VERSION/g"
-    mvn -amd -s $MVN_SETTINGS_FILE -Dmaven.repo.local=/m2/repository -B -U clean deploy
-    mvn -s $MVN_SETTINGS_FILE -Dmaven.repo.local=/m2/repository javadoc:aggregate
+    mvn -amd -s ./settings.xml -Dmaven.repo.local=/m2/repository -B -U clean deploy
+    mvn -s ./settings.xml -Dmaven.repo.local=/m2/repository javadoc:aggregate
     rm -rf docs
     mkdir docs
     cp -R target/site/apidocs/* docs/
     git add docs
     if [ -z $(git tag -l $VERSION) ]
     then
+      git config --global user.email "$(git show HEAD^2 -s --pretty=format:'%ae')"
+      git config --global user.name "$(git show HEAD^2 -s --pretty=format:'%an')"
       git commit -m "javadoc v$VERSION"
       git tag "v$VERSION" -m ""
       git push origin "v$VERSION"
-      git push origin master
+      git push origin $CI_DEFAULT_BRANCH
     fi
 
     if $AUTO_RELEASE_NOTES ; then
