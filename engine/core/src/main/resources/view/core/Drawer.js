@@ -6,12 +6,11 @@ import { ErrorLog } from './ErrorLog.js'
 import { demo as defaultDemo } from '../demo.js'
 import { setRenderer, destroyFlagged } from './rendering.js'
 import { ModuleError } from './ModuleError.js'
-import { PIXILoader } from './PIXILoader.js'
-
 /* global PIXI requestAnimationFrame $ */
 
 export class Drawer {
   constructor (customDemo) {
+    PIXI.settings.STRICT_TEXTURE_CACHE = true
     this.toDestroy = []
     this.stepByStepAnimateSpeed = config.stepByStepAnimateSpeed || null
 
@@ -41,7 +40,7 @@ export class Drawer {
 
   static get requirements () {
     return {
-      PIXI: 'PIXI8'
+      PIXI: 'PIXI6'
     }
   }
 
@@ -164,14 +163,13 @@ export class Drawer {
     scope.canvasWidth = canvasWidth
     scope.canvasHeight = canvasHeight
 
-    scope.loaderProgress = new PIXI.Text({
-      text: '100', style: {
+    scope.loaderProgress = new PIXI.Text('100', {
       fontSize: (canvasHeight * 0.117) || 30,
       fontFamily: 'Lato',
       fontWeight: '900',
       fill: 'white',
       align: 'center'
-    }})
+    })
 
     scope.loaderProgress.anchor.y = 1
     scope.loaderProgress.anchor.x = 1.3
@@ -197,11 +195,13 @@ export class Drawer {
 
     scope.progressBar.clear()
 
-    scope.progressBar
-      .rect(0, 0, scope.canvasWidth * scope.realProgress + 1, scope.canvasHeight)
-      .fill({color: 0x0, alpha: 1})
-      .rect(scope.canvasWidth * scope.realProgress, 0, scope.canvasWidth, scope.canvasHeight)
-      .fill({color: 0x3f4446, alpha: 1})
+    scope.progressBar.beginFill(0x0, 1)
+    scope.progressBar.drawRect(0, 0, scope.canvasWidth * scope.realProgress + 1, scope.canvasHeight)
+    scope.progressBar.endFill()
+
+    scope.progressBar.beginFill(0x3f4446, 1)
+    scope.progressBar.drawRect(scope.canvasWidth * scope.realProgress, 0, scope.canvasWidth, scope.canvasHeight)
+    scope.progressBar.endFill()
     return true
   }
 
@@ -234,8 +234,9 @@ export class Drawer {
 
       var darkness = new PIXI.Graphics()
       if (!scope.missingLogo) {
-        darkness.rect(0, 0, Drawer.WIDTH + 20, Drawer.HEIGHT + 20)
-        darkness.fill(0, this.demo.overlayAlpha || 0)
+        darkness.beginFill(0, this.demo.overlayAlpha || 0)
+        darkness.drawRect(0, 0, Drawer.WIDTH + 20, Drawer.HEIGHT + 20)
+        darkness.endFill()
         darkness.x -= 10
         darkness.y -= 10
       }
@@ -754,7 +755,7 @@ export class Drawer {
 
     var drawer = this
 
-    var loader = new PIXILoader()
+    var loader = new PIXI.Loader(window.location.origin)
     this.playerInfo = agents.map(function (agent, index) {
       var agentData = {
         name: agent.name || 'Anonymous',
@@ -767,8 +768,9 @@ export class Drawer {
       }
 
       if (agent.avatar != null) {
-        loader.add('$' + agentData.index, agent.avatar, function (event) {
+        loader.add('avatar' + index, agent.avatar, { loadType: 2, crossOrigin: true }, function (event) {
           agentData.avatar = event.texture
+          PIXI.Texture.addToCache(event.texture, '$' + agentData.index)
         })
       }
       return agentData
@@ -783,8 +785,8 @@ export class Drawer {
       completed = true
     }
 
-    loader.onComplete(onComplete)
-    loader.onError(function (e) {
+    loader.onComplete.add(onComplete)
+    loader.onError.add(function (e) {
       console.warn(e)
       // The loader won't complete now, let's just go ahead and see what happens
       if (!completed) {
@@ -825,131 +827,123 @@ export class Drawer {
     window.PIXI = Drawer.PIXI || window.PIXI
     this.oversampling = oversampling || 1
 
-    //TODO: don't doubl init
-    const initAssetsPromise = PIXI.Assets.init({
-      basePath: window.location.origin,
-    })
-
-    initAssetsPromise.then(async () => {
-      const notifyRenderer = () => {
-        if (this.currentFrame >= 0) {
-          this.changed = true
-        }
-      }
-
-      this.canvas = $(canvas)
-      this.canvas.off('mousemove')
-      this.canvas.off('wheel')
-      this.canvas.bind('wheel', notifyRenderer)
-      this.canvas.mousemove(notifyRenderer)
-
-      if (colors) this.colors = this.parseColor(colors)
-
-      if (location === 'ide') {
-        if (!this.debugModeSetByUser) {
-          this.debugMode = true
-        }
-        ErrorLog.listen((err) => console.error(err.cause ? err.cause : err))
-      }
-      this.asyncRendering = true
-      this.asyncRenderingTime = 0
-      this.destroyed = false
-      this.asynchronousStep = null
-      var self = this
-      this.initWidth = width | 0
-      this.initHeight = height | 0
-      this.endCallback = endCallback || this.endCallback
-
-      if (!this.alreadyLoaded) {
-        this.alreadyLoaded = true
-        // Initialisation
-        this.question = null
-        this.scope = null
-        this.currentFrame = -1
-        this.loaded = 0
-        // Engine instanciation
-        this.container = new PIXI.Container()
-        var resources = this.getResources()
-        this.renderer = await this.createRenderer(this.initWidth, this.initHeight, canvas)
-        setRenderer(this.renderer)
-        var loader = new PIXILoader(resources.baseUrl)
-
-        for (key in resources.images) {
-          loader.add(key, resources.images[key])
-        }
-        var i
-        for (i = 0; i < resources.sprites.length; ++i) {
-          loader.add(resources.sprites[i])
-        }
-        for (i = 0; i < resources.fonts.length; ++i) {
-          loader.add(resources.fonts[i])
-        }
-        // for (key in resources.spines) {
-        //   loader.add(key, resources.spines[key])
-        // }
-        // for (i = 0; i < resources.others.length; ++i) {
-        //   loader.add(resources.others[i])
-        // }
-
-        if (this.demo) {
-          this.demo.agents.forEach(agent => {
-            loader.add('$' + agent.index, agent.avatar, function (event) {
-              agent.avatarTexture = event.texture
-            })
-          })
-        }
-
-        self.scope = {}
-
-        const onStart = function (loader, resource) {
-          requestAnimationFrame(self.animate.bind(self))
-          self.initPreload(self.scope, self.container, self.loaded = 0, self.initWidth, self.initHeight)
-        }
-        loader.onStart(onStart)
-        loader.onProgress(function (progress, resource) {
-          if (progress < 100) {
-            self.loaded = progress / 100
-            self.preload(self.scope, self.container, self.loaded, self.initWidth, self.initHeight, resource)
-          }
-        })
-
-        const onComplete = function () {
-          var key
-          for (key in resources.spines) {
-            if (resources.spines.hasOwnProperty(key)) {
-              PIXI.AnimCache[key] = PIXI.AnimCache[resources.baseUrl + resources.spines[key]]
-            }
-          }
-          self.loaded = 1
-          self.reinit(true)
-          self.changed = true
-        }
-
-        loader.onComplete(onComplete)
-        loader.onError(function (e) {
-          console.warn(e)
-        })
-
-        // PIXI bug workaround: if there is nothing to load, don't even try.
-        if (Object.keys(loader.toLoad).length) {
-          loader.load()
-        } else {
-          onStart()
-          onComplete()
-        }
-      } else {
+    const notifyRenderer = () => {
+      if (this.currentFrame >= 0) {
         this.changed = true
-        this.renderer.resize(this.initWidth, this.initHeight)
-        this.reinit(true)
       }
-    })
+    }
+
+    this.canvas = $(canvas)
+    this.canvas.off('mousemove')
+    this.canvas.off('wheel')
+    this.canvas.bind('wheel', notifyRenderer)
+    this.canvas.mousemove(notifyRenderer)
+
+    if (colors) this.colors = this.parseColor(colors)
+
+    if (location === 'ide') {
+      if (!this.debugModeSetByUser) {
+        this.debugMode = true
+      }
+      ErrorLog.listen((err) => console.error(err.cause ? err.cause : err))
+    }
+    this.asyncRendering = true
+    this.asyncRenderingTime = 0
+    this.destroyed = false
+    this.asynchronousStep = null
+    var self = this
+    this.initWidth = width | 0
+    this.initHeight = height | 0
+    this.endCallback = endCallback || this.endCallback
+
+    if (!this.alreadyLoaded) {
+      this.alreadyLoaded = true
+      // Initialisation
+      this.question = null
+      this.scope = null
+      this.currentFrame = -1
+      this.loaded = 0
+      // Engine instanciation
+      this.container = new PIXI.Container()
+      var resources = this.getResources()
+      this.renderer = this.createRenderer(this.initWidth, this.initHeight, canvas)
+      setRenderer(this.renderer)
+      var loader = new PIXI.Loader(resources.baseUrl)
+      for (key in resources.images) {
+        loader.add(key, resources.images[key], { crossOrigin: true })
+      }
+      var i
+      for (i = 0; i < resources.sprites.length; ++i) {
+        loader.add(resources.sprites[i], { crossOrigin: true })
+      }
+      for (i = 0; i < resources.fonts.length; ++i) {
+        loader.add(resources.fonts[i], { crossOrigin: true })
+      }
+      for (key in resources.spines) {
+        loader.add(key, resources.spines[key], { crossOrigin: true })
+      }
+      for (i = 0; i < resources.others.length; ++i) {
+        loader.add(resources.others[i], { crossOrigin: true })
+      }
+
+      if (this.demo) {
+        this.demo.agents.forEach(agent => {
+          loader.add('avatar' + agent.index, agent.avatar, { loadType: 2, crossOrigin: true }, function (event) {
+            agent.avatarTexture = event.texture
+            PIXI.Texture.addToCache(event.texture, '$' + agent.index)
+          })
+        })
+      }
+
+      self.scope = {}
+
+      const onStart = function (loader, resource) {
+        requestAnimationFrame(self.animate.bind(self))
+        self.initPreload(self.scope, self.container, self.loaded = 0, self.initWidth, self.initHeight)
+      }
+      loader.onStart.add(onStart)
+      loader.onProgress.add(function (loader, resource) {
+        if (loader.progress < 100) {
+          self.preload(self.scope, self.container, self.loaded = loader.progress / 100, self.initWidth, self.initHeight, resource)
+        }
+      })
+
+      const onComplete = function () {
+        var key
+        for (key in resources.spines) {
+          if (resources.spines.hasOwnProperty(key)) {
+            PIXI.AnimCache[key] = PIXI.AnimCache[resources.baseUrl + resources.spines[key]]
+          }
+        }
+        self.loaded = 1
+        self.reinit(true)
+        self.changed = true
+      }
+
+      loader.onComplete.add(onComplete)
+      loader.onError.add(function (e) {
+        console.warn(e)
+      })
+
+      // PIXI bug workaround: if there is nothing to load, don't even try.
+      if (Object.keys(loader.resources).length) {
+        loader.load()
+      } else {
+        onStart()
+        onComplete()
+      }
+    } else {
+      this.changed = true
+      this.renderer.resize(this.initWidth, this.initHeight)
+      this.reinit(true)
+    }
   }
 
-  async createRenderer (width, height, canvas) {
+  createRenderer (width, height, canvas) {
     return PIXI.autoDetectRenderer({
       width, 
       height,
-      canvas,
+      view: canvas,
       clearBeforeRender: true,
       preserveDrawingBuffer: false
     })
