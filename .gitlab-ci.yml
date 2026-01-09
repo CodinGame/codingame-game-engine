@@ -6,6 +6,7 @@ build_and_deploy:
   when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   image:
     name: gitlab.codingame.com:5050/codingame/tools/build-release:master
     entrypoint: [""]
