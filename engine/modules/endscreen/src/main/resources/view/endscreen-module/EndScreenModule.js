@@ -162,15 +162,14 @@ export class EndScreenModule {
     avatarContainer.x = 0
 
     var backgroundAvatar = new PIXI.Graphics()
-    backgroundAvatar.beginFill(0xffffff)
     backgroundAvatar.alpha = 0.1
-    backgroundAvatar.drawRect(0, 0, 240, 120)
+    backgroundAvatar.rect(0, 0, 240, 120).fill({color: 0xffffff})
     avatarContainer.addChild(backgroundAvatar)
 
     var avatarBorder = new PIXI.Graphics()
-    avatarBorder.lineStyle(1, 0xffffff)
+    
     avatarBorder.alpha = 0.5
-    avatarBorder.drawRect(0, 0, 120, 120)
+    avatarBorder.rect(0, 0, 120, 120).stroke({width: 1, color: 0xffffff})
     avatarContainer.addChild(avatarBorder)
 
     var avatar = new PIXI.Sprite(finisher.player.avatar)
@@ -223,15 +222,14 @@ export class EndScreenModule {
     var layer = new PIXI.Container()
 
     var background = new PIXI.Graphics()
-    background.beginFill(0, 0.85)
-    background.drawRect(0, 0, WIDTH, HEIGHT)
-    background.endFill()
+    .rect(0, 0, WIDTH, HEIGHT)
+    .fill({color: 0, alpha: 0.85})
 
     layer.backgroundRanking = background
 
     let sprite = this.spriteName
     var titleRanking
-    if (PIXI.utils.TextureCache[sprite]) {
+    if (PIXI.Assets.cache.has('logo.png')) {
       titleRanking = PIXI.Sprite.from(sprite)
     } else {
       ErrorLog.push(new MissingImageError(sprite))
