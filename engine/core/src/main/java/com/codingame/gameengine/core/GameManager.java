@@ -39,6 +39,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private static final int GAME_DURATION_SOFT_QUOTA = 25_000;
     private static final int MAX_TURN_TIME = GAME_DURATION_SOFT_QUOTA;
     private static final int MIN_TURN_TIME = 50;
+    private static final int SOFT_TIMELIMIT_EXTRA = 50;
 
     protected List<T> players;
     private int maxTurns = 200;
@@ -196,7 +197,9 @@ abstract public class GameManager<T extends AbstractPlayer> {
             if (nbrOutputLines > 0) {
                 addTurnTime();
             }
-            dumpNextPlayerInfos(player.getIndex(), nbrOutputLines, player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime);
+            int timelimit = player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime;
+            player.setTimelimit(timelimit);
+            dumpNextPlayerInfos(player.getIndex(), nbrOutputLines, timelimit + SOFT_TIMELIMIT_EXTRA);
 
             // READ PLAYER OUTPUTS
             iCmd = InputCommand.parse(s.nextLine());

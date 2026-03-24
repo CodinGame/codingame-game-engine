@@ -28,10 +28,14 @@ abstract public class AbstractPlayer {
     private List<String> inputs = new ArrayList<>();
     private List<String> outputs;
     private boolean timeout;
+    private int timelimit;
     private int score;
     private boolean hasBeenExecuted;
     private boolean hasNeverBeenExecuted = true;
     private long lastExecutionTimeMs = -1;
+    private int timelimitsExceeded = 0;
+    private boolean timelimitExceededLastTurn = false;
+    private final int MAX_SOFT_TIMELIMIT_EXCEEDS = 2;
 
     /**
      * Returns a string that will be converted into the real nickname by the viewer.
@@ -79,6 +83,10 @@ abstract public class AbstractPlayer {
         this.score = score;
     }
 
+    void setTimelimit(int timelimit) {
+        this.timelimit = timelimit;
+    }
+
     /**
      * Adds a new line to the input to send to the player on execute.
      * 
@@ -102,6 +110,9 @@ abstract public class AbstractPlayer {
         gameManagerProvider.get().execute(this);
         this.hasBeenExecuted = true;
         this.hasNeverBeenExecuted = false;
+        this.timelimitExceededLastTurn = getLastExectionTimeMs() > this.timelimit;
+        if (this.timelimitExceededLastTurn) this.timelimitsExceeded++;
+        if (this.timelimitsExceeded > MAX_SOFT_TIMELIMIT_EXCEEDS) this.timeout = true;
     }
 
     /**
@@ -182,5 +193,13 @@ abstract public class AbstractPlayer {
     
     public long getLastExectionTimeMs() {
         return lastExecutionTimeMs;
+    }
+
+    public int getTimelimitsExceeded() {
+        return timelimitsExceeded;
+    }
+
+    public boolean hasTimelimitExceededLastTurn() {
+        return timelimitExceededLastTurn;
     }
 }
