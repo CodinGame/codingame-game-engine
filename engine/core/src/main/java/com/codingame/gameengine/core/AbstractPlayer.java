@@ -34,6 +34,8 @@ abstract public class AbstractPlayer {
     private boolean hasNeverBeenExecuted = true;
     private long lastExecutionTimeMs = -1;
     private int timelimitsExceeded = 0;
+    private  boolean useTimebank = false;
+    private int timebank = 0;
     private boolean timelimitExceededLastTurn = false;
     private final int MAX_SOFT_TIMELIMIT_EXCEEDS = 2;
 
@@ -83,8 +85,34 @@ abstract public class AbstractPlayer {
         this.score = score;
     }
 
+    /**
+     * Set the player's time limit for the next turn
+     *
+     * @param timelimit
+     *            The time limit in milliseconds
+     */
     void setTimelimit(int timelimit) {
         this.timelimit = timelimit;
+    }
+
+    /**
+     * Set the player's timebank for the whole game
+     *
+     * @param timebank
+     *            the timebank in milliseconds
+     */
+    void setTimebank(int timebank) {
+        this.useTimebank = true;
+        this.timebank = timebank;
+    }
+
+    /**
+     * Get the remaining timebank
+     *
+     * @return the remaining timebank in milliseconds
+     */
+    public int getRemainingTimebank() {
+        return timebank;
     }
 
     /**
@@ -110,6 +138,7 @@ abstract public class AbstractPlayer {
         gameManagerProvider.get().execute(this);
         this.hasBeenExecuted = true;
         this.hasNeverBeenExecuted = false;
+        if (this.useTimebank) this.timebank -= getLastExectionTimeMs();
         this.timelimitExceededLastTurn = getLastExectionTimeMs() > this.timelimit;
         if (this.timelimitExceededLastTurn) this.timelimitsExceeded++;
         if (this.timelimitsExceeded > MAX_SOFT_TIMELIMIT_EXCEEDS) this.timeout = true;
