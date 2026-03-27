@@ -453,7 +453,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * @param timebank
      *              Duration in milliseconds
      * @throws IllegalArgumentException
-     *             if timebank &lt; 1000 or &gt; 25000
+     *             if timebank &lt; 1000 or &gt; 30000 for all players combined
      */
     public void setTimebank(int timebank) {
         if (useTurntime) {
