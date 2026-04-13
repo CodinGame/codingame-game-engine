@@ -10,6 +10,7 @@ export class SpriteAnimation extends TextureBasedEntity {
     super()
     Object.assign(this.defaultState, {
       images: '',
+      imageRange: '',
       loop: false,
       duration: 1000,
       playing: true,
@@ -33,6 +34,20 @@ export class SpriteAnimation extends TextureBasedEntity {
 
   updateDisplay (state, changed, globalData, frame, progress) {
     super.updateDisplay(state, changed, globalData)
+
+    if (state.imageRange) {
+      let parts = state.imageRange.split('|')
+      let prefix = parts[0]
+      let startText = parts[1]
+      let lastImage = prefix + parts[2]
+      let images = [prefix + startText]
+      for (let i = 1; images[images.length - 1] !== lastImage; i++) {
+        let suffix = `${+startText + i}`
+        while (suffix.length < startText.length) suffix = '0' + suffix
+        images.push(prefix + suffix)
+      }
+      state.images = images.join(',')
+    }
 
     if (state.images) {
       const images = state.images.split(',')
