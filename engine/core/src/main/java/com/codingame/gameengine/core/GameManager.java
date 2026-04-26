@@ -523,7 +523,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
      *             if firstTurnMaxTime &lt; 50 or &gt; 25000
      */
     public void setFirstTurnMaxTime(int firstTurnMaxTime) throws IllegalArgumentException {
-        if (useTurntime) {
+        if (useTimebank) {
             throw new UnsupportedOperationException("Use either setTimebank or setTurnMaxTime & setFirstTurnMaxTime, not both");
         } else if (firstTurnMaxTime < MIN_TURN_TIME) {
             throw new IllegalArgumentException("Invalid turn max time : stay above 50ms");
