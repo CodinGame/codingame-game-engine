@@ -39,6 +39,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private static final int GAME_DURATION_SOFT_QUOTA = 25_000;
     private static final int MAX_TURN_TIME = GAME_DURATION_SOFT_QUOTA;
     private static final int MIN_TURN_TIME = 50;
+    private static final int SOFT_TIMELIMIT_EXTRA = 50;
 
     protected List<T> players;
     private int maxTurns = 200;
@@ -73,6 +74,8 @@ abstract public class GameManager<T extends AbstractPlayer> {
     private int totalViewDataBytesSent = 0;
     private int totalGameSummaryBytes = 0;
     private int totalTurnTime = 0;
+    private boolean useTurntime = false;
+    private boolean useTimebank = false;
 
     private boolean viewWarning, summaryWarning;
     private boolean monitoringRequested;
@@ -193,10 +196,15 @@ abstract public class GameManager<T extends AbstractPlayer> {
             }
             dumpInfos();
             dumpNextPlayerInput(player.getInputs().toArray(new String[0]));
-            if (nbrOutputLines > 0) {
+            if (nbrOutputLines > 0 && !useTimebank) {
                 addTurnTime();
             }
-            dumpNextPlayerInfos(player.getIndex(), nbrOutputLines, player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime);
+            int timelimit = player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime;
+            if (useTimebank) {
+                timelimit = player.getRemainingTimebank();
+            }
+            player.setTimelimit(timelimit);
+            dumpNextPlayerInfos(player.getIndex(), nbrOutputLines, timelimit + (useTimebank ? 0 : SOFT_TIMELIMIT_EXTRA));
 
             // READ PLAYER OUTPUTS
             iCmd = InputCommand.parse(s.nextLine());
@@ -442,6 +450,32 @@ abstract public class GameManager<T extends AbstractPlayer> {
     }
 
     /**
+     * Set the timeout delay for each player for the whole game. This will disable the time limit per turn
+     *
+     * @param timebank
+     *            Duration in milliseconds
+     * @throws IllegalArgumentException
+     *             if timebank &lt; 1000 or &gt; 30000 for all players combined
+     */
+    public void setTimebank(int timebank) {
+        if (useTurntime) {
+            throw new UnsupportedOperationException("Use either setTimebank or setTurnMaxTime & setFirstTurnMaxTime, not both");
+        } else if (timebank < MIN_TURN_TIME) {
+            throw new IllegalArgumentException("Invalid time bank: use at least 1000ms");
+        } else if (timebank * players.size() > GAME_DURATION_HARD_QUOTA) {
+            throw new IllegalArgumentException(
+                "Invalid timebank: stay under " + GAME_DURATION_HARD_QUOTA + "ms total, " + (GAME_DURATION_HARD_QUOTA / players.size())
+                    + " per player"
+            );
+        }
+        totalTurnTime += timebank * players.size();
+        this.useTimebank = true;
+        for (T player : players) {
+            player.setTimebank(timebank);
+        }
+    }
+
+    /**
      * Set the maximum amount of turns. Default: 400.
      * 
      * @param maxTurns
@@ -474,12 +508,15 @@ abstract public class GameManager<T extends AbstractPlayer> {
      *             if turnMaxTime &lt; 50 or &gt; 25000
      */
     public void setTurnMaxTime(int turnMaxTime) throws IllegalArgumentException {
-        if (turnMaxTime < MIN_TURN_TIME) {
+        if (useTimebank) {
+            throw new UnsupportedOperationException("Use either setTimebank or setTurnMaxTime & setFirstTurnMaxTime, not both");
+        } else if (turnMaxTime < MIN_TURN_TIME) {
             throw new IllegalArgumentException("Invalid turn max time : stay above 50ms");
         } else if (turnMaxTime > MAX_TURN_TIME) {
             throw new IllegalArgumentException("Invalid turn max time : stay under 25s");
         }
         this.turnMaxTime = turnMaxTime;
+        this.useTurntime = true;
     }
 
     /**
@@ -491,12 +528,15 @@ abstract public class GameManager<T extends AbstractPlayer> {
      *             if firstTurnMaxTime &lt; 50 or &gt; 25000
      */
     public void setFirstTurnMaxTime(int firstTurnMaxTime) throws IllegalArgumentException {
-        if (firstTurnMaxTime < MIN_TURN_TIME) {
+        if (useTimebank) {
+            throw new UnsupportedOperationException("Use either setTimebank or setTurnMaxTime & setFirstTurnMaxTime, not both");
+        } else if (firstTurnMaxTime < MIN_TURN_TIME) {
             throw new IllegalArgumentException("Invalid turn max time : stay above 50ms");
         } else if (firstTurnMaxTime > MAX_TURN_TIME) {
             throw new IllegalArgumentException("Invalid turn max time : stay under 25s");
         }
         this.firstTurnMaxTime = firstTurnMaxTime;
+        this.useTurntime = true;
     }
 
     /**

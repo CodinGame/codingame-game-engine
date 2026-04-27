@@ -2,11 +2,13 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## Next Release
+## 4.6.0
 
 ### 🎁 Features
 
 - Added a method to Player to get execution time for current frame.
+- Added `Timebank` mode. _Contributed by [eulerscheZahl](https://github.com/eulerscheZahl)_
+- Updated timeout handling, including a 3-strike rule. _Contributed by [eulerscheZahl](https://github.com/eulerscheZahl)_
 
 ## 4.5.0
 

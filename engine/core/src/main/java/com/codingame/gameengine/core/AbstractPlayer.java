@@ -28,10 +28,16 @@ abstract public class AbstractPlayer {
     private List<String> inputs = new ArrayList<>();
     private List<String> outputs;
     private boolean timeout;
+    private int timelimit;
     private int score;
     private boolean hasBeenExecuted;
     private boolean hasNeverBeenExecuted = true;
     private long lastExecutionTimeMs = -1;
+    private int timelimitsExceeded = 0;
+    private boolean useTimebank = false;
+    private int timebank = 0;
+    private boolean timelimitExceededLastTurn = false;
+    private final int MAX_SOFT_TIMELIMIT_EXCEEDS = 2;
 
     /**
      * Returns a string that will be converted into the real nickname by the viewer.
@@ -80,6 +86,63 @@ abstract public class AbstractPlayer {
     }
 
     /**
+     * Set the player's time limit for the next turn
+     *
+     * @param timelimit
+     *            The time limit in milliseconds
+     */
+    void setTimelimit(int timelimit) {
+        this.timelimit = timelimit;
+    }
+
+    /**
+     * Set the player's timebank for the whole game
+     *
+     * @param timebank
+     *            the timebank in milliseconds
+     */
+    void setTimebank(int timebank) {
+        this.useTimebank = true;
+        this.timebank = timebank;
+    }
+
+    /**
+     * Get the remaining timebank
+     *
+     * @return the remaining timebank in milliseconds
+     */
+    public int getRemainingTimebank() {
+        return timebank;
+    }
+
+    /**
+     * Get the execution time of the last successful execution Will still return the previous value in case of a timeout
+     *
+     * @return The execution time of the last execution in milliseconds
+     */
+    public long getLastExectionTimeMs() {
+        return lastExecutionTimeMs;
+    }
+
+    /**
+     * Get how often the player has already exceeded the time limit in this game
+     *
+     * @return how often the player has already exceeded the time limit in this game
+     */
+    public int getTimelimitsExceeded() {
+        return timelimitsExceeded;
+    }
+
+    /**
+     * Get whether the player exceeded the time limit in the last turn
+     *
+     * @return true, if the player exceeded the time limit in the last turn
+     */
+    public boolean hasTimelimitExceededLastTurn() {
+        return timelimitExceededLastTurn;
+    }
+
+    /**
      * Adds a new line to the input to send to the player on execute.
      * 
      * @param line
@@ -102,6 +165,20 @@ abstract public class AbstractPlayer {
         gameManagerProvider.get().execute(this);
         this.hasBeenExecuted = true;
         this.hasNeverBeenExecuted = false;
+        if (this.useTimebank) {
+            if (hasTimedOut()) {
+                this.timebank = 0;
+            } else {
+                this.timebank -= getLastExectionTimeMs();
+            }
+        }
+        this.timelimitExceededLastTurn = getLastExectionTimeMs() > this.timelimit;
+        if (this.timelimitExceededLastTurn) {
+            this.timelimitsExceeded++;
+        }
+        if (this.timelimitsExceeded > MAX_SOFT_TIMELIMIT_EXCEEDS) {
+            this.timeout = true;
+        }
     }
 
     /**
@@ -178,9 +255,5 @@ abstract public class AbstractPlayer {
 
     final public void setLastExecutionTimeMs(long ms) {
         this.lastExecutionTimeMs = ms;
-    }
-    
-    public long getLastExectionTimeMs() {
-        return lastExecutionTimeMs;
     }
 }
