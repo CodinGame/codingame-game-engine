@@ -116,8 +116,7 @@ abstract public class AbstractPlayer {
     }
 
     /**
-     * Get the execution time of the last successful execution
-     * Will still return the previous value in case of a timeout
+     * Get the execution time of the last successful execution Will still return the previous value in case of a timeout
      *
      * @return The execution time of the last execution in milliseconds
      */
@@ -143,7 +142,6 @@ abstract public class AbstractPlayer {
         return timelimitExceededLastTurn;
     }
 
-
     /**
      * Adds a new line to the input to send to the player on execute.
      * 
@@ -168,12 +166,19 @@ abstract public class AbstractPlayer {
         this.hasBeenExecuted = true;
         this.hasNeverBeenExecuted = false;
         if (this.useTimebank) {
-            if (hasTimedOut()) this.timebank = 0;
-            else this.timebank -= getLastExectionTimeMs();
+            if (hasTimedOut()) {
+                this.timebank = 0;
+            } else {
+                this.timebank -= getLastExectionTimeMs();
+            }
         }
         this.timelimitExceededLastTurn = getLastExectionTimeMs() > this.timelimit;
-        if (this.timelimitExceededLastTurn) this.timelimitsExceeded++;
-        if (this.timelimitsExceeded > MAX_SOFT_TIMELIMIT_EXCEEDS) this.timeout = true;
+        if (this.timelimitExceededLastTurn) {
+            this.timelimitsExceeded++;
+        }
+        if (this.timelimitsExceeded > MAX_SOFT_TIMELIMIT_EXCEEDS) {
+            this.timeout = true;
+        }
     }
 
     /**

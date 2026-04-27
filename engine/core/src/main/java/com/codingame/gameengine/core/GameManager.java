@@ -200,7 +200,9 @@ abstract public class GameManager<T extends AbstractPlayer> {
                 addTurnTime();
             }
             int timelimit = player.hasNeverBeenExecuted() ? firstTurnMaxTime : turnMaxTime;
-            if (useTimebank) timelimit = player.getRemainingTimebank();
+            if (useTimebank) {
+                timelimit = player.getRemainingTimebank();
+            }
             player.setTimelimit(timelimit);
             dumpNextPlayerInfos(player.getIndex(), nbrOutputLines, timelimit + (useTimebank ? 0 : SOFT_TIMELIMIT_EXTRA));
 
@@ -451,7 +453,7 @@ abstract public class GameManager<T extends AbstractPlayer> {
      * Set the timeout delay for each player for the whole game. This will disable the time limit per turn
      *
      * @param timebank
-     *              Duration in milliseconds
+     *            Duration in milliseconds
      * @throws IllegalArgumentException
      *             if timebank &lt; 1000 or &gt; 30000 for all players combined
      */
@@ -461,7 +463,10 @@ abstract public class GameManager<T extends AbstractPlayer> {
         } else if (timebank < MIN_TURN_TIME) {
             throw new IllegalArgumentException("Invalid time bank: use at least 1000ms");
         } else if (timebank * players.size() > GAME_DURATION_HARD_QUOTA) {
-            throw new IllegalArgumentException("Invalid timebank: stay under " + GAME_DURATION_HARD_QUOTA + "ms total, " + (GAME_DURATION_HARD_QUOTA / players.size()) + " per player");
+            throw new IllegalArgumentException(
+                "Invalid timebank: stay under " + GAME_DURATION_HARD_QUOTA + "ms total, " + (GAME_DURATION_HARD_QUOTA / players.size())
+                    + " per player"
+            );
         }
         totalTurnTime += timebank * players.size();
         this.useTimebank = true;
