@@ -2,7 +2,7 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
-## 4.7.0
+## 4.7.6
 
 ### 🎁 Features
 
