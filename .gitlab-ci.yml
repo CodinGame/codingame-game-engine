@@ -37,7 +37,7 @@ build_and_deploy:
       git commit -m "javadoc v$VERSION"
       git tag "v$VERSION" -m ""
       git push origin "v$VERSION"
-      git push origin $CI_DEFAULT_BRANCH
+      git push origin HEAD:$CI_DEFAULT_BRANCH
     fi
 
     if $AUTO_RELEASE_NOTES ; then
