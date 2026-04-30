@@ -171,8 +171,14 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
         }
         this.images = images;
         String[] compressed = compressImages();
-        if (compressed == images) set("images", Stream.of(images).collect(Collectors.joining(",")), null);
-        else set("imageRange", compressed[0], null);
+        if (compressed == images) {
+            set("images", Stream.of(images).collect(Collectors.joining(",")), null);
+            set("imageRange", "");
+        }
+        else {
+            set("images", "");
+            set("imageRange", compressed[0], null);
+        }
         return this;
     }
 
