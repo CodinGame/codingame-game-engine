@@ -13,7 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 /**
- * @author Jean Porée
+ * @author Jena Porée
  *
  *         This module allows you to display or hide elements of the GraphicEntityModule using the viewer's options menu.
  *
