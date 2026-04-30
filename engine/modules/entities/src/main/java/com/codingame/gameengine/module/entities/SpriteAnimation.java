@@ -1,6 +1,5 @@
 package com.codingame.gameengine.module.entities;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -174,8 +173,7 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
         if (compressed == images) {
             set("images", Stream.of(images).collect(Collectors.joining(",")), null);
             set("imageRange", "");
-        }
-        else {
+        } else {
             set("images", "");
             set("imageRange", compressed[0], null);
         }
@@ -211,7 +209,7 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
             if (!validPrefix) continue;
             String compressed = prefix + "|" + numberText + "|" + images[images.length - 1].substring(prefixLength);
             if (compressed.length() < uncompressed.length())
-                return new String[]{compressed};
+                return new String[] { compressed };
         }
         return images;
     }
