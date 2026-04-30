@@ -169,7 +169,14 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
             throw new IllegalArgumentException("Animation must contain at least 1 image.");
         }
         this.images = images;
-        set("images", Stream.of(images).collect(Collectors.joining(",")), null);
+        String[] compressed = compressImages();
+        if (compressed == images) {
+            set("images", Stream.of(images).collect(Collectors.joining(",")), null);
+            set("imageRange", "");
+        } else {
+            set("images", "");
+            set("imageRange", compressed[0], null);
+        }
         return this;
     }
 
@@ -179,6 +186,31 @@ public class SpriteAnimation extends TextureBasedEntity<SpriteAnimation> impleme
      * @return the names of the images used for this animation.
      */
     public String[] getImages() {
+        return images;
+    }
+
+    private String[] compressImages() {
+        if (Stream.of(images).anyMatch(i -> i.contains("|"))) return images;
+        String uncompressed = Stream.of(images).collect(Collectors.joining(","));
+        for (int prefixLength = images[0].length() - 1; prefixLength > 0; prefixLength--) {
+            String prefix = images[0].substring(0, prefixLength);
+            String numberText = images[0].substring(prefixLength);
+            int start = 0;
+            try {
+                start = Integer.parseInt(numberText);
+            } catch (NumberFormatException ex) {
+                break; // can't parse, no compression possible
+            }
+            boolean validPrefix = true;
+            for (int i = 1; i < images.length; i++) {
+                String suffix = String.format("%0" + numberText.length() + "d", start + i); // add leading zeros
+                if (!images[i].equals(prefix + suffix)) validPrefix = false;
+            }
+            if (!validPrefix) continue;
+            String compressed = prefix + "|" + numberText + "|" + images[images.length - 1].substring(prefixLength);
+            if (compressed.length() < uncompressed.length())
+                return new String[] { compressed };
+        }
         return images;
     }
 }

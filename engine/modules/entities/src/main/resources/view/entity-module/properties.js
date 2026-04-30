@@ -77,6 +77,7 @@ export const PROPERTIES = {
   baseHeight: constOpts,
   image: stringOpts,
   images: stringOpts,
+  imageRange: stringOpts,
   scaleMode: stringOpts,
   restarted: {
     type: String,

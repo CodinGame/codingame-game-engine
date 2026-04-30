@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## 4.7.8
+
+### 🛠️ Improvements
+
+- More compact output for `SpriteAnimations`. __Contributed by [eulerscheZahl](https://github.com/eulerscheZahl)_
+
 ## 4.7.7
 
 ### 🎁 Features

@@ -38,6 +38,7 @@ const PROPERTY_KEY_MAP = {
   z: 'zIndex',
   b: 'blendMode',
   I: 'images',
+  IR: 'imageRange',
   rs: 'restarted',
   p: 'playing',
   l: 'loop',
