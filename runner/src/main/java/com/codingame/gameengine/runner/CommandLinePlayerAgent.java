@@ -1,17 +1,19 @@
 package com.codingame.gameengine.runner;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
 /**
- * This class is used in with the <code>GameRunner</code> to add an AI as a player.
+ * This class is used in with the <code>GameRunner</code> to add an AI as a
+ * player.
  */
 public class CommandLinePlayerAgent extends Agent {
 
     private OutputStream processStdin;
-    private InputStream processStdout;
+    private BufferedReader processInputReader;
     private InputStream processStderr;
     private String[] commandArray;
     private Process process;
@@ -20,18 +22,18 @@ public class CommandLinePlayerAgent extends Agent {
      * Creates an Agent for your game, will run the given commandLine at game start
      * 
      * @param commandLine
-     *            the command line to run
+     *                    the command line to run
      */
     public CommandLinePlayerAgent(String commandLine) {
         super();
         this.commandArray = commandLine.split(" ");
     }
-    
+
     /**
      * Creates an Agent for your game, will run the given commandLine at game start
      * 
      * @param commandArray
-     *            the command array to run
+     *                     the command array to run
      */
     public CommandLinePlayerAgent(String[] commandArray) {
         super();
@@ -44,8 +46,8 @@ public class CommandLinePlayerAgent extends Agent {
     }
 
     @Override
-    protected InputStream getOutputStream() {
-        return processStdout;
+    protected BufferedReader getOutputReader() {
+        return processInputReader;
     }
 
     @Override
@@ -61,21 +63,15 @@ public class CommandLinePlayerAgent extends Agent {
             throw new RuntimeException("Failed to launch " + String.join(" ", commandArray), e);
         }
         processStdin = process.getOutputStream();
-        processStdout = process.getInputStream();
+        processInputReader = process.inputReader();
         processStderr = process.getErrorStream();
-    }
-
-    @Override
-    public String getOutput(int nbLine, long timeout) {
-        String output = super.getOutput(nbLine, timeout);
-        return output;
     }
 
     /**
      * Launch the agent. After the call, agent is ready to process input / output
      * 
      * @throws Exception
-     *             if an error occurs
+     *                   if an error occurs
      */
 
     @Override
