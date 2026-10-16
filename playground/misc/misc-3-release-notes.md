@@ -2,6 +2,12 @@
 
 The CodinGame SDK is regularly updated and improved. This document lets you know what changed in the latest releases.
 
+## Next Release
+
+### 🛠️ Improvements
+
+- Upgraded the replay player to cg-player 2.0.0 for a smaller download and faster playback.
+
 ## 4.7.8
 
 ### 🛠️ Improvements
