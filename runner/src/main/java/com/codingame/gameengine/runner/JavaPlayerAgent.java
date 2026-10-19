@@ -1,7 +1,9 @@
 package com.codingame.gameengine.runner;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
@@ -34,11 +36,12 @@ public class JavaPlayerAgent extends Agent {
 
     private OutputStream processStdin;
     private InputStream processStdout;
+    private BufferedReader processStdoutReader;
     private InputStream processStderr;
 
     /**
      * @param className
-     *            The name of the class to use as a participating AI.
+     *                  The name of the class to use as a participating AI.
      */
     public JavaPlayerAgent(String className) {
         super();
@@ -48,6 +51,7 @@ public class JavaPlayerAgent extends Agent {
         try {
             processStdin = new PipedOutputStream(agentStdin);
             processStdout = new PipedInputStream(agentStdout, 100_000);
+            processStdoutReader = new BufferedReader(new InputStreamReader(processStdout, UTF8));
             processStderr = new PipedInputStream(agentStderr, 100_000);
         } catch (IOException e) {
             throw new RuntimeException("Cannot initialize Player Agent", e);
@@ -60,8 +64,8 @@ public class JavaPlayerAgent extends Agent {
     }
 
     @Override
-    protected InputStream getOutputStream() {
-        return processStdout;
+    protected BufferedReader getOutputReader() {
+        return processStdoutReader;
     }
 
     @Override
@@ -77,7 +81,7 @@ public class JavaPlayerAgent extends Agent {
      * Launch the agent. After the call, agent is ready to process input / output
      * 
      * @throws Exception
-     *             if an error occurs
+     *                   if an error occurs
      */
     @Override
     protected void runInputOutput() throws Exception {
@@ -99,7 +103,7 @@ public class JavaPlayerAgent extends Agent {
             if (javaRunnerThread.isAlive()) {
                 // TODO
                 javaRunnerThread.interrupt();
-//                 javaRunnerThread.destroy();
+                // javaRunnerThread.destroy();
                 javaRunnerThread.stop();
             }
         }

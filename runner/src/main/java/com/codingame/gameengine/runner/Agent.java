@@ -1,10 +1,16 @@
 package com.codingame.gameengine.runner;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.Properties;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,34 +21,45 @@ abstract class Agent {
     public static final int AGENT_MAX_BUFFER_SIZE = 10_000;
     public static final int THRESHOLD_LIMIT_STDERR_SIZE = 4096 * 50;
 
+    /**
+     * Single dedicated thread for all blocking agent I/O — sequential game loop
+     * never needs more than one.
+     */
+    private static final ExecutorService AGENT_IO_EXECUTOR = Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(r, "agent-reader");
+        t.setDaemon(true);
+        return t;
+    });
+
     private static Log log = LogFactory.getLog(Agent.class);
 
     private OutputStream processStdin;
-    private InputStream processStdout;
+    private BufferedReader processStdoutReader;
     private InputStream processStderr;
     private int totalStderrBytesSent = 0;
     private int agentId;
-    private boolean lastAgentByteIsCarriageReturn = false;
     private boolean failed = false;
 
     private String nickname;
     private String avatar;
 
     public long lastExecutionTimeMs;
+
     public Agent() {
     }
 
     abstract protected OutputStream getInputStream();
 
-    abstract protected InputStream getOutputStream();
+    abstract protected BufferedReader getOutputReader();
 
     abstract protected InputStream getErrorStream();
 
     /**
-     * Initialize an agent given global properties. A call to this function is needed before-all
+     * Initialize an agent given global properties. A call to this function is
+     * needed before-all
      *
      * @param conf
-     *            Global configuration
+     *             Global configuration
      */
     public void initialize(Properties conf) {
         this.lastExecutionTimeMs = 0;
@@ -54,7 +71,7 @@ abstract class Agent {
     public void execute() {
         try {
             this.processStdin = getInputStream();
-            this.processStdout = getOutputStream();
+            this.processStdoutReader = getOutputReader();
             this.processStderr = getErrorStream();
             runInputOutput();
         } catch (Exception e) {
@@ -70,7 +87,7 @@ abstract class Agent {
      * Launch the agent. After the call, agent is ready to process input / output
      *
      * @throws Exception
-     *             if an error occurs
+     *                   if an error occurs
      */
     protected abstract void runInputOutput() throws Exception;
 
@@ -78,7 +95,7 @@ abstract class Agent {
      * Write 'input' to standard input of agent
      *
      * @param input
-     *            an input to write
+     *              an input to write
      */
     public void sendInput(String input) {
         if (processStdin != null) {
@@ -98,57 +115,56 @@ abstract class Agent {
      * Get the output of an agent
      *
      * @param nbLine
-     *            Number of lines wanted
+     *                Number of lines wanted
      * @param timeout
-     *            Stop reading after timeout milliseconds
-     * @return the agent output
+     *                Stop reading after timeout milliseconds
+     * @return the agent output, or null if timed out or reader closed
      */
     public String getOutput(int nbLine, long timeout) {
-        if (processStdout == null) {
+        return getOutput(nbLine, timeout, AGENT_MAX_BUFFER_SIZE);
+    }
+
+    /**
+     * Read at most maxOutputSize bytes across nbLine lines.
+     * 
+     * @param nbLine
+     *                      Number of lines wanted
+     * @param timeout
+     *                      Stop reading after timeout milliseconds
+     * @param maxOutputSize
+     *                      Maximum number of bytes to read
+     * @return the agent output, or null if timed out or reader closed
+     */
+    protected final String getOutput(int nbLine, long timeout, int maxOutputSize) {
+        if (processStdoutReader == null) {
             return null;
         }
 
-        try {
-            byte[] tmp = new byte[AGENT_MAX_BUFFER_SIZE];
-            int offset = 0;
-            int nbOccurences = 0;
-
-            long t0 = System.nanoTime();
-
-            while ((offset < AGENT_MAX_BUFFER_SIZE) && (nbOccurences < nbLine)) {
-                long current = System.nanoTime();
-                if ((current - t0) > (timeout * 1_000_000l)) {
-                    break;
-                }
-
-                if (processStdout.available() > 0) {
-                    int nbRead = processStdout.read(tmp, offset, 1);
-                    if (nbRead < 0) {
-                        // Should not happen, just in case...
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            try {
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < nbLine; i++) {
+                    String line = processStdoutReader.readLine();
+                    if (line == null) {
                         break;
                     }
-                    byte curByte = tmp[offset];
-                    if (!((curByte == '\n') && lastAgentByteIsCarriageReturn)) {
-                        offset += nbRead;
-                        if ((curByte == '\n') || (curByte == '\r')) {
-                            ++nbOccurences;
-                        }
-                    }
-                    lastAgentByteIsCarriageReturn = curByte == '\r';
-                } else {
-                    if ((offset < AGENT_MAX_BUFFER_SIZE) && (nbOccurences < nbLine)) {
-                        Thread.sleep(1);
+                    sb.append(line).append('\n');
+                    if (sb.length() >= maxOutputSize) {
+                        break;
                     }
                 }
+                return sb.toString();
+            } catch (IOException e) {
+                return null;
             }
+        }, AGENT_IO_EXECUTOR);
 
-            return new String(tmp, 0, offset, UTF8);
-        } catch (IOException e1) {
-            processStdout = null;
-        } catch (InterruptedException e) {
-            // wtf
+        try {
+            return future.orTimeout(timeout, TimeUnit.MILLISECONDS).join();
+        } catch (CompletionException e) {
+            future.cancel(true);
+            return null;
         }
-        return null;
     }
 
     /**
